@@ -1,0 +1,202 @@
+.carousel-product {
+    padding: 10px;
+    position: relative;
+    display: block;
+    box-shadow: rgba(49,53,59,0.12) 0 1px 6px 0;
+    margin-bottom: 24px;
+    border-radius: 12px;
+    background-color: white;
+}
+
+.carousel-product .card {
+    display: block;
+    border-radius: 9px;
+    width: 150px;
+    overflow: visible;
+    height: fit-content;
+}
+
+.carousel-product .card .a-link {
+    text-decoration: none;
+}
+
+.carousel-product .card-body {
+    width: 150px;
+    height: 87px;
+}
+
+.carousel-product .image-product {
+    background-position: center center;
+    background-repeat: no-repeat;
+    border-top-left-radius: 9px;
+    border-top-right-radius: 9px;
+    border: none;
+    height: 150px;
+}
+
+.carousel-product .add-to-cart {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.carousel-product .add-to-cart {
+    border-top-right-radius: 9px;
+    border-bottom-left-radius: 9px;
+    background: rgb(var(--color-primary));
+    height: 30px;
+    width: 30px;
+    padding-top: 2.5px;
+    justify-content: center;
+    align-items: center;
+}
+
+.carousel-product .add-to-cart i {
+    color: rgb(var(--color-primary-soft));
+}
+
+.carousel-product .tag-img {
+    height: 20px;
+    background-image: url("http://127.0.0.1:8000/assets/images/app/tagbgred.png");
+    background-position: right bottom;
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin: -0.5rem;
+}
+
+.carousel-product .tag-text {
+    margin-top: -16px;
+    color: white;
+    font-size: 10px;
+    line-height: 14px;
+    font-weight: 600;
+    justify-content: start;
+    align-items: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.carousel-product .date-option {
+    position: absolute;
+    height: 20px;
+    background: rgb(var(--color-primary-soft));
+    bottom: 0;
+    width: 150px;
+    border-radius: 0 0 9px 9px;
+}
+
+.carousel-product .date-post {
+    color: white;
+    font-size: small;
+    text-align: center;
+}
+
+.carousel-product .harga {
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    -webkit-box-align: center;
+    margin-bottom: 4px;
+    color: rgba(49, 53, 59, 0.96);
+    opacity: 1;
+    font-size: 1rem;
+    font-weight: bold;
+    align-items: flex-end;
+    line-height: 1.43;
+}
+
+.carousel-product .product-name {
+    margin-bottom: 4px;
+    margin-top: 4px;
+    font-size: 0.86rem;
+    color: rgba(49, 53, 59, 0.96);
+    max-width: 100%;
+    max-height: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: pre-wrap;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.carousel-product .post-time-tag{
+    position: absolute;
+    z-index: 7;
+    top: 3px;
+    left: 0.5rem;
+    background: rgba(0, 0, 0, 0.3)
+}
+
+.carousel-product .price-tag {
+    font-size: 10px;
+}
+
+.carousel-product .owl-prev {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    top: -33.5%;
+    left: 20px;
+    display: block !important;
+    border:0 solid black;
+}
+.carousel-product .owl-next {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    top: -33.5%;
+    right: 20px;
+    display: block !important;
+    border:0 solid black;
+}
+
+.carousel-product .owl-prev i {transform : scale(2); color: rgb(var(--color-primary-soft));}
+.carousel-product .owl-next i {transform : scale(2); color: rgb(var(--color-primary-soft));}
+/*End Owl Products Carousel Navigation*/
+
+/*Lihat Semua Animation*/
+
+.btn-new-product-all {
+    display: inline-block;
+    padding: 0.75rem 1.25rem;
+    border-radius: 10rem;
+    margin-right: 7px;
+    margin-top: 5px;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 0.15rem;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.btn-new-product-all:after {
+    content: "";
+    position: absolute;
+    bottom: -2%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(var(--color-primary-soft));
+    border-radius: 10rem;
+    z-index: -2;
+}
+
+.btn-new-product-all:before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background-color: rgb(var(--color-primary));
+    transition: all 0.3s;
+    border-radius: 10rem;
+    z-index: -1;
+}
+
+.btn-new-product-all:hover { color: #fff; }
+.btn-new-product-all:hover:before { width: 100%; }
