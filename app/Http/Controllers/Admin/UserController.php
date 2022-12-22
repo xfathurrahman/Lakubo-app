@@ -24,7 +24,7 @@ class UserController extends Controller
         $roles = Role::all();
         $permissions = Permission::all();
 
-        return view('admin.users.role', compact('user', 'roles', 'permissions'));
+        return view('admin.users.edit', compact('user', 'roles', 'permissions'));
     }
 
     public function assignRole(Request $request, User $user)
@@ -47,6 +47,12 @@ class UserController extends Controller
         return back()->with('message', 'Role not exists.');
     }
 
+    public function updateRole(Request $request, User $user)
+    {
+        $user->syncRoles($request->role);
+        return back()->with('message', 'Role updated.');
+    }
+
     public function givePermission(Request $request, User $user)
     {
         if ($user->hasPermissionTo($request->permission)) {
@@ -63,6 +69,12 @@ class UserController extends Controller
             return back()->with('message', 'Permission revoked.');
         }
         return back()->with('message', 'Permission does not exists.');
+    }
+
+    public function updatePermission(Request $request, User $user)
+    {
+        $user->syncPermissions($request->permission);
+        return back()->with('message', 'Permission updated.');
     }
 
     public function destroy(User $user)
