@@ -11,13 +11,17 @@ class RoleController extends Controller
 {
     public function index()
     {
-        $roles = Role::whereNotIn('name', ['admin'])->get();
-        return view('admin.roles.index', compact('roles'));
+        /*$roles = Role::whereNotIn('name', ['admin'])->get();*/
+        $roles = Role::all();
+        $permissions = Permission::all();
+        $role_permission = Role::with('permissions')->get();
+
+        return view('admin.roles.index', compact('roles','permissions','role_permission'));
     }
 
     public function create()
     {
-        return view('admin.roles.create');
+        /*return view('admin.roles.create');*/
     }
 
     public function store(Request $request)
@@ -30,26 +34,26 @@ class RoleController extends Controller
 
     public function edit(Role $role)
     {
-        $permissions = Permission::all();
-        return view('admin.roles.edit', compact('role', 'permissions'));
+        /*$permissions = Permission::all();
+        return view('admin.roles.edit', compact('role', 'permissions'));*/
     }
 
     public function update(Request $request, Role $role)
     {
         $validated = $request->validate(['name' => ['required', 'min:3']]);
         $role->update($validated);
+        $role->syncPermissions($request->permission);
 
-        return to_route('admin.roles.index')->with('message', 'Role Updated successfully.');
+        return back()->with('success', 'Peran dan Hak akses berhasil di ubah.');
     }
 
     public function destroy(Role $role)
     {
         $role->delete();
-
-        return back()->with('message', 'Role deleted.');
+        return back()->with('success', 'Peran di hapus.');
     }
 
-    public function givePermission(Request $request, Role $role)
+/*    public function givePermission(Request $request, Role $role)
     {
         if($role->hasPermissionTo($request->permission)){
             return back()->with('message', 'Permission exists.');
@@ -65,6 +69,6 @@ class RoleController extends Controller
             return back()->with('message', 'Permission revoked.');
         }
         return back()->with('message', 'Permission not exists.');
-    }
+    }*/
 
 }

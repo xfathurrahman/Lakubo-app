@@ -5,7 +5,7 @@
     @endsection
 
     <div class="py-12 w-full">
-        <div class="mx-auto sm:px-6 lg:px-8">
+        <div class="mx-auto sm:px-3 lg:px-5">
             <div class="grid grid-cols-12 gap-6 mt-10">
                 <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
                     <div class="w-full sm:w-auto mt-3 sm:mt-0 mx-auto">

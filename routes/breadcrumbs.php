@@ -24,6 +24,17 @@ Breadcrumbs::for('user-edit', function (BreadcrumbTrail $trail) {
     $trail->push('Edit Pengguna', url('#'));
 });
 
+// Kelola Peran
+Breadcrumbs::for('roles', function (BreadcrumbTrail $trail) {
+    $trail->push('Kelola Peran', url('admin/roles'));
+});
+
+// Kelola Hak Akses
+Breadcrumbs::for('permissions', function (BreadcrumbTrail $trail) {
+    $trail->push('Kelola Hak Akses', url('admin/permissions'));
+});
+
+
 /*// Home > Blog > [Category]
 Breadcrumbs::for('category', function (BreadcrumbTrail $trail, $category) {
     $trail->parent('blog');
