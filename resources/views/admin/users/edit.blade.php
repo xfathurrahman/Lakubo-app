@@ -3,6 +3,7 @@
     @section('breadcrumbs')
         {{ Breadcrumbs::render('user-edit') }}
     @endsection
+        <div class="py-12">
             <div class="grid grid-cols-12 gap-2 sm:px-3 lg:px-5">
                 <div class="col-span-12 lg:col-span-12 2xl:col-span-12 mt-2 box pb-2">
                     <!-- BEGIN: Display Information -->
@@ -20,26 +21,26 @@
                                             <div class="col-span-12 2xl:col-span-6">
                                                 <div>
                                                     <label for="fullname" class="form-label">Nama</label>
-                                                    <input id="fullname" name="new_fullname" type="text" class="form-control" placeholder="Input text" value="{{ $user->name }}">
+                                                    <input id="fullname" name="new_fullname" type="text" class="form-control" placeholder="Masukan Nama Lengkap" value="{{ $user->name }}">
                                                 </div>
                                                 <div class="mt-3">
                                                     <label for="email" class="form-label">Email</label>
-                                                    <input id="email" name="new_mail" type="email" class="form-control" value="{{ $user->email }}">
+                                                    <input id="email" name="new_mail" type="email" class="form-control" placeholder="Masukan Email" value="{{ $user->email }}">
                                                 </div>
                                             </div>
                                             <div class="col-span-12 2xl:col-span-6">
                                                 <div>
-                                                    <label for="update-profile-form-4" class="form-label">Phone Number</label>
-                                                    <input id="update-profile-form-4" type="text" class="form-control" placeholder="Input text" value="65570828">
+                                                    <label for="phone" class="form-label">Phone Number</label>
+                                                    <input id="phone" type="number" name="new_phone" class="form-control" placeholder="Masukan Nomor Handphone" value="{{ $user->phone }}">
                                                 </div>
                                                 <div class="mt-3">
-                                                    <label for="update-profile-form-4" class="form-label">Phone Number</label>
-                                                    <input id="update-profile-form-4" type="text" class="form-control" placeholder="Input text" value="65570828">
+                                                    <label for="update-profile-form-4" class="form-label">Field</label>
+                                                    <input id="update-profile-form-4" type="text" class="form-control" placeholder="Input text" value="">
                                                 </div>
                                             </div>
                                             <div class="col-span-12">
                                                 <div class="mt-3">
-                                                    <label for="update-profile-form-5" class="form-label">Address</label>
+                                                    <label for="update-profile-form-5" class="form-label">Alamat</label>
                                                     <textarea id="update-profile-form-5" class="form-control" placeholder="Adress">10 Anson Road, International Plaza, #10-11, 079903 Singapore, Singapore</textarea>
                                                 </div>
                                             </div>
@@ -67,7 +68,6 @@
                     </div>
                     <!-- END: Display Information -->
                 </div>
-
                 <div class="lg:col-span-6 col-span-12 rounded-lg box pb-2">
                     <div class="intro-y">
                         <div class="flex items-center p-2 border-b border-slate-200/60 dark:border-darkmode-400">
@@ -82,7 +82,7 @@
                                 <div class="mt-3 lg:mt-0">
                                     <label for="user_role" class="form-label">Peran</label>
                                     <select name="role[]" data-placeholder="Cari peran..." id="user_role" class="tom-select w-full" multiple>
-                                        @if($user->hasAnyRole([1,2,3,4,5,6,7,8,9]))
+                                        @if($user->hasAnyRole(\Spatie\Permission\Models\Role::all()))
                                             @foreach ($user->roles as $user_role)
                                                 @foreach( $roles as $role )
                                                     @if($user_role -> name === $role->name)
@@ -102,7 +102,7 @@
                                     <div class="mt-3">
                                         <label for="user_permission" class="form-label">Hak akses</label>
                                         <select name="permission[]" data-placeholder="Cari hak akses..." id="user_permission" class="tom-select w-full" multiple>
-                                            @if($user->hasAnyPermission([1,2,3,4,5,6,7,8,9]))
+                                            @if($user->hasAnyPermission(\Spatie\Permission\Models\Permission::all()))
                                                 @foreach ($user->permissions as $user_permission)
                                                     @foreach( $permissions as $permission )
                                                         @if($user_permission -> name === $permission->name)
@@ -150,7 +150,6 @@
                         </form>
                     </div>
                 </div>
-
             </div>
-
+        </div>
 </x-app-layout>

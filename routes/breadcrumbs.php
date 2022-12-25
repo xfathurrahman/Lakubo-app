@@ -34,6 +34,23 @@ Breadcrumbs::for('permissions', function (BreadcrumbTrail $trail) {
     $trail->push('Kelola Hak Akses', url('admin/permissions'));
 });
 
+// Produk
+Breadcrumbs::for('products', function (BreadcrumbTrail $trail) {
+    $trail->push('Produk', url('seller/products'));
+});
+
+// Produk > Tambah Produk
+Breadcrumbs::for('product_add', function (BreadcrumbTrail $trail) {
+    $trail->parent('products');
+    $trail->push('Tambah Produk', url('#'));
+});
+
+// Produk > Edit Produk
+Breadcrumbs::for('product_edit', function (BreadcrumbTrail $trail) {
+    $trail->parent('products');
+    $trail->push('Edit Produk', url('#'));
+});
+
 
 /*// Home > Blog > [Category]
 Breadcrumbs::for('category', function (BreadcrumbTrail $trail, $category) {

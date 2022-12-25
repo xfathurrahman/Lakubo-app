@@ -1,0 +1,194 @@
+/*! Image Uploader - v1.2.3 - 26/11/2019
+ * Copyright (c) 2019 Christian Bayer; Licensed MIT */
+
+/* Icons Font Face*/
+@font-face {
+    font-family: 'Image Uploader Icons';
+    src: url('../fonts/iu.eot');
+    src: url('../fonts/iu.eot') format('embedded-opentype'),
+    url('../fonts/iu.ttf') format('truetype'),
+    url('../fonts/iu.woff') format('woff'),
+    url('../fonts/iu.svg') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Icons class */
+[class^="iui-"], [class*="iui-"] {
+    font-family: 'Image Uploader Icons' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Icon Close */
+.iui-close:before {
+    content: "\f2ed";
+}
+
+/* Icon Cloud Upload */
+.iui-cloud-upload:before {
+    content: "\e901";
+}
+
+/* Base style */
+.image-uploader {
+    min-height: 10rem;
+    border: 2px dashed #429bff;
+    position: relative;
+    border-radius: 9px;
+}
+
+/* Style on hover */
+.image-uploader.drag-over {
+    background-color: #f3f3f3;
+}
+
+/* Hide the file input */
+.image-uploader input[type="file"] {
+    width: 0;
+    height: 0;
+    position: absolute;
+    z-index: -1;
+    opacity: 0;
+}
+
+/* Text container */
+.image-uploader .upload-text {
+    position: relative;
+    display: flex;
+    padding-top: 40px;
+    padding-bottom: 10px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.image-uploader .upload-text i {
+    display: block;
+    font-size: 3rem;
+    margin-bottom: .5rem;
+}
+
+.image-uploader .upload-text span {
+    display: block;
+}
+
+/* Hide the text if there is at least one uploaded image */
+/*.image-uploader.has-files .upload-text {
+    display: none;
+}*/
+
+/* Uploaded images container */
+.image-uploader .uploaded {
+    padding: .7rem;
+    line-height: 0;
+    text-align: center;
+}
+
+.image-uploader .uploaded .uploaded-image {
+    display: inline-block;
+    width: calc(16.6666667% - 2rem);
+    padding-bottom: calc(16.6666667% - 2rem);
+    height: 0;
+    position: relative;
+    background: #f3f3f3;
+    cursor: default;
+    margin: .5rem .5rem -40px;
+}
+
+.image-uploader .uploaded .uploaded-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    border-radius: 9px;
+}
+
+/* Delete image button */
+.image-uploader .uploaded .uploaded-image .delete-image {
+    display: none;
+    cursor: pointer;
+    position: absolute;
+    top: .2rem;
+    right: .2rem;
+    width: 25px;
+    border-radius: 50%;
+    padding: .3rem;
+    line-height: 1;
+    background-color: rgba(229, 229, 229, 0.5);
+    -webkit-appearance: none;
+    border: none;
+}
+
+.image-uploader .uploaded .uploaded-image:hover .delete-image {
+    display: block;
+}
+
+.image-uploader .uploaded .uploaded-image .delete-image i {
+    display: block;
+    color: #fff;
+    width: 1.4rem;
+    height: 1.4rem;
+    font-size: 1.4rem;
+    line-height: 1.4rem;
+}
+
+/******************************
+*          RESPONSIVE         *
+******************************/
+
+@media screen and (max-width: 1366px) {
+    .image-uploader .uploaded .uploaded-image {
+        width: calc(20% - 1rem);
+        padding-bottom: calc(20% - 1rem);
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .image-uploader .uploaded {
+        padding: .4rem;
+    }
+
+    .image-uploader .uploaded .uploaded-image {
+        width: calc(25% - .8rem);
+        padding-bottom: calc(25% - .4rem);
+        margin: .4rem;
+    }
+}
+
+@media screen and (max-width: 786px) {
+    .image-uploader .uploaded {
+        padding: .3rem;
+    }
+
+    .image-uploader .uploaded .uploaded-image {
+        width: calc(33.3333333333% - .6rem);
+        padding-bottom: calc(33.3333333333% - .3rem);
+        margin: .3rem;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .image-uploader .uploaded {
+        padding: .2rem;
+    }
+
+    .image-uploader .uploaded .uploaded-image {
+        width: calc(50% - .4rem);
+        padding-bottom: calc(50% - .4rem);
+        margin: .2rem;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .add-product-btn {
+        left: auto;
+        right: 0;
+    }
+}

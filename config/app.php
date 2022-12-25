@@ -186,6 +186,7 @@ return [
          * Package Service Providers...
          */
         Spatie\Permission\PermissionServiceProvider::class,
+        AzisHapidin\IndoRegion\IndoRegionServiceProvider::class,
         /*
          * Application Service Providers...
          */

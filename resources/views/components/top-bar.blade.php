@@ -18,14 +18,14 @@
                     <hr class="dropdown-divider border-white/[0.08]">
                 </li>
                 <li>
-                    <a href="" class="dropdown-item hover:bg-white/5">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                             icon-name="user" data-lucide="user" class="lucide lucide-user w-4 h-4 mr-2">
-                            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
-                            <circle cx="12" cy="7" r="4"></circle>
-                        </svg>
-                        Profile </a>
+                    <a href="{{ route('seller.index') }}" class="dropdown-item hover:bg-white/5">
+                        <i class="fa-solid fa-store mr-2"></i>
+                        Toko Saya </a>
+                </li>
+                <li>
+                    <a href="{{ route('dashboard') }}" class="dropdown-item hover:bg-white/5">
+                        <i class="fa-solid fa-store mr-2"></i>
+                        Akun Saya </a>
                 </li>
                 <li>
                     <a href="{{ route('profile.edit') }}" class="dropdown-item hover:bg-white/5">
@@ -35,7 +35,8 @@
                             <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"></path>
                             <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                         </svg>
-                        Edit Akun </a>
+                        Edit Akun
+                    </a>
                 </li>
                 {{--                <li>
                                     <a href="" class="dropdown-item hover:bg-white/5"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="lock" data-lucide="lock" class="lucide lucide-lock w-4 h-4 mr-2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0110 0v4"></path></svg> Reset Password </a>

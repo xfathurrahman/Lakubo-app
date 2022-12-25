@@ -15,6 +15,24 @@
                 </a>
             </li>
             <li>
+                <a href="#" class="side-menu {{ Request::is('profile') ? 'side-menu--active' : '' }}">
+                    <div class="side-menu__icon"> <i data-lucide="home"></i> </div>
+                    <div class="side-menu__title"> Profile </div>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('seller.index') }}" class="side-menu {{ Request::is('seller') ? 'side-menu--active' : '' }}">
+                    <div class="side-menu__icon"> <i data-lucide="home"></i> </div>
+                    <div class="side-menu__title"> Dashboard Seller</div>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('seller.products.index') }}" class="side-menu {{ Request::is('seller/products') ? 'side-menu--active' : '' }}">
+                    <div class="side-menu__icon"> <i data-lucide="shopping-bag"></i> </div>
+                    <div class="side-menu__title">Produk Saya</div>
+                </a>
+            </li>
+            <li>
                 <a href="#" class="side-menu {{ Request::is('product-list') ? 'side-menu--active' : '' }}">
                     <div class="side-menu__icon"> <i data-lucide="shopping-bag"></i> </div>
                     <div class="side-menu__title">Produk UMKM</div>
@@ -87,6 +105,35 @@
                         <a href="{{url('admin/permissions')}}" class="side-menu {{ Request::is('admin/permissions') ? 'side-menu--active' : '' }}">
                             <div class="side-menu__icon"> <i data-lucide="zap"></i> </div>
                             <div class="side-menu__title">Hak Akses</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:;" class="side-menu {{ Request::is('profile/*') ? 'side-menu--active' : '' }}">
+                    <div class="side-menu__icon"> <i data-lucide="users"></i> </div>
+                    <div class="side-menu__title">
+                        Pengaturan
+                        <div class="side-menu__sub-icon "> <i data-lucide="chevron-down"></i> </div>
+                    </div>
+                </a>
+                <ul class="">
+                    <li>
+                        <a href="{{url('profile')}}" class="side-menu {{ Request::is('admin/users') ? 'side-menu--active' : '' }}">
+                            <div class="side-menu__icon"> <i data-lucide="zap"></i> </div>
+                            <div class="side-menu__title">Profile</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="side-menu {{ Request::is('admin/roles') ? 'side-menu--active' : '' }}">
+                            <div class="side-menu__icon"> <i data-lucide="zap"></i> </div>
+                            <div class="side-menu__title">Alamat</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="side-menu {{ Request::is('profile/password') ? 'side-menu--active' : '' }}">
+                            <div class="side-menu__icon"> <i data-lucide="zap"></i> </div>
+                            <div class="side-menu__title">Kata Sandi</div>
                         </a>
                     </li>
                 </ul>

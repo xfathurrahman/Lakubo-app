@@ -44,8 +44,10 @@ class UserController extends Controller
     public function updateUserAccount(Request $request, User $user)
     {
         $updateUserAccount =  User::find($user->id);
+        $updateUserAccount -> username = $request -> new_username;
         $updateUserAccount -> name = $request -> new_fullname;
         $updateUserAccount -> email = $request -> new_mail;
+        $updateUserAccount -> phone = $request -> new_phone;
         $updateUserAccount -> update();
         return back()->with('message', 'Info akun berhasil di ubah.');
     }
@@ -69,10 +71,10 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         if ($user->hasRole('admin')) {
-            return back()->with('message', 'you are admin.');
+            return back()->with('error', 'anda adalah "admin".');
         }
         $user->delete();
 
-        return back()->with('message', 'User deleted.');
+        return back()->with('success', "pengguna '$user->name' dihapus.");
     }
 }
