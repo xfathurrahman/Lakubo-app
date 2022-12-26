@@ -11,10 +11,23 @@ class ProfileUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['string', 'max:255'],
-            'username' => ['string', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
-            'phone' => ['string', 'max:13'],
-            'email' => ['email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
+            'provinsi'=> ['required'],
+            'kabupaten'=> ['required'],
+            'kecamatan'=> ['required'],
+            'desa'=> ['required'],
+            'detail_alamat'=> ['required'],
+            'nama_lengkap' => ['required','string', 'max:255'],
+            'username' => ['required','string', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
+            'nomor_handphone' => ['required','regex:/^([0-9\s\-\+\(\)]*)$/','min:11','max:13'],
+            'email' => ['required','email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'username.required' => __('Nama pengguna wajib di isi.'),
+        ];
+    }
+
 }

@@ -57,11 +57,11 @@ class ProfileController extends Controller
     {
         $request->user()->fill($request->validated());
 
-        $province = $request->province;
-        $regency = $request->regency;
-        $district = $request->district;
-        $village = $request->village;
-        $detail_address = $request->detail_address;
+        $province = $request-> provinsi;
+        $regency = $request -> kabupaten;
+        $district = $request-> kecamatan;
+        $village = $request -> desa;
+        $detail_address = $request->detail_alamat;
 
         $user_address = UserAddress::find(Auth::user()->id);
         $user_address -> province_id = $province;
