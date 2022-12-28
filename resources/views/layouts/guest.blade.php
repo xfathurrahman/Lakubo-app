@@ -7,13 +7,11 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <link rel="stylesheet" href="{{ asset('css/midone-app.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/midone-_app.css') }}">
 </head>
 <body class="login" id="auth">
 {{ $slot }}
 <!-- BEGIN: JS Assets-->
-<script src="{{ asset('js/app.js') }}"></script>
+<script src="{{ asset('js/midone_app.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/jquery-3.6.1.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/parsley.min.js') }}"></script>
 <!-- END: JS Assets-->

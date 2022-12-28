@@ -23,7 +23,7 @@ return [
     |
     */
 
-    'view' => 'breadcrumbs::tailwind',
+    'view' => 'partials.breadcrumbs',
 
     /*
     |--------------------------------------------------------------------------

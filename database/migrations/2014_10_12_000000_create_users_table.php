@@ -26,10 +26,23 @@ return new class extends Migration
             $table->rememberToken();
             $table->timestamps();
         });
+
+        Schema::create('user_addresses', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->string('province_id');
+            $table->string('regency_id');
+            $table->string('district_id');
+            $table->string('village_id');
+            $table->string('detail_address');
+            $table->timestamps();
+        });
     }
 
     public function down()
     {
         Schema::dropIfExists('users');
+        Schema::dropIfExists('user_addresses');
     }
 };

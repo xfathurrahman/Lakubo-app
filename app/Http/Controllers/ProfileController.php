@@ -23,34 +23,9 @@ class ProfileController extends Controller
         $regencies = Regency::where('province_id', $address['province_id'])->get();
         $districts = District::where('regency_id', $address['regency_id'])->get();
         $villages = Village::where('district_id', $address['district_id'])->get();
-
         return view('profile.edit', [
                 'user' => $request->user(),]
             ,compact('provinces','regencies','districts','villages'))->with($userAddresses);
-    }
-
-    public function getProvince()
-    {
-        $data = Province::where('name', 'LIKE', '%'.request('q').'%')->paginate(100);
-        return response()->json($data);
-    }
-
-    public function getRegency($id)
-    {
-        $data = Regency::where('province_id', $id)->where('name', 'LIKE', '%'.request('q').'%')->paginate(100);
-        return response()->json($data);
-    }
-
-    public function getDistrict($id)
-    {
-        $data = District::where('regency_id', $id)->where('name', 'LIKE', '%'.request('q').'%')->paginate(100);
-        return response()->json($data);
-    }
-
-    public function getVillage($id)
-    {
-        $data = Village::where('district_id', $id)->where('name', 'LIKE', '%'.request('q').'%')->paginate(100);
-        return response()->json($data);
     }
 
     public function update(ProfileUpdateRequest $request)

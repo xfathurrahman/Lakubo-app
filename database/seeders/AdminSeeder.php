@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Store;
 use App\Models\User;
 use App\Models\UserAddress;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -20,7 +21,14 @@ class AdminSeeder extends Seeder
             'email_verified_at' => now(),
             'password' => bcrypt('12345678'),
             'remember_token' => Str::random(10),
-        ])->assignRole('seller','admin');
+        ])->assignRole('customer','seller','admin');
+
+        Store::create([
+            'name' => 'Lakubo Official',
+            'user_id' => $user->id,
+            'category_id' => 1,
+            'description' => 'Lapak UMKM official Lakubo',
+        ]);
 
         UserAddress::create([
             'user_id' => $user->id,

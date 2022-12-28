@@ -1,4 +1,9 @@
 <x-app-layout>
+
+    @section('breadcrumbs')
+        {{ Breadcrumbs::render('profile') }}
+    @endsection
+
     <div class="py-2">
         @include('profile.partials.update-profile-information-form')
         <div class="w-full pt-4 sm:rounded-lg sm:px-3 lg:px-5">

@@ -3,12 +3,20 @@
 namespace App\Http\Controllers\Seller;
 
 use App\Http\Controllers\Controller;
+use App\Models\Store;
 use Illuminate\Http\Request;
 
 class SellerDashboardController extends Controller
 {
     public function index()
     {
+
+        $store = Store::where('user_id', auth()->user()->id)->get();
+
+        if ($store == ''){
+            return back()->with('error','Anda belum memiliki Lapak UMKM');
+        }
+
         return view('seller.index');
     }
 

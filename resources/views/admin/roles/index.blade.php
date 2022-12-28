@@ -38,8 +38,8 @@
             @endif
         </div>
         <hr>
-        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 mx-auto box">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <table class="w-full text-sm text-left text-gray-500 mx-auto box">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
             <tr>
                 <th scope="col" class="py-3 px-6">
                     ID
@@ -61,16 +61,16 @@
             </thead>
             <tbody>
             @foreach($role_permission as $role)
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <tr class="bg-white border-b hover:bg-gray-50">
                     <td class="p-4 w-4">
                         <div class="flex items-center">
                             #{{$role->id}}
                         </div>
                     </td>
-                    <th scope="row" class=" py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    <th scope="row" class=" py-4 px-6 font-medium text-gray-900 whitespace-nowrap">
                         {{ $role->name }}
                     </th>
-                    <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap">
                         @foreach($role->permissions as $permis)
                             <ol class="custom-counter">
                                 <li><i class="fa-solid fa-circle-check px-2"></i>{{ $permis->name }}</li>

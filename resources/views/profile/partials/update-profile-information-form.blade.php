@@ -175,7 +175,7 @@
                 placeholder:'Pilih Provinsi',
                 searchInputPlaceholder: 'Cari Provinsi...',
                 ajax: {
-                    url: "{{route('profile.getProvince')}}",
+                    url: "{{ route('getProvince' )}}",
                     processResults: function({data}){
                         return {
                             results: $.map(data, function(item){
@@ -198,7 +198,7 @@
                     placeholder:'Pilih Kabupaten',
                     searchInputPlaceholder: 'Cari Kabupaten...',
                     ajax: {
-                        url: "{{ url('profile/regency')}}/" + id,
+                        url: "{{ url('indoregion/regency')}}/" + id,
                         processResults: function({data}){
                             return {
                                 results: $.map(data, function(item){
@@ -221,7 +221,7 @@
                     placeholder:'Pilih Kecamatan',
                     searchInputPlaceholder: 'Cari Kecamatan...',
                     ajax: {
-                        url: "{{url('profile/district')}}/"+ id,
+                        url: "{{url('indoregion/district')}}/"+ id,
                         processResults: function({data}){
                             return {
                                 results: $.map(data, function(item){
@@ -243,7 +243,7 @@
                     placeholder:'Pilih Desa',
                     searchInputPlaceholder: 'Cari Desa...',
                     ajax: {
-                        url: "{{url('profile/village')}}/"+ id,
+                        url: "{{url('indoregion/village')}}/"+ id,
                         processResults: function({data}){
                             return {
                                 results: $.map(data, function(item){
@@ -257,7 +257,6 @@
                     }
                 });
             });
-
         });
     </script>
 @endsection

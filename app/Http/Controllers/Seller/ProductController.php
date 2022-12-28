@@ -17,14 +17,17 @@ class ProductController extends Controller
 {
     public function index()
     {
-        /*$store_id = Store::with('users')->where('store_id',Auth::user()->id)->get();*/
+        if (auth()->user()->stores)
+        {
+            $listProducts = Product::with('productCategories','productImages','stores')
+                ->where('store_id', Auth::user()->stores->id)
+                ->Paginate(10)
+                ->onEachSide(2);
+            return view('seller.products.index', compact('listProducts'));
+        }
 
-        $listProducts = Product::with('categories','productImages','users')
-            ->where('user_id', Auth::user()->id)
-            ->Paginate(10)
-            ->onEachSide(2);
+        return view('seller.products.index');
 
-        return view('seller.products.index', compact('listProducts'));
     }
 
     public function create()
@@ -54,7 +57,7 @@ class ProductController extends Controller
         $product -> category_id=$category_id;
         $product -> description=$description;
         $product -> quantity=$quantity;
-        $product -> user_id=Auth::user()->id;
+        $product -> store_id = Auth::user()->stores->id;
         $product -> save();
 
         $productId=$product->id;
@@ -121,7 +124,6 @@ class ProductController extends Controller
         $product -> category_id = $category_id;
         $product -> description = $description;
         $product -> quantity = $quantity;
-        $product -> user_id = Auth::user()->id;
         $product->update();
         return redirect('seller/products')->with('message', "Product $product->name berhasil di update");
     }

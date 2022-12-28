@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\ProductCategory;
+use App\Models\StoreCategory;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -21,6 +23,8 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
+        $this->call(StoreCategorySeeder::class);
+        $this->call(ProductCategorySeeder::class);
         $this->call(RoleSeeder::class);
         $this->call(AdminSeeder::class);
         $this->call(CustomerSeeder::class);
