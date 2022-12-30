@@ -13,11 +13,8 @@ class ProductCategory extends Model
 
     protected $fillable = [
         'name',
-        'slug',
         'image'
     ];
-
-    protected $hidden = [];
 
     public function products(): HasMany
     {

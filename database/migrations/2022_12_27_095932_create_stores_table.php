@@ -11,8 +11,7 @@ return new class extends Migration
         Schema::create('store_categories', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
-            $table->string('slug');
-            $table->string('image');
+            $table->string('image_path');
             $table->softDeletes();
             $table->timestamps();
         });

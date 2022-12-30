@@ -22,7 +22,7 @@
 
         <!-- BEGIN: Notification -->
         <div class="intro-y col-span-12 2xl:col-span-12">
-            <form method="POST" action="{{ route('seller.products.store') }}" name="form-example-1" id="form-example-1" role="form" enctype="multipart/form-data">
+            <form method="POST" action="{{ route('seller.products.store') }}" data-parsley-validate="" role="form" enctype="multipart/form-data">
                 @csrf
                 <!-- BEGIN: Uplaod Product -->
                 <div class="intro-y box p-5">
@@ -47,7 +47,7 @@
                                     </div>
                                 </div>
                                 <div class="w-full mt-3 xl:mt-0 flex-1">
-                                    <div class="input-field">
+                                    <div class="input-field text-center">
                                         <div class="input-images-1"></div>
                                     </div>
                                 </div>
@@ -72,22 +72,38 @@
                                     </div>
                                 </div>
                                 <div class="w-full mt-3 xl:mt-0 flex-1">
-                                    <input id="product-name" name="name" type="text" class="form-control" placeholder="Nama Produk">
-                                    <div class="form-help text-right">Maximum character 0/50</div>
+                                    <input id="product-name"
+                                           name="name"
+                                           type="text"
+                                           class="form-control"
+                                           placeholder="Nama Produk"
+                                           required=""
+                                           data-parsley-maxlength="120"
+                                           data-parsley-required-message="Wajib memasukan Nama Produk"
+                                           data-parsley-maxlength-message="Maksimal 120 karakter..."
+                                    >
                                 </div>
                             </div>
                             <div class="form-inline items-start flex-col xl:flex-row mt-5 pt-5 first:mt-0 first:pt-0">
                                 <div class="form-label xl:w-64 xl:!mr-10">
                                     <div class="text-left">
                                         <div class="flex items-center">
-                                            <label for="category" class="font-medium">Kategori</label>
+                                            <label for="selectCateProd" class="font-medium">Kategori</label>
                                             <div class="ml-2 px-2 py-0.5 bg-slate-200 text-slate-600 dark:bg-darkmode-300 dark:text-slate-400 text-xs rounded-md">Wajib</div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="w-full mt-3 xl:mt-0 flex-1">
-                                    <select id="category" name="category_id" class="form-select">
-                                        <option value="1">Makanan</option>
+                                    <select name="kategori"
+                                            id="selectCateProd"
+                                            class="w-full form-control"
+                                            required
+                                            data-parsley-required-message="Wajib memilih Kategori Produk"
+                                    >
+                                        <option selected disabled>Pilih Kategori</option>
+                                        @foreach($listCateProd as $category)
+                                            <option value="{{ $category -> id }}">{{ $category -> name }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -101,12 +117,35 @@
                                     </div>
                                 </div>
                                 <div class="w-full mt-3 xl:mt-0 flex-1">
-                                    <div class="sm:grid grid-cols-2 gap-2">
-                                        <div class="input-group">
-                                            <div class="input-group-text">Rp</div>
-                                            <input name="price" type="text" class="form-control" placeholder="Harga">
+                                    <div class="grid grid-cols-12 gap-x-5">
+                                        <div class="col-span-12 2xl:col-span-6">
+                                            <div>
+                                                <input name="price"
+                                                       type="number"
+                                                       class="form-control"
+                                                       onkeypress="return onlyNumberKey(event)"
+                                                       placeholder="Masukan harga"
+                                                       required=""
+                                                       data-parsley-maxlength="10"
+                                                       data-parsley-required-message="Wajib memasukan data Harga"
+                                                       data-parsley-maxlength-message="Maksimal 10 digit..."
+                                                >
+                                            </div>
                                         </div>
-                                        <input name="quantity" type="text" class="form-control mt-2 sm:mt-0" placeholder="Stok">
+                                        <div class="col-span-12 2xl:col-span-6">
+                                            <div>
+                                                <input name="quantity"
+                                                       type="number"
+                                                       class="form-control mt-2 sm:mt-0"
+                                                       onkeypress="return onlyNumberKey(event)"
+                                                       placeholder="Stok"
+                                                       required=""
+                                                       data-parsley-maxlength="7"
+                                                       data-parsley-required-message="Wajib memasukan data Stok"
+                                                       data-parsley-maxlength-message="Maksimal 7 digit..."
+                                                >
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -133,7 +172,16 @@
                                     </div>
                                 </div>
                                 <div class="w-full mt-3 xl:mt-0 flex-1">
-                                    <p><textarea name="description" class="editor" id="editor"></textarea></p>
+                                    <label for="editor"></label>
+                                    <textarea name="description"
+                                              class="editor"
+                                              id="editor"
+                                              placeholder="Deskripsikan produkmu..."
+                                              required=""
+                                              data-parsley-maxlength="1000"
+                                              data-parsley-required-message="Wajib memasukan Deskripsi Produk"
+                                              data-parsley-maxlength-message="Maksimal 1000 karakter..."
+                                    ></textarea>
                                     <div class="form-help text-right">Maximum character 0/2000</div>
                                 </div>
                             </div>
@@ -141,21 +189,35 @@
                     </div>
                 </div>
                 <!-- END: Product Detail -->
-                <div class="flex justify-end flex-col md:flex-row gap-2 mt-5">
+                <div class="form-navigation-product flex justify-end flex-col md:flex-row gap-2 mt-5">
                     <button type="button" class="btn py-3 border-slate-300 dark:border-darkmode-400 text-slate-500 w-full md:w-52">Batal</button>
                     <button type="button" class="btn py-3 border-slate-300 dark:border-darkmode-400 text-slate-500 w-full md:w-52">Simpan & Tambah Baru</button>
-                    <button type="submit" class="btn py-3 btn-primary w-full md:w-52">Simpan</button>
+                    <button type="submit" class="btn submit py-3 btn-primary w-full md:w-52">Simpan</button>
                 </div>
             </form>
         </div>
     </div>
 
     @section('script')
+
+        <script>
+            function onlyNumberKey(evt) {
+                // Only ASCII character in that range allowed
+                var ASCIICode = (evt.which) ? evt.which : evt.keyCode
+                return !(ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57));
+            }
+
+            $('.form-navigation-product .submit').click(function(){
+                Parsley.addMessage('en', 'required', 'Wajib mengunggah gambar produk.');
+            });
+
+        </script>
+
         <script>
             $('.input-images-1').imageUploader({
                 imagesInputName: 'files',
                 maxSize: 2 * 1024 * 1024,
-                maxFiles: 5
+                maxFiles: 5,
             });
         </script>
 
@@ -180,6 +242,20 @@
                 .catch( error => {
                     console.log( error );
                 } );
+        </script>
+
+        <script>
+            $(document).ready(function (){
+                $("#selectCateProd").select2({
+                    placeholder:'Pilih Kategori Produk',
+                    searchInputPlaceholder: 'Cari kategori...',
+                    language: {
+                        noResults: function () {
+                            return "Tidak ditemukan.";
+                        }
+                    }
+                });
+            });
         </script>
 
     @endsection

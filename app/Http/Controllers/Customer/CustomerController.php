@@ -7,6 +7,7 @@ use App\Http\Requests\Customer\CreateStoreRequest;
 use App\Models\District;
 use App\Models\Store;
 use App\Models\StoreAddress;
+use App\Models\StoreCategory;
 use App\Models\Village;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,9 +30,9 @@ class CustomerController extends Controller
         return response()->json($data);
     }
 
-    public function getVillage($id)
+    public function getStoreCate()
     {
-        $data = Village::where('district_id', $id)->where('name', 'LIKE', '%'.request('q').'%')->paginate(1000);
+        $data = StoreCategory::where('name', 'LIKE', '%'.request('q').'%')->paginate(100);
         return response()->json($data);
     }
 
@@ -56,11 +57,8 @@ class CustomerController extends Controller
         $storeAddress->detail_address = $data['detail_alamat'];
         $storeAddress->save();
 
-        $user = Auth::user();
-        $user->assignRole('seller');
+        Auth::user()->assignRole('seller');
 
         return redirect('seller/dashboard')->with('success','Berhasil membuat lapak UMKM');
-
     }
-
 }

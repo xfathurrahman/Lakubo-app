@@ -11,8 +11,7 @@ class ProductCategorySeeder extends Seeder
     {
         ProductCategory::create([
             'name' => 'VAS bunga',
-            'slug' => 'gambar-1',
-            'image' => 'gambar-1.jpg'
+            'image_path' => 'gambar-1.jpg'
         ]);
     }
 }

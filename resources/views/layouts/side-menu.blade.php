@@ -36,8 +36,8 @@
                     </li>
                     <li>
                         <a href="{{ url('seller/store') }}" class="side-menu {{ Request::is('seller/store') ? 'side-menu--active' : '' }}">
-                            <div class="side-menu__icon"> <i data-lucide="user"></i> </div>
-                            <div class="side-menu__title"> Toko Saya</div>
+                            <div class="side-menu__icon"> <i class="fa-solid fa-store w-5 h-5"></i> </div>
+                            <div class="side-menu__title"> Lapak Saya</div>
                         </a>
                     </li>
                     <li>
@@ -56,15 +56,9 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="side-menu {{ Request::is('product-list') ? 'side-menu--active' : '' }}">
+                        <a href="{{ route('admin.products') }}" class="side-menu {{ Request::is('admin/products') ? 'side-menu--active' : '' }}">
                             <div class="side-menu__icon"> <i data-lucide="package"></i> </div>
                             <div class="side-menu__title">Produk UMKM</div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="side-menu {{ Request::is('categories') ? 'side-menu--active' : '' }}">
-                            <div class="side-menu__icon"> <i data-lucide="tag"></i> </div>
-                            <div class="side-menu__title"> Kategori </div>
                         </a>
                     </li>
                     <li>
@@ -73,6 +67,47 @@
                             <div class="side-menu__title"> Transaksi </div>
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ route('admin.stores') }}" class="side-menu {{ Request::is('admin/stores') ? 'side-menu--active' : '' }}">
+                            <div class="side-menu__icon"> <i data-lucide="package"></i> </div>
+                            <div class="side-menu__title">Pelapak UMKM</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="side-menu {{ Request::is('admin/') ? 'side-menu--active' : '' }}">
+                            <div class="side-menu__icon"> <i data-lucide="package"></i> </div>
+                            <div class="side-menu__title">Carousel</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.categories') }}" class="side-menu {{ Request::is('admin/categories') ? 'side-menu--active' : '' }}">
+                            <div class="side-menu__icon"> <i data-lucide="package"></i> </div>
+                            <div class="side-menu__title">Kategori</div>
+                        </a>
+                    </li>
+                    {{--<li>
+                        <a href="#" class="side-menu {{ Request::is('admin/categories/*') ? 'side-menu--active' : '' }}">
+                            <div class="side-menu__icon"> <i data-lucide="tag"></i> </div>
+                            <div class="side-menu__title">
+                                Kelola Kategori
+                                <div class="side-menu__sub-icon "> <i data-lucide="chevron-down"></i> </div>
+                            </div>
+                        </a>
+                        <ul>
+                            <li>
+                                <a href="{{ route('admin.product.categories') }}" class="side-menu {{ Request::is('admin/categories/products') ? 'side-menu--active' : '' }}">
+                                    <div class="side-menu__icon"> <i data-lucide="zap"></i> </div>
+                                    <div class="side-menu__title"> Produk </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.store.categories') }}" class="side-menu {{ Request::is('admin/categories/stores') ? 'side-menu--active' : '' }}">
+                                    <div class="side-menu__icon"> <i data-lucide="zap"></i> </div>
+                                    <div class="side-menu__title"> Lapak </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>--}}
                     <li>
                         <a href="#" class="side-menu {{ Request::is('admin/manage/*') ? 'side-menu--active' : '' }}">
                             <div class="side-menu__icon"> <i data-lucide="users"></i> </div>
@@ -112,7 +147,7 @@
                 </li>
 
                 <li>
-                    <a href="#" class="side-menu {{ Request::is('orders') ? 'side-menu--active' : '' }}">
+                    <a href="{{ route('customer.orders') }}" class="side-menu {{ Request::is('customer/orders') ? 'side-menu--active' : '' }}">
                         <div class="side-menu__icon"> <i data-lucide="shopping-bag"></i> </div>
                         <div class="side-menu__title"> Pesanan Saya </div>
                     </a>

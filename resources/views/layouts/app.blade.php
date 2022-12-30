@@ -23,8 +23,6 @@
         <script type="text/javascript" src="{{ asset('js/select2-searchInputPlaceholder.js') }}"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/js/all.min.js"></script>
         <script type="text/javascript" src="https://cdn.ckeditor.com/ckeditor5/35.4.0/classic/ckeditor.js"></script>
-        @yield('script')
-
         <script>
             $(function(){
                 var $sections=$('.form-section');
@@ -55,17 +53,26 @@
                     }).done(function(){
                         navigateTo(curIndex()+1);
                     });
-
                 });
                 $sections.each(function(index,section){
                     $(section).find(':input').attr('data-parsley-group','block-'+index);
                 });
                 navigateTo(0);
             });
-        </script>
 
-        <script>
+
             $(document).ready(function (){
+
+                $("#selectCateStore").select2({
+                    placeholder:'Pilih Kategori Lapak',
+                    searchInputPlaceholder: 'Cari kategori...',
+                    language: {
+                        noResults: function () {
+                            return "Tidak ditemukan.";
+                        }
+                    }
+                });
+
                 $("#selectDistrictStore").select2({
                     placeholder:'Pilih Kecamatan',
                     searchInputPlaceholder: 'Cari Kecamatan...',
@@ -81,6 +88,29 @@
                     language: {
                         noResults: function () {
                             return "Tidak ditemukan.";
+                        }
+                    }
+                });
+
+                $("#selectCateStore").select2({
+                    placeholder:'Pilih Kategori Lapak',
+                    searchInputPlaceholder: 'Cari kategori...',
+                    language: {
+                        noResults: function () {
+                            return "Tidak ditemukan.";
+                        }
+                    },
+                    ajax: {
+                        url: "{{ url('customer/store/categories' )}}",
+                        processResults: function({data}){
+                            return {
+                                results: $.map(data, function(item){
+                                    return {
+                                        id: item.id,
+                                        text: item.name,
+                                    }
+                                })
+                            }
                         }
                     }
                 });
@@ -134,10 +164,9 @@
                         }
                     });
                 });
-
             });
-
         </script>
 
+        @yield('script')
     </body>
 </html>

@@ -26,6 +26,21 @@ Breadcrumbs::for('user-edit', function (BreadcrumbTrail $trail) {
     $trail->push('Edit Pengguna', url('#'));
 });
 
+// Products
+Breadcrumbs::for('admin_products', function (BreadcrumbTrail $trail) {
+    $trail->push('Daftar Produk', url('admin/products'));
+});
+
+// Stores
+Breadcrumbs::for('admin_stores', function (BreadcrumbTrail $trail) {
+    $trail->push('Daftar Pelapak', url('admin/stores'));
+});
+
+// Categories
+Breadcrumbs::for('categories', function (BreadcrumbTrail $trail) {
+    $trail->push('Kelola Kategori', url('admin/categories'));
+});
+
 // Kelola Peran
 Breadcrumbs::for('roles', function (BreadcrumbTrail $trail) {
     $trail->push('Kelola Peran', url('admin/roles'));
@@ -77,7 +92,12 @@ Breadcrumbs::for('product_edit', function (BreadcrumbTrail $trail) {
 
 // Dashboard
 Breadcrumbs::for('profile', function (BreadcrumbTrail $trail) {
-    $trail->push('Profile', route('profile.edit'));
+    $trail->push('Akun Saya', route('profile.edit'));
+});
+
+// Dashboard
+Breadcrumbs::for('my-order', function (BreadcrumbTrail $trail) {
+    $trail->push('Pesanan Saya', route('customer.orders'));
 });
 
 /*END: Customer Page*/

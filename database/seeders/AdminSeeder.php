@@ -23,12 +23,12 @@ class AdminSeeder extends Seeder
             'remember_token' => Str::random(10),
         ])->assignRole('customer','seller','admin');
 
-        Store::create([
+        /*Store::create([
             'name' => 'Lakubo Official',
             'user_id' => $user->id,
             'category_id' => 1,
             'description' => 'Lapak UMKM official Lakubo',
-        ]);
+        ]);*/
 
         UserAddress::create([
             'user_id' => $user->id,

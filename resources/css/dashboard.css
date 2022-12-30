@@ -8,3 +8,11 @@
     color: #35cb4c;
 }
 
+.create_category_modal {
+    z-index: 99!important;
+}
+
+.dropdown-menu-main-top {
+    z-index: 999!important;
+}
+

@@ -50,8 +50,7 @@
                         <div class="float-left" style="vertical-align: center;">
                             Menampilkan
                             {{ $listProducts->firstItem() }}
-                            {{---
-                            {{ $listProducts->lastItem() }}--}}
+                            {{---{{ $listProducts->lastItem() }}--}}
                             dari
                             {{ $listProducts->total() }}
                             total produk.
@@ -87,14 +86,14 @@
                                                 @break
                                             @endif--}}
                                             <div class="w-10 h-10 image-fit zoom-in" style="margin-left: -0.70rem">
-                                                <img alt="Product-img" class="tooltip rounded-full" src="{{ asset("storage/product-image")."/".$image -> image_path }}" title="Uploaded {{ Carbon\Carbon::parse($product->created_at)->diffForHumans() }}">
+                                                <img data-action="zoom" alt="Product-img" class="tooltip rounded-full" src="{{ asset("storage/product-image")."/".$image -> image_path }}" title="Uploaded {{ Carbon\Carbon::parse($product->created_at)->diffForHumans() }}">
                                             </div>
                                         @endforeach
                                     </div>
                                 </td>
                                 <td>
                                     <a href="" class="font-medium whitespace-nowrap">{{ $product->name }}</a>
-                                    <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5">ini kategori</div>
+                                    <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5">{{ $product->productCategories->name }}</div>
                                 </td>
                                 <td class="text-center">{{ $product-> quantity }}</td>
                                 <td class="w-40">
@@ -111,8 +110,8 @@
                         @else
                             <tr>
                                 <td colspan="6">
-                                    <img class="max-w-3xl max-h-52 mx-auto" src="{{ asset('storage/assets/empty-box.jpg') }}" alt="iklan kosong">
-                                    <p class="text-center text-dark">Anda belum mengunggah produk.</p>
+                                    <img class="max-w-3xl max-h-52 mx-auto" src="{{ asset('assets/images/app/not-found-store.png') }}" alt="iklan kosong">
+                                    <p class="text-center text-dark py-5">Anda belum mengunggah produk.</p>
                                 </td>
                             </tr>
                         @endif

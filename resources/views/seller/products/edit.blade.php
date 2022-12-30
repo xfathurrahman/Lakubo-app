@@ -22,7 +22,7 @@
 
         <!-- BEGIN: Notification -->
         <div class="intro-y col-span-12 2xl:col-span-12">
-            <form method="POST" action="{{ route('seller.products.update', $product->id) }}" name="form-example-1" id="form-example-1" role="form" enctype="multipart/form-data">
+            <form method="POST" action="{{ route('seller.products.update', $product->id) }}" class="dropzone" role="form" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <!-- BEGIN: Uplaod Product -->
@@ -53,7 +53,7 @@
                                             <div class="flex justify-center">
                                                 @foreach($product -> productImages as $image)
                                                     <div class="w-12 h-12 image-fit zoom-in">
-                                                        <img alt="Product-img" class="tooltip rounded-full" src="{{ asset("storage/product-image")."/".$image -> image_path }}" title="Uploaded {{ Carbon\Carbon::parse($product->created_at)->diffForHumans() }}">
+                                                        <img data-action="zoom" alt="Product-img" class="tooltip rounded-full" src="{{ asset("storage/product-image")."/".$image -> image_path }}" title="Uploaded {{ Carbon\Carbon::parse($product->created_at)->diffForHumans() }}">
                                                     </div>
                                                 @endforeach
                                             </div>
@@ -61,9 +61,45 @@
                                     </div>
                                 </div>
                                 <div class="w-full mt-3 xl:mt-0 flex-1">
-                                    <div class="input-field">
+
+                                    @foreach ($product -> productImages as $attach)
+                                        <?php $path =  base64_encode(asset($attach->url)); ?>
+
+                                        <script>
+                                            $("document").ready(()=>{
+                                                var path = "{{ $path }}";
+                                                var file = new File([path], "{{ $attach->name }}", {type: "{{ $attach->mime_type }}", lastModified: {{ $attach->updated_at}}})
+                                                file['status'] = "queued";
+                                                file['status'] = "queued";
+                                                file['previewElement'] = "div.dz-preview.dz-image-preview";
+                                                file['previewTemplate'] = "div.dz-preview.dz-image-preview";
+                                                file['_removeLink'] = "a.dz-remove";
+                                                file['webkitRelativePath'] = "";
+                                                file['width'] = 500;
+                                                file['height'] = 500;
+                                                file['accepted'] = true;
+                                                file['dataURL'] = path;
+                                                file['upload'] = {
+                                                    bytesSent: 0 ,
+                                                    filename: "{{ $attach->file_name }}" ,
+                                                    progress: 0 ,
+                                                    total: {{ $attach->file_size }} ,
+                                                    uuid: "{{ md5($attach->id) }}" ,
+                                                };
+
+                                                myDropzone.emit("addedfile", file , path);
+                                                myDropzone.emit("thumbnail", file , path);
+                                                // myDropzone.emit("complete", itemInfo);
+                                                // myDropzone.options.maxFiles = myDropzone.options.maxFiles - 1;
+                                                myDropzone.files.push(file);
+                                                console.log(file);
+                                            });
+                                        </script>
+                                    @endforeach
+
+                                    {{--<div class="input-field">
                                         <div class="input-images-1"></div>
-                                    </div>
+                                    </div>--}}
                                 </div>
                             </div>
                         </div>
@@ -100,8 +136,20 @@
                                     </div>
                                 </div>
                                 <div class="w-full mt-3 xl:mt-0 flex-1">
-                                    <select id="category" name="category_id" class="form-select">
-                                        <option value="1">Makanan</option>
+                                    <select name="kategori"
+                                            id="selectCateProd"
+                                            class="w-full form-control"
+                                            required
+                                            data-parsley-required-message="Wajib memilih Kategori Produk"
+                                    >
+                                        <option selected disabled>Pilih Kategori</option>
+                                        @foreach( $listCateProd as $cate_prod )
+                                            @if($cate_prod -> id == $productCategories->id)
+                                                <option selected value="{{ $cate_prod-> id }}">{{ $cate_prod->name }}</option>
+                                            @else
+                                                <option value="{{ $cate_prod -> id }}">{{ $cate_prod -> name }}</option>
+                                            @endif
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -167,11 +215,35 @@
     </div>
 
     @section('script')
-        <script>
+        {{--<script>
+
+            let preloaded = [
+                {id: 1, src: 'https://picsum.photos/500/500?random=1'},
+                {id: 2, src: 'https://picsum.photos/500/500?random=2'},
+                {id: 3, src: 'https://picsum.photos/500/500?random=3'},
+                {id: 4, src: 'https://picsum.photos/500/500?random=4'},
+                {id: 5, src: 'https://picsum.photos/500/500?random=5'},
+            ];
+
             $('.input-images-1').imageUploader({
+                preloaded: preloaded,
                 imagesInputName: 'files',
                 maxSize: 2 * 1024 * 1024,
                 maxFiles: 5
+            });
+        </script>--}}
+
+        <script>
+            $(document).ready(function (){
+                $("#selectCateProd").select2({
+                    placeholder:'Pilih Kategori Produk',
+                    searchInputPlaceholder: 'Cari kategori...',
+                    language: {
+                        noResults: function () {
+                            return "Tidak ditemukan.";
+                        }
+                    }
+                });
             });
         </script>
 

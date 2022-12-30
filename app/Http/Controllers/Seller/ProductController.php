@@ -3,11 +3,9 @@
 namespace App\Http\Controllers\Seller;
 
 use App\Http\Controllers\Controller;
-use App\Models\Image;
 use App\Models\Product;
+use App\Models\ProductCategory;
 use App\Models\ProductImage;
-use App\Models\Store;
-use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,42 +23,36 @@ class ProductController extends Controller
                 ->onEachSide(2);
             return view('seller.products.index', compact('listProducts'));
         }
-
         return view('seller.products.index');
-
     }
 
     public function create()
     {
-        return view('seller.products.create');
+        $listCateProd = ProductCategory::all();
+        return view('seller.products.create', compact('listCateProd'));
     }
 
     public function store(Request $request): RedirectResponse
     {
+        $data = $request->all();
+
         Validator::make($request->all(), [
-            'name'=>'required|string',
-            'category_id'=>'required',
-            'quantity'=>'required',
-            'description'=>'required|string',
+            'name'=>'required|string|max:120',
+            'kategori'=>'required',
+            'price'=>'required|max:10',
+            'quantity'=>'required|max:7',
+            'description'=>'required|string|max:1000',
             'files' => 'required',
         ])->validate();
 
-        $name=$request->name;
-        $price=$request->price;
-        $category_id=$request->category_id;
-        $description=$request->description;
-        $quantity=$request->quantity;
-
         $product  = new Product;
-        $product -> name=$name;
-        $product -> price=$price;
-        $product -> category_id=$category_id;
-        $product -> description=$description;
-        $product -> quantity=$quantity;
+        $product -> name = $data['name'];
+        $product -> price = $data['price'];
+        $product -> category_id = $data['kategori'];
+        $product -> description =  $data['description'];
+        $product -> quantity =  $data['quantity'];
         $product -> store_id = Auth::user()->stores->id;
         $product -> save();
-
-        $productId=$product->id;
 
         if ($request->hasfile('files')) {
             $files = $request->file('files');
@@ -69,7 +61,7 @@ class ProductController extends Controller
                 $name   = time().'.'.$file->getClientOriginalName();
                 $path   = public_path('/storage/product-image');
                 $file  -> move($path, $name);
-                $image -> product_id=$productId;
+                $image -> product_id = $product->id;
                 $image -> image_path=$name;
                 $image -> save();
             }
@@ -84,23 +76,30 @@ class ProductController extends Controller
 
     public function edit(Request $request, Product $product)
     {
-        return view('seller.products.edit', compact( 'product'));
+        $listCateProd = ProductCategory::all();
+        $productCategories = ProductCategory::where('id', $product->category_id)->first();
+
+        return view('seller.products.edit', compact( 'product','listCateProd','productCategories'));
+    }
+
+    public function getImage()
+    {
+        $data = ProductImage::all();
+        return response()->json($data);
     }
 
     public function update(Request $request, Product $product)
     {
-        Validator::make($request->all(), [
-            'name'=>'required',
-            'category_id'=>'required',
-            'quantity'=>'required',
-            'description'=>'required',
-        ])->validate();
+        $data = $request->all();
 
-        $name=$request->name;
-        $price=$request->price;
-        $category_id=$request->category_id;
-        $description=$request->description;
-        $quantity=$request->quantity;
+        Validator::make($request->all(), [
+            'name'=>'required|string|max:120',
+            'kategori'=>'required',
+            'price'=>'required|max:10',
+            'quantity'=>'required|max:7',
+            'description'=>'required|string|max:1000',
+            'files' => 'required',
+        ])->validate();
 
         // nambah foto baru
         if ($request->hasfile('files')) {
@@ -119,12 +118,14 @@ class ProductController extends Controller
                 $image->save();
             }
         }
-        $product -> name = $name;
-        $product -> price = $price;
-        $product -> category_id = $category_id;
-        $product -> description = $description;
-        $product -> quantity = $quantity;
+
+        $product -> name = $data['name'];
+        $product -> price = $data['price'];
+        $product -> category_id = $data['kategori'];
+        $product -> description =  $data['description'];
+        $product -> quantity =  $data['quantity'];
         $product->update();
+
         return redirect('seller/products')->with('message', "Product $product->name berhasil di update");
     }
 

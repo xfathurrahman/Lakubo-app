@@ -21,7 +21,17 @@ class Store extends Model
         return $this->belongsTo(User::class,'user_id', 'id');
     }
 
-    public function StoreAddresses()
+    public function StoreCategories()
+    {
+        return $this->belongsTo(StoreCategory::class,'category_id', 'id');
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class,'store_id', 'id');
+    }
+
+    public function storeAddresses()
     {
         return $this->hasOne(StoreAddress::class,'store_id', 'id');
     }
