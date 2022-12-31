@@ -9,6 +9,9 @@ use App\Models\ProductImage;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
@@ -98,15 +101,16 @@ class ProductController extends Controller
             'price'=>'required|max:10',
             'quantity'=>'required|max:7',
             'description'=>'required|string|max:1000',
-            'files' => 'required',
         ])->validate();
 
-        // nambah foto baru
-        if ($request->hasfile('files')) {
-            // hapus image_path dari DB
-            $imagedel = ProductImage::with('products')->where('product_id', $product->id);
-            $imagedel ->delete();
+        if ( $request->isNotFilled('old')) {
+            DB::table('product_images')->where('product_id', $product->id)->delete();
+        } elseif ($request->old)
+        {
+            DB::table('product_images')->where('product_id', $product->id)->whereNotIn('id', $request->old)->delete();
+        }
 
+        if ($request->hasfile('files')) {
             $files = $request->file('files');
             foreach ($files as $file) {
                 $image = new ProductImage();

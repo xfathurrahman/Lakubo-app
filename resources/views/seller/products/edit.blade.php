@@ -22,7 +22,7 @@
 
         <!-- BEGIN: Notification -->
         <div class="intro-y col-span-12 2xl:col-span-12">
-            <form method="POST" action="{{ route('seller.products.update', $product->id) }}" class="dropzone" role="form" enctype="multipart/form-data">
+            <form method="POST" action="{{ route('seller.products.update', $product->id) }}" data-parsley-validate="" role="form" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <!-- BEGIN: Uplaod Product -->
@@ -45,61 +45,12 @@
                                             <div>Format gambar .jpg .jpeg .png dan ukuran minimum 300 x 300px (Untuk gambar optimal gunakan ukuran minimum 700 x 700 px).</div>
                                             <div class="mt-2">Pilih foto produk atau tarik dan letakkan hingga maksimal 5 foto sekaligus di sini.</div>
                                         </div>
-                                        <div class="flex items-center">
-                                            <div class="font-medium">Foto Produk</div>
-                                            <div class="ml-2 px-2 py-0.5 bg-slate-200 text-slate-600 dark:bg-darkmode-300 dark:text-slate-400 text-xs rounded-md">Saat ini</div>
-                                        </div>
-                                        <div class="w-full mt-3">
-                                            <div class="flex justify-center">
-                                                @foreach($product -> productImages as $image)
-                                                    <div class="w-12 h-12 image-fit zoom-in">
-                                                        <img data-action="zoom" alt="Product-img" class="tooltip rounded-full" src="{{ asset("storage/product-image")."/".$image -> image_path }}" title="Uploaded {{ Carbon\Carbon::parse($product->created_at)->diffForHumans() }}">
-                                                    </div>
-                                                @endforeach
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                                 <div class="w-full mt-3 xl:mt-0 flex-1">
-
-                                    @foreach ($product -> productImages as $attach)
-                                        <?php $path =  base64_encode(asset($attach->url)); ?>
-
-                                        <script>
-                                            $("document").ready(()=>{
-                                                var path = "{{ $path }}";
-                                                var file = new File([path], "{{ $attach->name }}", {type: "{{ $attach->mime_type }}", lastModified: {{ $attach->updated_at}}})
-                                                file['status'] = "queued";
-                                                file['status'] = "queued";
-                                                file['previewElement'] = "div.dz-preview.dz-image-preview";
-                                                file['previewTemplate'] = "div.dz-preview.dz-image-preview";
-                                                file['_removeLink'] = "a.dz-remove";
-                                                file['webkitRelativePath'] = "";
-                                                file['width'] = 500;
-                                                file['height'] = 500;
-                                                file['accepted'] = true;
-                                                file['dataURL'] = path;
-                                                file['upload'] = {
-                                                    bytesSent: 0 ,
-                                                    filename: "{{ $attach->file_name }}" ,
-                                                    progress: 0 ,
-                                                    total: {{ $attach->file_size }} ,
-                                                    uuid: "{{ md5($attach->id) }}" ,
-                                                };
-
-                                                myDropzone.emit("addedfile", file , path);
-                                                myDropzone.emit("thumbnail", file , path);
-                                                // myDropzone.emit("complete", itemInfo);
-                                                // myDropzone.options.maxFiles = myDropzone.options.maxFiles - 1;
-                                                myDropzone.files.push(file);
-                                                console.log(file);
-                                            });
-                                        </script>
-                                    @endforeach
-
-                                    {{--<div class="input-field">
+                                    <div class="input-field text-center">
                                         <div class="input-images-1"></div>
-                                    </div>--}}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -122,8 +73,17 @@
                                     </div>
                                 </div>
                                 <div class="w-full mt-3 xl:mt-0 flex-1">
-                                    <input id="product-name" name="name" type="text" class="form-control" value="{{ $product->name }}" placeholder="Nama Produk">
-                                    <div class="form-help text-right">Maximum character 0/50</div>
+                                    <input id="product-name"
+                                           name="name"
+                                           type="text"
+                                           class="form-control"
+                                           placeholder="Nama Produk"
+                                           value="{{ $product->name }}"
+                                           required=""
+                                           data-parsley-maxlength="120"
+                                           data-parsley-required-message="Wajib memasukan Nama Produk"
+                                           data-parsley-maxlength-message="Maksimal 120 karakter..."
+                                    >
                                 </div>
                             </div>
                             <div class="form-inline items-start flex-col xl:flex-row mt-5 pt-5 first:mt-0 first:pt-0">
@@ -163,12 +123,37 @@
                                     </div>
                                 </div>
                                 <div class="w-full mt-3 xl:mt-0 flex-1">
-                                    <div class="sm:grid grid-cols-2 gap-2">
-                                        <div class="input-group">
-                                            <div class="input-group-text">Rp</div>
-                                            <input name="price" value="{{ $product->price }}" type="text" class="form-control" placeholder="Harga">
+                                    <div class="grid grid-cols-12 gap-x-5">
+                                        <div class="col-span-12 2xl:col-span-6">
+                                            <div>
+                                                <input name="price"
+                                                       type="number"
+                                                       class="form-control"
+                                                       onkeypress="return onlyNumberKey(event)"
+                                                       placeholder="Masukan harga"
+                                                       value="{{ $product->price }}"
+                                                       required=""
+                                                       data-parsley-maxlength="10"
+                                                       data-parsley-required-message="Wajib memasukan data Harga"
+                                                       data-parsley-maxlength-message="Maksimal 10 digit..."
+                                                >
+                                            </div>
                                         </div>
-                                        <input name="quantity" value="{{ $product->quantity }}" type="text" class="form-control mt-2 sm:mt-0" placeholder="Stok">
+                                        <div class="col-span-12 2xl:col-span-6">
+                                            <div>
+                                                <input name="quantity"
+                                                       type="number"
+                                                       class="form-control mt-2 sm:mt-0"
+                                                       onkeypress="return onlyNumberKey(event)"
+                                                       placeholder="Stok"
+                                                       value="{{ $product->quantity }}"
+                                                       required=""
+                                                       data-parsley-maxlength="7"
+                                                       data-parsley-required-message="Wajib memasukan data Stok"
+                                                       data-parsley-maxlength-message="Maksimal 7 digit..."
+                                                >
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -195,43 +180,52 @@
                                     </div>
                                 </div>
                                 <div class="w-full mt-3 xl:mt-0 flex-1">
-                                    <textarea name="description" class="editor" id="editor">
-                                        {{ $product->description }}
-                                    </textarea>
-                                    <div class="form-help text-right">Maximum character 0/2000</div>
+                                    <textarea name="description"
+                                              class="editor"
+                                              id="editor"
+                                              required=""
+                                              data-parsley-maxlength="1000"
+                                              data-parsley-required-message="Wajib memasukan Deskripsi Produk"
+                                              data-parsley-maxlength-message="Maksimal 1000 karakter..."
+                                    >{{ $product->description }}</textarea>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <!-- END: Product Detail -->
-                <div class="flex justify-end flex-col md:flex-row gap-2 mt-5">
+                <div class="form-navigation-product-edit flex justify-end flex-col md:flex-row gap-2 mt-5">
                     <button type="button" class="btn py-3 border-slate-300 dark:border-darkmode-400 text-slate-500 w-full md:w-52">Batal</button>
                     <button type="button" class="btn py-3 border-slate-300 dark:border-darkmode-400 text-slate-500 w-full md:w-52">Simpan & Tambah Baru</button>
-                    <button type="submit" class="btn py-3 btn-primary w-full md:w-52">Simpan</button>
+                    <button type="submit" class="submit btn py-3 btn-primary w-full md:w-52">Simpan</button>
                 </div>
             </form>
         </div>
     </div>
 
     @section('script')
-        {{--<script>
 
+        <script>
+            $('.form-navigation-product-edit .submit').click(function(){
+                Parsley.addMessage('en', 'required', 'Wajib mengunggah gambar produk.');
+            });
+        </script>
+
+        <script>
             let preloaded = [
-                {id: 1, src: 'https://picsum.photos/500/500?random=1'},
-                {id: 2, src: 'https://picsum.photos/500/500?random=2'},
-                {id: 3, src: 'https://picsum.photos/500/500?random=3'},
-                {id: 4, src: 'https://picsum.photos/500/500?random=4'},
-                {id: 5, src: 'https://picsum.photos/500/500?random=5'},
+                    @foreach($product -> productImages as $image)
+                {id: {{ $image->id }}, src: '{{ asset("storage/product-image")."/".$image -> image_path }}', name: 'files'},
+                @endforeach
             ];
 
             $('.input-images-1').imageUploader({
                 preloaded: preloaded,
                 imagesInputName: 'files',
+                preloadedInputName: 'old',
                 maxSize: 2 * 1024 * 1024,
                 maxFiles: 5
             });
-        </script>--}}
+        </script>
 
         <script>
             $(document).ready(function (){
@@ -251,22 +245,11 @@
             ClassicEditor.create( document.querySelector( '#editor' ), {
                     toolbar: { items: [
                             'heading',
-                            'alignment',
                             'bold',
                             'italic',
                             'blockQuote',
-                            'underline',
-                            'subscript',
-                            'superscript',
                             'bulletedList',
                             'numberedList',
-                            'todoList',
-                            'fontfamily',
-                            'fontsize',
-                            'fontColor',
-                            'fontBackgroundColor',
-                            'code',
-                            'codeBlock',
                             'insertTable',
                             'outdent',
                             'indent',

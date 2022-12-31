@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="{{ asset('css/image-uploader.css') }}">
         <link rel="stylesheet" href="{{ asset('css/image-uploader.css') }}">
         <link rel="stylesheet" href="{{ asset('css/select2.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/alertify.css') }}">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
@@ -21,6 +22,7 @@
         <script type="text/javascript" src="{{ asset('js/image-uploader.js') }}"></script>
         <script type="text/javascript" src="{{ asset('js/select2.min.js') }}"></script>
         <script type="text/javascript" src="{{ asset('js/select2-searchInputPlaceholder.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('js/alertify.js') }}"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/js/all.min.js"></script>
         <script type="text/javascript" src="https://cdn.ckeditor.com/ckeditor5/35.4.0/classic/ckeditor.js"></script>
         <script>

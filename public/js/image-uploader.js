@@ -81,7 +81,6 @@
                 name: plugin.settings.imagesInputName + '[]',
                 accept: plugin.settings.extensions.join(','),
                 multiple: '',
-                required:''
             }).appendTo($container);
 
             // Create the uploaded images container and append it to the container
@@ -153,7 +152,7 @@
                 let $preloaded = $('<input>', {
                     type: 'hidden',
                     name: plugin.settings.preloadedInputName + '[]',
-                    value: id
+                    value: id,
                 }).appendTo($container)
 
             } else {
@@ -316,7 +315,7 @@
         let validateMaxFiles = function (index, file) {
 
             if ((index + dataTransfer.items.length + plugin.settings.preloaded.length) >= plugin.settings.maxFiles) {
-                alertify.alert(`Berkas "${file.name}" tidak dapat ditambahkan ( maksimal ${plugin.settings.maxFiles} Gambar. )`).set({title:"Maaf..",transition:'flipy'}).set({labels:{ok:'Oke'}});
+                alertify.alert(`Berkas "${file.name}" tidak dapat ditambahkan ( maksimal ${plugin.settings.maxFiles} Gambar. )`).set({title:"Maaf :(",transition:'pulse'}).set({labels:{ok:'Oke'}});
                 return false;
             }
 
