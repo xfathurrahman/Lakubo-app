@@ -19,8 +19,24 @@
                     <button type="button" class="btn-close text-white" data-tw-dismiss="alert" aria-label="Close"> <i data-lucide="x" class="w-4 h-4"></i> </button>
                 </div>
             @endif
-
         <!-- BEGIN: Notification -->
+
+            <!-- BEGIN: Notification -->
+            @if(Session::has('success'))
+                <div class="intro-y col-span-11 alert alert-success alert-dismissible show flex items-center mb-6" role="alert">
+                    <span><i data-lucide="info" class="w-4 h-4 mr-2"></i></span>
+                    <div class="block">
+                        {{ Session::get('success') }}
+                        @php
+                            Session::forget('success');
+                        @endphp
+                    </div>
+                    <button type="button" class="btn-close text-white" data-tw-dismiss="alert" aria-label="Close"> <i data-lucide="x" class="w-4 h-4"></i> </button>
+                </div>
+            @endif
+            <!-- BEGIN: Notification -->
+
+
         <div class="intro-y col-span-12 2xl:col-span-12">
             <form method="POST" action="{{ route('seller.products.store') }}" data-parsley-validate="" role="form" enctype="multipart/form-data">
                 @csrf
@@ -77,6 +93,7 @@
                                            type="text"
                                            class="form-control"
                                            placeholder="Nama Produk"
+                                           value="{{old('name')}}"
                                            required=""
                                            data-parsley-maxlength="120"
                                            data-parsley-required-message="Wajib memasukan Nama Produk"
@@ -102,7 +119,7 @@
                                     >
                                         <option selected disabled>Pilih Kategori</option>
                                         @foreach($listCateProd as $category)
-                                            <option value="{{ $category -> id }}">{{ $category -> name }}</option>
+                                            <option @if( old('kategori')  == $category->id) selected="selected" @endif value="{{ $category -> id }}">{{ $category -> name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -125,6 +142,7 @@
                                                        class="form-control"
                                                        onkeypress="return onlyNumberKey(event)"
                                                        placeholder="Masukan harga"
+                                                       value="{{old('price')}}"
                                                        required=""
                                                        data-parsley-maxlength="10"
                                                        data-parsley-required-message="Wajib memasukan data Harga"
@@ -139,6 +157,7 @@
                                                        class="form-control mt-2 sm:mt-0"
                                                        onkeypress="return onlyNumberKey(event)"
                                                        placeholder="Stok"
+                                                       value="{{old('quantity')}}"
                                                        required=""
                                                        data-parsley-maxlength="7"
                                                        data-parsley-required-message="Wajib memasukan data Stok"
@@ -181,7 +200,7 @@
                                               data-parsley-maxlength="1000"
                                               data-parsley-required-message="Wajib memasukan Deskripsi Produk"
                                               data-parsley-maxlength-message="Maksimal 1000 karakter..."
-                                    ></textarea>
+                                    >{{old('description')}}</textarea>
                                     <div class="form-help text-right">Maximum character 0/2000</div>
                                 </div>
                             </div>
@@ -190,9 +209,9 @@
                 </div>
                 <!-- END: Product Detail -->
                 <div class="form-navigation-product flex justify-end flex-col md:flex-row gap-2 mt-5">
-                    <button type="button" class="btn py-3 border-slate-300 dark:border-darkmode-400 text-slate-500 w-full md:w-52">Batal</button>
-                    <button type="button" class="btn py-3 border-slate-300 dark:border-darkmode-400 text-slate-500 w-full md:w-52">Simpan & Tambah Baru</button>
-                    <button type="submit" class="btn submit py-3 btn-primary w-full md:w-52">Simpan</button>
+                    <a href="{{ route('seller.products.index') }}" type="button" class="btn py-3 border-slate-300 dark:border-darkmode-400 text-slate-500 w-full md:w-52">Batal</a>
+                    <button type="submit" name="action" value="save_and_new" class="btn btn-twitter py-3 w-full md:w-52">Simpan & Tambah Baru</button>
+                    <button type="submit" name="action" value="save" class="btn submit py-3 btn-primary w-full md:w-52">Simpan</button>
                 </div>
             </form>
         </div>

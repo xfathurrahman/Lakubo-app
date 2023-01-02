@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Seller;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Seller\StoreProductRequest;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\ProductImage;
@@ -35,18 +36,10 @@ class ProductController extends Controller
         return view('seller.products.create', compact('listCateProd'));
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(StoreProductRequest $request)
     {
         $data = $request->all();
-
-        Validator::make($request->all(), [
-            'name'=>'required|string|max:120',
-            'kategori'=>'required',
-            'price'=>'required|max:10',
-            'quantity'=>'required|max:7',
-            'description'=>'required|string|max:1000',
-            'files' => 'required',
-        ])->validate();
+        $request->validated();
 
         $product  = new Product;
         $product -> name = $data['name'];
@@ -68,8 +61,12 @@ class ProductController extends Controller
                 $image -> image_path=$name;
                 $image -> save();
             }
-            return redirect('seller/products')->with("success", "Produk berhasi ditambahkan");
         }
+        if ($request->get('action') == 'save_and_new') {
+            return redirect('seller/products/create')->with("success", "Produk berhasil ditambahkan");
+        }
+
+        return redirect('seller/products')->with("success", "Produk berhasil ditambahkan");
     }
 
     public function show($id)
@@ -103,38 +100,57 @@ class ProductController extends Controller
             'description'=>'required|string|max:1000',
         ])->validate();
 
-        if ( $request->isNotFilled('old')) {
-            DB::table('product_images')->where('product_id', $product->id)->delete();
-        } elseif ($request->old)
+        if ($request->filled('old') || $request->hasFile('files'))
         {
-            DB::table('product_images')->where('product_id', $product->id)->whereNotIn('id', $request->old)->delete();
-        }
-
-        if ($request->hasfile('files')) {
-            $files = $request->file('files');
-            foreach ($files as $file) {
-                $image = new ProductImage();
-                $image_name = time() . '.' . $file->getClientOriginalName();
-                $path = public_path('/storage/product-image');
-                $file->move($path, $image_name);
-                $image->product_id = $product->id;
-                $image->image_path = $image_name;
-                $image->save();
+            if ( $request->isNotFilled('old')) {
+                DB::table('product_images')->where('product_id', $product->id)->delete();
+            } elseif ($request->old)
+            {
+                DB::table('product_images')->where('product_id', $product->id)->whereNotIn('id', $request->old)->delete();
             }
+
+            if ($request->hasfile('files')) {
+                $files = $request->file('files');
+                foreach ($files as $file) {
+                    $image = new ProductImage();
+                    $image_name = time() . '.' . $file->getClientOriginalName();
+                    $path = public_path('/storage/product-image');
+                    $file->move($path, $image_name);
+                    $image->product_id = $product->id;
+                    $image->image_path = $image_name;
+                    $image->save();
+                }
+            }
+
+            $product -> name = $data['name'];
+            $product -> price = $data['price'];
+            $product -> category_id = $data['kategori'];
+            $product -> description =  $data['description'];
+            $product -> quantity =  $data['quantity'];
+            $product->update();
+
+            return redirect('seller/products')->with('success', "Product $product->name berhasil di update");
         }
-
-        $product -> name = $data['name'];
-        $product -> price = $data['price'];
-        $product -> category_id = $data['kategori'];
-        $product -> description =  $data['description'];
-        $product -> quantity =  $data['quantity'];
-        $product->update();
-
-        return redirect('seller/products')->with('message', "Product $product->name berhasil di update");
+        return back()->with('error','Wajib menggunggah minimal 1 gambar produk.');
     }
 
-    public function destroy($id)
+    public function destroy($product)
     {
-        //
+        $product = Product::find($product);
+        if ($product)
+        {
+            foreach ( $product->productImages as $image)
+            {
+                $path = public_path('storage/product-image/'.$image->image_path);
+                if (file_exists($path)) {
+                    unlink($path);
+                }
+            }
+            $product->productImages()->delete();
+            $product->delete();
+            return redirect('seller/products')->with('success', 'Produk berhasil di hapus.');
+        }
+        $product->delete();
+        return redirect('seller/products')->with('success', 'Produk tidak memiliki gambar.');
     }
 }

@@ -43,12 +43,19 @@ Route::get('/getimage/{id}', [ProductController::class, 'getImage'])->name('getI
 
 Route::middleware(['auth', 'verified', 'role:admin'])->name('admin.')->prefix('admin')->group(function (){
     Route::get('/dashboard',[AdminDashboardController::class,'index'])->name('dashboard');
+    /*-----------------------------------------------Produk-------------------------------------------------------*/
     Route::get('/products',[AdminProductController::class,'index'])->name('products');
+    /*-----------------------------------------------Lapak-------------------------------------------------------*/
     Route::get('/stores',[AdminStoreController::class,'index'])->name('stores');
+    /*-----------------------------------------------Kategori-------------------------------------------------------*/
     Route::get('/categories',[CategoryController::class,'index'])->name('categories');
     Route::post('/categories/products/create',[CategoryController::class,'storeCateProd'])->name('product.category.store');
-    Route::put('/categories/products/edit',[CategoryController::class,'updateCateProd'])->name('product.category.update');
     Route::post('/categories/stores/create',[CategoryController::class,'storeCateStore'])->name('store.category.store');
+    Route::put('/categories/products/{id}/edit',[CategoryController::class,'updateCateProd'])->name('product.category.update');
+    Route::put('/categories/store/{id}/edit',[CategoryController::class,'updateCateStore'])->name('store.category.update');
+    Route::delete('/categories/product/{id}/delete',[CategoryController::class,'deleteCateProd'])->name('product.category.delete');
+    Route::delete('/categories/store/{id}/delete',[CategoryController::class,'deleteCateStore'])->name('store.category.delete');
+    /*-----------------------------------------------Hak akses & Peran-------------------------------------------------------*/
     Route::get('/manage/roles',[RoleController::class,'index'])->name('roles.index');
     Route::post('/roles/create',[RoleController::class,'store'])->name('roles.store');
     Route::put('/roles/{role}/update',[RoleController::class,'update'])->name('roles.update');
@@ -57,6 +64,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->name('admin.')->prefix('a
     Route::post('/permissions/create',[PermissionController::class,'store'])->name('permissions.store');
     Route::put('/permissions/{permission}/update',[PermissionController::class,'update'])->name('permissions.update');
     Route::delete('/permissions/{permission}/delete',[PermissionController::class,'destroy'])->name('permissions.delete');
+    /*-----------------------------------------------Pengguna-------------------------------------------------------*/
     Route::get('/manage/users', [UserController::class, 'index'])->name('users.index');
     Route::get('/manage/users/{user}', [UserController::class, 'show'])->name('users.show');
     Route::put('/users/{user}', [UserController::class, 'updateUserAccount'])->name('users.account.update');
@@ -74,7 +82,7 @@ Route::middleware(['auth', 'verified', 'role:seller'])->name('seller.')->prefix(
     Route::post('/products/create', [ProductController::class,'store'])->name('products.store');
     Route::get('/products/{product}/edit', [ProductController::class,'edit'])->name('products.edit');
     Route::put('/products/{product}/update', [ProductController::class,'update'])->name('products.update');
-    Route::put('/products/{product}/delete', [ProductController::class,'destroy'])->name('products.delete');
+    Route::delete('/products/{product}/delete', [ProductController::class,'destroy'])->name('products.delete');
 });
 
 Route::middleware(['auth', 'verified', 'role:customer'])->name('customer.')->prefix('customer')->group(function (){

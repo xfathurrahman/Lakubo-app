@@ -39,22 +39,26 @@
 
     <div class="mt-10 w-full box">
         <div class="p-2">
-            <ul class="nav nav-boxed-tabs" role="tablist">
-                <li id="example-3-tab" class="nav-item flex-1" role="presentation">
-                    <button class="nav-link w-full py-2 active" data-tw-toggle="pill" data-tw-target="#example-tab-3"
+            <ul class="nav nav-link-tabs" role="tablist" id="myTab">
+                <li id="tab-products" class="nav-item flex-1" role="presentation">
+                    <button class="nav-link w-full py-2 active"
+                            data-tw-toggle="pill"
+                            data-tw-target="#tab-products"
                             type="button"
-                            role="tab" aria-controls="example-tab-3" aria-selected="true"> Produk
+                            role="tab" aria-controls="example-tab-3" aria-selected="true"><i class="fa-solid fa-boxes-stacked h-4 w-4 mr-2"></i>Produk
                     </button>
                 </li>
-                <li id="example-4-tab" class="nav-item flex-1" role="presentation">
-                    <button class="nav-link w-full py-2" data-tw-toggle="pill" data-tw-target="#example-tab-4"
+                <li id="tab-stores" class="nav-item flex-1" role="presentation">
+                    <button class="nav-link w-full py-2"
+                            data-tw-toggle="pill"
+                            data-tw-target="#tab-stores"
                             type="button"
-                            role="tab" aria-controls="example-tab-4" aria-selected="false"> Lapak
+                            role="tab" aria-controls="example-tab-4" aria-selected="false"><i class="fa-solid fa-store h-4 w-4 mr-2"></i>Lapak
                     </button>
                 </li>
             </ul>
             <div class="tab-content mt-5">
-                <div id="example-tab-3" class="tab-pane leading-relaxed active" role="tabpanel"
+                <div id="tab-products" class="tab-pane leading-relaxed active" role="tabpanel"
                      aria-labelledby="example-3-tab">
                     <div class="overflow-x-auto">
                         <table class="table">
@@ -109,8 +113,7 @@
 
                                                 <a href="#"
                                                    data-tw-toggle="modal"
-                                                   data-tw-target="#delete-role-modal-#"
-                                                   data-role_id="#"
+                                                   data-tw-target="#delete-prod-cate-modal-{{$prod_cate->id}}"
                                                    class="btn btn-primary shadow-md mr-2 delete_role"
                                                 ><i data-lucide="trash" class="w-4 h-4 mr-1"></i>Hapus</a>
 
@@ -123,7 +126,7 @@
                         </table>
                     </div>
                 </div>
-                <div id="example-tab-4" class="tab-pane leading-relaxed" role="tabpanel"
+                <div id="tab-stores" class="tab-pane leading-relaxed" role="tabpanel"
                      aria-labelledby="example-3-tab">
                     <div class="overflow-x-auto">
                         <table class="table">
@@ -171,14 +174,12 @@
                                             <div class="flex space-x-2">
                                                 <a href="#"
                                                    data-tw-toggle="modal"
-                                                   data-tw-target="#delete-role-modal-#"
-                                                   data-role_id="#"
-                                                   class="btn btn-primary shadow-md mr-2 delete_role"
+                                                   data-tw-target="#edit_store_category-{{ $store_cate->id }}"
+                                                   class="btn btn-outline-secondary shadow-md mr-2 delete_role"
                                                 ><i data-lucide="edit" class="w-4 h-4 mr-1"></i>Edit</a>
                                                 <a href="#"
                                                    data-tw-toggle="modal"
-                                                   data-tw-target="#delete-role-modal-#"
-                                                   data-role_id="#"
+                                                   data-tw-target="#delete-store-cate-modal-{{$store_cate->id}}"
                                                    class="btn btn-primary shadow-md mr-2 delete_role"
                                                 ><i data-lucide="trash" class="w-4 h-4 mr-1"></i>Hapus</a>
                                             </div>
@@ -192,11 +193,8 @@
                 </div>
             </div>
         </div>
-
-        @include('.admin.category.partials.create-product-category-modal')
-        @include('.admin.category.partials.create-store-category-modal')
-        @include('.admin.category.partials.edit-product-category-modal')
-
+        @include('.admin.category.partials.create-category-modal')
+        @include('.admin.category.partials.edit-category-modal')
+        @include('.admin.category.partials.delete-category-modal')
     </div>
-
 </x-app-layout>

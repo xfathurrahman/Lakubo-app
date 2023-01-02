@@ -74,7 +74,6 @@ class UserController extends Controller
             return back()->with('error', 'anda adalah "admin".');
         }
         $user->delete();
-
         return back()->with('success', "pengguna '$user->name' dihapus.");
     }
 }

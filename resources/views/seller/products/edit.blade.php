@@ -9,13 +9,13 @@
         @if(Session::has('error'))
             <div class="intro-y col-span-11 alert alert-primary alert-dismissible show flex items-center mb-6" role="alert">
                 <span><i data-lucide="info" class="w-4 h-4 mr-2"></i></span>
-                <span>
+                <div class="font-medium">Data anda tidak valid :&emsp;</div>
+                <div class="block">
                     {{ Session::get('error') }}
                     @php
                         Session::forget('error');
                     @endphp
-                    <a href="https://themeforest.net/item/midone-jquery-tailwindcss-html-admin-template/26366820" class="underline ml-1" target="blank">Learn More</a>
-                </span>
+                </div>
                 <button type="button" class="btn-close text-white" data-tw-dismiss="alert" aria-label="Close"> <i data-lucide="x" class="w-4 h-4"></i> </button>
             </div>
         @endif
@@ -195,8 +195,7 @@
                 </div>
                 <!-- END: Product Detail -->
                 <div class="form-navigation-product-edit flex justify-end flex-col md:flex-row gap-2 mt-5">
-                    <button type="button" class="btn py-3 border-slate-300 dark:border-darkmode-400 text-slate-500 w-full md:w-52">Batal</button>
-                    <button type="button" class="btn py-3 border-slate-300 dark:border-darkmode-400 text-slate-500 w-full md:w-52">Simpan & Tambah Baru</button>
+                    <a href="{{ url('/seller/products') }}" class="btn py-3 border-slate-300 dark:border-darkmode-400 text-slate-500 w-full md:w-52">Batal</a>
                     <button type="submit" class="submit btn py-3 btn-primary w-full md:w-52">Simpan</button>
                 </div>
             </form>
@@ -214,8 +213,8 @@
         <script>
             let preloaded = [
                     @foreach($product -> productImages as $image)
-                {id: {{ $image->id }}, src: '{{ asset("storage/product-image")."/".$image -> image_path }}', name: 'files'},
-                @endforeach
+                        {id: {{ $image->id }}, src: '{{ asset("storage/product-image")."/".$image -> image_path }}'},
+                    @endforeach
             ];
 
             $('.input-images-1').imageUploader({

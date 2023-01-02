@@ -24,6 +24,7 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('name');
             $table->longText('description');
+            $table->softDeletes();
             $table->timestamps();
         });
 
@@ -36,6 +37,7 @@ return new class extends Migration
             $table->string('district_id');
             $table->string('village_id');
             $table->string('detail_address');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

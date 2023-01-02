@@ -49,8 +49,7 @@
                     <div class="hidden md:block mx-auto text-slate-500">
                         <div class="float-left" style="vertical-align: center;">
                             Menampilkan
-                            {{ $listProducts->firstItem() }}
-                            {{---{{ $listProducts->lastItem() }}--}}
+                            {{ $listProducts->firstItem() }}&nbsp;-&nbsp;{{ $listProducts->lastItem() }}
                             dari
                             {{ $listProducts->total() }}
                             total produk.
@@ -102,7 +101,7 @@
                                 <td class="table-report__action w-56">
                                     <div class="flex justify-center items-center">
                                         <a class="flex items-center mr-3" href="{{ route('seller.products.edit', $product->id) }}"> <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Edit </a>
-                                        <a class="flex items-center text-danger" href="javascript:;" data-tw-toggle="modal" data-tw-target="#delete-confirmation-modal"> <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Delete </a>
+                                        <a class="flex items-center text-danger" href="javascript:;" data-tw-toggle="modal" data-tw-target="#delete-confirmation-modal-{{$product->id}}"> <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Delete </a>
                                     </div>
                                 </td>
                             </tr>
@@ -135,29 +134,7 @@
                 </div>
                 <!-- END: Pagination -->
             </div>
-            <!-- BEGIN: Delete Confirmation Modal -->
-            <div id="delete-confirmation-modal" class="modal" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-body p-0">
-                            <div class="p-5 text-center">
-                                <i data-lucide="x-circle" class="w-16 h-16 text-danger mx-auto mt-3"></i>
-                                <div class="text-3xl mt-5">Are you sure?</div>
-                                <div class="text-slate-500 mt-2">
-                                    Do you really want to delete these records?
-                                    <br>
-                                    This process cannot be undone.
-                                </div>
-                            </div>
-                            <div class="px-5 pb-8 text-center">
-                                <button type="button" data-tw-dismiss="modal" class="btn btn-outline-secondary w-24 mr-1">Cancel</button>
-                                <button type="button" class="btn btn-danger w-24">Delete</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- END: Delete Confirmation Modal -->
+            @include('.seller.products.partials.delete-product-modal')
         @else
             <div class="intro-y col-span-11 alert alert-primary alert-dismissible show flex items-center mb-6" role="alert">
                 <span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="info" data-lucide="info" class="lucide lucide-info w-4 h-4 mr-2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></span>
