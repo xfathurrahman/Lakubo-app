@@ -3,7 +3,7 @@
 @section('title', __('Forbidden'))
 @section('code', '403')
 @section('image')
-    <img alt="Midone - HTML Admin Template" class="h-48 lg:h-auto" src="{{ asset('assets/images/403-error-illustration.svg') }}">
+    <img alt="403-error" class="h-48 lg:h-auto" src="{{ asset('assets/images/403-error-illustration.svg') }}">
 @endsection
 @section('message')
     <div class="intro-x text-xl lg:text-3xl font-medium mt-5">Oops. Anda tidak memiliki akses.</div>

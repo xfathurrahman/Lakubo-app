@@ -1,0 +1,78 @@
+@media (min-width: 1280px) {
+    .xl\:w-31-5 {
+        width: 31.5rem;
+    }
+}
+
+.h-30rem {
+    height: 30rem;
+}
+
+.h-28rem {
+    height: 28rem;
+}
+
+.color-1 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(248 113 113 / var(--tw-bg-opacity));
+}
+.color-2 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(96 165 250 / var(--tw-bg-opacity));
+}
+.color-3 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(251 146 60 / var(--tw-bg-opacity));
+}
+.color-4 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(244 114 182 / var(--tw-bg-opacity));
+}
+.color-5 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(74 222 128 / var(--tw-bg-opacity));
+}
+.color-6 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(251 191 36 / var(--tw-bg-opacity));
+}
+.color-7 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(232 121 249 / var(--tw-bg-opacity));
+}
+.color-8 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(251 113 133 / var(--tw-bg-opacity));
+}
+.color-9 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(45 212 191 / var(--tw-bg-opacity));
+}
+.color-10 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(192 132 252 / var(--tw-bg-opacity));
+}
+
+.capitalize_address {
+    text-transform: lowercase;
+    display: inline-block;
+    overflow-y: hidden!important;
+}
+
+.capitalize_address::first-line {
+    text-transform: capitalize;
+}
+
+.google-maps {
+    position: relative;
+    padding-bottom: 75%;
+height: 0;
+    overflow: hidden;
+}
+.google-maps iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    max-height: 100%!important;
+}

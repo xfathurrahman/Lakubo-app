@@ -247,13 +247,12 @@
                         'heading',
                         'bold',
                         'italic',
-                        'blockQuote',
+                        /*'blockQuote',
                         'bulletedList',
                         'numberedList',
                         'insertTable',
                         'outdent',
-                        'indent',
-                        'blockQuote',
+                        'indent',*/
                         'undo',
                         'redo'
                     ] }

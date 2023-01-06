@@ -1,4 +1,4 @@
-.form-control {
+/*.form-control {
     border: 1px solid #ccc;
     border-radius: 3px;
     box-shadow: none !important;
@@ -6,7 +6,7 @@
 
 .form-control:focus {
     border: 1px solid #34495e;
-}
+}*/
 
 .select2.select2-container {
     width: 100% !important;

@@ -54,11 +54,12 @@ class ProductController extends Controller
             $files = $request->file('files');
             foreach($files as $file) {
                 $image  = new ProductImage;
-                $name   = time().'.'.$file->getClientOriginalName();
+                $image_name = preg_replace('~[\\\\/:*?"<>|& ]~', '', $file->getClientOriginalName());
+                $fileName = date('mYdhs').'_'.$image_name;
                 $path   = public_path('/storage/product-image');
-                $file  -> move($path, $name);
+                $file  -> move($path, $fileName);
                 $image -> product_id = $product->id;
-                $image -> image_path=$name;
+                $image -> image_path=$fileName;
                 $image -> save();
             }
         }
@@ -113,11 +114,12 @@ class ProductController extends Controller
                 $files = $request->file('files');
                 foreach ($files as $file) {
                     $image = new ProductImage();
-                    $image_name = time() . '.' . $file->getClientOriginalName();
+                    $image_name = preg_replace('~[\\\\/:*?"<>|& ]~', '', $file->getClientOriginalName());
+                    $fileName = date('mYdhs').'_'.$image_name;
                     $path = public_path('/storage/product-image');
-                    $file->move($path, $image_name);
+                    $file->move($path, $fileName);
                     $image->product_id = $product->id;
-                    $image->image_path = $image_name;
+                    $image->image_path = $fileName;
                     $image->save();
                 }
             }

@@ -202,6 +202,12 @@
         </div>
     </div>
 
+    <style>
+        .ck-content .table {
+            width: auto;
+        }
+    </style>
+
     @section('script')
 
         <script>
@@ -252,11 +258,15 @@
                             'insertTable',
                             'outdent',
                             'indent',
-                            'blockQuote',
                             'undo',
                             'redo'
                         ] }
                 } )
+                /*.then( editor => {
+                    const toolbarElement = editor.ui.view.toolbar.element;
+                        toolbarElement.style.display = 'none'
+                        editor.enableReadOnlyMode( 'feature-id' )
+                } )*/
                 .catch( error => {
                     console.log( error );
                 } );

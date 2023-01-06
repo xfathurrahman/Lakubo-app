@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static where(string $string, int|string|null $id)
  * @method static id()
  * @method static find($id)
+ * @method static orderBy(string $string, string $string1)
  */
 class ProductCategory extends Model
 {

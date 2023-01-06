@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\StoreCategoryController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Customer\OrderController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\IndoRegionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Seller\ProductController;
@@ -29,9 +30,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [HomeController::class,'index']);
+Route::get('/detail/product/{id}', [HomeController::class,'getProduct'])->name('getProduct');
 
 Route::get('/indoregion/boyolali', [IndoRegionController::class,'getBoyolali'])->name('getBoyolali');
 Route::get('/indoregion/province', [IndoRegionController::class, 'getProvince'])->name('getProvince');
@@ -76,6 +76,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->name('admin.')->prefix('a
 Route::middleware(['auth', 'verified', 'role:seller'])->name('seller.')->prefix('seller')->group(function (){
     Route::get('/dashboard',[SellerDashboardController::class,'index'])->name('dashboard');
     Route::get('/store',[StoreController::class,'index'])->name('store.index');
+    Route::put('/store/{store}/update',[StoreController::class,'update'])->name('store.update');
     Route::delete('/store',[StoreController::class,'destroy'])->name('store.destroy');
     Route::get('/products', [ProductController::class,'index'])->name('products.index');
     Route::get('/products/create', [ProductController::class,'create'])->name('products.create');

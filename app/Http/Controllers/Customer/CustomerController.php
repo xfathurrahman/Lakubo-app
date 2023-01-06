@@ -55,6 +55,7 @@ class CustomerController extends Controller
         $storeAddress->district_id = $data['kecamatan'];
         $storeAddress->village_id = $data['desa'];
         $storeAddress->detail_address = $data['detail_alamat'];
+        $storeAddress->embedded_map = $data['google_maps'];
         $storeAddress->save();
 
         Auth::user()->assignRole('seller');

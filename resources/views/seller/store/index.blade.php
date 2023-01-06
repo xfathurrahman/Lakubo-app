@@ -48,9 +48,9 @@
 
             <!-- BEGIN: Display Information -->
             <div class="intro-y mt-0 box">
-                <form method="post" action="#{{--{{ route('store.update') }}--}}" class="space-y-3">
+                <form method="post" action="{{ route('seller.store.update', auth()->user()->stores->id) }}" class="space-y-3">
                     @csrf
-                    @method('patch')
+                    @method('PUT')
                     <div class="flex items-center p-2 border-b border-slate-200/60 dark:border-darkmode-400">
                         <h2 class="font-medium text-base ml-3 mr-auto">Informasi Lapak UMKM</h2>
                     </div>
@@ -60,16 +60,16 @@
                                 <div class="grid grid-cols-12 gap-x-5">
                                     <div class="col-span-12 2xl:col-span-6">
                                         <div>
-                                            <label for="username" class="flex justify-between form-label">Nama Lapak
+                                            <label for="name" class="flex justify-between form-label">Nama Lapak
                                                 <span class="text-slate-500">
-                                                    <x-input-error :messages="$errors->get('username')"/></span>
+                                                    <x-input-error :messages="$errors->get('nama_lapak')"/></span>
                                             </label>
-                                            <input id="username" name="username" type="text" class="form-control" placeholder="Masukan Nama Pengguna" value="{{ auth()->user()->stores->name }}" required="" data-parsley-error-message="Nama pengguna wajib di isi.">
+                                            <input id="name" name="nama_lapak" type="text" class="form-control" placeholder="Masukan Nama Pengguna" value="{{ auth()->user()->stores->name }}" required="" data-parsley-error-message="Nama pengguna wajib di isi.">
                                         </div>
                                         <div class="mt-3">
                                             <div class="intro-y col-span-12">
                                                 <label for="editSelectCateStore" class="form-label">Kategori</label>
-                                                <select name="kategori" id="editSelectCateStore" class="w-full form-control" required>
+                                                <select name="kategori_lapak" id="editSelectCateStore" class="w-full form-control" required>
                                                     @foreach( $storeCategories as $store_cate )
                                                         @if($store_cate -> id == auth()->user()->stores->category_id)
                                                             <option selected value="{{ $store_cate-> id }}">{{ $store_cate->name }}</option>
@@ -125,10 +125,16 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-span-12 2xl:col-span-12">
+                                        <div class="mt-3">
+                                            <label for="detail-address" class="flex justify-between form-label">Lokasi di google maps</label>
+                                            <textarea id="lokasi_di_map" name="lokasi_di_map" class="form-control h-72 md:h-20" placeholder="<iframe src=https://www.google.com/maps/embed></iframe>">{{ $storeAddresses->embedded_map }}</textarea>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="form-navigation flex items-center justify-start mt-3">
                                     <button type="submit" class="simpan btn btn-primary w-20">Simpan</button>
-                                    @if (session('status') === 'profile-updated')
+                                    @if (session('status') === 'store-updated')
                                         <p
                                             x-data="{ show: true }"
                                             x-show="show"

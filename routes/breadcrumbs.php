@@ -102,6 +102,8 @@ Breadcrumbs::for('my-order', function (BreadcrumbTrail $trail) {
 
 /*END: Customer Page*/
 
+/////////////////////////////////////////////////////////////////////////////////
+
 
 /*// Home > Blog > [Category]
 Breadcrumbs::for('category', function (BreadcrumbTrail $trail, $category) {

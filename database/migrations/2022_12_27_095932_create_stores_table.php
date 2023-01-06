@@ -37,6 +37,7 @@ return new class extends Migration
             $table->string('district_id');
             $table->string('village_id');
             $table->string('detail_address');
+            $table->longText('embedded_map')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

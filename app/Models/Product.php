@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static where(string $string, int|string|null $id)
  * @method static id()
  * @method static find($id)
+ * @method static orderBy(string $string, string $string1)
  */
 class Product extends Model
 {
@@ -34,6 +35,11 @@ class Product extends Model
     public function productCategories(): BelongsTo
     {
         return $this->belongsTo(ProductCategory::class,'category_id', 'id');
+    }
+
+    public function productImage()
+    {
+        return $this->hasOne(ProductImage::class,'product_id','id');
     }
 
     public function productImages(): HasMany

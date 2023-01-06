@@ -16,7 +16,6 @@ class ProductImage extends Model
     protected $fillable = [
         'product_id',
         'image_path',
-        'image_order',
     ];
 
     protected $cast = ['image_path' => 'array'];

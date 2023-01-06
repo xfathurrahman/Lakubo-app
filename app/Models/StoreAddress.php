@@ -5,6 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @method static where(string $string)
+ * @method static find(mixed $id)
+ */
 class StoreAddress extends Model
 {
     use HasFactory;
@@ -15,6 +19,7 @@ class StoreAddress extends Model
         'district_id',
         'village_id',
         'detail_address',
+        'embedded_map',
     ];
 
     public function stores()

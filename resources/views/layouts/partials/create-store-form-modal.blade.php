@@ -21,6 +21,10 @@
                         <button class="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400 step1">2</button>
                         <div class="lg:w-32 font-medium lg:mt-3 ml-3 lg:mx-auto">Alamat Usaha</div>
                     </div>
+                    <div class="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                        <button class="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400 step2">3</button>
+                        <div class="lg:w-32 font-medium lg:mt-3 ml-3 lg:mx-auto">Sematkan Peta</div>
+                    </div>
                 </div>
                 <form action="{{ route('customer.store.new') }}" method="POST" class="store-form">
                     @csrf
@@ -41,38 +45,48 @@
                         @endif
                         <!-- END: Modal Header -->
                         <!-- BEGIN: Modal Body -->
-                        <div class="form-section">
-                            <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
-                                <div class="intro-y col-span-12">
-                                    <label for="name" class="form-label">Nama Usaha</label>
-                                    <input name="nama" id="name" type="text" class="form-control" placeholder="Lakubo Shop" required>
-                                </div>
-                                <div class="intro-y col-span-12">
-                                    <label for="selectCateStore" class="form-label">Kategori</label>
-                                    <select name="kategori" id="selectCateStore" class="w-full form-control" required></select>
-                                </div>
-                                <div class="intro-y col-span-12">
-                                    <label for="description" class="form-label">Deskripsi</label>
-                                    <textarea name="deskripsi" id="description" class="form-control" placeholder="Deskripsikan usahamu secara singkat" required></textarea>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-section">
-                            <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
-                                <div class="intro-y col-span-12">
-                                    <label for="selectDistrictStore" class="form-label">Kecamatan</label>
-                                    <select name="kecamatan" id="selectDistrictStore" class="w-full form-control" required></select>
-                                </div>
-                                <div class="intro-y col-span-12">
-                                    <label for="selectVillageStore" class="form-label">Desa</label>
-                                    <select name="desa" id="selectVillageStore" class="w-full form-control" required></select>
-                                </div>
-                                <div class="intro-y col-span-12">
-                                    <label for="detail_alamat" class="form-label">Detail Alamat</label>
-                                    <textarea id="detail_alamat" name="detail_alamat" class="form-control" placeholder="Masukan detail lokasi usahamu" required></textarea>
+                            <div class="form-section">
+                                <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
+                                    <div class="intro-y col-span-12">
+                                        <label for="name" class="form-label">Nama Usaha</label>
+                                        <input name="nama" id="name" type="text" class="form-control" placeholder="Lakubo Shop" required>
+                                    </div>
+                                    <div class="intro-y col-span-12">
+                                        <label for="selectCateStore" class="form-label">Kategori</label>
+                                        <select name="kategori" id="selectCateStore" class="w-full form-control" required></select>
+                                    </div>
+                                    <div class="intro-y col-span-12">
+                                        <label for="description" class="form-label">Deskripsi</label>
+                                        <textarea name="deskripsi" id="description" class="form-control" placeholder="Deskripsikan usahamu secara singkat" required></textarea>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                            <div class="form-section">
+                                <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
+                                    <div class="intro-y col-span-12">
+                                        <label for="selectDistrictStore" class="form-label">Kecamatan</label>
+                                        <select name="kecamatan" id="selectDistrictStore" class="w-full form-control" required></select>
+                                    </div>
+                                    <div class="intro-y col-span-12">
+                                        <label for="selectVillageStore" class="form-label">Desa</label>
+                                        <select name="desa" id="selectVillageStore" class="w-full form-control" required></select>
+                                    </div>
+                                    <div class="intro-y col-span-12">
+                                        <label for="detail_alamat" class="form-label">Detail Alamat</label>
+                                        <textarea id="detail_alamat" name="detail_alamat" class="form-control" placeholder="Masukan detail lokasi usahamu" required></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-section">
+                                <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
+                                    <div class="intro-y col-span-12">
+                                        <label for="lokasi_di_map" class="form-label flex justify-between">
+                                            Detail Alamat<span class="sm:ml-auto mt-1 sm:mt-0 text-xs text-slate-500">(Opsional)</span>
+                                        </label>
+                                        <textarea id="lokasi_di_map" name="google_maps" class="form-control h-56" placeholder="<iframe src=https://www.google.com/maps/embed></iframe>"></textarea>
+                                    </div>
+                                </div>
+                            </div>
                     </div>
                     <!-- END: Modal Body -->
                     <!-- BEGIN: Modal Footer -->

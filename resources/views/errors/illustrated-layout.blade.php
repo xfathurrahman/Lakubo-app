@@ -6,6 +6,7 @@
 
     <title>@yield('title')</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link rel="stylesheet" href="{{ asset('css/dashboard/midone_app.css') }}">
 </head>
 <body class="py-5">
 <div class="container">

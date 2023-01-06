@@ -22,7 +22,7 @@
 
 .carousel-product .card-body {
     width: 150px;
-    height: 87px;
+    height: 125px;
 }
 
 .carousel-product .image-product {
@@ -79,7 +79,6 @@
 .carousel-product .date-option {
     position: absolute;
     height: 20px;
-    background: rgb(var(--color-primary-soft));
     bottom: 0;
     width: 150px;
     border-radius: 0 0 9px 9px;
@@ -118,6 +117,65 @@
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+}
+
+
+.owner-info {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    color: rgba(0, 0, 0, 0.54);
+    font-size: 0.85rem;
+    line-height: 18px;
+    margin-bottom: 4px;
+}
+
+.owner-pp {
+    position: relative;
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 16px;
+    margin-right: 2px;
+    vertical-align: middle;
+}
+
+.owner-name {
+    height: 20px;
+    width: 101px;
+    position: absolute;
+    top: 82%;
+    left: 28%;
+    transform: translateX(-50%,-50%);
+    overflow: hidden;
+}
+
+.owner-name:before {
+    content: attr(data-hover-before);
+    transform: translateX(-50%,-50%);
+    left: 10%;
+    top: 10%;
+    position: absolute;
+    transition: 0.5s;
+}
+
+.owner-name:after {
+    content: attr(data-hover-after);
+    transform: translateX(-50%,-50%);
+    position: absolute;
+    top: 100%;
+    left: 10%;
+    transition: 0.5s;
+}
+
+.carousel-product .card:hover .owner-name:before {
+    top: -100%;
+}
+
+.carousel-product .card:hover .owner-name:after {
+    top: 0;
 }
 
 .carousel-product .post-time-tag{
@@ -164,7 +222,7 @@
     margin-right: 7px;
     margin-top: 5px;
     color: #fff;
-    text-transform: uppercase;
+    text-transform: capitalize;
     font-size: 0.7rem;
     letter-spacing: 0.15rem;
     transition: all 0.3s;
