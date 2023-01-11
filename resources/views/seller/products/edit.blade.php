@@ -219,8 +219,8 @@
         <script>
             let preloaded = [
                     @foreach($product -> productImages as $image)
-                        {id: {{ $image->id }}, src: '{{ asset("storage/product-image")."/".$image -> image_path }}'},
-                    @endforeach
+                {id: {{ $image->id }}, src: '{{ asset("storage/product-image")."/".$image -> image_path }}'},
+                @endforeach
             ];
 
             $('.input-images-1').imageUploader({
@@ -248,20 +248,20 @@
 
         <script>
             ClassicEditor.create( document.querySelector( '#editor' ), {
-                    toolbar: { items: [
-                            'heading',
-                            'bold',
-                            'italic',
-                            'blockQuote',
-                            'bulletedList',
-                            'numberedList',
-                            'insertTable',
-                            'outdent',
-                            'indent',
-                            'undo',
-                            'redo'
-                        ] }
-                } )
+                toolbar: { items: [
+                        'heading',
+                        'bold',
+                        'italic',
+                        'blockQuote',
+                        'bulletedList',
+                        'numberedList',
+                        'insertTable',
+                        'outdent',
+                        'indent',
+                        'undo',
+                        'redo'
+                    ] }
+            } )
                 /*.then( editor => {
                     const toolbarElement = editor.ui.view.toolbar.element;
                         toolbarElement.style.display = 'none'

@@ -13,7 +13,7 @@
         <!-- image section  -->
         <section
             @foreach($images as $image)
-            x-data = "{selected : '{{ asset('storage/product-image').'/'.$image -> image_path }}'}"
+                x-data = "{selected : '{{ asset('storage/product-image').'/'.$image -> image_path }}'}"
             @endforeach
             class="relative md:grid md:grid-cols-4 md:gap-7 md:justify-items-center md:px-5">
             <h2 class="sr-only">Images of the products</h2>
@@ -145,8 +145,8 @@
         } )
             .then( editor => {
                 const toolbarElement = editor.ui.view.toolbar.element;
-                    toolbarElement.style.display = 'none'
-                    editor.enableReadOnlyMode( 'feature-id' )
+                toolbarElement.style.display = 'none'
+                editor.enableReadOnlyMode( 'feature-id' )
             } )
             .catch( error => {
                 console.log( error );

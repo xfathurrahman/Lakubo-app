@@ -7,38 +7,38 @@
         @endsection
 
         <!-- BEGIN: Notification -->
-            @if(count($errors) > 0)
-                <div class="intro-y col-span-11 alert alert-primary alert-dismissible show flex items-center mb-6" role="alert">
-                    <span><i data-lucide="info" class="w-4 h-4 mr-2"></i></span>
-                    <div class="font-medium">Data anda tidak valid :&emsp;</div>
-                    <div class="block">
-                        @foreach($errors->all() as $error)
-                            <span>{{ $error }}&nbsp;</span>
-                        @endforeach
-                    </div>
-                    <button type="button" class="btn-close text-white" data-tw-dismiss="alert" aria-label="Close"> <i data-lucide="x" class="w-4 h-4"></i> </button>
+        @if(count($errors) > 0)
+            <div class="intro-y col-span-11 alert alert-primary alert-dismissible show flex items-center mb-6" role="alert">
+                <span><i data-lucide="info" class="w-4 h-4 mr-2"></i></span>
+                <div class="font-medium">Data anda tidak valid :&emsp;</div>
+                <div class="block">
+                    @foreach($errors->all() as $error)
+                        <span>{{ $error }}&nbsp;</span>
+                    @endforeach
                 </div>
-            @endif
+                <button type="button" class="btn-close text-white" data-tw-dismiss="alert" aria-label="Close"> <i data-lucide="x" class="w-4 h-4"></i> </button>
+            </div>
+        @endif
         <!-- BEGIN: Notification -->
 
-            <!-- BEGIN: Notification -->
-            @if(Session::has('success'))
-                <div class="intro-y col-span-11 alert alert-success alert-dismissible show flex items-center mb-6" role="alert">
-                    <span><i data-lucide="info" class="w-4 h-4 mr-2"></i></span>
-                    <div class="block">
-                        {{ Session::get('success') }}
-                        @php
-                            Session::forget('success');
-                        @endphp
-                    </div>
-                    <button type="button" class="btn-close text-white" data-tw-dismiss="alert" aria-label="Close"> <i data-lucide="x" class="w-4 h-4"></i> </button>
+        <!-- BEGIN: Notification -->
+        @if(Session::has('success'))
+            <div class="intro-y col-span-11 alert alert-success alert-dismissible show flex items-center mb-6" role="alert">
+                <span><i data-lucide="info" class="w-4 h-4 mr-2"></i></span>
+                <div class="block">
+                    {{ Session::get('success') }}
+                    @php
+                        Session::forget('success');
+                    @endphp
                 </div>
-            @endif
-            <!-- BEGIN: Notification -->
+                <button type="button" class="btn-close text-white" data-tw-dismiss="alert" aria-label="Close"> <i data-lucide="x" class="w-4 h-4"></i> </button>
+            </div>
+        @endif
+        <!-- BEGIN: Notification -->
 
 
         <div class="intro-y col-span-12 2xl:col-span-12">
-            <form method="POST" action="{{ route('seller.products.store') }}" data-parsley-validate="" role="form" enctype="multipart/form-data">
+            <form id="createProduct" method="POST" action="{{ route('seller.products.store') }}" data-parsley-validate="" role="form" enctype="multipart/form-data">
                 @csrf
                 <!-- BEGIN: Uplaod Product -->
                 <div class="intro-y box p-5">
@@ -96,8 +96,10 @@
                                            value="{{old('name')}}"
                                            required=""
                                            data-parsley-maxlength="120"
+                                           data-parsley-minlength="20"
                                            data-parsley-required-message="Wajib memasukan Nama Produk"
                                            data-parsley-maxlength-message="Maksimal 120 karakter..."
+                                           data-parsley-minlength-message="Minimal 20 karakter..."
                                     >
                                 </div>
                             </div>
@@ -135,8 +137,9 @@
                                 </div>
                                 <div class="w-full mt-3 xl:mt-0 flex-1">
                                     <div class="grid grid-cols-12 gap-x-5">
-                                        <div class="col-span-12 2xl:col-span-6">
-                                            <div>
+                                        <div class="col-span-12 2xl:col-span-6" id="parsley_error">
+                                            <div class="input-group">
+                                                <div class="input-group-text">Rp.</div>
                                                 <input name="price"
                                                        type="number"
                                                        class="form-control"
@@ -144,9 +147,11 @@
                                                        placeholder="Masukan harga"
                                                        value="{{old('price')}}"
                                                        required=""
+                                                       data-parsley-errors-container="#parsley_error"
                                                        data-parsley-maxlength="10"
-                                                       data-parsley-required-message="Wajib memasukan data Harga"
+                                                       data-parsley-required-message="Wajib memasukan Harga produk"
                                                        data-parsley-maxlength-message="Maksimal 10 digit..."
+                                                       data-parsley-group="block1"
                                                 >
                                             </div>
                                         </div>
@@ -160,7 +165,7 @@
                                                        value="{{old('quantity')}}"
                                                        required=""
                                                        data-parsley-maxlength="7"
-                                                       data-parsley-required-message="Wajib memasukan data Stok"
+                                                       data-parsley-required-message="Wajib memasukan Stok produk"
                                                        data-parsley-maxlength-message="Maksimal 7 digit..."
                                                 >
                                             </div>
@@ -195,13 +200,15 @@
                                     <textarea name="description"
                                               class="editor"
                                               id="editor"
+                                              maxlength="1000"
                                               placeholder="Deskripsikan produkmu..."
                                               required=""
                                               data-parsley-maxlength="1000"
+                                              data-parsley-minlength="50"
                                               data-parsley-required-message="Wajib memasukan Deskripsi Produk"
                                               data-parsley-maxlength-message="Maksimal 1000 karakter..."
+                                              data-parsley-minlength-message="Masukan minimal 50 karakter..."
                                     >{{old('description')}}</textarea>
-                                    <div class="form-help text-right">Maximum character 0/2000</div>
                                 </div>
                             </div>
                         </div>
@@ -230,6 +237,19 @@
                 Parsley.addMessage('en', 'required', 'Wajib mengunggah gambar produk.');
             });
 
+            /*$('#createProduct').parsley({
+                successClass: 'has-success',
+                errorClass: 'has-error',
+                errorsContainer: function(el) {
+                    return el.$element.closest('.input-group');
+                },
+                classHandler: function(el) {
+                    return el.$element.closest(".input-group");
+                },
+                errorsWrapper: '<div class="help-block"></div>',
+                errorTemplate: "</div><div></div>"
+            });*/
+
         </script>
 
         <script>
@@ -244,18 +264,20 @@
             ClassicEditor
                 .create( document.querySelector( '#editor' ), {
                     toolbar: { items: [
-                        'heading',
-                        'bold',
-                        'italic',
-                        /*'blockQuote',
-                        'bulletedList',
-                        'numberedList',
-                        'insertTable',
-                        'outdent',
-                        'indent',*/
-                        'undo',
-                        'redo'
-                    ] }
+                            'heading',
+                            'bold',
+                            'italic',
+                            'bulletedList',
+                            'numberedList',
+                            /*'blockQuote',
+                            'bulletedList',
+                            'numberedList',
+                            'insertTable',
+                            'outdent',
+                            'indent',*/
+                            'undo',
+                            'redo'
+                        ] }
                 } )
                 .catch( error => {
                     console.log( error );
