@@ -33,12 +33,10 @@ class HomeController extends Controller
             ->orderBy('id','asc')
             ->get();
 
-        $storeAddresses = StoreAddress::where('store_id', Auth::user()->stores->id)->first();
-
         $province = Province::find('33');
         $regency = Regency::find('3309');
-        $district = District::where('regency_id', $storeAddresses->regency_id )->first();
-        $village = Village::where('district_id', $storeAddresses->district_id)->first();
+        $district = District::where('regency_id', $product->stores->storeAddresses->regency_id )->first();
+        $village = Village::where('district_id', $product->stores->storeAddresses->district_id)->first();
 
         return view('home.pages.product-detail', compact
         (

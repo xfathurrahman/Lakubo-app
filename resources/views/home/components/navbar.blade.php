@@ -26,8 +26,7 @@
                  style="position: absolute; inset: 0 auto auto 0; margin: 0; transform: translate(0px, 710px);">
                 <ul class="py-1 text-sm text-gray-700" aria-labelledby="dropdown-button">
                     <li>
-                        <button type="button"
-                                class="inline-flex py-2 px-4 w-full hover:bg-gray-100">
+                        <button type="button" class="inline-flex py-2 px-4 w-full hover:bg-gray-100">
                             Mockups
                         </button>
                     </li>
@@ -137,10 +136,16 @@
             </div>
         </form>
         <div class="flex md:order-2 ml-1 xs:ml-auto xs:mr-0">
-            <button type="button"
-                    class="cart-btn text-white bg-red-400 hover:bg-red-500 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 mr-0 lg:px-5 py-2.5 text-center lg:mr-3 md:mr-0">
-                <i class="fa-solid fa-cart-shopping"></i>
-            </button>
+            <li class="font-sans block mt-4 inline-block mt-0 lg:ml-6 align-middle text-black hover:text-gray-700">
+                <a href="{{ route('customer.cart.index') }}" class="relative flex">
+                    <button type="button" class="cart-btn text-white bg-red-400 hover:bg-red-500 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 mr-0 lg:px-5 py-2.5 text-center lg:mr-3 md:mr-0">
+                        <svg class="flex-1 w-5 h-5 fill-current" viewbox="0 0 24 24">
+                            <path d="M17,18C15.89,18 15,18.89 15,20A2,2 0 0,0 17,22A2,2 0 0,0 19,20C19,18.89 18.1,18 17,18M1,2V4H3L6.6,11.59L5.24,14.04C5.09,14.32 5,14.65 5,15A2,2 0 0,0 7,17H19V15H7.42A0.25,0.25 0 0,1 7.17,14.75C7.17,14.7 7.18,14.66 7.2,14.63L8.1,13H15.55C16.3,13 16.96,12.58 17.3,11.97L20.88,5.5C20.95,5.34 21,5.17 21,5A1,1 0 0,0 20,4H5.21L4.27,2M7,18C5.89,18 5,18.89 5,20A2,2 0 0,0 7,22A2,2 0 0,0 9,20C9,18.89 8.1,18 7,18Z"/>
+                        </svg>
+                        <span class="absolute left-8 top-1 rounded-full bg-red-600 w-4 h-4 top right p-0 m-0 text-white font-mono text-sm  leading-tight text-center cart-count">0</span>
+                    </button>
+                </a>
+            </li>
             <!-- BEGIN: Account Menu -->
             <div x-data="{ open: false }" class="w-12 px-4 lg:ml-2 ml-0 flex justify-center items-center">
                 <div @click="open = !open"

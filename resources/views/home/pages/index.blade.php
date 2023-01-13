@@ -72,7 +72,7 @@
                             <p class="mb-5">{{ $product -> created_at -> diffForHumans() }}</p>
                         </span>
                         </div>
-                        @can('buy product')
+                        @can('keranjang')
                             @if($product->quantity > 0)
                                 <div class="add-to-cart product_data">
                                     <button class="">
@@ -118,6 +118,12 @@
             <h5 class="m-0 p-0 align-middle"><a href="#" class="btn-new-product-all font-bold text-decoration-none">Lihat Semua</a></h5>
         </div>
     </div>
+
+    <style>
+        .swal2-popup {
+            font-size: 0.8rem !important;
+        }
+    </style>
 
 @endsection
 
@@ -235,5 +241,47 @@
         /*##########################################################
                           *CAROUSEL PRODUCT END*
         ##########################################################*/
+        /*##########################################################
+                       *TAMBAH PRODUCT KE KERANJANG*
+        ##########################################################*/
+        $(document).on('click','.addToCartBtn', function (e) {
+            e.preventDefault();
+            var product_id = $(this).closest('.product_data').find('.prod_id').val();
+            var product_qty = $(this).closest('.product_data').find('.qty_input').val();
+            $.ajax({
+                method: "POST",
+                url: "{{route('customer.addToCart')}}",
+                data: {
+                    'product_id': product_id,
+                    'product_qty': product_qty,
+                },
+                success: function (response) {
+                    // window.location.reload();
+                    loadCart();
+                    $('#refreshcart').load(location.href + " #refreshcart");
+                    if (response.success) {
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: response.success,
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    } else {
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'info',
+                            title: response.error,
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    }
+                }
+            });
+        });
+        /*##########################################################
+                     *TAMBAH PRODUCT KE KERANJANG END*
+        ##########################################################*/
+
     </script>
 @endsection

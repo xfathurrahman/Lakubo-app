@@ -35,9 +35,9 @@
 }
 
 .carousel-product .add-to-cart {
-    position: absolute;
-    right: 0;
-    top: 0;
+    position: absolute; !important;
+    right: 0; !important;
+    top: 0; !important;
 }
 
 .carousel-product .add-to-cart {
@@ -51,8 +51,20 @@
     align-items: center;
 }
 
-.carousel-product .add-to-cart i {
-    color: rgb(var(--color-primary-soft));
+.add-to-cart {
+    border-top-right-radius: 9px;
+    border-bottom-left-radius: 9px;
+    background: rgb(250, 112, 112);
+    height: 30px;
+    width: 30px;
+    padding-top: 2.5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.add-to-cart i {
+    color: #ffffff;
 }
 
 .carousel-product .tag-img {

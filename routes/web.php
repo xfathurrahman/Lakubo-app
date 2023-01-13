@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\ProductCategoryController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\StoreCategoryController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Customer\CartController;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Customer\OrderController;
 use App\Http\Controllers\HomeController;
@@ -39,7 +40,6 @@ Route::get('/indoregion/regency/{id}', [IndoRegionController::class, 'getRegency
 Route::get('/indoregion/district/{id}', [IndoRegionController::class, 'getDistrict'])->name('getDistrict');
 Route::get('/indoregion/village/{id}', [IndoRegionController::class, 'getVillage'])->name('getVillage');
 Route::get('/getimage/{id}', [ProductController::class, 'getImage'])->name('getImage');
-
 
 Route::middleware(['auth', 'verified', 'role:admin'])->name('admin.')->prefix('admin')->group(function (){
     Route::get('/dashboard',[AdminDashboardController::class,'index'])->name('dashboard');
@@ -91,6 +91,12 @@ Route::middleware(['auth', 'verified', 'role:customer'])->name('customer.')->pre
     Route::get('/store/district', [CustomerController::class,'getDistrict'])->name('store.getDistrict');
     Route::get('/store/categories/', [CustomerController::class,'getStoreCate'])->name('store.getStoreCate');
     Route::get('/orders', [OrderController::class,'index'])->name('orders');
+    // CART
+    Route::get('/cart', [CartController::class,'index'])->name('cart.index');
+    Route::post('/add-to-cart',[CartController::class,'addProductToCart'])->name('addToCart');
+    Route::get('/load-cart-data',[CartController::class,'cartCount'])->name('cartCount');
+    Route::post('/delete-cart-item',[CartController::class,'deleteCartItem'])->name('delete.cartItem');
+    Route::put('/update-cart-item',[CartController::class,'updateCartItem'])->name('update.cartItem');
 });
 
 Route::middleware('auth')->group(function () {

@@ -1,7 +1,7 @@
 @import "./dashboard/midone_app.css";
 @import "./dashboard/select2.min.css";
 @import "./dashboard/image-uploader.css";
-@import "./dashboard/alertify.css";
+@import "./all/alertify.css";
 @import "./dashboard/select2-custom.css";
 
 body {

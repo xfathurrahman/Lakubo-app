@@ -19,7 +19,30 @@
         <script type="text/javascript" src="{{ asset('js/owl.carousel.js') }}"></script>
         <script type="text/javascript" src="{{ asset('js/slick.min.js') }}"></script>
         <script type="text/javascript" src="{{ asset('js/easyzoom.js') }}"></script>
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script type="text/javascript" src="https://cdn.ckeditor.com/ckeditor5/35.4.0/classic/ckeditor.js"></script>
+        <script>
+            /*LOAD CART COUNT*/
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            loadCart();
+            function loadCart(){
+                $.ajax({
+                    method: "GET",
+                    url: "{{route('customer.cartCount')}}",
+                    success: function (response) {
+                        $('.cart-count').html('');
+                        $('.cart-count').html(response.count);
+                    }
+                });
+            }
+            /*LOAD CART COUNT END*/
+        </script>
         @yield('script')
     </body>
 
