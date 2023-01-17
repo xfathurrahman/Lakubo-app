@@ -50,16 +50,16 @@
                                                     </div>
                                                     <div class="invisible">
                                                         <label class="inline-block p-0 m-0" for="max-qty">{{ $cart_item -> products -> quantity }}&nbsp;tersisa</label>
-                                                        <param class="max-qty inline-block p-0 m-0" id="max-qty" value="{{ $cart_item -> products -> quantity }}" name="max-qty">
+                                                        <input class="invisible max-qty inline-block p-0 m-0" id="max-qty" value="{{ $cart_item -> products -> quantity }}" name="max-qty">
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                <span class="text-center w-1/5 font-semibold text-sm">@currency($cart_item->products->price)</span>
-                                @php $subtotal = 0 @endphp
-                                @php $subtotal += $cart_item->products->price * $cart_item->product_qty; @endphp
-                                <span class="text-center w-1/5 font-semibold text-sm">@currency($subtotal)</span>
-                            </div>
+                                        <span class="text-center w-1/5 font-semibold text-sm">@currency($cart_item->products->price)</span>
+                                        @php $subtotal = 0 @endphp
+                                        @php $subtotal += $cart_item->products->price * $cart_item->product_qty; @endphp
+                                        <span class="text-center w-1/5 font-semibold text-sm">@currency($subtotal)</span>
+                                    </div>
                                 @php $total += $cart_item->products->price * $cart_item->product_qty; @endphp
                                 @endforeach
                             @else
@@ -136,6 +136,7 @@
             }
 
         });
+
 
         $(document).on('click','.decrement_btn', function (e) {
             e.preventDefault();
