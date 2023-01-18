@@ -47,6 +47,7 @@ class ProductController extends Controller
         $product -> category_id = $data['kategori'];
         $product -> description =  $data['description'];
         $product -> quantity =  $data['quantity'];
+        $product -> weight =  $data['weight'];
         $product -> store_id = Auth::user()->stores->id;
         $product -> save();
 
@@ -98,6 +99,7 @@ class ProductController extends Controller
             'kategori'=>'required',
             'price'=>'required|max:10',
             'quantity'=>'required|max:7',
+            'weight'=>'required|max:7',
             'description'=>'required|string|max:1000',
         ])->validate();
 
@@ -129,6 +131,7 @@ class ProductController extends Controller
             $product -> category_id = $data['kategori'];
             $product -> description =  $data['description'];
             $product -> quantity =  $data['quantity'];
+            $product -> weight =  $data['weight'];
             $product->update();
 
             return redirect('seller/products')->with('success', "Product $product->name berhasil di update");

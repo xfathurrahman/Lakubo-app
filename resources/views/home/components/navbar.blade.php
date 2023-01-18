@@ -136,7 +136,7 @@
             </div>
         </form>
         <div class="flex md:order-2 ml-1 xs:ml-auto xs:mr-0">
-            <li class="font-sans block mt-4 inline-block mt-0 lg:ml-6 align-middle text-black hover:text-gray-700">
+            <li class="font-sans block inline-block mt-0 lg:ml-6 align-middle text-black hover:text-gray-700">
                 <a href="{{ route('customer.cart.index') }}" class="relative flex">
                     <button type="button" class="cart-btn text-white bg-red-400 hover:bg-red-500 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 mr-0 lg:px-5 py-2.5 text-center lg:mr-3 md:mr-0">
                         <svg class="flex-1 w-5 h-5 fill-current" viewbox="0 0 24 24">

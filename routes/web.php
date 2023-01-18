@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\StoreCategoryController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Customer\CartController;
+use App\Http\Controllers\Customer\CheckoutController;
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Customer\OrderController;
 use App\Http\Controllers\HomeController;
@@ -97,6 +98,9 @@ Route::middleware(['auth', 'verified', 'role:customer'])->name('customer.')->pre
     Route::get('/load-cart-data',[CartController::class,'cartCount'])->name('cartCount');
     Route::post('/delete-cart-item',[CartController::class,'deleteCartItem'])->name('delete.cartItem');
     Route::put('/update-cart-item',[CartController::class,'updateCartItem'])->name('update.cartItem');
+    // CHECKOUT
+    Route::get('/checkout', [CheckoutController::class,'index'])->name('checkout.index');
+
 });
 
 Route::middleware('auth')->group(function () {

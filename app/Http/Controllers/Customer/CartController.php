@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Customer;
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\Product;
+use App\Models\Store;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,15 +13,15 @@ class CartController extends Controller
 {
     public function index()
     {
-        $cartitems['cartitems'] = Cart::where('user_id', Auth::id())->get();
-        $totalcart = Cart::where('user_id', Auth::id())->count();
+        $userCarts = Cart::where('user_id', Auth::id())->get();
 
-        return view('home.pages.cart')->with($cartitems)->with(['totalcart' => $totalcart]);
+        return view('home.pages.cart', compact('userCarts'));
     }
 
     public function addProductToCart(Request $request)
     {
         $product_id = $request->input('product_id');
+        $store_id = $request->input('store_id');
         $product_qty = $request->input('product_qty');
 
         if (Auth::check())
@@ -36,6 +37,7 @@ class CartController extends Controller
                 $cartItem = new Cart();
                 $cartItem -> product_id = $product_id;
                 $cartItem -> user_id = Auth::id();
+                $cartItem -> store_id = $store_id;
                 $cartItem -> product_qty = $product_qty;
                 $cartItem -> save();
 

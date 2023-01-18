@@ -26,6 +26,7 @@ return new class extends Migration
             $table->bigInteger('price');
             $table->longText('description');
             $table->integer('quantity');
+            $table->integer('weight');
             $table->softDeletes();
             $table->timestamps();
         });

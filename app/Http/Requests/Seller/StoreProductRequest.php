@@ -13,6 +13,7 @@ class StoreProductRequest extends FormRequest
             'kategori'=>'required',
             'price'=>'required|max:10',
             'quantity'=>'required|max:7',
+            'weight'=>'required|max:7',
             'description'=>'required|string|max:1000',
             'files' => 'required',
         ];

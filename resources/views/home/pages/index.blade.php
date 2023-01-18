@@ -78,6 +78,7 @@
                                     <button class="">
                                         <input type="hidden" class="qty_input" name="product_qty" value="1">
                                         <input type="hidden" class="prod_id" name="product_id" value="{{ $product->id }}">
+                                        <input type="hidden" class="store_id" name="store_id" value="{{ $product->stores->id }}">
                                         <button type="button" class="btn addToCartBtn">
                                             <i class="fa fa-cart-plus" aria-hidden="true"></i>
                                         </button>
@@ -247,12 +248,14 @@
         $(document).on('click','.addToCartBtn', function (e) {
             e.preventDefault();
             var product_id = $(this).closest('.product_data').find('.prod_id').val();
+            var store_id = $(this).closest('.product_data').find('.store_id').val();
             var product_qty = $(this).closest('.product_data').find('.qty_input').val();
             $.ajax({
                 method: "POST",
                 url: "{{route('customer.addToCart')}}",
                 data: {
                     'product_id': product_id,
+                    'store_id': store_id,
                     'product_qty': product_qty,
                 },
                 success: function (response) {

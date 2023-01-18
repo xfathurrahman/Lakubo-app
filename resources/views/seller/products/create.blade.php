@@ -107,30 +107,7 @@
                                 <div class="form-label xl:w-64 xl:!mr-10">
                                     <div class="text-left">
                                         <div class="flex items-center">
-                                            <label for="selectCateProd" class="font-medium">Kategori</label>
-                                            <div class="ml-2 px-2 py-0.5 bg-slate-200 text-slate-600 dark:bg-darkmode-300 dark:text-slate-400 text-xs rounded-md">Wajib</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="w-full mt-3 xl:mt-0 flex-1">
-                                    <select name="kategori"
-                                            id="selectCateProd"
-                                            class="w-full form-control"
-                                            required
-                                            data-parsley-required-message="Wajib memilih Kategori Produk"
-                                    >
-                                        <option selected disabled>Pilih Kategori</option>
-                                        @foreach($listCateProd as $category)
-                                            <option @if( old('kategori')  == $category->id) selected="selected" @endif value="{{ $category -> id }}">{{ $category -> name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-inline items-start flex-col xl:flex-row mt-5 pt-5 first:mt-0 first:pt-0">
-                                <div class="form-label xl:w-64 xl:!mr-10">
-                                    <div class="text-left">
-                                        <div class="flex items-center">
-                                            <div class="font-medium">Harga & Kuantitas</div>
+                                            <label for="selectCateProd" class="font-medium">Harga & Kategori</label>
                                             <div class="ml-2 px-2 py-0.5 bg-slate-200 text-slate-600 dark:bg-darkmode-300 dark:text-slate-400 text-xs rounded-md">Wajib</div>
                                         </div>
                                     </div>
@@ -153,6 +130,49 @@
                                                        data-parsley-maxlength-message="Maksimal 10 digit..."
                                                        data-parsley-group="block1"
                                                 >
+                                            </div>
+                                        </div>
+                                        <div class="selectCateProd col-span-12 2xl:col-span-6 mt-2 2xl:mt-0">
+                                            <select name="kategori"
+                                                    id="selectCateProd"
+                                                    class="w-full form-control"
+                                                    required
+                                                    data-parsley-required-message="Wajib memilih Kategori Produk"
+                                            >
+                                                <option selected disabled>Pilih Kategori</option>
+                                                @foreach($listCateProd as $category)
+                                                    <option @if( old('kategori')  == $category->id) selected="selected" @endif value="{{ $category -> id }}">{{ $category -> name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-inline items-start flex-col xl:flex-row mt-5 pt-5 first:mt-0 first:pt-0">
+                                <div class="form-label xl:w-64 xl:!mr-10">
+                                    <div class="text-left">
+                                        <div class="flex items-center">
+                                            <div class="font-medium">Berat & Kuantitas</div>
+                                            <div class="ml-2 px-2 py-0.5 bg-slate-200 text-slate-600 dark:bg-darkmode-300 dark:text-slate-400 text-xs rounded-md">Wajib</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="w-full mt-3 xl:mt-0 flex-1">
+                                    <div class="grid grid-cols-12 gap-x-5">
+                                        <div class="col-span-12 2xl:col-span-6" id="parsley_error">
+                                            <div class="input-group">
+                                                <input name="weight"
+                                                       type="number"
+                                                       class="form-control"
+                                                       onkeypress="return onlyNumberKey(event)"
+                                                       placeholder="Berat"
+                                                       value="{{old('weight')}}"
+                                                       required=""
+                                                       data-parsley-maxlength="7"
+                                                       data-parsley-required-message="Wajib memasukan Berat produk"
+                                                       data-parsley-maxlength-message="Maksimal 7 digit..."
+                                                >
+                                                <div class="input-group-text">Gram</div>
                                             </div>
                                         </div>
                                         <div class="col-span-12 2xl:col-span-6">

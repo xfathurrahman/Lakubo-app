@@ -71,7 +71,7 @@
                                 <th class="whitespace-nowrap">GAMBAR PRODUK</th>
                                 <th class="whitespace-nowrap">NAMA PRODUK</th>
                                 <th class="text-center whitespace-nowrap">STOK</th>
-                                <th class="text-center whitespace-nowrap">STATUS</th>
+                                <th class="text-center whitespace-nowrap">BERAT</th>
                                 <th class="text-center whitespace-nowrap">AKSI</th>
                             </tr>
                         </thead>
@@ -95,9 +95,10 @@
                                     <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5">{{ $product->productCategories->name }}</div>
                                 </td>
                                 <td class="text-center">{{ $product-> quantity }}</td>
-                                <td class="w-40">
+                                <td class="text-center">{{ $product-> weight }} Gram</td>
+                                {{--<td class="w-40">
                                     <div class="flex items-center justify-center text-success"> <i data-lucide="check-square" class="w-4 h-4 mr-2"></i> Active </div>
-                                </td>
+                                </td>--}}
                                 <td class="table-report__action w-56">
                                     <div class="flex justify-center items-center">
                                         <a class="flex items-center mr-3" href="{{ route('seller.products.edit', $product->id) }}"> <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Edit </a>

@@ -25,6 +25,7 @@ class Product extends Model
         'description',
         'category_id',
         'quantity',
+        'weight',
     ];
 
     public function stores()
