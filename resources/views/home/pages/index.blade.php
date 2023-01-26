@@ -72,20 +72,35 @@
                             <p class="mb-5">{{ $product -> created_at -> diffForHumans() }}</p>
                         </span>
                         </div>
-                        @can('keranjang')
-                            @if($product->quantity > 0)
-                                <div class="add-to-cart product_data">
-                                    <button class="">
-                                        <input type="hidden" class="qty_input" name="product_qty" value="1">
-                                        <input type="hidden" class="prod_id" name="product_id" value="{{ $product->id }}">
-                                        <input type="hidden" class="store_id" name="store_id" value="{{ $product->stores->id }}">
-                                        <button type="button" class="btn addToCartBtn">
-                                            <i class="fa fa-cart-plus" aria-hidden="true"></i>
-                                        </button>
+                        @if (Auth::check())
+                            @if(auth()->user()->hasRole('seller') && $product->store_id == auth()->user()->stores->id)
+                                <a href="{{ route('seller.products.edit', $product->id) }}" class="add-to-cart product_data">
+                                    <i class="fa-solid fa-pencil"></i>
+                                </a>
+                            @elseif($product->quantity > 0)
+                            <div class="add-to-cart product_data">
+                                <button class="">
+                                    <input type="hidden" class="qty_input" name="product_qty" value="1">
+                                    <input type="hidden" class="prod_id" name="product_id" value="{{ $product->id }}">
+                                    <input type="hidden" class="store_id" name="store_id" value="{{ $product->stores->id }}">
+                                    <button type="button" class="btn addToCartBtn">
+                                        <i class="fa fa-cart-plus" aria-hidden="true"></i>
                                     </button>
-                                </div>
+                                </button>
+                            </div>
                             @endif
-                        @endcan
+                        @elseif($product->quantity > 0)
+                            <div class="add-to-cart product_data">
+                                <button class="">
+                                    <input type="hidden" class="qty_input" name="product_qty" value="1">
+                                    <input type="hidden" class="prod_id" name="product_id" value="{{ $product->id }}">
+                                    <input type="hidden" class="store_id" name="store_id" value="{{ $product->stores->id }}">
+                                    <button type="button" class="btn addToCartBtn">
+                                        <i class="fa fa-cart-plus" aria-hidden="true"></i>
+                                    </button>
+                                </button>
+                            </div>
+                        @endif
                         <a class="a-link" href="{{ route('getProduct', $product -> id) }}">
                             <img class="image-product" src="{{ asset("storage/product-image")."/".$product -> productImage -> image_path }}" alt="Image from {{ $product->stores->name }}">
                             <div class="card-body bg-red-100">
@@ -245,46 +260,59 @@
         /*##########################################################
                        *TAMBAH PRODUCT KE KERANJANG*
         ##########################################################*/
-        $(document).on('click','.addToCartBtn', function (e) {
-            e.preventDefault();
-            var product_id = $(this).closest('.product_data').find('.prod_id').val();
-            var store_id = $(this).closest('.product_data').find('.store_id').val();
-            var product_qty = $(this).closest('.product_data').find('.qty_input').val();
-            $.ajax({
-                method: "POST",
-                url: "{{route('customer.addToCart')}}",
-                data: {
-                    'product_id': product_id,
-                    'store_id': store_id,
-                    'product_qty': product_qty,
-                },
-                success: function (response) {
-                    // window.location.reload();
-                    loadCart();
-                    $('#refreshcart').load(location.href + " #refreshcart");
-                    if (response.success) {
-                        Swal.fire({
-                            position: 'center',
-                            icon: 'success',
-                            title: response.success,
-                            showConfirmButton: false,
-                            timer: 1500
-                        });
-                    } else {
-                        Swal.fire({
-                            position: 'center',
-                            icon: 'info',
-                            title: response.error,
-                            showConfirmButton: false,
-                            timer: 1500
-                        });
+
+        @if(Auth::check())
+            $(document).on('click','.addToCartBtn', function (e) {
+                e.preventDefault();
+                var product_id = $(this).closest('.product_data').find('.prod_id').val();
+                var store_id = $(this).closest('.product_data').find('.store_id').val();
+                $.ajax({
+                    method: "POST",
+                    url: "{{route('customer.addToCart')}}",
+                    data: {
+                        'product_id': product_id,
+                        'store_id': store_id,
+                    },
+                    success: function (response) {
+                        // window.location.reload();
+                        loadCart();
+                        $('#refreshcart').load(location.href + " #refreshcart");
+                        if (response.success) {
+                            Swal.fire({
+                                position: 'center',
+                                icon: 'success',
+                                title: response.success,
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                        } else{
+                            Swal.fire({
+                                position: 'center',
+                                icon: 'info',
+                                title: response.error,
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                        }
                     }
-                }
+                });
             });
-        });
+            @else
+            $(document).on('click','.addToCartBtn', function (e) {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'info',
+                    title: 'Silahkan Masuk terlebih dahulu untuk mulai belanja.',
+                    showConfirmButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: '<a href="http://127.0.0.1:8000/login">Masuk</a>'
+                });
+            });
+
+        @endif
+
         /*##########################################################
                      *TAMBAH PRODUCT KE KERANJANG END*
         ##########################################################*/
-
     </script>
 @endsection

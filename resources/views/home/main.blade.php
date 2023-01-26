@@ -2,6 +2,7 @@
 
 @section('body')
     <body id="main-app">
+
         <nav class="bg-white shadow py-2.5 fixed w-full z-20 top-0 left-0 border-b border-gray-200">
             @include('home.components.navbar')
         </nav>
@@ -10,7 +11,7 @@
             @yield('content')
         </div>
 
-        <footer class="bg-white bottom-0 w-full">
+        <footer class="bg-white w-full">
             @include('home.components.footer')
         </footer>
 
@@ -30,7 +31,10 @@
                 }
             });
 
-            loadCart();
+            @if(Auth::check())
+                loadCart();
+            @endif
+
             function loadCart(){
                 $.ajax({
                     method: "GET",

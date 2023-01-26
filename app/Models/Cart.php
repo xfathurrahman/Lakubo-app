@@ -7,20 +7,21 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @method static where(string $string, mixed $product_id)
+ * @method static find($cart_id)
  */
 class Cart extends Model
 {
     use HasFactory;
-    protected $table = 'carts';
     protected $fillable = [
         'user_id',
-        'product_id',
         'store_id',
-        'product_qty',
     ];
-
-    public function products()
+    public function cartItems()
     {
-        return $this->belongsTo(Product::class,'product_id','id');
+        return $this->hasMany(CartItem::class,'cart_id','id');
+    }
+    public function stores()
+    {
+        return $this->belongsTo(Store::class,'store_id','id');
     }
 }

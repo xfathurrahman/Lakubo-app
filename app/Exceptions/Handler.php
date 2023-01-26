@@ -30,6 +30,15 @@ class Handler extends ExceptionHandler
         });
     }
 
+    protected function unauthenticated($request, AuthenticationException|\Illuminate\Auth\AuthenticationException $exception)
+    {
+        if ($request->expectsJson()) {
+            return response()->json(['error' => 'Silahkan Login terlebih dahulu.'], 401);
+        }
+
+        return redirect()->guest('login');
+    }
+
     /*public function render($request, Throwable $e)
     {
         if ($e instanceof UnauthorizedException) {
