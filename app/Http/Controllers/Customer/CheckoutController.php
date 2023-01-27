@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Auth;
 
 class CheckoutController extends Controller
 {
+
+
+
     public function index($id) {
 
         $cartName = Cart::find($id);
