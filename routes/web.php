@@ -99,7 +99,7 @@ Route::middleware(['auth', 'verified', 'role:customer'])->name('customer.')->pre
     Route::post('/delete-cart-item',[CartController::class,'deleteCartItem'])->name('delete.cartItem');
     Route::put('/update-cart-item',[CartController::class,'updateCartItem'])->name('update.cartItem');
     // CHECKOUT
-    Route::get('/checkout', [CheckoutController::class,'index'])->name('checkout.index');
+    Route::get('/checkout/{id}', [CheckoutController::class,'index'])->name('checkout.index');
 
 });
 

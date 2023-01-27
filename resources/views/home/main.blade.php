@@ -11,7 +11,7 @@
             @yield('content')
         </div>
 
-        <footer class="bg-white w-full">
+        <footer class="bg-white w-full absolute bottom-0">
             @include('home.components.footer')
         </footer>
 

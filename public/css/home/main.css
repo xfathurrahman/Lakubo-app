@@ -32,9 +32,11 @@ html , body {
 }
 
 #main-app {
-    padding: 0;
     margin: 0;
+    position: relative;
     min-width: 500px;
+    min-height: 100%;
+    padding-bottom: 24rem;
     background-color: rgba(238, 238, 238, 0.93);
 }
 
