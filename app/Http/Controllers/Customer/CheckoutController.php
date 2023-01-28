@@ -25,9 +25,7 @@ class CheckoutController extends Controller
         }
 
         $totalWeight = 0;
-        $total = 0;
         foreach ($cartItems as $item) {
-            $total += $item->products->price * $item->product_qty;
             $totalWeight += $item -> products -> weight;
         }
 
@@ -45,7 +43,6 @@ class CheckoutController extends Controller
         ])->get();
 
         $services = [];
-
         foreach($cost[0]['costs'] as $row) {
             $services[] = array(
               'description'     => $row['description'],

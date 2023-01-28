@@ -31,7 +31,6 @@ return new class extends Migration
             $table->unsignedBigInteger('product_id')->default(0);
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->string('product_qty')->default(1);
-            $table->string('note')->nullable();
             $table->timestamps();
         });
     }
