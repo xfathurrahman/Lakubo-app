@@ -26,4 +26,25 @@ class StoreAddress extends Model
     {
         return $this->belongsTo(Store::class,'store_id', 'id');
     }
+
+    public function province()
+    {
+        return $this->hasOne(Province::class,'id', 'province_id');
+    }
+
+    public function regency()
+    {
+        return $this->hasOne(Regency::class,'id', 'regency_id');
+    }
+
+    public function district()
+    {
+        return $this->hasOne(District::class,'id', 'district_id');
+    }
+
+    public function village()
+    {
+        return $this->hasOne(Village::class,'id', 'village_id');
+    }
+
 }

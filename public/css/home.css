@@ -12,3 +12,5 @@
 @import "./home/cart.css";
 @import "./all/alertify.css";
 @import "./home/checkout.css";
+@import "./all/select2.min.css";
+@import "./all/select2-custom.css";

@@ -20,6 +20,8 @@
         <script type="text/javascript" src="{{ asset('js/owl.carousel.js') }}"></script>
         <script type="text/javascript" src="{{ asset('js/slick.min.js') }}"></script>
         <script type="text/javascript" src="{{ asset('js/easyzoom.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('js/select2.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('js/select2-searchInputPlaceholder.js') }}"></script>
         <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script type="text/javascript" src="https://cdn.ckeditor.com/ckeditor5/35.4.0/classic/ckeditor.js"></script>
         <script>

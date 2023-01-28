@@ -1,8 +1,8 @@
 @import "./dashboard/midone_app.css";
-@import "./dashboard/select2.min.css";
+@import "./all/select2.min.css";
 @import "./dashboard/image-uploader.css";
 @import "./all/alertify.css";
-@import "./dashboard/select2-custom.css";
+@import "./all/select2-custom.css";
 
 body {
     padding-right: 20px!important;

@@ -73,21 +73,34 @@
                         </span>
                         </div>
                         @if (Auth::check())
-                            @if(auth()->user()->hasRole('seller') && $product->store_id == auth()->user()->stores->id)
-                                <a href="{{ route('seller.products.edit', $product->id) }}" class="add-to-cart product_data">
-                                    <i class="fa-solid fa-pencil"></i>
-                                </a>
-                            @elseif($product->quantity > 0)
-                            <div class="add-to-cart product_data">
-                                <button class="">
-                                    <input type="hidden" class="qty_input" name="product_qty" value="1">
-                                    <input type="hidden" class="prod_id" name="product_id" value="{{ $product->id }}">
-                                    <input type="hidden" class="store_id" name="store_id" value="{{ $product->stores->id }}">
-                                    <button type="button" class="btn addToCartBtn">
-                                        <i class="fa fa-cart-plus" aria-hidden="true"></i>
+                            @if(auth()->user()->stores)
+                                @if(auth()->user()->hasRole('seller') && $product->store_id == auth()->user()->stores->id)
+                                    <a href="{{ route('seller.products.edit', $product->id) }}" class="add-to-cart product_data">
+                                        <i class="fa-solid fa-pencil"></i>
+                                    </a>
+                                @elseif($product->quantity > 0)
+                                <div class="add-to-cart product_data">
+                                    <button class="">
+                                        <input type="hidden" class="qty_input" name="product_qty" value="1">
+                                        <input type="hidden" class="prod_id" name="product_id" value="{{ $product->id }}">
+                                        <input type="hidden" class="store_id" name="store_id" value="{{ $product->stores->id }}">
+                                        <button type="button" class="btn addToCartBtn">
+                                            <i class="fa fa-cart-plus" aria-hidden="true"></i>
+                                        </button>
                                     </button>
-                                </button>
-                            </div>
+                                </div>
+                                @endif
+                            @elseif($product->quantity > 0)
+                                <div class="add-to-cart product_data">
+                                    <button class="">
+                                        <input type="hidden" class="qty_input" name="product_qty" value="1">
+                                        <input type="hidden" class="prod_id" name="product_id" value="{{ $product->id }}">
+                                        <input type="hidden" class="store_id" name="store_id" value="{{ $product->stores->id }}">
+                                        <button type="button" class="btn addToCartBtn">
+                                            <i class="fa fa-cart-plus" aria-hidden="true"></i>
+                                        </button>
+                                    </button>
+                                </div>
                             @endif
                         @elseif($product->quantity > 0)
                             <div class="add-to-cart product_data">

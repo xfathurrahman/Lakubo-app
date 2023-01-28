@@ -29,6 +29,13 @@
     padding-right: 33px;
 }
 
+#center-option .select2.select2-container .select2-selection .select2-selection__rendered {
+    color: #333;
+    line-height: 32px;
+    padding-right: 33px;
+    text-align: center;
+}
+
 .select2.select2-container .select2-selection .select2-selection__arrow {
     background: #f8f8f8;
     border-left: 1px solid #ccc;

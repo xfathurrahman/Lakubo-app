@@ -44,6 +44,11 @@ class User extends Authenticatable
         return $this->hasOne(UserAddress::class,'user_id', 'id');
     }
 
+    public function hasItem()
+    {
+        return $this->hasMany(cartItem::class,'user_id', 'id');
+    }
+
     public function carts()
     {
         return $this->hasManyThrough(Product::class,Cart::class,'product_id','user_id', 'id');

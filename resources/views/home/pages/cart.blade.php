@@ -1,9 +1,7 @@
 @extends('home.main')
 
 @section('content')
-
     <div id="refreshcart">
-
         @if ( $userCarts->count() < 1 )
             <div class="w-full mx-auto bg-gray-100 shadow-lg rounded-lg my-8">
                 <div class="md:flex ">
@@ -21,7 +19,7 @@
                         <div class="md:flex ">
                             <div class="w-full p-4 px-5 py-5">
                                 <div class="flex justify-between border-b pb-5">
-                                    <div class="font-medium text-lg">Pesanan {{ $loop->iteration }} dari <p class="text-red-400 inline">{{ $store->stores->name }}</p></div>
+                                    <div class="font-medium text-lg">Pesanan {{ $loop -> iteration }} dari <p class="text-red-400 inline">{{ $store->stores->name }}</p></div>
                                     <div class="font-medium text-lg">{{ $store->cartItems->count() }} Item</div>
                                 </div>
                                 <div class="flex my-5">
@@ -92,6 +90,24 @@
 
 
 @section('script')
+
+    <script>
+        @if (session('success'))
+        Swal.fire({
+            type: 'success',
+            title: '{{ session('success') }}',
+            showConfirmButton: false,
+        });
+        @elseif (session('error'))
+        Swal.fire({
+            type: 'error',
+            title: '{{ session('error') }}',
+            showConfirmButton: true,
+            className: 'my-custom-class'
+        });
+        @endif
+    </script>
+
     <script>
 
         // SET THE VALUE OF PRODUCT - QTY
@@ -115,7 +131,6 @@
                     timer: 1500
                 })
             }
-
         });
 
 
