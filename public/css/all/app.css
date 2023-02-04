@@ -1,0 +1,8 @@
+.capitalize_address {
+    text-transform: lowercase;
+    overflow-y: hidden!important;
+}
+
+.capitalize_address::first-line {
+    text-transform: capitalize;
+}

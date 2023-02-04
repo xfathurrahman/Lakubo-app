@@ -53,16 +53,6 @@
     background-color: rgb(192 132 252 / var(--tw-bg-opacity));
 }
 
-.capitalize_address {
-    text-transform: lowercase;
-    display: inline-block;
-    overflow-y: hidden!important;
-}
-
-.capitalize_address::first-line {
-    text-transform: capitalize;
-}
-
 .google-maps {
     position: relative;
     padding-bottom: 75%;

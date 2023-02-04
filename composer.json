@@ -13,6 +13,8 @@
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
+        "midtrans/midtrans-php": "^2.5",
+        "nesbot/carbon": "^2.66",
         "spatie/laravel-permission": "^5.7"
     },
     "require-dev": {

@@ -13,7 +13,7 @@
                 </div>
             </div>
         @else
-            <div style="min-height: 34rem;">
+            <div style="min-height: 33rem;">
                 @foreach($userCarts as $store)
                     <div class="w-full mx-auto bg-gray-100 shadow-lg rounded-lg mt-6 my-4">
                         <div class="md:flex ">

@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="md:py-5 mb-14">
-        <div class="w-full mx-auto bg-gray-100 shadow-lg rounded-lg" id="refreshcart">
+        <div class="w-full mx-auto bg-gray-100 shadow-lg rounded-lg">
             <div class="md:flex ">
                 <div class="w-full p-4 px-5 py-5">
                     <div class="flex justify-between border-b pb-5 mb-5">
@@ -55,38 +55,45 @@
                             </div>
                         </div>
                     @else
-                        <form action="#">
-                            <div class="flex border-b pb-3 pt-3">
-                                <h3 class="font-semibold text-gray-600 text-xs uppercase w-2/5">Detail Produk</h3>
-                                <h3 class="font-semibold text-center text-gray-600 text-xs uppercase w-1/5 text-center">Kuantitas</h3>
-                                <h3 class="font-semibold text-center text-gray-600 text-xs uppercase w-1/5 text-center">@Harga</h3>
-                                <h3 class="font-semibold text-center text-gray-600 text-xs uppercase w-1/5 text-center">Subtotal</h3>
-                            </div>
-                            @php $total = 0 @endphp
-                            @php $totalWeight = 0 @endphp
-                            @foreach($cartItems as $item)
-                                <div class="product_data flex items-center -mx-8 px-6 py-5 border-b">
-                                    <div class="flex grid grid-cols-4 w-2/5">
-                                        <div class="w-20 col-span-4 lg:col-span-1 mx-auto">
-                                            <img class="h-20" src="{{ asset("storage/product-image")."/".$item -> products -> productImage -> image_path }}" alt="">
-                                        </div>
-                                        <div class="col-span-4 lg:col-span-3 flex flex-col justify-between text-center lg:text-left px-2 mt-2 lg:ml-4 lg:mt-0 flex-grow">
-                                            <span class="font-bold text-xs lg:text-sm">{{ $item -> products -> name }}</span>
-                                            <span class="text-xs">({{ $item -> products -> weight }} gram)</span>
-                                            <span class="text-red-500 text-xs">{{ $item -> products -> productCategories -> name }}</span>
-                                        </div>
+                        <div class="flex border-b pb-3 pt-3">
+                            <h3 class="font-semibold text-gray-600 text-xs uppercase w-2/5">Detail Produk</h3>
+                            <h3 class="font-semibold text-center text-gray-600 text-xs uppercase w-1/5 text-center">Kuantitas</h3>
+                            <h3 class="font-semibold text-center text-gray-600 text-xs uppercase w-1/5 text-center">@Harga</h3>
+                            <h3 class="font-semibold text-center text-gray-600 text-xs uppercase w-1/5 text-center">Subtotal</h3>
+                        </div>
+                        @php $total = 0 @endphp
+                        @php $totalWeight = 0 @endphp
+                        @php $totalProduct = 0 @endphp
+                        @foreach($cartItems as $item)
+                            <div class="product_data flex items-center -mx-8 px-6 py-5 border-b">
+                                <div class="flex grid grid-cols-4 w-2/5">
+                                    <div class="w-20 col-span-4 lg:col-span-1 mx-auto">
+                                        <img class="h-20" src="{{ asset("storage/product-image")."/".$item -> products -> productImage -> image_path }}" alt="">
                                     </div>
-                                    <span class="text-center w-1/5 font-semibold text-sm">{{ $item -> product_qty }}</span>
-                                    <span class="text-center w-1/5 font-semibold text-sm">@currency($item->products->price)</span>
-                                    @php $subtotal = 0 @endphp
-                                    @php $subtotal += $item->products->price * $item->product_qty; @endphp
-                                    <span class="text-center w-1/5 font-semibold text-sm">@currency($subtotal)</span>
+                                    <div class="col-span-4 lg:col-span-3 flex flex-col justify-between text-center lg:text-left px-2 mt-2 lg:ml-4 lg:mt-0 flex-grow">
+                                        <span class="font-bold text-xs lg:text-sm">{{ $item -> products -> name }}</span>
+                                        @php $subtotalWeight = 0 @endphp
+                                        @php $subtotalWeight += $item -> products -> weight * $item->product_qty @endphp
+                                        <span class="text-xs">({{ $subtotalWeight }} gram)</span>
+                                        <span class="text-red-500 text-xs">{{ $item -> products -> productCategories -> name }}</span>
+                                    </div>
                                 </div>
-                                @php $total += $item->products->price * $item->product_qty; @endphp
-                                @php $totalWeight += $item -> products -> weight; @endphp
-                            @endforeach
+                                <span class="text-center w-1/5 font-semibold text-sm">{{ $item -> product_qty }}</span>
+                                <span class="text-center w-1/5 font-semibold text-sm">@currency($item->products->price)</span>
+                                @php $subtotal = 0 @endphp
+                                @php $subtotal += $item->products->price * $item->product_qty; @endphp
+                                <span class="text-center w-1/5 font-semibold text-sm">@currency($subtotal)</span>
+                            </div>
+                            @php $total += $item->products->price * $item->product_qty; @endphp
+                            @php $totalWeight += $subtotalWeight; @endphp
+                            @php $totalProduct += $item -> product_qty; @endphp
+                        @endforeach
+
+                        <form method="POST" action="{{ route('customer.checkout.store', $item->cart_id) }}" role="form">
+                            @csrf
+                            <input type="text" class="shadow-sm w-full border-gray-300 rounded-lg mt-3" placeholder="Tambah Catatan (Opsional)">
                             <div class="flex justify-between items-center my-3">
-                                <div class="text-md text-gray-400">Berat ({{ $cartItems->count() }}) produk:
+                                <div class="text-md text-gray-400">Berat total ({{ $totalProduct }}):
                                     <span class="text-md inline-block text-center ml-2 text-red-500">{{ $totalWeight }} gram</span>
                                 </div>
                                 <div class="text-md text-gray-400">Total harga produk:
@@ -110,7 +117,7 @@
                                     <span class="text-xl inline-block text-center ml-2 text-red-500" id="totalCost">@currency($total)</span>
                                 </div>
                             </div>
-                            <button class="h-12 w-full bg-red-400 rounded text-white focus:outline-none hover:bg-red-500">Bayar</button>
+                            <button type="submit" class="h-12 w-full bg-red-400 rounded text-white focus:outline-none hover:bg-red-500">Buat Pesanan</button>
                         </form>
                     @endif
                 </div>
@@ -122,6 +129,13 @@
 
 
 @section('script')
+
+{{--    <script>
+        window.onbeforeunload = function() {
+            return "Data yang belum disimpan akan hilang. Yakin ingin meninggalkan halaman ini?";
+        };
+
+    </script>--}}
 
     <script>
         $("#selectShipping").change(function() {

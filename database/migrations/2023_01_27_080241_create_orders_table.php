@@ -15,14 +15,41 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->tinyInteger('status')->default(0);
+            $table->string('invoice');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->string('customer_name');
+            $table->string('customer_phone');
+            $table->enum('status',['unpaid','paid'])->default('unpaid');
             $table->integer('total_price');
             $table->string('shipping');
+            $table->string('resi')->nullable();
             $table->string('note')->nullable();
             $table->timestamps();
         });
+
+        Schema::create('order_items', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('order_id');
+            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
+            $table->string('product_id');
+            $table->integer('quantity');
+            $table->integer('subtotal');
+            $table->timestamps();
+        });
+
+        Schema::create('order_addresses', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('order_id');
+            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
+            $table->string('province_id');
+            $table->string('regency_id');
+            $table->string('district_id');
+            $table->string('village_id');
+            $table->string('detail_address');
+            $table->timestamps();
+        });
+
     }
 
     /**
@@ -33,5 +60,7 @@ return new class extends Migration
     public function down()
     {
         Schema::dropIfExists('orders');
+        Schema::dropIfExists('order_items');
+        Schema::dropIfExists('order_addresses');
     }
 };

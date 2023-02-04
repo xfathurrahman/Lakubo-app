@@ -147,7 +147,7 @@
                 </li>
 
                 <li>
-                    <a href="{{ route('customer.orders') }}" class="side-menu {{ Request::is('customer/orders') ? 'side-menu--active' : '' }}">
+                    <a href="{{ route('customer.orders') }}" class="side-menu {{ Request::is('customer/orders*') ? 'side-menu--active' : '' }}">
                         <div class="side-menu__icon"> <i data-lucide="shopping-bag"></i> </div>
                         <div class="side-menu__title"> Pesanan Saya </div>
                     </a>

@@ -3,6 +3,7 @@
 @import "./dashboard/image-uploader.css";
 @import "./all/alertify.css";
 @import "./all/select2-custom.css";
+@import "./all/app.css";
 
 body {
     padding-right: 20px!important;

@@ -99,8 +99,10 @@ Route::middleware(['auth', 'verified', 'role:customer'])->name('customer.')->pre
     Route::post('/delete-cart-item',[CartController::class,'deleteCartItem'])->name('delete.cartItem');
     Route::put('/update-cart-item',[CartController::class,'updateCartItem'])->name('update.cartItem');
     // CHECKOUT
-    Route::get('/checkout/{id}', [CheckoutController::class,'index'])->name('checkout.index');
-
+    Route::get('/checkout/{store_id}', [CheckoutController::class,'index'])->name('checkout.index');
+    Route::post('/checkout/{store_id}', [CheckoutController::class,'store'])->name('checkout.store');
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders');
+    Route::get('/order/detail/{order_id}', [OrderController::class, 'show'])->name('order.show');
 });
 
 Route::middleware('auth')->group(function () {

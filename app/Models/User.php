@@ -54,4 +54,9 @@ class User extends Authenticatable
         return $this->hasManyThrough(Product::class,Cart::class,'product_id','user_id', 'id');
     }
 
+    public function orders()
+    {
+        return $this->hasManyThrough(Order::class,OrderItem::class,'order_id','user_id', 'id');
+    }
+
 }

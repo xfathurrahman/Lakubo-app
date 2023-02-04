@@ -90,14 +90,20 @@ Breadcrumbs::for('product_edit', function (BreadcrumbTrail $trail) {
 
 /*BEGIN: Customer Page*/
 
-// Dashboard
+// Profile edit
 Breadcrumbs::for('profile', function (BreadcrumbTrail $trail) {
     $trail->push('Akun Saya', route('profile.edit'));
 });
 
-// Dashboard
+// Pesanan saya
 Breadcrumbs::for('my-order', function (BreadcrumbTrail $trail) {
     $trail->push('Pesanan Saya', route('customer.orders'));
+});
+
+// Pesanan saya / detail
+Breadcrumbs::for('my-order-detail', function (BreadcrumbTrail $trail) {
+    $trail->parent('my-order');
+    $trail->push('Detail', url('#'));
 });
 
 /*END: Customer Page*/
