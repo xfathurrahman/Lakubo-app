@@ -15,15 +15,15 @@
             @include('home.components.footer')
         </footer>
 
-        <script type="text/javascript" src="{{ asset('js/flowbite.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('js/jquery-3.6.1.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('js/owl.carousel.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('js/slick.min.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('js/easyzoom.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('js/select2.min.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('js/select2-searchInputPlaceholder.js') }}"></script>
+        <script src="{{ asset('js/flowbite.js') }}"></script>
+        <script src="{{ asset('js/jquery-3.6.1.js') }}"></script>
+        <script src="{{ asset('js/owl.carousel.js') }}"></script>
+        <script src="{{ asset('js/slick.min.js') }}"></script>
+        <script src="{{ asset('js/easyzoom.js') }}"></script>
+        <script src="{{ asset('js/select2.min.js') }}"></script>
+        <script src="{{ asset('js/select2-searchInputPlaceholder.js') }}"></script>
         <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script type="text/javascript" src="https://cdn.ckeditor.com/ckeditor5/35.4.0/classic/ckeditor.js"></script>
+        <script src="https://cdn.ckeditor.com/ckeditor5/35.4.0/classic/ckeditor.js"></script>
         <script>
             /*LOAD CART COUNT*/
 

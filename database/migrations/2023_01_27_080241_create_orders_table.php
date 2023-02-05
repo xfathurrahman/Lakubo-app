@@ -24,8 +24,8 @@ return new class extends Migration
             $table->string('customer_email');
             $table->string('payment_type');
             $table->integer('gross_amount');
-            $table->string('pdf_url');
-            $table->string('shipping')->default(0);
+            $table->string('pdf_url')->nullable();
+            $table->string('shipping');
             $table->string('payment_code')->nullable();
             $table->string('resi')->nullable();
             $table->string('note')->nullable();

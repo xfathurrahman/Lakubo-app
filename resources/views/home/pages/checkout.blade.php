@@ -102,7 +102,7 @@
                                         <span class="text-xl inline-block text-center ml-2 text-red-500">@currency($total)</span>
                                         <input class="hidden" type="text" name="price" id="price" value="{{ $total }}">
                                         <div class="text-sm text-gray-400">+ Biaya ongkir:
-                                            <span class="text-sm inline-block text-center text-red-500" id="shippingCost">@currency($cart->shipping_cost)</span>
+                                            <span class="text-sm inline-block text-center text-red-500" id="shippingCost">0</span>
                                         </div>
                                     </div>
                                 </div>
@@ -110,13 +110,9 @@
                                     <input type="hidden" class="cart_id" value="{{ $cart->id }}">
                                     <div class="w-1/2 mr-auto text-center">
                                         <select id="select_shipping" name="shipping" class="js-states form-control" required>
-                                            <option value="0" selected disabled>Pilih Pengiriman (JNE)</option>
+                                            <option value="0" selected disabled>Pilih Jasa Pengiriman (JNE)</option>
                                             @foreach( $services as $service )
-                                                @if($cart->shipping_cost == $service['biaya'])
-                                                    <option selected value="{{ $service['biaya'] }}">{{ $service['description'] }} (@currency($service['biaya'])) | {{ $service['etd'] }} Hari Pengiriman</option>
-                                                @else
-                                                    <option value="{{ $service['biaya'] }}">{{ $service['description'] }} (@currency($service['biaya'])) | {{ $service['etd'] }} Hari Pengiriman</option>
-                                                @endif
+                                                <option value="{{ $service['biaya'] }}">{{ $service['description'] }} (@currency($service['biaya'])) | {{ $service['etd'] }} Hari Pengiriman</option>
                                             @endforeach
                                         </select>
 
@@ -127,7 +123,9 @@
                                 </div>
                                 <input type="hidden" name="json" id="json_callback">
                             </form>
-                            <button id="pay-button" class="h-12 w-full bg-red-400 rounded text-white focus:outline-none hover:bg-red-500">Bayar</button>
+                            <button id="pay-button" class="h-12 w-full bg-gray-400 rounded text-white focus:outline-none hover:bg-red-500">
+                                <i class="fa-solid fa-circle-info mr-2 text-sm"></i>Anda Belum Memilih Jasa Pengiriman
+                            </button>
                         </div>
                     @endif
                 </div>
@@ -139,131 +137,94 @@
 
 @section('script')
 
-{{--    <script>
-        window.onbeforeunload = function() {
-            return "Data yang belum disimpan akan hilang. Yakin ingin meninggalkan halaman ini?";
-        };
-
-    </script>--}}
-
-    <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="config('midtrans.client_key')"></script>
-    <script type="text/javascript">
+    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="config('midtrans.client_key')"></script>
+    <script>
         $(document).ready(function() {
-            var price = $("#price").val();
-            var shipping = $("#select_shipping").val();
-            var total = `Rp. ${(parseInt(price) + parseInt(shipping)).toLocaleString("id-ID", {minimumFractionDigits: 0})}`;
-            var shippingCost = `Rp. ${(parseInt(shipping)).toLocaleString("id-ID", {minimumFractionDigits: 0})}`;
 
-            $("#select_shipping").select2({
+            let SnapToken;
+            let select_shipping = $("#select_shipping");
+            let payButton = $("#pay-button");
+            payButton.prop("disabled", true).removeClass("hover:bg-red-500");
+
+            select_shipping.select2({
                 minimumResultsForSearch: Infinity,
                 placeholder: "Pilih pengiriman",
                 searchInputPlaceholder: 'Cari Pengiriman...',
             });
-            $("#totalCost").text(total);
-            $("#shippingCost").text(shippingCost);
+            select_shipping.change(function() {
 
-            $("#select_shipping").change(function() {
-                var cart_id = $(this).closest('.product_data').find('.cart_id').val();
-                var price = $("#price").val();
-                var shipping = $(this).val();
-                var total = `Rp. ${(parseInt(price) + parseInt(shipping)).toLocaleString("id-ID", {minimumFractionDigits: 0})}`;
-                var gross_amount = (parseInt(price) + parseInt(shipping)).toString();
-                var shippingCost = `Rp. ${(parseInt(shipping)).toLocaleString("id-ID", {minimumFractionDigits: 0})}`;
+                let price = $("#price").val();
+                let shipping = $(this).val();
+                let total = `Rp. ${(parseInt(price) + parseInt(shipping)).toLocaleString("id-ID", {minimumFractionDigits: 0})}`;
+                let gross_amount = (parseInt(price) + parseInt(shipping)).toString();
+                let shippingCost = `Rp. ${(parseInt(shipping)).toLocaleString("id-ID", {minimumFractionDigits: 0})}`;
+
                 $("#totalCost").text(total);
                 $("#shippingCost").text(shippingCost);
 
-                function getNewToken(){
-                    $.ajax({
-                        type: "POST",
-                        url: "{{route('customer.snap.token')}}",
-                        data: { grossAmount: gross_amount },
-                        success: function(gross_amount) {
-                            newSnapToken = gross_amount;
-                        }
-                    });
-                }
-
-                var data = {
-                    'cart_id' : cart_id,
-                    'shipping_cost': shipping,
-                }
                 $.ajax({
-                    method: "PUT",
-                    url: "{{route('customer.update.shipping')}}",
-                    data: data,
+                    type: "POST",
+                    url: "{{route('customer.snap.token')}}",
+                    data: { grossAmount: gross_amount },
                     beforeSend: function() {
-                        $("#select_shipping").prop("disabled", true);
+                        payButton.prop("disabled", true).html("Memuat <i class='fas fa-spinner fa-spin'></i>");
+                    },
+                    success: function(gross_amount) {
+                        SnapToken = gross_amount;
                     },
                     complete: function() {
-                        $("#select_shipping").prop("disabled", false);
-                    },
-                    success: function (){
-                        getNewToken();
+                        setTimeout(function() {
+                            payButton.prop("disabled", false).addClass("hover:bg-red-500 bg-red-400").text("Bayar").removeClass("bg-gray-400");
+                        }, 1300);  // 1000 milliseconds = 1 second
                     }
-                })
-            });
-        });
-
-        $(document).ajaxComplete(function() {
-            $("#select_shipping").select2({
-                minimumResultsForSearch: Infinity,
-                placeholder: "Pilih pengiriman",
-                searchInputPlaceholder: 'Cari Pengiriman...',
-            });
-        });
-
-        // For example trigger on button clicked, or any time you need
-        var payButton = document.getElementById('pay-button');
-        var newSnapToken;
-
-        payButton.addEventListener('click', function () {
-            // Trigger snap popup. @TODO: Replace TRANSACTION_TOKEN_HERE with your transaction token
-            window.snap.pay(newSnapToken, {
-                onSuccess: function(result){
-                    /* You may add your own implementation here */
-                    Swal.fire({
-                        position: 'center',
-                        icon: 'success',
-                        title: "Pembayaran Berhasil!",
-                        showConfirmButton: false,
-                        timer: 1500
-                    }); console.log(result);
-                    send_response_to_form(result);
-                },
-                onPending: function(result){
-                    /* You may add your own implementation here */
-                    Swal.fire({
-                        position: 'center',
-                        icon: 'info',
-                        title: "Menunggu Pembayaran Anda.",
-                        showConfirmButton: false,
-                        timer: 1500
-                    }); console.log(result);
-                    send_response_to_form(result);
-                },
-                onError: function(result){
-                    /* You may add your own implementation here */
-                    Swal.fire({
-                        position: 'center',
-                        icon: 'error',
-                        title: "Pembayaran gagal!",
-                        showConfirmButton: false,
-                        timer: 1500
-                    }); console.log(result);
-                    send_response_to_form(result);
-                },
-                onClose: function(){
-                    /* You may add your own implementation here */
-                    alert('you closed the popup without finishing the payment');
+                });
+                payButton.click(function() {
+                    window.snap.pay(SnapToken, {
+                        onSuccess: function(result){
+                            /* You may add your own implementation here */
+                            Swal.fire({
+                                position: 'center',
+                                icon: 'success',
+                                title: "Pembayaran Berhasil!",
+                                showConfirmButton: false,
+                                timer: 1500
+                            }); console.log(result);
+                            send_response_to_form(result);
+                        },
+                        onPending: function(result){
+                            /* You may add your own implementation here */
+                            Swal.fire({
+                                position: 'center',
+                                icon: 'info',
+                                title: "Menunggu Pembayaran Anda.",
+                                showConfirmButton: false,
+                                timer: 1500
+                            }); console.log(result);
+                            send_response_to_form(result);
+                        },
+                        onError: function(result){
+                            /* You may add your own implementation here */
+                            Swal.fire({
+                                position: 'center',
+                                icon: 'error',
+                                title: "Pembayaran gagal!",
+                                showConfirmButton: false,
+                                timer: 1500
+                            }); console.log(result);
+                            send_response_to_form(result);
+                        },
+                        onClose: function(){
+                            /* You may add your own implementation here */
+                            alert('you closed the popup without finishing the payment');
+                        }
+                    })
+                });
+                function send_response_to_form(result){
+                    document.getElementById('json_callback').value = JSON.stringify(result);
+                    document.getElementById('submit_form').submit();
                 }
-            })
+            });
         });
-
-        function send_response_to_form(result){
-            document.getElementById('json_callback').value = JSON.stringify(result);
-            document.getElementById('submit_form').submit();
-        }
-
     </script>
 
 @endsection

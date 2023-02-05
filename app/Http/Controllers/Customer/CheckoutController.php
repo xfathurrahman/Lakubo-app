@@ -130,10 +130,8 @@ class CheckoutController extends Controller
         foreach ($cart->cartItems as $item) {
             $subtotalPrice += $item->products->price * $item->product_qty;
         }
-
-        $this->shippingCost = $request->input('shipping');
-
         $totalPrice += $subtotalPrice;
+
         $shippingCost = $request->input('shipping');
         $note = $request->input('note');
 
@@ -149,9 +147,9 @@ class CheckoutController extends Controller
             $order->customer_email = Auth::user()->email;
             $order->shipping = $shippingCost;
             $order->payment_code = $json->payment_code ?? null;
-            $order->pdf_url = $json->pdf_url;
+            $order->pdf_url = $json->pdf_url ?? null;
             $order->note = $note;
-            $order->gross_amount = $totalPrice;
+            $order->gross_amount = $totalPrice + $shippingCost;
             $order->save();
 
             $custAddress = Auth::user()->address;
