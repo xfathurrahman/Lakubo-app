@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Customer;
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\CartItem;
+use App\Models\UserAddress;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Kavist\RajaOngkir\Facades\RajaOngkir;
 
 class CartController extends Controller
 {
@@ -14,8 +16,10 @@ class CartController extends Controller
     {
         $userId = Auth::id();
         $userCarts = Cart::with('cartItems')->where('user_id', $userId)->get();
-        /*return response()->json($userCarts);*/
-        return view('home.pages.cart', compact('userCarts'));
+        return view('home.pages.cart', [
+            'userCarts' => $userCarts,
+        ]);
+
     }
 
     public function addProductToCart(Request $request)

@@ -15,14 +15,18 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->string('invoice');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->string('transaction_status');
+            $table->string('transaction_id');
             $table->string('customer_name');
             $table->string('customer_phone');
-            $table->enum('status',['unpaid','paid'])->default('unpaid');
-            $table->integer('total_price');
+            $table->string('customer_email');
+            $table->string('payment_type');
+            $table->integer('gross_amount');
             $table->string('shipping');
+            $table->string('pdf_url');
+            $table->string('payment_code')->nullable();
             $table->string('resi')->nullable();
             $table->string('note')->nullable();
             $table->timestamps();

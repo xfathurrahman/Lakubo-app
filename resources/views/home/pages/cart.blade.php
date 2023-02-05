@@ -72,9 +72,10 @@
                                     </div>
                                     @php $total += $cart_item->products->price * $cart_item->product_qty; @endphp
                                 @endforeach
-                                <div class="mb-8">
-                                    <div class="w-full h-6 text-md py-4">Total Harga Produk</div>
-                                    <span class="flex inline h-6 text-xl py-4">@currency($total)</span>
+                                <div class="py-4 my-2 border-y-2">
+                                    <div class="text-md text-gray-400 text-right min-w-fit">
+                                        Harga Total Produk :<span class="text-xl inline-block text-center ml-2 text-red-500" id="totalCost">@currency($total)</span>
+                                    </div>
                                 </div>
                                 <a href="{{ route('customer.checkout.index',$store -> id) }}">
                                     <button class="h-12 w-full bg-red-400 rounded text-white focus:outline-none hover:bg-red-500">Check Out</button>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Order;
 use App\Models\OrderAddress;
@@ -21,36 +22,67 @@ class CheckoutController extends Controller
 {
     public function index($store_id) {
 
-        $cartItems = $this->getCartItems($store_id);
-        $services  = $this->getShippingCost($cartItems);
+        $cart = $this->getCartItems($store_id);
+        $services  = $this->getShippingCost($cart);
+        $snapToken  = $this->getSnapToken($cart);
 
         return view('home.pages.checkout', [
-            'cartItems' => $cartItems,
+            'cart' => $cart,
             'services' => $services,
+            'snapToken' => $snapToken,
         ]);
     }
 
     public function getCartItems($store_id) {
-        $cartItems = CartItem::where('user_id', Auth::id())->where('cart_id', $store_id)->get();
-        if ($cartItems->count() < 1) {
-            session()->flash('error', 'Anda belum bisa checkout, \n Anda di alihkan ke halaman keranjang.');
+        $cart = Cart::with('cartItems')->where('user_id', Auth::id())->where('store_id', $store_id)->first();
+        if (!$cart || $cart->cartItems->count() < 1) {
+            session()->flash('error', 'Anda belum bisa checkout, Anda dialihkan ke halaman keranjang.');
             return redirect('customer/cart');
         }
-
-        return $cartItems;
+        return $cart;
     }
 
-    public function getShippingCost($cartItems): array
+    public function updateShipping(Request $request)
+    {
+        $cart_id = $request->input('cart_id');
+        $shipping_cost = $request->input('shipping_cost');
+
+        if(Cart::where('id', $cart_id)->where('user_id', Auth::id())->exists()) {
+            $cart = Cart::where('id', $cart_id)->where('user_id', Auth::id())->first();
+            $cart -> shipping_cost = $shipping_cost;
+            $cart->update();
+
+            return response()->json(['status' => "Biaya pengiriman di ubah"]);
+        }
+
+    }
+
+    public function getGrossAmount($cart): float|int
+    {
+        $shipping_cost = $cart->shipping_cost;
+
+        $grossAmount = 0;
+        $subTotal = 0;
+        foreach ($cart->cartItems as $item){
+            $subTotal += $item -> products -> price * $item -> product_qty;
+        }
+        $grossAmount += $subTotal + $shipping_cost;
+
+        return $grossAmount;
+    }
+
+    public function getShippingCost($cart): array
     {
         $totalWeight = 0;
         $subtotalWeight = 0;
-        foreach ($cartItems as $item) {
+        foreach ($cart->cartItems as $item) {
             $subtotalWeight += $item -> products -> weight * $item->product_qty;
         }
         $totalWeight += $subtotalWeight;
 
         $userAddress = UserAddress::find(Auth::id());
-        $userRegency = $userAddress->regency->name;
+        $userRegency = str_replace(array('KABUPATEN ', 'KOTA '), '', $userAddress->regency->name);
+
         $regency = RajaOngkir::kota()->search($userRegency)->get();
         $regency_id = $regency[0]['city_id'];
 
@@ -72,56 +104,100 @@ class CheckoutController extends Controller
         return $services;
     }
 
+    public function getSnapToken($grossAmount): string
+    {
+        Config::$serverKey = config('midtrans.server_key');     // Set your Merchant Server Key
+        Config::$isProduction = false;                              // Set to true for Production Environment.
+        Config::$isSanitized = true;                                // Set sanitization on (default)
+        Config::$is3ds = true;                                      // Set 3DS transaction for credit card to true
+
+        $getGrossAmount = $this->getGrossAmount($grossAmount);
+
+        do {
+            $order_id = strtoupper(random_int(10000, 99999));
+            $orderExists = DB::table('orders')->where('id', $order_id)->exists();
+        } while ($orderExists);
+
+        $params = array(
+            'transaction_details' => array(
+                'order_id' => $order_id,
+                'gross_amount' => $getGrossAmount,
+            ),
+            'customer_details' => array(
+                'first_name' => '',
+                'last_name' => Auth::user()->name,
+                'email' => Auth::user()->email,
+                'phone' => Auth::user()->phone,
+            ),
+        );
+        return Snap::getSnapToken($params);
+    }
+
     /**
      * @throws Exception
      */
     public function store(Request $request, $store_id)
     {
-        $cartItems = $this->getCartItems($store_id);
+        $json = json_decode($request->get('json'), false, 512, JSON_THROW_ON_ERROR);
+
+        $cart = $this->getCartItems($store_id);
         $totalPrice = 0;
         $subtotalPrice = 0;
-        foreach ($cartItems as $item) {
-            $subtotalPrice += $item -> products -> price * $item->product_qty;
+        foreach ($cart->cartItems as $item) {
+            $subtotalPrice += $item->products->price * $item->product_qty;
         }
+
+        $this->shippingCost = $request->input('shipping');
+
         $totalPrice += $subtotalPrice;
         $shippingCost = $request->input('shipping');
         $note = $request->input('note');
 
-        $order = new Order;
-        do {
-            $invoice = "INV/".strtoupper(random_int(1000000, 9999999));
-            $invoiceExists = DB::table('orders')->where('invoice', $invoice)->exists();
-        } while ($invoiceExists);
-        $order->invoice = $invoice;
-        $order -> user_id = Auth::id();
-        $order -> customer_name = Auth::user()->name;
-        $order -> customer_phone = Auth::user()->phone;
-        $order -> shipping = $shippingCost;
-        $order -> note = $note;
-        $order -> total_price = $totalPrice;
-        $order->save();
+        try {
+            $order = new Order;
+            $order->id = $json->order_id;
+            $order->user_id = Auth::id();
+            $order->transaction_status = $json->transaction_status;
+            $order->transaction_id = $json->transaction_id;
+            $order->payment_type = $json->payment_type;
+            $order->customer_name = Auth::user()->name;
+            $order->customer_phone = Auth::user()->phone;
+            $order->customer_email = Auth::user()->email;
+            $order->shipping = $shippingCost;
+            $order->payment_code = $json->payment_code ?? null;
+            $order->pdf_url = $json->pdf_url;
+            $order->note = $note;
+            $order->gross_amount = $totalPrice;
+            $order->save();
 
-        foreach ($cartItems as $item) {
-            $orderItem = new OrderItem;
-            $orderItem -> order_id = $order->id;
-            $orderItem -> product_id = $item->product_id;
-            $orderItem -> quantity = $item->product_qty;
-            $subtotalPriceInput = $item -> products -> price * $item->product_qty;
-            $orderItem -> subtotal = $subtotalPriceInput;
-            $orderItem -> save();
+            $custAddress = Auth::user()->address;
+            $orderAddress = new OrderAddress;
+            $orderAddress->order_id = $order->id;
+            $orderAddress->province_id = $custAddress->province_id;
+            $orderAddress->regency_id = $custAddress->regency_id;
+            $orderAddress->district_id = $custAddress->district_id;
+            $orderAddress->village_id = $custAddress->village_id;
+            $orderAddress->detail_address = $custAddress->detail_address;
+
+            $orderItems = [];
+            foreach ($cart->cartItems as $item) {
+                $orderItem = new OrderItem;
+                $orderItem->order_id = $order->id;
+                $orderItem->product_id = $item->product_id;
+                $orderItem->quantity = $item->product_qty;
+                $subtotalPriceInput = $item->products->price * $item->product_qty;
+                $orderItem->subtotal = $subtotalPriceInput;
+                $orderItems[] = $orderItem;
+            }
+
+            $order->orderAddress()->save($orderAddress);
+            $order->orderItems()->saveMany($orderItems);
+
+            return redirect()->route('customer.order.show', ['order_id' => $order->id])->with('success', 'Pesanan berhasil dibuat!');
+
+        } catch (Exception $e) {
+            return redirect(url('/'))->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
-
-        $custAddress = Auth::user()->address;
-        $orderAddress = new OrderAddress;
-        $orderAddress -> order_id = $order->id;
-        $orderAddress -> province_id = $custAddress->province_id;
-        $orderAddress -> regency_id = $custAddress->regency_id;
-        $orderAddress -> district_id = $custAddress->district_id;
-        $orderAddress -> village_id = $custAddress->village_id;
-        $orderAddress -> detail_address = $custAddress->detail_address;
-        $orderAddress->save();
-
-        return redirect()->route('customer.order.show', ['order_id' => $order->id])->with('success', 'Pesanan berhasil dibuat!');
     }
 
 }
