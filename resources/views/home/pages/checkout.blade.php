@@ -148,11 +148,77 @@
 
     <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="config('midtrans.client_key')"></script>
     <script type="text/javascript">
+        $(document).ready(function() {
+            var price = $("#price").val();
+            var shipping = $("#select_shipping").val();
+            var total = `Rp. ${(parseInt(price) + parseInt(shipping)).toLocaleString("id-ID", {minimumFractionDigits: 0})}`;
+            var shippingCost = `Rp. ${(parseInt(shipping)).toLocaleString("id-ID", {minimumFractionDigits: 0})}`;
+
+            $("#select_shipping").select2({
+                minimumResultsForSearch: Infinity,
+                placeholder: "Pilih pengiriman",
+                searchInputPlaceholder: 'Cari Pengiriman...',
+            });
+            $("#totalCost").text(total);
+            $("#shippingCost").text(shippingCost);
+
+            $("#select_shipping").change(function() {
+                var cart_id = $(this).closest('.product_data').find('.cart_id').val();
+                var price = $("#price").val();
+                var shipping = $(this).val();
+                var total = `Rp. ${(parseInt(price) + parseInt(shipping)).toLocaleString("id-ID", {minimumFractionDigits: 0})}`;
+                var gross_amount = (parseInt(price) + parseInt(shipping)).toString();
+                var shippingCost = `Rp. ${(parseInt(shipping)).toLocaleString("id-ID", {minimumFractionDigits: 0})}`;
+                $("#totalCost").text(total);
+                $("#shippingCost").text(shippingCost);
+
+                function getNewToken(){
+                    $.ajax({
+                        type: "POST",
+                        url: "{{route('customer.snap.token')}}",
+                        data: { grossAmount: gross_amount },
+                        success: function(gross_amount) {
+                            newSnapToken = gross_amount;
+                        }
+                    });
+                }
+
+                var data = {
+                    'cart_id' : cart_id,
+                    'shipping_cost': shipping,
+                }
+                $.ajax({
+                    method: "PUT",
+                    url: "{{route('customer.update.shipping')}}",
+                    data: data,
+                    beforeSend: function() {
+                        $("#select_shipping").prop("disabled", true);
+                    },
+                    complete: function() {
+                        $("#select_shipping").prop("disabled", false);
+                    },
+                    success: function (){
+                        getNewToken();
+                    }
+                })
+            });
+        });
+
+        $(document).ajaxComplete(function() {
+            $("#select_shipping").select2({
+                minimumResultsForSearch: Infinity,
+                placeholder: "Pilih pengiriman",
+                searchInputPlaceholder: 'Cari Pengiriman...',
+            });
+        });
+
         // For example trigger on button clicked, or any time you need
         var payButton = document.getElementById('pay-button');
+        var newSnapToken;
+
         payButton.addEventListener('click', function () {
             // Trigger snap popup. @TODO: Replace TRANSACTION_TOKEN_HERE with your transaction token
-            window.snap.pay('{{ $snapToken }}', {
+            window.snap.pay(newSnapToken, {
                 onSuccess: function(result){
                     /* You may add your own implementation here */
                     Swal.fire({
@@ -198,55 +264,6 @@
             document.getElementById('submit_form').submit();
         }
 
-    </script>
-
-    <script>
-
-        $(document).ready(function() {
-            var price = $("#price").val();
-            var shipping = $("#select_shipping").val();
-            var total = `Rp. ${(parseInt(price) + parseInt(shipping)).toLocaleString("id-ID", {minimumFractionDigits: 0})}`;
-            var shippingCost = `Rp. ${(parseInt(shipping)).toLocaleString("id-ID", {minimumFractionDigits: 0})}`;
-
-            $("#select_shipping").select2({
-                minimumResultsForSearch: Infinity,
-                placeholder: "Pilih pengiriman",
-                searchInputPlaceholder: 'Cari Pengiriman...',
-            });
-            $("#totalCost").text(total);
-            $("#shippingCost").text(shippingCost);
-        });
-
-        $("#select_shipping").change(function() {
-            var cart_id = $(this).closest('.product_data').find('.cart_id').val();
-            var price = $("#price").val();
-            var shipping = $(this).val();
-            var total = `Rp. ${(parseInt(price) + parseInt(shipping)).toLocaleString("id-ID", {minimumFractionDigits: 0})}`;
-            var shippingCost = `Rp. ${(parseInt(shipping)).toLocaleString("id-ID", {minimumFractionDigits: 0})}`;
-            $("#totalCost").text(total);
-            $("#shippingCost").text(shippingCost);
-
-            var data = {
-                'cart_id' : cart_id,
-                'shipping_cost': shipping,
-            }
-            $.ajax({
-                method: "PUT",
-                url: "{{route('customer.update.shipping')}}",
-                data: data,
-                success: function (){
-                    location.reload();
-                }
-            })
-        });
-
-        $(document).ajaxComplete(function() {
-            $("#select_shipping").select2({
-                minimumResultsForSearch: Infinity,
-                placeholder: "Pilih pengiriman",
-                searchInputPlaceholder: 'Cari Pengiriman...',
-            });
-        });
     </script>
 
 @endsection

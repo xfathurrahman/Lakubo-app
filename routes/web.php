@@ -103,6 +103,7 @@ Route::middleware(['auth', 'verified', 'role:customer'])->name('customer.')->pre
     Route::post('/checkout/{store_id}', [CheckoutController::class,'store'])->name('checkout.store');
     Route::get('/orders', [OrderController::class, 'index'])->name('orders');
     Route::put('/update-shipping',[CheckoutController::class,'updateShipping'])->name('update.shipping');
+    Route::post('/get-snap-token',[CheckoutController::class,'getSnapToken'])->name('snap.token');
     Route::get('/order/detail/{order_id}', [OrderController::class, 'show'])->name('order.show');
 });
 

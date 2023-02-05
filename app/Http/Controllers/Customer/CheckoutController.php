@@ -24,12 +24,10 @@ class CheckoutController extends Controller
 
         $cart = $this->getCartItems($store_id);
         $services  = $this->getShippingCost($cart);
-        $snapToken  = $this->getSnapToken($cart);
 
         return view('home.pages.checkout', [
             'cart' => $cart,
             'services' => $services,
-            'snapToken' => $snapToken,
         ]);
     }
 
@@ -55,20 +53,6 @@ class CheckoutController extends Controller
             return response()->json(['status' => "Biaya pengiriman di ubah"]);
         }
 
-    }
-
-    public function getGrossAmount($cart): float|int
-    {
-        $shipping_cost = $cart->shipping_cost;
-
-        $grossAmount = 0;
-        $subTotal = 0;
-        foreach ($cart->cartItems as $item){
-            $subTotal += $item -> products -> price * $item -> product_qty;
-        }
-        $grossAmount += $subTotal + $shipping_cost;
-
-        return $grossAmount;
     }
 
     public function getShippingCost($cart): array
@@ -104,14 +88,14 @@ class CheckoutController extends Controller
         return $services;
     }
 
-    public function getSnapToken($grossAmount): string
+    public function getSnapToken(Request $request): string
     {
         Config::$serverKey = config('midtrans.server_key');     // Set your Merchant Server Key
         Config::$isProduction = false;                              // Set to true for Production Environment.
         Config::$isSanitized = true;                                // Set sanitization on (default)
         Config::$is3ds = true;                                      // Set 3DS transaction for credit card to true
 
-        $getGrossAmount = $this->getGrossAmount($grossAmount);
+        $grossAmount = $request->input('grossAmount');
 
         do {
             $order_id = strtoupper(random_int(10000, 99999));
@@ -121,7 +105,7 @@ class CheckoutController extends Controller
         $params = array(
             'transaction_details' => array(
                 'order_id' => $order_id,
-                'gross_amount' => $getGrossAmount,
+                'gross_amount' => $grossAmount,
             ),
             'customer_details' => array(
                 'first_name' => '',
@@ -199,5 +183,19 @@ class CheckoutController extends Controller
             return redirect(url('/'))->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
+
+    /*    public function getGrossAmount($cart): float|int
+    {
+        $shipping_cost = $cart->shipping_cost;
+
+        $grossAmount = 0;
+        $subTotal = 0;
+        foreach ($cart->cartItems as $item){
+            $subTotal += $item -> products -> price * $item -> product_qty;
+        }
+        $grossAmount += $subTotal + $shipping_cost;
+
+        return $grossAmount;
+    }*/
 
 }
