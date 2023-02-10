@@ -147,6 +147,18 @@ class CheckoutController extends Controller
             $order->customer_email = Auth::user()->email;
             $order->shipping = $shippingCost;
             $order->payment_code = $json->payment_code ?? null;
+            $order->store_name = $json->store ?? null;
+            $order->transaction_time = $json->transaction_time ?? null;
+            $va_number = null;
+            if (isset($json->va_numbers[0]->va_number)) {
+                $va_number = $json->va_numbers[0]->va_number;
+            }
+            $order->va_number = $va_number;
+            $bank = null;
+            if (isset($json->va_numbers[0]->bank)) {
+                $bank = $json->va_numbers[0]->bank;
+            }
+            $order->bank = $bank;
             $order->pdf_url = $json->pdf_url ?? null;
             $order->note = $note;
             $order->gross_amount = $totalPrice + $shippingCost;
@@ -178,7 +190,7 @@ class CheckoutController extends Controller
             return redirect()->route('customer.order.show', ['order_id' => $order->id])->with('success', 'Pesanan berhasil dibuat!');
 
         } catch (Exception $e) {
-            return redirect(url('/'))->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
 

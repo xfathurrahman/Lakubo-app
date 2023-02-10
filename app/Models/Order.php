@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
+/**
+ * @method static where(string $string, $order_id)
+ * @method static find(mixed $invoce)
+ */
 class Order extends Model
 {
     use HasFactory;

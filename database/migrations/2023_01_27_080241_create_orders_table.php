@@ -26,6 +26,10 @@ return new class extends Migration
             $table->integer('gross_amount');
             $table->string('pdf_url')->nullable();
             $table->string('shipping');
+            $table->dat('transaction_time')->nullable();
+            $table->string('bank')->nullable();
+            $table->string('store_name')->nullable();
+            $table->string('va_number')->nullable();
             $table->string('payment_code')->nullable();
             $table->string('resi')->nullable();
             $table->string('note')->nullable();

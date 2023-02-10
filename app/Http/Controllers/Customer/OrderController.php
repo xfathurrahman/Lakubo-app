@@ -92,10 +92,10 @@ class OrderController extends Controller
     public function callback(Request $request)
     {
         $serverKey = config('midtrans.server_key');
-        $hashed = hash("sha512", $request->invoice.$request->status.$request->gross_amount.$serverKey);
+        $hashed = hash("sha512", $request->order_id.$request->status_code.$request->gross_amount.$serverKey);
         if ($hashed === $request->signature_key)
         {
-            $order = Order::find($request->invoce);
+            $order = Order::find($request->order_id);
             $order->update(['status' => 'Paid']);
         }
     }

@@ -115,7 +115,6 @@
                                                 <option value="{{ $service['biaya'] }}">{{ $service['description'] }} (@currency($service['biaya'])) | {{ $service['etd'] }} Hari Pengiriman</option>
                                             @endforeach
                                         </select>
-
                                     </div>
                                     <div class="text-md text-gray-400 min-w-fit">Total Tagihan:
                                         <span class="text-xl inline-block text-center ml-2 text-red-500" id="totalCost">@currency($total)</span>
@@ -178,6 +177,7 @@
                         }, 1300);  // 1000 milliseconds = 1 second
                     }
                 });
+
                 payButton.click(function() {
                     window.snap.pay(SnapToken, {
                         onSuccess: function(result){

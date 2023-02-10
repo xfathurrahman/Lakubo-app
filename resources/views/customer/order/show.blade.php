@@ -36,16 +36,57 @@
                     <div class="box p-5 rounded-md">
                         <div class="flex items-center border-b border-slate-200/60 dark:border-darkmode-400 pb-5 mb-5">
                             <div class="font-medium text-base truncate">Detail Transaksi</div>
+                            @if($orders->transaction_status === 'pending')
+                                <div class="items-center ml-auto text-primary">
+                                    <a href="{{ $orders->pdf_url }}" class="inline-flex">
+                                        <i data-lucide="file-text" class="w-4 h-4 mr-2"></i> Unduh Tagihan
+                                    </a>
+                                </div>
+                            @endif
                         </div>
                         <div class="flex items-center"> <i data-lucide="clipboard" class="w-4 h-4 text-slate-500 mr-2"></i> Invoice: INV/{{ $orders->id }} </div>
                         <div class="flex items-center mt-3"> <i data-lucide="calendar" class="w-4 h-4 text-slate-500 mr-2"></i> Pesanan Dibuat: {{ Carbon\Carbon::parse($orders->created_at)->format('d F Y') }}</div>
-                        <div class="flex items-center mt-3">
+
+                        <div class="flex items-center mt-3" id="refresh-status">
                             <i data-lucide="clock" class="w-4 h-4 text-slate-500 mr-2"></i> Status Transaksi:
-                            <span class="bg-success/20 text-danger rounded px-2 ml-1">{{ $orders -> transaction_status }}</span>
-                            @if($orders->transaction_status === 'pending')
-                                <a href="{{ $orders->pdf_url }}" class="flex items-center ml-auto text-primary"> <i data-lucide="file-text" class="w-4 h-4 mr-2"></i> Unduh Tagihan </a>
-                            @endif
+                            <div class="bg-success/20 text-danger rounded px-2 ml-1 inline-flex">
+                                <span>{{ $orders -> transaction_status }}</span>
+                                <span>
+                                    {{--Data ubah status--}}
+                                    <input type="hidden" id="order_id" value="{{ $orders -> id }}">
+                                    <input type="hidden" id="transaction_status" value="Sukses">
+                                    <input type="hidden" id="status_code" value="200">
+                                    <input type="hidden" id="gross_amount" value="{{ $orders -> gross_amount }}">
+                                    {{--Data ubah status end--}}
+                                    <button id="send_change_status" class="flex items-center ml-auto text-primary"><i data-lucide="refresh-ccw" class="w-4 h-4 ml-2 -mb-5"></i></button>
+                                </span>
+                            </div>
                         </div>
+
+                        @if($orders->bank)
+                            <div class="bg-green-100 p-2 mt-3 rounded-lg">
+                                <div class="flex items-center"> <i data-lucide="calendar" class="w-4 h-4 text-slate-500 mr-2"></i> Bayar sebelum: {{ $orders->transaction_time }}</div>
+                                <div class="flex items-center my-3"> <i data-lucide="credit-card" class="w-4 h-4 text-slate-500 mr-2"></i> Bank: <p class="ml-1 uppercase">{{ $orders->bank }}</p> </div>
+                                <div class="flex items-center">
+                                    <i data-lucide="activity" class="w-4 h-4 text-slate-500 mr-2"></i> No VA: {{ $orders->va_number }}
+                                    <button class="relative bg-red-400 hover:bg-red-500 text-white font-bold px-2 rounded ml-auto" id="copy-btn">Salin
+                                        <span class="hidden absolute -top-10 -right-2 mt-2 py-1 px-2 bg-black opacity-50 text-white rounded" id="tooltip">Disalin!</span>
+                                    </button>
+                                </div>
+                            </div>
+                        @else
+                            <div class="bg-green-100 p-2 mt-3 rounded-lg">
+                                <div class="flex items-center"> <i data-lucide="calendar" class="w-4 h-4 text-slate-500 mr-2"></i> Bayar sebelum: {{ $orders->transaction_time }}</div>
+                                <div class="flex items-center my-3"> <i data-lucide="credit-card" class="w-4 h-4 text-slate-500 mr-2"></i> Pembayaran: <p class="ml-1 uppercase">Indomaret</p> </div>
+                                <div class="flex items-center">
+                                    <i data-lucide="activity" class="w-4 h-4 text-slate-500 mr-2"></i> Kode Pembayaran: {{ $orders->payment_code }}
+                                    <button class="relative bg-red-400 hover:bg-red-500 text-white font-bold px-2 rounded ml-auto" id="copy-btn">Salin
+                                        <span class="hidden absolute -top-10 -right-2 mt-2 py-1 px-2 bg-black opacity-50 text-white rounded" id="tooltip">Disalin!</span>
+                                    </button>
+                                </div>
+                            </div>
+                        @endif
+
                         {{--<div class="flex items-center border-t border-slate-200/60 dark:border-darkmode-400 pt-5 mt-5 font-medium">
                             @if($orders->transaction_status === 'unpaid')
                                 <button id="pay-button" class="btn bg-red-500 text-white w-full">Bayar</button>
@@ -76,28 +117,6 @@
                             <i data-lucide="credit-card" class="w-4 h-4 text-slate-500 mr-2"></i> Total Tagihan:
                             <div class="ml-auto">@currency($orders->gross_amount+$orders->shipping)</div>
                         </div>
-                    </div>
-                    <div class="box p-5 rounded-md mt-5">
-                        <div class="flex items-center border-b border-slate-200/60 dark:border-darkmode-400 pb-5 mb-5">
-                            <div class="font-medium text-base truncate">Detail Penerima</div>
-                        </div>
-                        <div class="flex items-center"> <i data-lucide="clipboard" class="w-4 h-4 text-slate-500 mr-2"></i> Nama: {{ $orders->customer_name }} </div>
-                        <div class="flex items-center mt-3"> <i data-lucide="calendar" class="w-4 h-4 text-slate-500 mr-2"></i> Nomor Handphone: +62{{ ltrim($orders->customer_phone, '0') }} </div>
-                        <div class="flex items-center mt-3 capitalize_address">
-                            <i data-lucide="map-pin" class="w-4 h-4 text-slate-500 mr-2"></i>
-                            {{ $orders->orderAddress->detail_address }},
-                            {{ $orders->orderAddress->village->name }},
-                            {{ $orders->orderAddress->district->name }},
-                            {{ $orders->orderAddress->regency->name }},
-                            {{ $orders->orderAddress->province->name }}.
-                        </div>
-                    </div>
-                    <div class="box p-5 rounded-md mt-5">
-                        <div class="flex items-center border-b border-slate-200/60 dark:border-darkmode-400 pb-5 mb-5">
-                            <div class="font-medium text-base truncate">Informasi Pengiriman</div>
-                        </div>
-                        <div class="flex items-center"> <i data-lucide="clipboard" class="w-4 h-4 text-slate-500 mr-2"></i> Kurir: JNE </div>
-                        <div class="flex items-center mt-3"> <i data-lucide="calendar" class="w-4 h-4 text-slate-500 mr-2"></i> Nomor Resi: 003005580322 <i data-lucide="copy" class="w-4 h-4 text-slate-500 ml-2"></i> </div>
                     </div>
                 </div>
                 <div class="col-span-12 lg:col-span-7 2xl:col-span-8">
@@ -132,6 +151,34 @@
                             </table>
                         </div>
                     </div>
+                    <div class="grid grid-cols-12 gap-5">
+                        <div class="col-span-12 lg:col-span-6">
+                            <div class="box p-5 rounded-md mt-5" style="min-height: 210px">
+                                <div class="flex items-center border-b border-slate-200/60 dark:border-darkmode-400 pb-5 mb-5">
+                                    <div class="font-medium text-base truncate">Detail Penerima</div>
+                                </div>
+                                <div class="flex items-center"> <i data-lucide="clipboard" class="w-4 h-4 text-slate-500 mr-2"></i> Nama: {{ $orders->customer_name }} </div>
+                                <div class="flex items-center mt-3"> <i data-lucide="calendar" class="w-4 h-4 text-slate-500 mr-2"></i> Nomor Handphone: +62{{ ltrim($orders->customer_phone, '0') }} </div>
+                                <div class="flex items-center mt-3 capitalize_address">
+                                    <i data-lucide="map-pin" class="w-4 h-4 text-slate-500 mr-2"></i>
+                                    {{ $orders->orderAddress->detail_address }},
+                                    {{ $orders->orderAddress->village->name }},
+                                    {{ $orders->orderAddress->district->name }},
+                                    {{ $orders->orderAddress->regency->name }},
+                                    {{ $orders->orderAddress->province->name }}.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-span-12 lg:col-span-6">
+                            <div class="box p-5 rounded-md lg:mt-5 ml-auto" style="min-height: 210px">
+                                <div class="flex items-center border-b border-slate-200/60 dark:border-darkmode-400 pb-5 mb-5">
+                                    <div class="font-medium text-base truncate">Informasi Pengiriman</div>
+                                </div>
+                                <div class="flex items-center"> <i data-lucide="clipboard" class="w-4 h-4 text-slate-500 mr-2"></i> Kurir: JNE </div>
+                                <div class="flex items-center mt-3"> <i data-lucide="calendar" class="w-4 h-4 text-slate-500 mr-2"></i> Nomor Resi: 003005580322 <i data-lucide="copy" class="w-4 h-4 text-slate-500 ml-2"></i> </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- END: Transaction Details -->
@@ -140,5 +187,54 @@
     @else
         Data tidak ditemukan
     @endif
+
+    @section('script')
+
+            <script>
+                $(document).ready(function(){
+                    $("#send_change_status").click(function(){
+                        let order_id = $("#order_id").val();
+                        let transaction_status = $("#transaction_status").val();
+                        let status_code = $("#status_code").val();
+                        let gross_amount = $("#gross_amount").val();
+
+                        $.ajax({
+                            type: "POST",
+                            url: "/api/payment-notification-handler",
+                            data: {
+                                order_id: order_id,
+                                transaction_status: transaction_status,
+                                status_code: status_code,
+                                gross_amount: gross_amount
+                            },
+                            success: function(data) {
+                                console.log(data);
+                                //Tambahkan aksi setelah data berhasil dikirim ke server
+                            },
+                            error: function(data) {
+                                console.log(data);
+                                //Tambahkan aksi jika terjadi error saat mengirim data ke server
+                            }
+                        });
+                    });
+                });
+            </script>
+
+            <script>
+                const copyBtn = document.getElementById('copy-btn');
+                const tooltip = document.getElementById('tooltip');
+
+                copyBtn.addEventListener('click', function() {
+                    navigator.clipboard.writeText({{ $orders->va_number }}).then(function() {
+                        tooltip.classList.remove('hidden');
+                        setTimeout(function() {
+                            tooltip.classList.add('hidden');
+                        }, 1500);
+                    }, function() {
+                        console.error('Gagal menyalin ke clipboard');
+                    });
+                });
+            </script>
+    @endsection
 
 </x-app-layout>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" id="bg-color">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -22,6 +22,18 @@
         <script type="text/javascript" src="{{ asset('js/alertify.js') }}"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/js/all.min.js"></script>
         <script type="text/javascript" src="https://cdn.ckeditor.com/ckeditor5/35.4.0/classic/ckeditor.js"></script>
+
+        {{--<script>
+            const url = window.location.pathname;
+            let bgColor = "blue";
+            if (url.startsWith("/customer/")) {
+                bgColor = "red";
+            } else if (url.startsWith("/admin/")) {
+                bgColor = "green";
+            }
+            document.querySelector("html").style.backgroundColor = bgColor;
+        </script>--}}
+
         <script>
             $(function(){
                 var $sections=$('.form-section');
