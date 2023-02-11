@@ -86,7 +86,6 @@
                                 </div>
                             </div>
                         @endif
-
                         {{--<div class="flex items-center border-t border-slate-200/60 dark:border-darkmode-400 pt-5 mt-5 font-medium">
                             @if($orders->transaction_status === 'unpaid')
                                 <button id="pay-button" class="btn bg-red-500 text-white w-full">Bayar</button>
