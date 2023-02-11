@@ -28,7 +28,7 @@ return new class extends Migration
             $table->string('shipping');
             $table->dat('transaction_time')->nullable();
             $table->string('bank')->nullable();
-            $table->string('store_name')->nullable();
+            $table->string('payment_store')->nullable();
             $table->string('va_number')->nullable();
             $table->string('payment_code')->nullable();
             $table->string('resi')->nullable();

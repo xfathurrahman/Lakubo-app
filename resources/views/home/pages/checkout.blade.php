@@ -1,6 +1,13 @@
 @extends('home.main')
 
 @section('content')
+
+    @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <div class="md:py-5 mb-14">
         <div class="w-full mx-auto bg-gray-100 shadow-lg rounded-lg">
             <div class="md:flex ">

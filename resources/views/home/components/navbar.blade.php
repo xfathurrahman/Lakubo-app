@@ -1,6 +1,6 @@
 <div class="sm:container xl:px-32 flex flex-wrap items-center mx-auto">
 
-    <a href="http://127.0.0.1:8000/" class="flex items-center">
+    <a href="{{ route('home') }}" class="flex items-center">
         <img src="{{ asset('assets/images/app/cowlogo.svg') }}" class="ml-3 h-6 sm:h-9" alt="Flowbite Logo">
         <span class="self-center text-xl font-semibold whitespace-nowrap">Lakubo</span>
     </a>

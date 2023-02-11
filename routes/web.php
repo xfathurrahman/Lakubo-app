@@ -32,7 +32,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [HomeController::class,'index']);
+Route::get('/', [HomeController::class,'index'])->name('home');
 Route::get('/detail/product/{id}', [HomeController::class,'getProduct'])->name('getProduct');
 
 Route::get('/indoregion/boyolali', [IndoRegionController::class,'getBoyolali'])->name('getBoyolali');
@@ -105,7 +105,6 @@ Route::middleware(['auth', 'verified', 'role:customer'])->name('customer.')->pre
     Route::put('/update-shipping',[CheckoutController::class,'updateShipping'])->name('update.shipping');
     Route::post('/get-snap-token',[CheckoutController::class,'getSnapToken'])->name('snap.token');
     Route::get('/order/detail/{order_id}', [OrderController::class, 'show'])->name('order.show');
-    Route::post('/order/detail/{order_id}', [OrderController::class, 'show'])->name('order.show');
 });
 
 Route::middleware('auth')->group(function () {

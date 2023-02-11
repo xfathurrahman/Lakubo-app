@@ -147,7 +147,7 @@ class CheckoutController extends Controller
             $order->customer_email = Auth::user()->email;
             $order->shipping = $shippingCost;
             $order->payment_code = $json->payment_code ?? null;
-            $order->store_name = $json->store ?? null;
+            $order->payment_store = $json->store ?? null;
             $order->transaction_time = $json->transaction_time ?? null;
             $va_number = null;
             if (isset($json->va_numbers[0]->va_number)) {

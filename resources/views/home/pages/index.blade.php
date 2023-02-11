@@ -326,7 +326,7 @@
                     title: 'Silahkan Masuk terlebih dahulu untuk mulai belanja.',
                     showConfirmButton: true,
                     confirmButtonColor: "#DD6B55",
-                    confirmButtonText: '<a href="http://127.0.0.1:8000/login">Masuk</a>'
+                    confirmButtonText: '<a href="{{route('login')}}">Masuk</a>'
                 });
             });
 
