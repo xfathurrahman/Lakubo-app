@@ -19,6 +19,7 @@
         <script src="{{ asset('js/jquery-3.6.1.js') }}"></script>
         <script src="{{ asset('js/owl.carousel.js') }}"></script>
         <script src="{{ asset('js/slick.min.js') }}"></script>
+        <script src="{{ asset('js/parsley.min.js') }}"></script>
         <script src="{{ asset('js/easyzoom.js') }}"></script>
         <script src="{{ asset('js/select2.min.js') }}"></script>
         <script src="{{ asset('js/select2-searchInputPlaceholder.js') }}"></script>

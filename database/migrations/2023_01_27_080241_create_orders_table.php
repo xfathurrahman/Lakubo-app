@@ -17,7 +17,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->string('transaction_status');
+            $table->enum('status', ['pending', 'processing', 'completed', 'cancelled', 'shipped'])->nullable();
+            $table->enum('transaction_status', ['unpaid','pending','completed'])->default('unpaid');
             $table->string('transaction_id');
             $table->string('customer_name');
             $table->string('customer_phone');
@@ -26,7 +27,7 @@ return new class extends Migration
             $table->integer('gross_amount');
             $table->string('pdf_url')->nullable();
             $table->string('shipping');
-            $table->dat('transaction_time')->nullable();
+            $table->dateTime('transaction_time')->nullable();
             $table->string('bank')->nullable();
             $table->string('payment_store')->nullable();
             $table->string('va_number')->nullable();

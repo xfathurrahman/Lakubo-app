@@ -122,8 +122,6 @@ class CheckoutController extends Controller
      */
     public function store(Request $request, $store_id)
     {
-        $json = json_decode($request->get('json'), false, 512, JSON_THROW_ON_ERROR);
-
         $cart = $this->getCartItems($store_id);
         $totalPrice = 0;
         $subtotalPrice = 0;
@@ -136,30 +134,17 @@ class CheckoutController extends Controller
         $note = $request->input('note');
 
         try {
+            do {
+                $order_id = strtoupper(random_int(10000, 99999));
+                $orderExists = DB::table('orders')->where('id', $order_id)->exists();
+            } while ($orderExists);
             $order = new Order;
-            $order->id = $json->order_id;
+            $order->id = $order_id;
             $order->user_id = Auth::id();
-            $order->transaction_status = $json->transaction_status;
-            $order->transaction_id = $json->transaction_id;
-            $order->payment_type = $json->payment_type;
             $order->customer_name = Auth::user()->name;
             $order->customer_phone = Auth::user()->phone;
             $order->customer_email = Auth::user()->email;
             $order->shipping = $shippingCost;
-            $order->payment_code = $json->payment_code ?? null;
-            $order->payment_store = $json->store ?? null;
-            $order->transaction_time = $json->transaction_time ?? null;
-            $va_number = null;
-            if (isset($json->va_numbers[0]->va_number)) {
-                $va_number = $json->va_numbers[0]->va_number;
-            }
-            $order->va_number = $va_number;
-            $bank = null;
-            if (isset($json->va_numbers[0]->bank)) {
-                $bank = $json->va_numbers[0]->bank;
-            }
-            $order->bank = $bank;
-            $order->pdf_url = $json->pdf_url ?? null;
             $order->note = $note;
             $order->gross_amount = $totalPrice + $shippingCost;
             $order->save();
