@@ -22,8 +22,7 @@
                     <div class="flex justify-between border-b pb-5 mb-5">
                         <h1 class="font-semibold text-2xl">Checkout</h1>
                         <div class="my-2 inline-flex">
-                            <div class="text-red-400 font-medium">{{ $cart->stores->name }}</div>
-                            <a href="#" class="btn ml-2 h-6"><i class="fa-solid fa-store mr-2"></i>Kunjungi</a>
+                            <a href="#" class="text-red-400 font-medium"><i class="fa-solid fa-store mr-2"></i>{{ $cart->stores->name }}</a>
                         </div>
                     </div>
                     <div class="bg-gray-200 rounded-lg p-4">
@@ -73,7 +72,7 @@
                             </div>
                         </div>
                     @else
-                        <div class="flex flex-wrap lg:justify-between">
+                        <div class="flex flex-wrap lg:justify-between pt-6">
                             <div class="w-full lg:w-1/2 lg:pr-5">
                                 <div class="flex border-b pb-3 pt-3">
                                     <h3 class="font-semibold text-gray-600 text-xs uppercase w-2/5">Detail Produk</h3>
@@ -85,17 +84,17 @@
                                 @php $totalWeight = 0 @endphp
                                 @php $totalProduct = 0 @endphp
                                 @foreach($cart->cartItems as $item)
-                                    <div class="flex items-center px-6 py-5 border-b">
+                                    <div class="flex items-center p-2 border-b">
                                         <div class="flex grid grid-cols-4 w-2/5">
-                                            <div class="w-20 col-span-4 lg:col-span-1 mx-auto">
-                                                <img class="h-20" src="{{ asset("storage/product-image")."/".$item -> products -> productImage -> image_path }}" alt="">
+                                            <div class="w-16 col-span-4 lg:col-span-1 mx-auto">
+                                                <img class="h-16" src="{{ asset("storage/product-image")."/".$item -> products -> productImage -> image_path }}" alt="">
                                             </div>
-                                            <div class="col-span-4 lg:col-span-3 flex flex-col justify-between text-center lg:text-left px-2 mt-2 lg:ml-4 lg:mt-0 flex-grow">
+                                            <div class="col-span-4 lg:col-span-3 flex flex-col justify-between text-center lg:text-left mt-2 lg:ml-8 lg:mt-0 flex-grow">
                                                 <span class="font-bold text-xs lg:text-sm">{{ $item -> products -> name }}</span>
                                                 @php $subtotalWeight = 0 @endphp
                                                 @php $subtotalWeight += $item -> products -> weight * $item->product_qty @endphp
-                                                <span class="text-xs">({{ $subtotalWeight }} gram)</span>
-                                                <span class="text-red-500 text-xs">{{ $item -> products -> productCategories -> name }}</span>
+                                                <span class="text-xs my-1">{{ $subtotalWeight }} gram</span>
+                                                <span class="text-red-500 text-xs mt-1"><i class="fa-solid fa-tag mx-1"></i>{{ $item -> products -> productCategories -> name }}</span>
                                             </div>
                                         </div>
                                         <span class="text-center w-1/5 font-semibold text-sm">{{ $item -> product_qty }}</span>
@@ -108,8 +107,11 @@
                                     @php $totalWeight += $subtotalWeight; @endphp
                                     @php $totalProduct += $item -> product_qty; @endphp
                                 @endforeach
+                                <div class="text-md text-gray-400 mt-2">Berat total ({{ $totalProduct }}):
+                                    <div class="text-md inline-block text-center ml-2 text-red-500">{{ $totalWeight }} gram</div>
+                                </div>
                             </div>
-                            <div class="w-full lg:w-1/2 p-2 bg-red-400 rounded-lg lg:p-6 text-white">
+                            <div class="w-full lg:w-1/2 p-2 mt-6 lg:mt-0 bg-red-400 rounded-lg lg:p-6 text-white">
                                 <form id="submit_form" method="POST" action="{{ route('customer.checkout.store', $cart->id) }}" data-parsley-validate="" role="form">
                                     @csrf
                                     <input type="hidden" name="price" id="price" value="{{ $total }}">
@@ -119,7 +121,9 @@
                                             <label for="select_shipping" class="text-white">Pengiriman<span class="text-grey-400 inline-block float-right" id="parsley_error"></span></label>
                                             <select id="select_shipping" name="shipping" class="js-states py-3" required data-parsley-required-message="Pilih Jasa Pengiriman." data-parsley-errors-container="#parsley_error">
                                                 <option value="0" selected disabled>Layanan Pengiriman JNE</option>
-
+                                                {{--@foreach( $services as $service )
+                                                    <option value="{{ $service['biaya'] }}">{{ $service['description'] }} (@currency($service['biaya'])) | {{ $service['etd'] }} Hari Pengiriman</option>
+                                                @endforeach--}}
                                             </select>
                                         </div>
                                     </div>

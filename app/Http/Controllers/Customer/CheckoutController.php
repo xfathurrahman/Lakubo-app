@@ -23,11 +23,11 @@ class CheckoutController extends Controller
     public function index($store_id) {
 
         $cart = $this->getCartItems($store_id);
-        $services  = $this->getShippingCost($cart);
+        /*$services  = $this->getShippingCost($cart);*/
 
         return view('home.pages.checkout', [
             'cart' => $cart,
-            'services' => $services,
+            /*'services' => $services,*/
         ]);
     }
 
