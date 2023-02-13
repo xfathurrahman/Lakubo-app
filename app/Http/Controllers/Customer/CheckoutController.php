@@ -23,11 +23,10 @@ class CheckoutController extends Controller
     public function index($store_id) {
 
         $cart = $this->getCartItems($store_id);
-        /*$services  = $this->getShippingCost($cart);*/
-
+        $services  = $this->getShippingCost($cart);
         return view('home.pages.checkout', [
             'cart' => $cart,
-            /*'services' => $services,*/
+            'services' => $services,
         ]);
     }
 
@@ -52,7 +51,6 @@ class CheckoutController extends Controller
 
             return response()->json(['status' => "Biaya pengiriman di ubah"]);
         }
-
     }
 
     public function getShippingCost($cart): array
@@ -88,40 +86,29 @@ class CheckoutController extends Controller
         return $services;
     }
 
-    public function getSnapToken(Request $request): string
-    {
-        Config::$serverKey = config('midtrans.server_key');     // Set your Merchant Server Key
-        Config::$isProduction = false;                              // Set to true for Production Environment.
-        Config::$isSanitized = true;                                // Set sanitization on (default)
-        Config::$is3ds = true;                                      // Set 3DS transaction for credit card to true
-
-        $grossAmount = $request->input('grossAmount');
-
-        do {
-            $order_id = strtoupper(random_int(10000, 99999));
-            $orderExists = DB::table('orders')->where('id', $order_id)->exists();
-        } while ($orderExists);
-
-        $params = array(
-            'transaction_details' => array(
-                'order_id' => $order_id,
-                'gross_amount' => $grossAmount,
-            ),
-            'customer_details' => array(
-                'first_name' => '',
-                'last_name' => Auth::user()->name,
-                'email' => Auth::user()->email,
-                'phone' => Auth::user()->phone,
-            ),
-        );
-        return Snap::getSnapToken($params);
-    }
-
     /**
      * @throws Exception
      */
     public function store(Request $request, $store_id)
     {
+
+        // ambil data dari inputan
+        $shippingCost = $request->input('shipping');
+        $note = $request->input('note');
+
+        // konfirgurasi midtrans
+        Config::$serverKey = config('midtrans.server_key');         // Set your Merchant Server Key
+        Config::$isProduction = config('midtrans.is_production');   // Set to true for Production Environment.
+        Config::$isSanitized = true;                                    // Set sanitization on (default)
+        Config::$is3ds = true;                                          // Set 3DS transaction for credit card to true
+
+        // membuat order_id unik
+        do {
+            $order_id = strtoupper(random_int(10000, 99999));
+            $orderExists = DB::table('orders')->where('id', $order_id)->exists();
+        } while ($orderExists);
+
+        // hitung total harga
         $cart = $this->getCartItems($store_id);
         $totalPrice = 0;
         $subtotalPrice = 0;
@@ -130,23 +117,34 @@ class CheckoutController extends Controller
         }
         $totalPrice += $subtotalPrice;
 
-        $shippingCost = $request->input('shipping');
-        $note = $request->input('note');
+        // generate snap token
+        $params = array(
+            'transaction_details' => array(
+                'order_id' => $order_id,
+                'gross_amount' => $totalPrice + $shippingCost,
+            ),
+            'customer_details' => array(
+                'first_name' => Auth::user()->name,
+                'last_name' => '',
+                'email' => Auth::user()->email,
+                'phone' => Auth::user()->phone,
+            ),
+        );
+        $snapToken = Snap::getSnapToken($params);
 
+        // simpan data pesanan ke database
         try {
-            do {
-                $order_id = strtoupper(random_int(10000, 99999));
-                $orderExists = DB::table('orders')->where('id', $order_id)->exists();
-            } while ($orderExists);
             $order = new Order;
             $order->id = $order_id;
             $order->user_id = Auth::id();
+            $order->snap_token = $snapToken;
             $order->customer_name = Auth::user()->name;
             $order->customer_phone = Auth::user()->phone;
             $order->customer_email = Auth::user()->email;
             $order->shipping = $shippingCost;
+            $order->subtotal = $subtotalPrice;
+            $order->grand_total = $totalPrice + $shippingCost;
             $order->note = $note;
-            $order->gross_amount = $totalPrice + $shippingCost;
             $order->save();
 
             $custAddress = Auth::user()->address;
@@ -178,19 +176,4 @@ class CheckoutController extends Controller
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
-
-    /*    public function getGrossAmount($cart): float|int
-    {
-        $shipping_cost = $cart->shipping_cost;
-
-        $grossAmount = 0;
-        $subTotal = 0;
-        foreach ($cart->cartItems as $item){
-            $subTotal += $item -> products -> price * $item -> product_qty;
-        }
-        $grossAmount += $subTotal + $shipping_cost;
-
-        return $grossAmount;
-    }*/
-
 }

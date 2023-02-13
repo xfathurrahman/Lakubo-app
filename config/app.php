@@ -187,6 +187,7 @@ return [
          */
         Spatie\Permission\PermissionServiceProvider::class,
         AzisHapidin\IndoRegion\IndoRegionServiceProvider::class,
+        Milon\Barcode\BarcodeServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -211,6 +212,8 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
+        'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
+        'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
     ])->toArray(),
 
 ];

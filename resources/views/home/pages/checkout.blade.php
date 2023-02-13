@@ -115,15 +115,14 @@
                                 <form id="submit_form" method="POST" action="{{ route('customer.checkout.store', $cart->id) }}" data-parsley-validate="" role="form">
                                     @csrf
                                     <input type="hidden" name="price" id="price" value="{{ $total }}">
-                                    <input type="hidden" name="gross_amount" id="gross_amount" value="0">
-                                    <div class="text-md text-gray-400 pt-3">
+                                    <div class="text-md text-gray-400">
                                         <div class="shipment" id="center-option">
-                                            <label for="select_shipping" class="text-white">Pengiriman<span class="text-grey-400 inline-block float-right" id="parsley_error"></span></label>
-                                            <select id="select_shipping" name="shipping" class="js-states py-3" required data-parsley-required-message="Pilih Jasa Pengiriman." data-parsley-errors-container="#parsley_error">
+                                            <label for="select_shipping" class="text-white">Pilih Pengiriman<span class="text-yellow-300 inline-block float-right" id="parsley_error"></span></label>
+                                            <select id="select_shipping" name="shipping" class="js-states py-3" required data-parsley-required-message="Anda belum memilih jasa pengiriman!" data-parsley-errors-container="#parsley_error">
                                                 <option value="0" selected disabled>Layanan Pengiriman JNE</option>
-                                                {{--@foreach( $services as $service )
+                                                @foreach( $services as $service )
                                                     <option value="{{ $service['biaya'] }}">{{ $service['description'] }} (@currency($service['biaya'])) | {{ $service['etd'] }} Hari Pengiriman</option>
-                                                @endforeach--}}
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
@@ -133,7 +132,7 @@
                                     </div>
                                     <div class="flex justify-between border-b-2 py-3">
                                         <span class="text-grey-400">Subtotal:</span>
-                                        <span class="inline-block text-right">@currency($total)</span>
+                                        <span class="inline-block text-right">@currency($subtotal)</span>
                                     </div>
                                     <div class="flex justify-between border-b-2 py-3">
                                         <span class="text-grey-400">Biaya Pengiriman:</span>
@@ -141,9 +140,9 @@
                                     </div>
                                     <div class="flex justify-between py-3 text-xl">
                                         <span class="text-grey-400">Total:</span>
-                                        <span class="inline-block text-right" id="totalCost">@currency($total)</span>
+                                        <span class="inline-block text-right" id="grand_total">@currency($total)</span>
                                     </div>
-                                    <button type="submit" id="pay-button" class="h-12 w-full float-right bg-red-500 rounded text-white focus:outline-none hover:bg-red-600">Konfirmasi Pesanan</button>
+                                    <button type="submit" class="h-12 w-full float-right bg-red-500 rounded text-white focus:outline-none hover:bg-red-600">Konfirmasi Pesanan</button>
                                 </form>
                             </div>
                         </div>
@@ -176,15 +175,10 @@
             select_shipping.change(function() {
                 let price = $("#price").val();
                 let shipping = $(this).val();
-                // untuk ditampilkan ke blade
-                let total = `Rp. ${(parseInt(price) + parseInt(shipping)).toLocaleString("id-ID", {minimumFractionDigits: 0})}`;
                 let shippingCost = `Rp. ${(parseInt(shipping)).toLocaleString("id-ID", {minimumFractionDigits: 0})}`;
-                // untuk dibawah ke controller
-                let gross_amount = (parseInt(price) + parseInt(shipping)).toString();
-
-                $("#totalCost").text(total);
+                let grand_total = `Rp. ${(parseInt(price) + parseInt(shipping)).toLocaleString("id-ID", {minimumFractionDigits: 0})}`;
                 $("#shippingCost").text(shippingCost);
-                $("#gross_amount").val(gross_amount);
+                $("#grand_total").text(grand_total);
             });
         });
     </script>

@@ -101,10 +101,12 @@ Route::middleware(['auth', 'verified', 'role:customer'])->name('customer.')->pre
     // CHECKOUT
     Route::get('/checkout/{store_id}', [CheckoutController::class,'index'])->name('checkout.index');
     Route::post('/checkout/{store_id}', [CheckoutController::class,'store'])->name('checkout.store');
-    Route::get('/orders', [OrderController::class, 'index'])->name('orders');
     Route::put('/update-shipping',[CheckoutController::class,'updateShipping'])->name('update.shipping');
     Route::post('/get-snap-token',[CheckoutController::class,'getSnapToken'])->name('snap.token');
+    // ORDER
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders');
     Route::get('/order/detail/{order_id}', [OrderController::class, 'show'])->name('order.show');
+    Route::put('/order/detail/{order_id}', [OrderController::class, 'update'])->name('order.update');
 });
 
 Route::middleware('auth')->group(function () {

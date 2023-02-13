@@ -4,10 +4,18 @@
         {{ Breadcrumbs::render('my-order-detail') }}
     @endsection
 
-    @if(isset($orders))
+    @if(isset($order))
         <!-- BEGIN: Content -->
-        <div class="content">
-            <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
+        <div class="content mt-6">
+            {{--@if($order->transaction_status === 'completed')
+                <div class="alert bg-green-500 alert-dismissible show flex justify-center my-2" role="alert">
+                    <span class="font-medium text-lg text-white">Pembayaran anda telah kami terima, menunggu konfirmasi pelapak.</span>
+                    <button type="button" class="btn-close" data-tw-dismiss="alert" aria-label="Close">
+                        <i data-lucide="x" class="w-4 h-4 text-white"></i>
+                    </button>
+                </div>
+            @endif--}}
+            <div class="intro-y flex flex-col sm:flex-row items-center">
                 <h2 class="text-lg font-medium mr-auto">
                     Detail Pesanan
                 </h2>
@@ -15,15 +23,18 @@
                     <button class="btn btn-primary shadow-md mr-2">Print</button>
                     <div class="dropdown ml-auto sm:ml-0">
                         <button class="dropdown-toggle btn px-2 box" aria-expanded="false" data-tw-toggle="dropdown">
-                            <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="plus"></i> </span>
+                            <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4"
+                                                                                       data-lucide="plus"></i> </span>
                         </button>
                         <div class="dropdown-menu w-40">
                             <ul class="dropdown-content">
                                 <li>
-                                    <a href="" class="dropdown-item"> <i data-lucide="file" class="w-4 h-4 mr-2"></i> Export Word </a>
+                                    <a href="" class="dropdown-item"> <i data-lucide="file" class="w-4 h-4 mr-2"></i>
+                                        Export Word </a>
                                 </li>
                                 <li>
-                                    <a href="" class="dropdown-item"> <i data-lucide="file" class="w-4 h-4 mr-2"></i> Export PDF </a>
+                                    <a href="" class="dropdown-item"> <i data-lucide="file" class="w-4 h-4 mr-2"></i>
+                                        Export PDF </a>
                                 </li>
                             </ul>
                         </div>
@@ -36,86 +47,149 @@
                     <div class="box p-5 rounded-md">
                         <div class="flex items-center border-b border-slate-200/60 dark:border-darkmode-400 pb-5 mb-5">
                             <div class="font-medium text-base truncate">Detail Transaksi</div>
-                            @if($orders->transaction_status === 'pending')
+                            @if($order->transaction_status === 'pending')
                                 <div class="items-center ml-auto text-primary">
-                                    <a href="{{ $orders->pdf_url }}" class="inline-flex">
+                                    <a href="{{ $order->pdf_url }}" class="inline-flex">
                                         <i data-lucide="file-text" class="w-4 h-4 mr-2"></i> Unduh Tagihan
                                     </a>
                                 </div>
                             @endif
                         </div>
-                        <div class="flex items-center"> <i data-lucide="clipboard" class="w-4 h-4 text-slate-500 mr-2"></i> Invoice: INV/{{ $orders->id }} </div>
-                        <div class="flex items-center mt-3"> <i data-lucide="calendar" class="w-4 h-4 text-slate-500 mr-2"></i> Pesanan Dibuat: {{ Carbon\Carbon::parse($orders->created_at)->format('d F Y') }}</div>
-
-                        <div class="flex items-center mt-3" id="refresh-status">
-                            <i data-lucide="clock" class="w-4 h-4 text-slate-500 mr-2"></i> Status Transaksi:
-                            <div class="bg-success/20 text-danger rounded px-2 ml-1 inline-flex">
-                                <span>{{ $orders -> transaction_status }}</span>
-                                <span>
-                                    {{--Data ubah status--}}
-                                    <input type="hidden" id="order_id" value="{{ $orders -> id }}">
-                                    <input type="hidden" id="transaction_status" value="Sukses">
-                                    <input type="hidden" id="status_code" value="200">
-                                    <input type="hidden" id="gross_amount" value="{{ $orders -> gross_amount }}">
-                                    {{--Data ubah status end--}}
-                                    <button id="send_change_status" class="flex items-center ml-auto text-primary"><i data-lucide="refresh-ccw" class="w-4 h-4 ml-2 -mb-5"></i></button>
-                                </span>
+                        @if($order->transaction_status === 'completed')
+                        <div class="flex items-center justify-between">
+                            <div class="inline-flex">
+                                <i data-lucide="archive" class="w-4 h-4 text-slate-500 mr-2"></i>
+                                Status Pesanan:
+                            </div>
+                            @if($order->status === 'pending')
+                                <span class="bg-blue-400 text-white px-2 rounded-md">Menunggu Konfirmasi Pelapak.</span>
+                            @endif
+                        </div>
+                        @endif
+                        <div class="flex items-center mt-3 justify-between">
+                            <div class="inline-flex">
+                                <i data-lucide="key" class="w-4 h-4 text-slate-500 mr-2"></i>
+                                Order ID:
+                            </div>
+                            {{ ($order->id) }}
+                        </div>
+                        <div class="flex items-center mt-3 justify-between">
+                            <div class="inline-flex">
+                                <i data-lucide="clock" class="w-4 h-4 text-slate-500 mr-2"></i>
+                                Pesanan Dibuat:
+                            </div>
+                            {{ Carbon\Carbon::parse($order->transaction_time)->format('d F Y (H:i)') }}
+                        </div>
+                        <div class="flex items-center mt-2 justify-between">
+                            <div class="inline-flex">
+                                @if($order -> transaction_status === 'pending' || $order -> transaction_status === 'completed')
+                                    <i data-lucide="calendar" class="w-4 h-4 text-slate-500 mr-2"></i> Status Transaksi:
+                                @endif
+                            </div>
+                            <div class="inline-flex">
+                                @if($order -> transaction_status === 'pending')
+                                    <span class="bg-yellow-400 text-white px-2 rounded-md">Menunggu Pembayaran.</span>
+                                @elseif($order -> transaction_status === 'completed')
+                                    <span class="bg-green-500 text-white px-2 rounded-md">Pembayaran Berhasil.</span>
+                                @endif
                             </div>
                         </div>
-
-                        @if($orders->bank)
+                        @if($order->transaction_status === 'pending' && $order->bank)
                             <div class="bg-green-100 p-2 mt-3 rounded-lg">
-                                <div class="flex items-center"> <i data-lucide="calendar" class="w-4 h-4 text-slate-500 mr-2"></i> Bayar sebelum: {{ $orders->transaction_time }}</div>
-                                <div class="flex items-center my-3"> <i data-lucide="credit-card" class="w-4 h-4 text-slate-500 mr-2"></i> Bank: <p class="ml-1 uppercase">{{ $orders->bank }}</p> </div>
-                                <div class="flex items-center">
-                                    <i data-lucide="activity" class="w-4 h-4 text-slate-500 mr-2"></i> No VA: {{ $orders->va_number }}
-                                    <button class="relative bg-red-400 hover:bg-red-500 text-white font-bold px-2 rounded ml-auto" id="copy-btn">Salin
+                                <div class="flex items-center mt-2">
+                                    <div class="inline-flex">
+                                        <i data-lucide="credit-card" class="w-4 h-4 text-slate-500 mr-2"></i>
+                                        Bank tujuan:
+                                    </div>
+                                    <p class="ml-1 uppercase">{{ $order->bank }}</p>
+                                </div>
+                                <div class="flex items-center mt-2">
+                                    <i data-lucide="activity" class="w-4 h-4 text-slate-500 mr-2"></i> No Virtual Akun:
+                                    <span class="ml-2 underline decoration-solid decoration-red-400"> {{ $order->va_number }}</span>
+                                    <button class="relative font-bold px-2 rounded" id="copy-btn">
+                                        <i data-lucide="copy" class="w-4 h-4 text-slate-500 ml-2"></i>
                                         <span class="hidden absolute -top-10 -right-2 mt-2 py-1 px-2 bg-black opacity-50 text-white rounded" id="tooltip">Disalin!</span>
                                     </button>
                                 </div>
+                                <div class="flex items-center justify-between mt-2">
+                                    <div class="inline-flex">
+                                        <i data-lucide="calendar" class="w-4 h-4 text-slate-500 mr-2"></i>
+                                        Bayar dalam :
+                                    </div>
+                                    <div class="text-blue-700" id="countdown"></div>
+                                </div>
+                                <div class="bg-yellow-200 rounded-md p-2 mt-2">
+                                    <span>Catatan: Perhatikan batas waktu pembayaran agar pesanan tidak dibatalkan otomatis oleh sistem.</span>
+                                </div>
                             </div>
-                        @else
+                        @elseif($order->payment_store)
                             <div class="bg-green-100 p-2 mt-3 rounded-lg">
-                                <div class="flex items-center"> <i data-lucide="calendar" class="w-4 h-4 text-slate-500 mr-2"></i> Bayar sebelum: {{ $orders->transaction_time }}</div>
-                                <div class="flex items-center my-3"> <i data-lucide="credit-card" class="w-4 h-4 text-slate-500 mr-2"></i> Pembayaran: <p class="ml-1 uppercase">Indomaret</p> </div>
-                                <div class="flex items-center">
-                                    <i data-lucide="activity" class="w-4 h-4 text-slate-500 mr-2"></i> Kode Pembayaran: {{ $orders->payment_code }}
-                                    <button class="relative bg-red-400 hover:bg-red-500 text-white font-bold px-2 rounded ml-auto" id="copy-btn">Salin
-                                        <span class="hidden absolute -top-10 -right-2 mt-2 py-1 px-2 bg-black opacity-50 text-white rounded" id="tooltip">Disalin!</span>
-                                    </button>
+                                <div class="flex items-center mt-2">
+                                    <div class="inline-flex">
+                                        <i data-lucide="credit-card" class="w-4 h-4 text-slate-500 mr-2"></i>
+                                        Bank tujuan:
+                                    </div>
+                                    <p class="ml-1 uppercase">{{ $order->payment_store }}</p>
+                                </div>
+                                <div class="flex items-center mt-2">
+                                    <i data-lucide="activity" class="w-4 h-4 text-slate-500 mr-2"></i> No Virtual Akun:
+                                    <div class="flex justify-center">{!! DNS2D::getBarcodeHTML($order->payment_code, 'QRCODE',6,6) !!}</div>
+                                    <div class="flex justify-center mt-1">{{ $order->payment_code }}</div>
+                                </div>
+                                <div class="flex items-center justify-between mt-2">
+                                    <div class="inline-flex">
+                                        <i data-lucide="calendar" class="w-4 h-4 text-slate-500 mr-2"></i>
+                                        Bayar dalam :
+                                    </div>
+                                    <div class="text-blue-700" id="countdown"></div>
+                                </div>
+                                <div class="bg-yellow-200 rounded-md p-2 mt-2">
+                                    <span>Catatan: Perhatikan batas waktu pembayaran agar pesanan tidak dibatalkan otomatis oleh sistem.</span>
                                 </div>
                             </div>
                         @endif
-                        {{--<div class="flex items-center border-t border-slate-200/60 dark:border-darkmode-400 pt-5 mt-5 font-medium">
-                            @if($orders->transaction_status === 'unpaid')
-                                <button id="pay-button" class="btn bg-red-500 text-white w-full">Bayar</button>
-                            @elseif($orders->transaction_status === 'paid')
-                                <button class="btn bg-green-700 text-white w-full" disabled>Lunas</button>
-                            @elseif($orders->transaction_status === 'pending')
-                                <button class="btn bg-green-700 text-white w-full" disabled>Detail</button>
-                            @endif
-                        </div>--}}
                     </div>
                     <div class="box p-5 rounded-md mt-5">
                         <div class="flex items-center border-b border-slate-200/60 dark:border-darkmode-400 pb-5 mb-5">
                             <div class="font-medium text-base truncate">Detail Pembayaran</div>
                         </div>
-                        <div class="flex items-center">
+                        {{--<div class="flex items-center">
                             <i data-lucide="clipboard" class="w-4 h-4 text-slate-500 mr-2"></i> Metode Pembayaran:
-                            <div class="ml-auto">{{ $orders->payment_type }}</div>
-                        </div>
+                            <div class="ml-auto">{{ $order->payment_type }}</div>
+                        </div>--}}
                         <div class="flex items-center mt-3">
-                            <i data-lucide="credit-card" class="w-4 h-4 text-slate-500 mr-2"></i> Total Harga ({{ $orders->orderItems->count() }} Item):
-                            <div class="ml-auto">@currency($orders->gross_amount)</div>
+                            <i data-lucide="credit-card" class="w-4 h-4 text-slate-500 mr-2"></i> Total Harga
+                            ({{ $order->orderItems->count() }} Item):
+                            <div class="ml-auto">@currency($order->subtotal)</div>
                         </div>
                         <div class="flex items-center mt-3">
                             <i data-lucide="credit-card" class="w-4 h-4 text-slate-500 mr-2"></i> Biaya pengiriman:
-                            <div class="ml-auto">@currency($orders->shipping)</div>
+                            <div class="ml-auto">@currency($order->shipping)</div>
                         </div>
-                        <div class="flex items-center border-t border-slate-200/60 dark:border-darkmode-400 pt-5 mt-5 font-medium">
+                        <div
+                            class="flex items-center border-t border-slate-200/60 dark:border-darkmode-400 pt-5 mt-5 font-medium">
                             <i data-lucide="credit-card" class="w-4 h-4 text-slate-500 mr-2"></i> Total Tagihan:
-                            <div class="ml-auto">@currency($orders->gross_amount+$orders->shipping)</div>
+                            <div class="ml-auto">@currency($order->grand_total)</div>
                         </div>
+                        <form id="submit_form" method="POST" action="{{ route('customer.order.update', $order->id) }}">
+                            @csrf
+                            @method('put')
+                            <input type="hidden" name="json" id="json_callback">
+                        </form>
+                        @switch($order)
+                            @case($order->transaction_status === 'unpaid')
+                                <button id="pay-button"
+                                        class="h-12 mt-4 w-full bg-red-400 rounded text-white focus:outline-none hover:bg-red-500">
+                                    PILIH PEMBAYARAN
+                                </button>
+                                @break
+                            @case($order->transaction_status === 'unpaid' && $order->transaction_id === '')
+                                <button id="pay-button"
+                                        class="h-12 mt-4 w-full bg-red-400 rounded text-white focus:outline-none hover:bg-red-500">
+                                    LANJUTKAN PEMBAYARAN
+                                </button>
+                                @break
+                        @endswitch
                     </div>
                 </div>
                 <div class="col-span-12 lg:col-span-7 2xl:col-span-8">
@@ -131,14 +205,17 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($orders->orderItems as $item)
+                                @foreach($order->orderItems as $item)
                                     <tr>
                                         <td class="!py-4">
                                             <div class="flex items-center">
                                                 <div class="w-10 h-10 image-fit zoom-in">
-                                                    <img alt="#" src="{{ asset("storage/product-image")."/".$item-> products -> productImage -> image_path }}" title="Uploaded {{ Carbon\Carbon::parse($item -> products -> created_at)->diffForHumans() }}">
+                                                    <img alt="#"
+                                                         src="{{ asset("storage/product-image")."/".$item-> products -> productImage -> image_path }}"
+                                                         title="Uploaded {{ Carbon\Carbon::parse($item -> products -> created_at)->diffForHumans() }}">
                                                 </div>
-                                                <a href="" class="font-medium whitespace-nowrap ml-4">{{ $item -> products -> name }}</a>
+                                                <a href=""
+                                                   class="font-medium whitespace-nowrap ml-4">{{ $item -> products -> name }}</a>
                                             </div>
                                         </td>
                                         <td class="text-right">@currency($item->products->price)</td>
@@ -153,28 +230,39 @@
                     <div class="grid grid-cols-12 gap-5">
                         <div class="col-span-12 lg:col-span-6">
                             <div class="box p-5 rounded-md mt-5" style="min-height: 210px">
-                                <div class="flex items-center border-b border-slate-200/60 dark:border-darkmode-400 pb-5 mb-5">
+                                <div
+                                    class="flex items-center border-b border-slate-200/60 dark:border-darkmode-400 pb-5 mb-5">
                                     <div class="font-medium text-base truncate">Detail Penerima</div>
                                 </div>
-                                <div class="flex items-center"> <i data-lucide="clipboard" class="w-4 h-4 text-slate-500 mr-2"></i> Nama: {{ $orders->customer_name }} </div>
-                                <div class="flex items-center mt-3"> <i data-lucide="calendar" class="w-4 h-4 text-slate-500 mr-2"></i> Nomor Handphone: +62{{ ltrim($orders->customer_phone, '0') }} </div>
+                                <div class="flex items-center"><i data-lucide="clipboard"
+                                                                  class="w-4 h-4 text-slate-500 mr-2"></i>
+                                    Nama: {{ $order->customer_name }} </div>
+                                <div class="flex items-center mt-3"><i data-lucide="calendar"
+                                                                       class="w-4 h-4 text-slate-500 mr-2"></i> Nomor
+                                    Handphone: +62{{ ltrim($order->customer_phone, '0') }} </div>
                                 <div class="flex items-center mt-3 capitalize_address">
                                     <i data-lucide="map-pin" class="w-4 h-4 text-slate-500 mr-2"></i>
-                                    {{ $orders->orderAddress->detail_address }},
-                                    {{ $orders->orderAddress->village->name }},
-                                    {{ $orders->orderAddress->district->name }},
-                                    {{ $orders->orderAddress->regency->name }},
-                                    {{ $orders->orderAddress->province->name }}.
+                                    {{ $order->orderAddress->detail_address }},
+                                    {{ $order->orderAddress->village->name }},
+                                    {{ $order->orderAddress->district->name }},
+                                    {{ $order->orderAddress->regency->name }},
+                                    {{ $order->orderAddress->province->name }}.
                                 </div>
                             </div>
                         </div>
                         <div class="col-span-12 lg:col-span-6">
                             <div class="box p-5 rounded-md lg:mt-5 ml-auto" style="min-height: 210px">
-                                <div class="flex items-center border-b border-slate-200/60 dark:border-darkmode-400 pb-5 mb-5">
+                                <div
+                                    class="flex items-center border-b border-slate-200/60 dark:border-darkmode-400 pb-5 mb-5">
                                     <div class="font-medium text-base truncate">Informasi Pengiriman</div>
                                 </div>
-                                <div class="flex items-center"> <i data-lucide="clipboard" class="w-4 h-4 text-slate-500 mr-2"></i> Kurir: JNE </div>
-                                <div class="flex items-center mt-3"> <i data-lucide="calendar" class="w-4 h-4 text-slate-500 mr-2"></i> Nomor Resi: 003005580322 <i data-lucide="copy" class="w-4 h-4 text-slate-500 ml-2"></i> </div>
+                                <div class="flex items-center"><i data-lucide="clipboard"
+                                                                  class="w-4 h-4 text-slate-500 mr-2"></i> Kurir: JNE
+                                </div>
+                                <div class="flex items-center mt-3"><i data-lucide="calendar"
+                                                                       class="w-4 h-4 text-slate-500 mr-2"></i> Nomor
+                                    Resi: 003005580322 <i data-lucide="copy" class="w-4 h-4 text-slate-500 ml-2"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -188,52 +276,102 @@
     @endif
 
     @section('script')
+        <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js"
+                data-client-key="config('midtrans.client_key')"></script>
 
-            <script>
-                $(document).ready(function(){
-                    $("#send_change_status").click(function(){
-                        let order_id = $("#order_id").val();
-                        let transaction_status = $("#transaction_status").val();
-                        let status_code = $("#status_code").val();
-                        let gross_amount = $("#gross_amount").val();
+        <script type="text/javascript">
+            $(document).ready(function () {
+                let SnapToken = '{{ $order->snap_token }}'
+                let payButton = $("#pay-button");
 
-                        $.ajax({
-                            type: "POST",
-                            url: "/api/payment-notification-handler",
-                            data: {
-                                order_id: order_id,
-                                transaction_status: transaction_status,
-                                status_code: status_code,
-                                gross_amount: gross_amount
-                            },
-                            success: function(data) {
-                                console.log(data);
-                                //Tambahkan aksi setelah data berhasil dikirim ke server
-                            },
-                            error: function(data) {
-                                console.log(data);
-                                //Tambahkan aksi jika terjadi error saat mengirim data ke server
-                            }
-                        });
-                    });
+                payButton.click(function () {
+                    window.snap.pay(SnapToken, {
+                        onSuccess: function (result) {
+                            /* You may add your own implementation here */
+                            Swal.fire({
+                                position: 'center',
+                                icon: 'success',
+                                title: "Pembayaran Berhasil!",
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                            console.log(result);
+                            send_response_to_form(result);
+                        },
+                        onPending: function (result) {
+                            /* You may add your own implementation here */
+                            Swal.fire({
+                                position: 'center',
+                                icon: 'info',
+                                title: "Menunggu Pembayaran Anda.",
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                            console.log(result);
+                            send_response_to_form(result);
+                        },
+                        onError: function (result) {
+                            /* You may add your own implementation here */
+                            Swal.fire({
+                                position: 'center',
+                                icon: 'error',
+                                title: "Pembayaran gagal!",
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                            console.log(result);
+                            send_response_to_form(result);
+                        },
+                        onClose: function () {
+                            /* You may add your own implementation here */
+                            alert('you closed the popup without finishing the payment');
+                        }
+                    })
                 });
-            </script>
 
-            <script>
-                const copyBtn = document.getElementById('copy-btn');
-                const tooltip = document.getElementById('tooltip');
+                function send_response_to_form(result) {
+                    document.getElementById('json_callback').value = JSON.stringify(result);
+                    document.getElementById('submit_form').submit();
+                }
+            });
+        </script>
 
-                copyBtn.addEventListener('click', function() {
-                    navigator.clipboard.writeText({{ $orders->va_number }}).then(function() {
-                        tooltip.classList.remove('hidden');
-                        setTimeout(function() {
-                            tooltip.classList.add('hidden');
+        <script>
+            $(document).ready(function () {
+                const copyBtn = $('#copy-btn');
+                const tooltip = $('#tooltip');
+
+                copyBtn.click(function () {
+                    navigator.clipboard.writeText('{{ $order->va_number }}').then(function () {
+                        tooltip.removeClass('hidden');
+                        setTimeout(function () {
+                            tooltip.addClass('hidden');
                         }, 1500);
-                    }, function() {
+                    }, function () {
                         console.error('Gagal menyalin ke clipboard');
                     });
                 });
-            </script>
+
+                // hitung countdown expire transaksi
+                const transactionExpire = new Date('<?= $order->transaction_expire ?>');
+                const countDownDate = new Date(transactionExpire).getTime();
+                const x = setInterval(function() {
+                    const now = new Date().getTime();
+                    const distance = countDownDate - now;
+                    let days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                    document.getElementById("countdown").innerHTML = `${days > 0 ? days + ' hari ' : ''}${hours} jam ${minutes} menit ${seconds} detik`;
+                    if (distance < 0) {
+                        clearInterval(x);
+                        document.getElementById("countdown").innerHTML = "Waktu Habis";
+                    }
+                }, 1000);
+
+            });
+        </script>
+
     @endsection
 
 </x-app-layout>

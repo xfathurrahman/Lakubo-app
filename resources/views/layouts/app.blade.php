@@ -20,6 +20,7 @@
         <script type="text/javascript" src="{{ asset('js/select2.min.js') }}"></script>
         <script type="text/javascript" src="{{ asset('js/select2-searchInputPlaceholder.js') }}"></script>
         <script type="text/javascript" src="{{ asset('js/alertify.js') }}"></script>
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/js/all.min.js"></script>
         <script type="text/javascript" src="https://cdn.ckeditor.com/ckeditor5/35.4.0/classic/ckeditor.js"></script>
 

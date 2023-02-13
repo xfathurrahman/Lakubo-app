@@ -5,8 +5,14 @@ namespace App\Http\Controllers\Customer;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use Carbon\Carbon;
+use DateInterval;
+use DateTime;
+use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use JsonException;
 use Midtrans\Config;
 use Midtrans\Snap;
 use Midtrans\Transaction;
@@ -26,78 +32,42 @@ class OrderController extends Controller
 
     public function show($order_id)
     {
-        $orders = Order::with('orderItems')->where('id', $order_id)->first();
-
-        if ($orders->status === 'unpaid') {
-            $snapToken = $this->getSnapToken($orders);
-
-            return view('customer.order.show',[
-                'snapToken' => $snapToken,
-                'orders' => $orders,
-            ]);
-        }
-
-        if ($orders->status === 'pending') {
-
-            Config::$serverKey = config('midtrans.server_key');     // Set your Merchant Server Key
-            Config::$isProduction = false;                              // Set to true for Production Environment.
-            Config::$isSanitized = true;                                // Set sanitization on (default)
-            Config::$is3ds = true;                                      // Set 3DS transaction for credit card to true
-
-            $status = Transaction::status($orders->invoice);
-
-            $status = json_decode(json_encode($status), true);
-
-            $status->va_number            = $status['va_numbers'][0]['va_number'];
-            $status->gross_amount         = $status['gross_amount'];
-            $status->bank                 = $status['va_numbers'][0]['bank'];
-            $status->transaction_status   = $status['transaction_status'];
-            $transaction_time             = $status['transaction_time'];
-            $status->deadline             = date('Y-m-d H:i:s', strtotime('+1 day', strtotime($transaction_time)));
-
-            return view('customer.order.show',[
-                'orders' => $orders,
-                'status' => $status,
-            ]);
-        }
+        $order = Order::with('orderItems')->where('id', $order_id)->first();
 
         return view('customer.order.show',[
-            'orders' => $orders,
+            'order' => $order,
         ]);
-
     }
 
-    public function getSnapToken($orders)
+    /**
+     * @throws JsonException
+     */
+    public function update(Request $request, $order_id)
     {
-        Config::$serverKey = config('midtrans.server_key');     // Set your Merchant Server Key
-        Config::$isProduction = false;                              // Set to true for Production Environment.
-        Config::$isSanitized = true;                                // Set sanitization on (default)
-        Config::$is3ds = true;                                      // Set 3DS transaction for credit card to true
+        $order = Order::find($order_id);
+        $json = json_decode($request->get('json'), false, 512, JSON_THROW_ON_ERROR);
 
-        $params = array(
-            'transaction_details' => array(
-                'order_id' => $orders->id,
-                'gross_amount' => $orders->total_price + $orders->shipping,
-            ),
-            'customer_details' => array(
-                'first_name' => '',
-                'last_name' => $orders->customer_name,
-                'email' => Auth::user()->email,
-                'phone' => $orders->customer_phone,
-            ),
-        );
-        return Snap::getSnapToken($params);
-    }
+        try {
+            $order->transaction_id = $json->transaction_id ?? null;
+            $order->transaction_status = $json->transaction_status;
+            $order->payment_type = $json->payment_type ?? null;
+            $order->payment_code = $json->payment_code ?? null;
+            $order->payment_store = $json->store ?? null;
+            $transaction_time = $json->transaction_time ?? null;
+            $order->transaction_time = $transaction_time;
+            $expiry_time = new DateTime($transaction_time);
+            $expiry_time->add(new DateInterval('P1D'));
+            $order->transaction_expire = $expiry_time->format('Y-m-d H:i:s');
+            $va_number = $json->va_numbers[0]->va_number ?? null;
+            $order->va_number = $va_number;
+            $bank = $json->va_numbers[0]->bank ?? null;
+            $order->bank = $bank;
+            $order->pdf_url = $json->pdf_url ?? null;
+            $order->update();
 
-    public function callback(Request $request)
-    {
-        $serverKey = config('midtrans.server_key');
-        $hashed = hash("sha512", $request->order_id.$request->status_code.$request->gross_amount.$serverKey);
-        if ($hashed === $request->signature_key)
-        {
-            $order = Order::find($request->order_id);
-            $order->update(['status' => 'Paid']);
+            return redirect()->back()->with('success', 'Pembayaran berhasil');
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
-
 }

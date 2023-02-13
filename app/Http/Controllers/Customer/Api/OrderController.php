@@ -8,21 +8,31 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-    /**
-     * @throws \JsonException
-     */
-    public function payment_handler(Request $request): string
+    public function payment_handler(Request $request): void
     {
-        $json = json_decode($request->getContent(), false, 512, JSON_THROW_ON_ERROR);
-
         $serverKey = config('midtrans.server_key');
-        $signature_key = hash('sha512', $json->order_id . $json->status_code . $json->gross_amount . $serverKey);
-        if ($signature_key !== $json->signature_key) {
-            return "This is invalid signature key";
+        $hashed = hash("sha512", $request->order_id.$request->status_code.$request->gross_amount.$serverKey);
+
+        if ($hashed === $request->signature_key) {
+            if ($request->transaction_status === 'capture' || $request->transaction_status === 'settlement'){
+                $order = Order::find($request->order_id);
+                $order->update([
+                    'transaction_status' => 'completed',
+                    'status' => 'pending',
+                    'transaction_time' => $request->transaction_time,
+                    'transaction_id' => $request->transaction_id,
+                    'payment_type' => $request->payment_type ?? null,
+                    'va_number' => $request->va_numbers[0]['va_number'] ?? null,
+                    'bank' => $request->va_numbers[0]['bank'] ?? null,
+                ]);
+            }
+            if ($request->transaction_status === 'cancel' || $request->transaction_status === 'deny' || $request->transaction_status === 'expire'){
+                $order = Order::find($request->order_id);
+                $order->update([
+                    'transaction_status' => 'cancel',
+                    'status' => 'cancelled'
+                ]);
+            }
         }
-        // status berhasil
-        return Order::where('id', $json->order_id)
-            ->first()
-            ->update(['transaction_status' => $json->transaction_status]);
     }
 }
