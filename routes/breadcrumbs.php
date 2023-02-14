@@ -8,15 +8,21 @@ use Diglactic\Breadcrumbs\Breadcrumbs;
 //  with `$trail`. This is nice for IDE type checking and completion.
 use Diglactic\Breadcrumbs\Generator as BreadcrumbTrail;
 
+Breadcrumbs::for('Homepage', function (BreadcrumbTrail $trail) {
+    $trail->push('Beranda', route('home'));
+});
+
 /*BEGIN: Admin Page*/
 
 // Dashboard
 Breadcrumbs::for('admin_dashboard', function (BreadcrumbTrail $trail) {
+    $trail->parent('Homepage');
     $trail->push('Admin Dashboard', route('admin.dashboard'));
 });
 
 // Pengguna
 Breadcrumbs::for('users', function (BreadcrumbTrail $trail) {
+    $trail->parent('admin_dashboard');
     $trail->push('Daftar Pengguna', url('admin/users'));
 });
 
@@ -28,26 +34,31 @@ Breadcrumbs::for('user-edit', function (BreadcrumbTrail $trail) {
 
 // Products
 Breadcrumbs::for('admin_products', function (BreadcrumbTrail $trail) {
+    $trail->parent('admin_dashboard');
     $trail->push('Daftar Produk', url('admin/products'));
 });
 
 // Stores
 Breadcrumbs::for('admin_stores', function (BreadcrumbTrail $trail) {
+    $trail->parent('admin_dashboard');
     $trail->push('Daftar Pelapak', url('admin/stores'));
 });
 
 // Categories
 Breadcrumbs::for('categories', function (BreadcrumbTrail $trail) {
+    $trail->parent('admin_dashboard');
     $trail->push('Kelola Kategori', url('admin/categories'));
 });
 
 // Kelola Peran
 Breadcrumbs::for('roles', function (BreadcrumbTrail $trail) {
+    $trail->parent('admin_dashboard');
     $trail->push('Kelola Peran', url('admin/roles'));
 });
 
 // Kelola Hak Akses
 Breadcrumbs::for('permissions', function (BreadcrumbTrail $trail) {
+    $trail->parent('admin_dashboard');
     $trail->push('Kelola Hak Akses', url('admin/permissions'));
 });
 
@@ -59,16 +70,19 @@ Breadcrumbs::for('permissions', function (BreadcrumbTrail $trail) {
 
 // Dashboard
 Breadcrumbs::for('seller_dashboard', function (BreadcrumbTrail $trail) {
+    $trail->parent('Homepage');
     $trail->push('Seller Dashboard', route('seller.dashboard'));
 });
 
 // Store
 Breadcrumbs::for('store', function (BreadcrumbTrail $trail) {
-    $trail->push('Lapak UMKM Saya', route('seller.store.index'));
+    $trail->parent('Homepage');
+    $trail->push('UMKM Saya', route('seller.store.index'));
 });
 
 // Produk
 Breadcrumbs::for('products', function (BreadcrumbTrail $trail) {
+    $trail->parent('Homepage');
     $trail->push('Produk', url('seller/products'));
 });
 
@@ -92,18 +106,20 @@ Breadcrumbs::for('product_edit', function (BreadcrumbTrail $trail) {
 
 // Profile edit
 Breadcrumbs::for('profile', function (BreadcrumbTrail $trail) {
+    $trail->parent('Homepage');
     $trail->push('Akun Saya', route('profile.edit'));
 });
 
 // Pesanan saya
 Breadcrumbs::for('my-order', function (BreadcrumbTrail $trail) {
+    $trail->parent('Homepage');
     $trail->push('Pesanan Saya', route('customer.orders'));
 });
 
 // Pesanan saya / detail
 Breadcrumbs::for('my-order-detail', function (BreadcrumbTrail $trail) {
     $trail->parent('my-order');
-    $trail->push('Detail', url('#'));
+    $trail->push('Detail Pesanan', url('#'));
 });
 
 /*END: Customer Page*/

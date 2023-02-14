@@ -15,6 +15,8 @@
 <script src="{{ asset('js/midone_app.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/jquery-3.6.1.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/parsley.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/select2.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/select2-searchInputPlaceholder.js') }}"></script>
 <!-- END: JS Assets-->
 @yield('script')
 </body>

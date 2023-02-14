@@ -9993,7 +9993,7 @@ html body{
     position: relative;
     overflow: hidden;
     --tw-bg-opacity: 1;
-    background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+    background-color: rgb(var(--color-slate-200) / var(--tw-bg-opacity));
     padding-top: 0.75rem;
     padding-bottom: 0.75rem;
     padding-left: 2rem;

@@ -8,32 +8,32 @@
                     <span class="text-white text-lg ml-3"> Lakubo </span>
                 </a>
                 <div class="my-auto">
-                    <img alt="Lakubo - Lapak UMKM Boyolali" class="-intro-x w-1/2 -mt-16" src="{{ asset('assets/images/illustration.svg') }}">
+                    <img alt="Lakubo - Lapak UMKM Boyolali" class="-intro-x w-1/2 -mt-16" src="{{ asset('assets/images/umkm-boy.png') }}">
                     <div class="-intro-x text-white font-medium text-4xl leading-tight mt-10">
-                        Beberapa step untuk mulai
+                        Beberapa step untuk menjadi
                         <br>
-                        menjadi pelapak UMKM Boyolali.
+                        bagian dari UMKM Boyolali.
                     </div>
                     <div class="-intro-x mt-5 text-lg text-white text-opacity-70">
-                        Kelola produk anda dengan lebih mudah.
+                        Jual beli produk UMKM lebih mudah!
                     </div>
                 </div>
             </div>
             <!-- END: Register Info -->
 
-            <!-- BEGIN: Wizard Layout -->
-            <div class="intro-y box py-10 sm:py-20 mt-5">
-                <div class="relative before:hidden before:lg:block before:absolute before:w-[69%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 sm:px-20">
-                    <div class="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-                        <button class="w-10 h-10 rounded-full btn btn-primary step0">1</button>
-                        <div class="lg:w-32 font-medium text-base lg:mt-3 ml-3 lg:mx-auto">Identitas</div>
+            <!-- BEGIN: Register Form -->
+            <div class="h-screen xl:h-auto flex py-5 xl:py-0 my-10 xl:my-0">
+                <div class="my-auto bg-white shadow-lg p-10 sm:px-20 rounded-md shadow-md w-full">
+                    <div class="relative before:hidden before:lg:block before:absolute before:w-[69%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 sm:px-20">
+                        <div class="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
+                            <button class="w-10 h-10 rounded-full btn btn-primary step0">1</button>
+                            <div class="lg:w-32 font-medium text-base lg:mt-3 ml-3 lg:mx-auto">Identitas</div>
+                        </div>
+                        <div class="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
+                            <button class="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400 step1">2</button>
+                            <div class="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Alamat</div>
+                        </div>
                     </div>
-                    <div class="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                        <button class="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400 step1">2</button>
-                        <div class="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Alamat</div>
-                    </div>
-                </div>
-                <div class="px-5 sm:px-20 mt-10 pt-10 border-t border-slate-200/60 dark:border-darkmode-400">
                     @if(count($errors) > 0)
                         <div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert">
                             <span class="font-medium">Data anda tidak valid ! lengkapi lalu coba lagi.<br></span>
@@ -42,7 +42,7 @@
                             @endforeach
                         </div>
                     @endif
-                    <div class="font-medium text-base text-center mb-5">Mendaftar</div>
+                    <h2 class="intro-x pb-5 mt-10 font-bold text-2xl xl:text-3xl text-center xl:text-left">Mendaftar</h2>
                     <form action="{{ route('register') }}" method="POST" class="seller-form" role="form" enctype="multipart/form-data">
                         @csrf
                         <div class="form-section">
@@ -85,8 +85,8 @@
                             <div class="grid grid-cols-12 gap-4 gap-y-1 mt-5">
                                 {{--Provinsi--}}
                                 <div class="intro-y col-span-12 sm:col-span-6">
-                                    <label for="provinsi" class="form-label">Provinsi</label>
-                                    <select name="province" id="provinsi" class="form-select" required="">
+                                    <label for="selectProvince" class="form-label">Provinsi</label>
+                                    <select id="selectProvince" name="province" class="w-full form-control" required>
                                         <option value="" selected disabled>-- Pilih Provinsi --</option>
                                         @foreach($provinces as $provinsi)
                                             <option value="{{$provinsi->id}}">{{ $provinsi->name }}</option>
@@ -95,18 +95,18 @@
                                 </div>
                                 {{--Kabupaten--}}
                                 <div class="intro-y col-span-12 sm:col-span-6">
-                                    <label for="kabupaten" class="form-label">Kabupaten</label>
-                                    <select name="regency" id="kabupaten" class="form-select" required=""></select>
+                                    <label for="selectRegency" class="form-label">Kabupaten</label>
+                                    <select id="selectRegency" name="regency" class="w-full form-control" required></select>
                                 </div>
                                 {{--Kecamatan--}}
                                 <div class="intro-y col-span-12 sm:col-span-6">
-                                    <label for="kecamatan" class="form-label">Kecamatan</label>
-                                    <select name="district" id="kecamatan" class="form-select" required=""></select>
+                                    <label for="selectDistrict" class="form-label">Kecamatan</label>
+                                    <select id="selectDistrict" name="district" class="w-full form-select" required=""></select>
                                 </div>
                                 {{--Desa--}}
                                 <div class="intro-y col-span-12 sm:col-span-6">
-                                    <label for="desa" class="form-label">Desa</label>
-                                    <select name="village" id="desa" class="form-select" required=""></select>
+                                    <label for="selectVillage" class="form-label">Desa</label>
+                                    <select id="selectVillage" name="village" class="w-full form-select" required=""></select>
                                 </div>
                             </div>
                             {{--Alamat Lengkap--}}
@@ -156,110 +156,121 @@
         </script>
 
         <script>
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
+
+            $(document).ready(function (){
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
+                $("#selectProvince").select2({
+                    placeholder:'Pilih Provinsi',
+                    searchInputPlaceholder: 'Cari Provinsi...',
+                });
+                $("#selectRegency").select2({
+                    placeholder:'Pilih Kabupaten',
+                    searchInputPlaceholder: 'Cari Kabupaten...',
+                });
+                $("#selectDistrict").select2({
+                    placeholder:'Pilih Kecamatan',
+                    searchInputPlaceholder: 'Cari Kecamatan...',
+                });
+                $("#selectVillage").select2({
+                    placeholder:'Pilih Desa',
+                    searchInputPlaceholder: 'Cari Desa...',
+                });
+
+                $("#selectProvince").select2({
+                    placeholder:'Pilih Provinsi',
+                    searchInputPlaceholder: 'Cari Provinsi...',
+                    ajax: {
+                        url: "{{ route('getProvince' )}}",
+                        processResults: function({data}){
+                            return {
+                                results: $.map(data, function(item){
+                                    return {
+                                        id: item.id,
+                                        text: item.name,
+                                    }
+                                })
+                            }
+                        }
+                    }
+                });
+
+                $("#selectProvince").change(function(){
+                    $('#selectRegency').html('');
+                    $('#selectDistrict').html('');
+                    $('#selectVillage').html('');
+                    let id = $('#selectProvince').val();
+                    $("#selectRegency").select2({
+                        placeholder:'Pilih Kabupaten',
+                        searchInputPlaceholder: 'Cari Kabupaten...',
+                        ajax: {
+                            url: "{{ url('indoregion/regency')}}/" + id,
+                            processResults: function({data}){
+                                return {
+                                    results: $.map(data, function(item){
+                                        return {
+                                            id: item.id,
+                                            text: item.name,
+                                        }
+                                    })
+                                }
+                            }
+                        }
+                    });
+                });
+
+                $("#selectRegency").change(function(){
+                    $('#selectDistrict').html('');
+                    $('#selectVillage').html('');
+                    let id = $('#selectRegency').val();
+                    $("#selectDistrict").select2({
+                        placeholder:'Pilih Kecamatan',
+                        searchInputPlaceholder: 'Cari Kecamatan...',
+                        ajax: {
+                            url: "{{url('indoregion/district')}}/"+ id,
+                            processResults: function({data}){
+                                return {
+                                    results: $.map(data, function(item){
+                                        return {
+                                            id: item.id,
+                                            text: item.name
+                                        }
+                                    })
+                                }
+                            }
+                        }
+                    });
+                });
+
+                $("#selectDistrict").change(function(){
+                    $('#selectVillage').html('');
+                    let id = $('#selectDistrict').val();
+                    $("#selectVillage").select2({
+                        placeholder:'Pilih Desa',
+                        searchInputPlaceholder: 'Cari Desa...',
+                        ajax: {
+                            url: "{{url('indoregion/village')}}/"+ id,
+                            processResults: function({data}){
+                                return {
+                                    results: $.map(data, function(item){
+                                        return {
+                                            id: item.id,
+                                            text: item.name
+                                        }
+                                    })
+                                }
+                            }
+                        }
+                    });
+                });
+
             });
-            $(function (){
-                $('#provinsi').on('change',function (){
-                    let id_provinsi = $('#provinsi').val()
-                    $.ajax({
-                        type : 'POST',
-                        url : "{{ route('getKabupaten') }}",
-                        data : {id_provinsi:id_provinsi},
-                        cache : false,
 
-                        success: function (msg){
-                            $('#kabupaten').html(msg);
-                            $('#kecamatan').html('');
-                            $('#desa').html('');
-                        },
-                        error: function (data){
-                            console.log('error:',data)
-                        },
-                    })
-                })
-            });
-            $(function (){
-                $('#kabupaten').on('change',function (){
-                    let id_kabupaten = $('#kabupaten').val()
-
-                    $.ajax({
-                        type : 'POST',
-                        url : "{{ route('getKecamatan') }}",
-                        data : {id_kabupaten:id_kabupaten},
-                        cache : false,
-
-                        success: function (msg){
-                            $('#kecamatan').html(msg);
-                            $('#desa').html('');
-                        },
-                        error: function (data){
-                            console.log('error:',data)
-                        },
-                    })
-
-                })
-            });
-            $(function (){
-                $('#kecamatan').on('change',function (){
-                    let id_kecamatan = $('#kecamatan').val()
-
-                    $.ajax({
-                        type : 'POST',
-                        url : "{{ route('getDesa') }}",
-                        data : {id_kecamatan:id_kecamatan},
-                        cache : false,
-
-                        success: function (msg){
-                            $('#desa').html(msg);
-                        },
-                        error: function (data){
-                            console.log('error:',data)
-                        },
-                    })
-
-                })
-            });
-            /*$(document).ready(function(){
-                $("#kabupaten-wrap").hide();
-                $("#kecamatan-wrap").hide();
-                $("#desa-wrap").hide();
-                $("#detail-address-wrap").hide();
-            });
-
-            $(document).on('change',"#provinsi", function () {
-                if ($(this).val() === "") {
-                    $("#kabupaten-wrap").hide();
-                } else {
-                    $("#kabupaten-wrap").show();
-                }
-            });
-
-            $(document).on('change',"#kabupaten", function () {
-                if ($(this).val() === "") {
-                    $("#kecamatan-wrap").hide();
-                } else {
-                    $("#kecamatan-wrap").show();
-                }
-            });
-
-            $(document).on('change',"#kecamatan", function () {
-                if ($(this).val() === "") {
-                    $("#desa-wrap").hide();
-                } else {
-                    $("#desa-wrap").show();
-                }
-            });
-
-            $(document).on('change',"#desa", function () {
-                if ($(this).val() === "") {
-                    $("#detail-address-wrap").hide();
-                } else {
-                    $("#detail-address-wrap").show();
-                }
-            });*/
         </script>
 
         <script>

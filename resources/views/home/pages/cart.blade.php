@@ -15,8 +15,8 @@
         @else
             <div style="min-height: 33rem;">
                 @foreach($userCarts as $store)
-                    <div class="w-full mx-auto bg-gray-100 shadow-lg rounded-lg mt-6 my-4">
-                        <div class="md:flex ">
+                    <div class="w-full mx-auto bg-white shadow-lg rounded-lg mt-6 my-4">
+                        <div class="md:flex">
                             <div class="w-full p-4 px-5 py-5">
                                 <div class="flex justify-between border-b pb-5">
                                     <div class="font-medium text-lg">Pesanan {{ $loop -> iteration }} dari <p class="text-red-400 inline">{{ $store->stores->name }}</p></div>
@@ -30,7 +30,7 @@
                                 </div>
                                 @php $total = 0 @endphp
                                 @foreach($store->cartItems as $cart_item)
-                                    <div class="product_data flex items-center hover:bg-gray-200 px-6 py-5">
+                                    <div class="product_data flex items-center hover:bg-gray-200 lg:px-6 py-5">
                                         <div class="flex grid grid-cols-4 w-2/5">
                                             <div class="w-20 col-span-4 lg:col-span-1 mx-auto">
                                                 <img class="h-20" src="{{ asset("storage/product-image")."/".$cart_item -> products -> productImage -> image_path }}" alt="">
@@ -77,9 +77,11 @@
                                         Harga Total Produk :<span class="text-xl inline-block text-center ml-2 text-red-500" id="totalCost">@currency($total)</span>
                                     </div>
                                 </div>
-                                <a href="{{ route('customer.checkout.index',$store -> id) }}">
-                                    <button class="h-12 w-full bg-red-400 rounded text-white focus:outline-none hover:bg-red-500">Check Out</button>
-                                </a>
+                                <div class="relative h-10 mt-3 lg:mt-5">
+                                    <a href="{{ route('customer.checkout.index',$store -> id) }}">
+                                        <button class="px-10 py-3 float-right bg-red-400 rounded text-white focus:outline-none hover:bg-red-500">Check Out</button>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>

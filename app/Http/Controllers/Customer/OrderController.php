@@ -52,7 +52,6 @@ class OrderController extends Controller
             $order->transaction_status = $json->transaction_status;
             $order->payment_type = $json->payment_type ?? null;
             $order->payment_code = $json->payment_code ?? null;
-            $order->payment_store = $json->store ?? null;
             $transaction_time = $json->transaction_time ?? null;
             $order->transaction_time = $transaction_time;
             $expiry_time = new DateTime($transaction_time);
@@ -66,6 +65,7 @@ class OrderController extends Controller
             $order->update();
 
             return redirect()->back()->with('success', 'Pembayaran berhasil');
+
         } catch (Exception $e) {
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }

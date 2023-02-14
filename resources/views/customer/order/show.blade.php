@@ -19,7 +19,7 @@
                 <h2 class="text-lg font-medium mr-auto">
                     Detail Pesanan
                 </h2>
-                <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
+                {{--<div class="w-full sm:w-auto flex mt-4 sm:mt-0">
                     <button class="btn btn-primary shadow-md mr-2">Print</button>
                     <div class="dropdown ml-auto sm:ml-0">
                         <button class="dropdown-toggle btn px-2 box" aria-expanded="false" data-tw-toggle="dropdown">
@@ -39,7 +39,7 @@
                             </ul>
                         </div>
                     </div>
-                </div>
+                </div>--}}
             </div>
             <!-- BEGIN: Transaction Details -->
             <div class="intro-y grid grid-cols-11 gap-5 mt-5">
@@ -63,27 +63,44 @@
                             </div>
                             @if($order->status === 'pending')
                                 <span class="bg-blue-400 text-white px-2 rounded-md">Menunggu Konfirmasi Pelapak.</span>
+                            @elseif($order->status === 'processing')
+                                <span class="bg-blue-400 text-white px-2 rounded-md">Diproses.</span>
+                            @elseif($order->status === 'completed')
+                                <span class="bg-blue-400 text-white px-2 rounded-md">Selesai.</span>
+                            @elseif($order->status === 'shipped')
+                                <span class="bg-blue-400 text-white px-2 rounded-md">Dikirim.</span>
                             @endif
                         </div>
+                        @endif
+                        @if($order->transaction_status === 'cancel')
+                            <div class="flex items-center justify-between">
+                                <div class="inline-flex">
+                                    <i data-lucide="archive" class="w-4 h-4 text-slate-500 mr-2"></i>
+                                    Status Pesanan:
+                                </div>
+                                @if($order->status === 'cancelled')
+                                    <span class="bg-red-400 text-white px-2 rounded-md">Pesanan Dibatalkan.</span>
+                                @endif
+                            </div>
                         @endif
                         <div class="flex items-center mt-3 justify-between">
                             <div class="inline-flex">
                                 <i data-lucide="key" class="w-4 h-4 text-slate-500 mr-2"></i>
-                                Order ID:
+                                ID Pesanan :
                             </div>
                             {{ ($order->id) }}
                         </div>
                         <div class="flex items-center mt-3 justify-between">
                             <div class="inline-flex">
                                 <i data-lucide="clock" class="w-4 h-4 text-slate-500 mr-2"></i>
-                                Pesanan Dibuat:
+                                Pesanan Dibuat :
                             </div>
                             {{ Carbon\Carbon::parse($order->transaction_time)->format('d F Y (H:i)') }}
                         </div>
                         <div class="flex items-center mt-2 justify-between">
                             <div class="inline-flex">
                                 @if($order -> transaction_status === 'pending' || $order -> transaction_status === 'completed')
-                                    <i data-lucide="calendar" class="w-4 h-4 text-slate-500 mr-2"></i> Status Transaksi:
+                                    <i data-lucide="calendar" class="w-4 h-4 text-slate-500 mr-2"></i> Status Transaksi :
                                 @endif
                             </div>
                             <div class="inline-flex">
@@ -96,20 +113,22 @@
                         </div>
                         @if($order->transaction_status === 'pending' && $order->bank)
                             <div class="bg-green-100 p-2 mt-3 rounded-lg">
-                                <div class="flex items-center mt-2">
+                                <div class="flex items-center justify-between mt-2">
                                     <div class="inline-flex">
                                         <i data-lucide="credit-card" class="w-4 h-4 text-slate-500 mr-2"></i>
-                                        Bank tujuan:
+                                        Bank tujuan :
                                     </div>
-                                    <p class="ml-1 uppercase">{{ $order->bank }}</p>
+                                    <p class="ml-1 uppercase text-blue-400">{{ $order->bank }}</p>
                                 </div>
                                 <div class="flex items-center mt-2">
-                                    <i data-lucide="activity" class="w-4 h-4 text-slate-500 mr-2"></i> No Virtual Akun:
-                                    <span class="ml-2 underline decoration-solid decoration-red-400"> {{ $order->va_number }}</span>
-                                    <button class="relative font-bold px-2 rounded" id="copy-btn">
-                                        <i data-lucide="copy" class="w-4 h-4 text-slate-500 ml-2"></i>
-                                        <span class="hidden absolute -top-10 -right-2 mt-2 py-1 px-2 bg-black opacity-50 text-white rounded" id="tooltip">Disalin!</span>
-                                    </button>
+                                    <i data-lucide="activity" class="w-4 h-4 text-slate-500 mr-2"></i> No Virtual Akun :
+                                    <div class="ml-auto mr-0">
+                                        <span class="ml-2 underline decoration-solid decoration-red-400"> {{ $order->va_number }}</span>
+                                        <button class="relative font-bold px-2 rounded" id="copy-btn">
+                                            <i data-lucide="copy" class="w-4 h-4 text-slate-500 -mb-0.5"></i>
+                                            <span class="hidden absolute -top-10 -right-2 mt-2 py-1 px-2 bg-black opacity-50 text-white rounded" id="tooltip">Disalin!</span>
+                                        </button>
+                                    </div>
                                 </div>
                                 <div class="flex items-center justify-between mt-2">
                                     <div class="inline-flex">
@@ -122,29 +141,29 @@
                                     <span>Catatan: Perhatikan batas waktu pembayaran agar pesanan tidak dibatalkan otomatis oleh sistem.</span>
                                 </div>
                             </div>
-                        @elseif($order->payment_store)
+                        @elseif($order->transaction_status === 'pending' && $order->payment_code)
                             <div class="bg-green-100 p-2 mt-3 rounded-lg">
-                                <div class="flex items-center mt-2">
+                                <div class="flex items-center justify-between mt-2">
                                     <div class="inline-flex">
                                         <i data-lucide="credit-card" class="w-4 h-4 text-slate-500 mr-2"></i>
-                                        Bank tujuan:
+                                        Gerai Pembayaran :
                                     </div>
-                                    <p class="ml-1 uppercase">{{ $order->payment_store }}</p>
+                                    <p class="ml-1 uppercase text-blue-400">Indomaret</p>
                                 </div>
                                 <div class="flex items-center mt-2">
-                                    <i data-lucide="activity" class="w-4 h-4 text-slate-500 mr-2"></i> No Virtual Akun:
-                                    <div class="flex justify-center">{!! DNS2D::getBarcodeHTML($order->payment_code, 'QRCODE',6,6) !!}</div>
-                                    <div class="flex justify-center mt-1">{{ $order->payment_code }}</div>
+                                    <i data-lucide="activity" class="w-4 h-4 text-slate-500 mr-2"></i> Kode Pembayaran:
                                 </div>
+                                <div class="flex justify-center mt-2">{!! DNS2D::getBarcodeHTML($order->payment_code, 'QRCODE',6,6) !!}</div>
+                                <div class="flex justify-center mt-1">{{ $order->payment_code }}</div>
                                 <div class="flex items-center justify-between mt-2">
                                     <div class="inline-flex">
                                         <i data-lucide="calendar" class="w-4 h-4 text-slate-500 mr-2"></i>
                                         Bayar dalam :
                                     </div>
-                                    <div class="text-blue-700" id="countdown"></div>
+                                    <div class="text-blue-400" id="countdown"></div>
                                 </div>
                                 <div class="bg-yellow-200 rounded-md p-2 mt-2">
-                                    <span>Catatan: Perhatikan batas waktu pembayaran agar pesanan tidak dibatalkan otomatis oleh sistem.</span>
+                                    <span>Catatan : Perhatikan batas waktu pembayaran agar pesanan tidak dibatalkan otomatis oleh sistem.</span>
                                 </div>
                             </div>
                         @endif
@@ -176,20 +195,12 @@
                             @method('put')
                             <input type="hidden" name="json" id="json_callback">
                         </form>
-                        @switch($order)
-                            @case($order->transaction_status === 'unpaid')
-                                <button id="pay-button"
-                                        class="h-12 mt-4 w-full bg-red-400 rounded text-white focus:outline-none hover:bg-red-500">
-                                    PILIH PEMBAYARAN
-                                </button>
-                                @break
-                            @case($order->transaction_status === 'unpaid' && $order->transaction_id === '')
-                                <button id="pay-button"
-                                        class="h-12 mt-4 w-full bg-red-400 rounded text-white focus:outline-none hover:bg-red-500">
-                                    LANJUTKAN PEMBAYARAN
-                                </button>
-                                @break
-                        @endswitch
+                        @if($order->transaction_status === 'unpaid')
+                            <button id="pay-button"
+                                    class="h-12 mt-4 w-full bg-red-400 rounded text-white focus:outline-none hover:bg-red-500">
+                                PILIH PEMBAYARAN
+                            </button>
+                        @endif
                     </div>
                 </div>
                 <div class="col-span-12 lg:col-span-7 2xl:col-span-8">
@@ -259,9 +270,10 @@
                                 <div class="flex items-center"><i data-lucide="clipboard"
                                                                   class="w-4 h-4 text-slate-500 mr-2"></i> Kurir: JNE
                                 </div>
-                                <div class="flex items-center mt-3"><i data-lucide="calendar"
-                                                                       class="w-4 h-4 text-slate-500 mr-2"></i> Nomor
-                                    Resi: 003005580322 <i data-lucide="copy" class="w-4 h-4 text-slate-500 ml-2"></i>
+                                <div class="flex items-center mt-3">
+                                    <i data-lucide="calendar" class="w-4 h-4 text-slate-500 mr-2"></i>
+                                    Nomor Resi: 003005580322
+                                    <i data-lucide="copy" class="w-4 h-4 text-slate-500 ml-2"></i>
                                 </div>
                             </div>
                         </div>
@@ -351,10 +363,11 @@
                         console.error('Gagal menyalin ke clipboard');
                     });
                 });
-
+                @isset($order->transaction_expire)
                 // hitung countdown expire transaksi
                 const transactionExpire = new Date('<?= $order->transaction_expire ?>');
                 const countDownDate = new Date(transactionExpire).getTime();
+                const countdown = $("#countdown");
                 const x = setInterval(function() {
                     const now = new Date().getTime();
                     const distance = countDownDate - now;
@@ -362,13 +375,13 @@
                     let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                     let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                     let seconds = Math.floor((distance % (1000 * 60)) / 1000);
-                    document.getElementById("countdown").innerHTML = `${days > 0 ? days + ' hari ' : ''}${hours} jam ${minutes} menit ${seconds} detik`;
+                    countdown.html(`${days > 0 ? days + ' hari ' : ''}${hours} jam ${minutes} menit ${seconds} detik`);
                     if (distance < 0) {
                         clearInterval(x);
-                        document.getElementById("countdown").innerHTML = "Waktu Habis";
+                        countdown.html("Waktu Habis");
                     }
                 }, 1000);
-
+                @endisset
             });
         </script>
 
