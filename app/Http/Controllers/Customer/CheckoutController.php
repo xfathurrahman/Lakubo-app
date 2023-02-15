@@ -8,6 +8,7 @@ use App\Models\CartItem;
 use App\Models\Order;
 use App\Models\OrderAddress;
 use App\Models\OrderItem;
+use App\Models\OrderShipping;
 use App\Models\Product;
 use App\Models\UserAddress;
 use Exception;
@@ -91,10 +92,11 @@ class CheckoutController extends Controller
      */
     public function store(Request $request, $store_id)
     {
-
         // ambil data dari inputan
-        $shippingCost = $request->input('shipping');
         $note = $request->input('note');
+        $shipping_cost = $request->input('shipping_cost');
+        $service = $request->input('service');
+        $etd = $request->input('etd');
 
         // konfirgurasi midtrans
         Config::$serverKey = config('midtrans.server_key');         // Set your Merchant Server Key
@@ -116,12 +118,13 @@ class CheckoutController extends Controller
             $subtotalPrice += $item->products->price * $item->product_qty;
         }
         $totalPrice += $subtotalPrice;
+        $grand_total =  $totalPrice + $shipping_cost;
 
         // generate snap token
         $params = array(
             'transaction_details' => array(
                 'order_id' => $order_id,
-                'gross_amount' => $totalPrice + $shippingCost,
+                'gross_amount' => $grand_total,
             ),
             'customer_details' => array(
                 'first_name' => Auth::user()->name,
@@ -137,13 +140,13 @@ class CheckoutController extends Controller
             $order = new Order;
             $order->id = $order_id;
             $order->user_id = Auth::id();
+            $order->store_id = $cart->store_id;
             $order->snap_token = $snapToken;
             $order->customer_name = Auth::user()->name;
             $order->customer_phone = Auth::user()->phone;
             $order->customer_email = Auth::user()->email;
-            $order->shipping = $shippingCost;
             $order->subtotal = $subtotalPrice;
-            $order->grand_total = $totalPrice + $shippingCost;
+            $order->grand_total = $grand_total;
             $order->note = $note;
             $order->save();
 
@@ -167,7 +170,13 @@ class CheckoutController extends Controller
                 $orderItems[] = $orderItem;
             }
 
+            $orderShipping = new OrderShipping;
+            $orderShipping->shipping_cost = $shipping_cost;
+            $orderShipping->service = $service;
+            $orderShipping->etd = $etd;
+
             $order->orderAddress()->save($orderAddress);
+            $order->orderShipping()->save($orderShipping);
             $order->orderItems()->saveMany($orderItems);
 
             return redirect()->route('customer.order.show', ['order_id' => $order->id])->with('success', 'Pesanan berhasil dibuat!');

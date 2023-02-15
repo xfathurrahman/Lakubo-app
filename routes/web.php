@@ -18,6 +18,7 @@ use App\Http\Controllers\IndoRegionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Seller\ProductController;
 use App\Http\Controllers\Seller\SellerDashboardController;
+use App\Http\Controllers\Seller\SellerOrderController;
 use App\Http\Controllers\Seller\StoreController;
 use Illuminate\Support\Facades\Route;
 
@@ -76,15 +77,19 @@ Route::middleware(['auth', 'verified', 'role:admin'])->name('admin.')->prefix('a
 
 Route::middleware(['auth', 'verified', 'role:seller'])->name('seller.')->prefix('seller')->group(function (){
     Route::get('/dashboard',[SellerDashboardController::class,'index'])->name('dashboard');
+    // MY STORE
     Route::get('/store',[StoreController::class,'index'])->name('store.index');
     Route::put('/store/{store}/update',[StoreController::class,'update'])->name('store.update');
     Route::delete('/store',[StoreController::class,'destroy'])->name('store.destroy');
+    // PRODUCTS
     Route::get('/products', [ProductController::class,'index'])->name('products.index');
     Route::get('/products/create', [ProductController::class,'create'])->name('products.create');
     Route::post('/products/create', [ProductController::class,'store'])->name('products.store');
     Route::get('/products/{product}/edit', [ProductController::class,'edit'])->name('products.edit');
     Route::put('/products/{product}/update', [ProductController::class,'update'])->name('products.update');
     Route::delete('/products/{product}/delete', [ProductController::class,'destroy'])->name('products.delete');
+    // ORDER
+    Route::get('/orders', [SellerOrderController::class,'index'])->name('orders.index');
 });
 
 Route::middleware(['auth', 'verified', 'role:customer'])->name('customer.')->prefix('customer')->group(function (){
@@ -101,6 +106,7 @@ Route::middleware(['auth', 'verified', 'role:customer'])->name('customer.')->pre
     // CHECKOUT
     Route::get('/checkout/{store_id}', [CheckoutController::class,'index'])->name('checkout.index');
     Route::post('/checkout/{store_id}', [CheckoutController::class,'store'])->name('checkout.store');
+    Route::post('/get-shipping-data', [CheckoutController::class,'store'])->name('shipping.data');
     Route::put('/update-shipping',[CheckoutController::class,'updateShipping'])->name('update.shipping');
     Route::post('/get-snap-token',[CheckoutController::class,'getSnapToken'])->name('snap.token');
     // ORDER

@@ -76,26 +76,32 @@ Breadcrumbs::for('seller_dashboard', function (BreadcrumbTrail $trail) {
 
 // Store
 Breadcrumbs::for('store', function (BreadcrumbTrail $trail) {
-    $trail->parent('Homepage');
+    $trail->parent('seller_dashboard');
     $trail->push('UMKM Saya', route('seller.store.index'));
 });
 
 // Produk
 Breadcrumbs::for('products', function (BreadcrumbTrail $trail) {
-    $trail->parent('Homepage');
+    $trail->parent('seller_dashboard');
     $trail->push('Produk', url('seller/products'));
 });
 
 // Produk > Tambah Produk
 Breadcrumbs::for('product_add', function (BreadcrumbTrail $trail) {
-    $trail->parent('products');
+    $trail->parent('seller_dashboard');
     $trail->push('Tambah Produk', url('#'));
 });
 
 // Produk > Edit Produk
 Breadcrumbs::for('product_edit', function (BreadcrumbTrail $trail) {
-    $trail->parent('products');
+    $trail->parent('seller_dashboard');
     $trail->push('Edit Produk', url('#'));
+});
+
+// Pesanan
+Breadcrumbs::for('orders', function (BreadcrumbTrail $trail) {
+    $trail->parent('seller_dashboard');
+    $trail->push('Pesanan', url('seller/orders'));
 });
 
 /*END: Seller Page*/

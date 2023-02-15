@@ -27,4 +27,9 @@ class Order extends Model
         return $this->hasOne(OrderAddress::class,'order_id', 'id');
     }
 
+    public function orderShipping(): HasOne
+    {
+        return $this->hasOne(OrderShipping::class,'order_id', 'id');
+    }
+
 }

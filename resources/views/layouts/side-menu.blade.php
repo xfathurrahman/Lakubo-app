@@ -43,7 +43,13 @@
                     <li>
                         <a href="{{ route('seller.products.index') }}" class="side-menu {{ Request::is('seller/products') ? 'side-menu--active' : '' }}">
                             <div class="side-menu__icon"> <i data-lucide="package"></i> </div>
-                            <div class="side-menu__title">Produk Saya</div>
+                            <div class="side-menu__title">Produk</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('seller.orders.index') }}" class="side-menu {{ Request::is('seller/order*') ? 'side-menu--active' : '' }}">
+                            <div class="side-menu__icon"> <i data-lucide="shopping-bag"></i> </div>
+                            <div class="side-menu__title"> Pesanan </div>
                         </a>
                     </li>
                 @endif

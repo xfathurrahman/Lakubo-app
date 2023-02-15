@@ -16,9 +16,6 @@
                 </div>
             @endif--}}
             <div class="intro-y flex flex-col sm:flex-row items-center">
-                <h2 class="text-lg font-medium mr-auto">
-                    Detail Pesanan
-                </h2>
                 {{--<div class="w-full sm:w-auto flex mt-4 sm:mt-0">
                     <button class="btn btn-primary shadow-md mr-2">Print</button>
                     <div class="dropdown ml-auto sm:ml-0">
@@ -46,14 +43,7 @@
                 <div class="col-span-12 lg:col-span-4 2xl:col-span-3">
                     <div class="box p-5 rounded-md">
                         <div class="flex items-center border-b border-slate-200/60 dark:border-darkmode-400 pb-5 mb-5">
-                            <div class="font-medium text-base truncate">Detail Transaksi</div>
-                            @if($order->transaction_status === 'pending')
-                                <div class="items-center ml-auto text-primary">
-                                    <a href="{{ $order->pdf_url }}" class="inline-flex">
-                                        <i data-lucide="file-text" class="w-4 h-4 mr-2"></i> Unduh Tagihan
-                                    </a>
-                                </div>
-                            @endif
+                            <div class="font-medium text-base truncate">Detail Pesanan</div>
                         </div>
                         @if($order->transaction_status === 'completed')
                         <div class="flex items-center justify-between">
@@ -83,24 +73,28 @@
                                 @endif
                             </div>
                         @endif
-                        <div class="flex items-center mt-3 justify-between">
-                            <div class="inline-flex">
-                                <i data-lucide="key" class="w-4 h-4 text-slate-500 mr-2"></i>
-                                ID Pesanan :
+                        <div class="flex items-center mt-3">
+                            <div class="inline-flex mr-2">
+                                <div class="flex items-center justify-between">
+                                    <span class="w-40 inline-flex"><i data-lucide="file-text" class="w-4 h-4 text-slate-500 mr-2"></i>ID Pesanan</span>:
+                                </div>
                             </div>
                             {{ ($order->id) }}
                         </div>
-                        <div class="flex items-center mt-3 justify-between">
-                            <div class="inline-flex">
-                                <i data-lucide="clock" class="w-4 h-4 text-slate-500 mr-2"></i>
-                                Pesanan Dibuat :
+                        <div class="flex items-center mt-3">
+                            <div class="inline-flex mr-2">
+                                <div class="flex items-center justify-between">
+                                    <span class="w-40 inline-flex"><i data-lucide="calendar" class="w-4 h-4 text-slate-500 mr-2"></i>Pesanan Dibuat</span>:
+                                </div>
                             </div>
                             {{ Carbon\Carbon::parse($order->transaction_time)->format('d F Y (H:i)') }}
                         </div>
-                        <div class="flex items-center mt-2 justify-between">
-                            <div class="inline-flex">
+                        <div class="flex items-center mt-2">
+                            <div class="inline-flex mr-2">
                                 @if($order -> transaction_status === 'pending' || $order -> transaction_status === 'completed')
-                                    <i data-lucide="calendar" class="w-4 h-4 text-slate-500 mr-2"></i> Status Transaksi :
+                                    <div class="flex items-center justify-between">
+                                        <span class="w-40 inline-flex"><i data-lucide="credit-card" class="w-4 h-4 text-slate-500 mr-2"></i>Status Transaksi</span>:
+                                    </div>
                                 @endif
                             </div>
                             <div class="inline-flex">
@@ -111,31 +105,79 @@
                                 @endif
                             </div>
                         </div>
+                    </div>
+                    <div class="box p-5 rounded-md mt-5">
+                        <div class="flex items-center border-b border-slate-200/60 dark:border-darkmode-400 pb-5 mb-5">
+                            <div class="font-medium text-base truncate">Detail Tagihan</div>
+                            @if($order->transaction_status === 'pending')
+                                <div class="items-center ml-auto text-primary">
+                                    <a href="{{ $order->pdf_url }}" class="inline-flex">
+                                        <i data-lucide="file-text" class="w-4 h-4 mr-2"></i> Unduh Tagihan
+                                    </a>
+                                </div>
+                            @endif
+                        </div>
+                        {{--<div class="flex items-center">
+                            <i data-lucide="clipboard" class="w-4 h-4 text-slate-500 mr-2"></i> Metode Pembayaran:
+                            <div class="ml-auto">{{ $order->payment_type }}</div>
+                        </div>--}}
+                        <div class="flex items-center mt-3">
+                            <div class="flex items-center justify-between">
+                                <span class="w-40 inline-flex"><i data-lucide="credit-card" class="w-4 h-4 text-slate-500 mr-2"></i>Subtotal ({{ $order->orderItems->count() }} Item)</span>:
+                            </div>
+                            <div class="ml-auto">@currency($order->subtotal)</div>
+                        </div>
+                        <div class="flex items-center mt-3">
+                            <div class="flex items-center justify-between">
+                                <span class="w-40 inline-flex"><i data-lucide="credit-card" class="w-4 h-4 text-slate-500 mr-2"></i>Biaya Pengiriman</span>:
+                            </div>
+                            <div class="ml-auto">@currency($order->orderShipping->shipping_cost)</div>
+                        </div>
+                        <div class="flex items-center mt-3 font-medium">
+                            <div class="flex items-center justify-between">
+                                <span class="w-40 inline-flex"><i data-lucide="credit-card" class="w-4 h-4 text-slate-500 mr-2"></i>Total Tagihan</span>:
+                            </div>
+                            <div class="ml-auto">@currency($order->grand_total)</div>
+                        </div>
+                        <div class="flex items-center border-y border-slate-200/60 dark:border-darkmode-400 pt-5 mt-5">
+                            @if($order->transaction_status === 'unpaid')
+                                <form id="submit_form" method="POST" action="{{ route('customer.order.update', $order->id) }}">
+                                    @csrf
+                                    @method('put')
+                                    <input type="hidden" name="json" id="json_callback">
+                                </form>
+                                <button id="pay-button" class="h-12 w-full bg-red-400 rounded text-white focus:outline-none hover:bg-red-500">PILIH PEMBAYARAN</button>
+                            @else
+                                <div class="font-medium text-base truncate pb-5">Selesaikan Pembayaran</div>
+                            @endif
+                        </div>
                         @if($order->transaction_status === 'pending' && $order->bank)
-                            <div class="bg-green-100 p-2 mt-3 rounded-lg">
-                                <div class="flex items-center justify-between mt-2">
+                            <div class="mt-2 rounded-lg">
+                                <div class="flex items-center">
                                     <div class="inline-flex">
-                                        <i data-lucide="credit-card" class="w-4 h-4 text-slate-500 mr-2"></i>
-                                        Bank tujuan :
+                                        <div class="flex items-center justify-between">
+                                            <span class="w-40 inline-flex"><i data-lucide="credit-card" class="w-4 h-4 text-slate-500 mr-2"></i>Bank Tujuan</span>:
+                                        </div>
                                     </div>
-                                    <p class="ml-1 uppercase text-blue-400">{{ $order->bank }}</p>
+                                    <p class="ml-2 uppercase text-blue-500">{{ $order->bank }}</p>
                                 </div>
                                 <div class="flex items-center mt-2">
-                                    <i data-lucide="activity" class="w-4 h-4 text-slate-500 mr-2"></i> No Virtual Akun :
-                                    <div class="ml-auto mr-0">
-                                        <span class="ml-2 underline decoration-solid decoration-red-400"> {{ $order->va_number }}</span>
-                                        <button class="relative font-bold px-2 rounded" id="copy-btn">
-                                            <i data-lucide="copy" class="w-4 h-4 text-slate-500 -mb-0.5"></i>
-                                            <span class="hidden absolute -top-10 -right-2 mt-2 py-1 px-2 bg-black opacity-50 text-white rounded" id="tooltip">Disalin!</span>
-                                        </button>
+                                    <div class="flex items-center justify-between">
+                                        <span class="w-40 inline-flex"><i data-lucide="credit-card" class="w-4 h-4 text-slate-500 mr-2"></i>Nomor VA</span>:
                                     </div>
+                                    <span class="ml-2 underline decoration-solid decoration-red-400"> {{ $order->va_number }}</span>
+                                    <button class="relative font-bold px-2 rounded" id="copy-btn">
+                                        <i data-lucide="copy" class="w-4 h-4 text-slate-500 -mb-0.5"></i>
+                                        <span class="hidden absolute -top-10 -right-2 mt-2 py-1 px-2 bg-black opacity-50 text-white rounded" id="tooltip">Disalin!</span>
+                                    </button>
                                 </div>
-                                <div class="flex items-center justify-between mt-2">
+                                <div class="flex items-center mt-2">
                                     <div class="inline-flex">
-                                        <i data-lucide="calendar" class="w-4 h-4 text-slate-500 mr-2"></i>
-                                        Bayar dalam :
+                                        <div class="flex items-center justify-between">
+                                            <span class="w-40 inline-flex"><i data-lucide="clock" class="w-4 h-4 text-slate-500 mr-2"></i>Bayar Dalam</span>:
+                                        </div>
                                     </div>
-                                    <div class="text-blue-700" id="countdown"></div>
+                                    <div class="text-blue-500 ml-2" id="countdown"></div>
                                 </div>
                                 <div class="bg-yellow-200 rounded-md p-2 mt-2">
                                     <span>Catatan: Perhatikan batas waktu pembayaran agar pesanan tidak dibatalkan otomatis oleh sistem.</span>
@@ -145,10 +187,9 @@
                             <div class="bg-green-100 p-2 mt-3 rounded-lg">
                                 <div class="flex items-center justify-between mt-2">
                                     <div class="inline-flex">
-                                        <i data-lucide="credit-card" class="w-4 h-4 text-slate-500 mr-2"></i>
-                                        Gerai Pembayaran :
+                                        <i data-lucide="credit-card" class="w-4 h-4 text-slate-500 mr-2"></i>Gerai Pembayaran :
                                     </div>
-                                    <p class="ml-1 uppercase text-blue-400">Indomaret</p>
+                                    <p class="ml-1 uppercase text-blue-500">Indomaret</p>
                                 </div>
                                 <div class="flex items-center mt-2">
                                     <i data-lucide="activity" class="w-4 h-4 text-slate-500 mr-2"></i> Kode Pembayaran:
@@ -160,47 +201,14 @@
                                         <i data-lucide="calendar" class="w-4 h-4 text-slate-500 mr-2"></i>
                                         Bayar dalam :
                                     </div>
-                                    <div class="text-blue-400" id="countdown"></div>
+                                    <div class="text-blue-500" id="countdown"></div>
                                 </div>
                                 <div class="bg-yellow-200 rounded-md p-2 mt-2">
                                     <span>Catatan : Perhatikan batas waktu pembayaran agar pesanan tidak dibatalkan otomatis oleh sistem.</span>
                                 </div>
                             </div>
                         @endif
-                    </div>
-                    <div class="box p-5 rounded-md mt-5">
-                        <div class="flex items-center border-b border-slate-200/60 dark:border-darkmode-400 pb-5 mb-5">
-                            <div class="font-medium text-base truncate">Detail Pembayaran</div>
-                        </div>
-                        {{--<div class="flex items-center">
-                            <i data-lucide="clipboard" class="w-4 h-4 text-slate-500 mr-2"></i> Metode Pembayaran:
-                            <div class="ml-auto">{{ $order->payment_type }}</div>
-                        </div>--}}
-                        <div class="flex items-center mt-3">
-                            <i data-lucide="credit-card" class="w-4 h-4 text-slate-500 mr-2"></i> Total Harga
-                            ({{ $order->orderItems->count() }} Item):
-                            <div class="ml-auto">@currency($order->subtotal)</div>
-                        </div>
-                        <div class="flex items-center mt-3">
-                            <i data-lucide="credit-card" class="w-4 h-4 text-slate-500 mr-2"></i> Biaya pengiriman:
-                            <div class="ml-auto">@currency($order->shipping)</div>
-                        </div>
-                        <div
-                            class="flex items-center border-t border-slate-200/60 dark:border-darkmode-400 pt-5 mt-5 font-medium">
-                            <i data-lucide="credit-card" class="w-4 h-4 text-slate-500 mr-2"></i> Total Tagihan:
-                            <div class="ml-auto">@currency($order->grand_total)</div>
-                        </div>
-                        <form id="submit_form" method="POST" action="{{ route('customer.order.update', $order->id) }}">
-                            @csrf
-                            @method('put')
-                            <input type="hidden" name="json" id="json_callback">
-                        </form>
-                        @if($order->transaction_status === 'unpaid')
-                            <button id="pay-button"
-                                    class="h-12 mt-4 w-full bg-red-400 rounded text-white focus:outline-none hover:bg-red-500">
-                                PILIH PEMBAYARAN
-                            </button>
-                        @endif
+
                     </div>
                 </div>
                 <div class="col-span-12 lg:col-span-7 2xl:col-span-8">
@@ -238,45 +246,68 @@
                             </table>
                         </div>
                     </div>
-                    <div class="grid grid-cols-12 gap-5">
-                        <div class="col-span-12 lg:col-span-6">
-                            <div class="box p-5 rounded-md mt-5" style="min-height: 210px">
-                                <div
-                                    class="flex items-center border-b border-slate-200/60 dark:border-darkmode-400 pb-5 mb-5">
-                                    <div class="font-medium text-base truncate">Detail Penerima</div>
-                                </div>
-                                <div class="flex items-center"><i data-lucide="clipboard"
-                                                                  class="w-4 h-4 text-slate-500 mr-2"></i>
-                                    Nama: {{ $order->customer_name }} </div>
-                                <div class="flex items-center mt-3"><i data-lucide="calendar"
-                                                                       class="w-4 h-4 text-slate-500 mr-2"></i> Nomor
-                                    Handphone: +62{{ ltrim($order->customer_phone, '0') }} </div>
-                                <div class="flex items-center mt-3 capitalize_address">
-                                    <i data-lucide="map-pin" class="w-4 h-4 text-slate-500 mr-2"></i>
-                                    {{ $order->orderAddress->detail_address }},
-                                    {{ $order->orderAddress->village->name }},
-                                    {{ $order->orderAddress->district->name }},
-                                    {{ $order->orderAddress->regency->name }},
-                                    {{ $order->orderAddress->province->name }}.
+                    <div class="box p-5 rounded-md mt-5">
+                        <div class="flex items-center border-b border-slate-200/60 dark:border-darkmode-400 pb-5 mb-5">
+                            <div class="font-medium text-base truncate">Detail Pengiriman</div>
+                        </div>
+
+                        <div class="flex items-center mt-3">
+                            <div class="flex items-center justify-between">
+                                <span class="w-40 inline-flex"><i data-lucide="user" class="w-4 h-4 text-slate-500 mr-2"></i>Nama Penerima</span>:
+                            </div>
+                            <span class="ml-2">{{ $order->customer_name }}</span>
+                        </div>
+
+                        <div class="flex items-center mt-3">
+                            <div class="flex items-center justify-between">
+                                <span class="w-40 inline-flex"><i data-lucide="smartphone" class="w-4 h-4 text-slate-500 mr-2"></i>No Handphone</span>:
+                            </div>
+                            <span class="ml-2">+62{{ ltrim($order->customer_phone, '0') }}</span>
+                        </div>
+
+                        <div class="lg:inline-flex lg:items-center">
+                            <div class="flex items-center mt-3">
+                                <div class="flex items-center justify-between">
+                                    <span class="w-40 inline-flex"><i data-lucide="map" class="w-4 h-4 text-slate-500 mr-2"></i>Alamat Penerima</span>:
                                 </div>
                             </div>
+                            <div class="capitalize_address lg:-mb-3 bg-gray-200 rounded-md p-2 lg:bg-transparent lg:p-0">
+                                {{ $order->orderAddress->detail_address }},
+                                {{ $order->orderAddress->village->name }},
+                                {{ $order->orderAddress->district->name }},
+                                {{ $order->orderAddress->regency->name }},
+                                {{ $order->orderAddress->province->name }}.
+                            </div>
                         </div>
-                        <div class="col-span-12 lg:col-span-6">
-                            <div class="box p-5 rounded-md lg:mt-5 ml-auto" style="min-height: 210px">
-                                <div
-                                    class="flex items-center border-b border-slate-200/60 dark:border-darkmode-400 pb-5 mb-5">
-                                    <div class="font-medium text-base truncate">Informasi Pengiriman</div>
-                                </div>
-                                <div class="flex items-center"><i data-lucide="clipboard"
-                                                                  class="w-4 h-4 text-slate-500 mr-2"></i> Kurir: JNE
-                                </div>
+
+                        <div class="flex items-center mt-3">
+                            <div class="flex items-center justify-between">
+                                <span class="w-40 inline-flex"><i data-lucide="zap" class="w-4 h-4 text-slate-500 mr-2"></i>Kurir</span>:
+                            </div>
+                            <span class="ml-2">JNE ({{ $order->orderShipping->service }})</span>
+                        </div>
+
+                        <div class="flex items-center mt-3">
+                            <div class="flex items-center justify-between">
+                                <span class="w-40 inline-flex"><i data-lucide="calendar" class="w-4 h-4 text-slate-500 mr-2"></i>Estimasi Pengiriman</span>:
+                            </div>
+                            <span class="ml-2">{{ $order->orderShipping->etd }} Hari</span>
+                        </div>
+
+                        @isset($order->orderShipping->tracking_number)
+                            <div class="flex items-center mt-3">
                                 <div class="flex items-center mt-3">
-                                    <i data-lucide="calendar" class="w-4 h-4 text-slate-500 mr-2"></i>
-                                    Nomor Resi: 003005580322
+                                    <div class="flex items-center justify-between">
+                                        <span class="w-40 inline-flex"><i data-lucide="search" class="w-4 h-4 text-slate-500 mr-2"></i>Nomor Resi</span>:
+                                    </div>
+                                </div>
+                                <div class="inline-flex items-center">
+                                    <span class="w-32">{{ $order->orderShipping->tracking_number }}</span>
                                     <i data-lucide="copy" class="w-4 h-4 text-slate-500 ml-2"></i>
                                 </div>
                             </div>
-                        </div>
+                        @endisset
+
                     </div>
                 </div>
             </div>
