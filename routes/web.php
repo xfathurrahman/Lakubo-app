@@ -90,6 +90,11 @@ Route::middleware(['auth', 'verified', 'role:seller'])->name('seller.')->prefix(
     Route::delete('/products/{product}/delete', [ProductController::class,'destroy'])->name('products.delete');
     // ORDER
     Route::get('/orders', [SellerOrderController::class,'index'])->name('orders.index');
+    Route::get('/orders/detail/{order_id}', [SellerOrderController::class,'show'])->name('order.show');
+    Route::put('/orders/detail/status/{order_id}', [SellerOrderController::class,'updateStatus'])->name('order.update.status');
+    Route::put('/orders/detail/confirm/{order_id}', [SellerOrderController::class,'confirmOrder'])->name('order.confirm');
+    Route::put('/orders/detail/reject/{order_id}', [SellerOrderController::class,'rejectOrder'])->name('order.reject');
+    Route::put('/orders/detail/resi/{order_id}', [SellerOrderController::class,'updateResi'])->name('order.update.resi');
 });
 
 Route::middleware(['auth', 'verified', 'role:customer'])->name('customer.')->prefix('customer')->group(function (){
@@ -109,7 +114,7 @@ Route::middleware(['auth', 'verified', 'role:customer'])->name('customer.')->pre
     Route::post('/get-shipping-data', [CheckoutController::class,'store'])->name('shipping.data');
     Route::put('/update-shipping',[CheckoutController::class,'updateShipping'])->name('update.shipping');
     Route::post('/get-snap-token',[CheckoutController::class,'getSnapToken'])->name('snap.token');
-    // ORDER
+    // CUSTOMER ORDER
     Route::get('/orders', [OrderController::class, 'index'])->name('orders');
     Route::get('/order/detail/{order_id}', [OrderController::class, 'show'])->name('order.show');
     Route::put('/order/detail/{order_id}', [OrderController::class, 'update'])->name('order.update');

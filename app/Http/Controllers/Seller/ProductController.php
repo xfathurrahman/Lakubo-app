@@ -64,6 +64,7 @@ class ProductController extends Controller
                 $image -> save();
             }
         }
+
         if ($request->get('action') == 'save_and_new') {
             return redirect('seller/products/create')->with("success", "Produk berhasil ditambahkan");
         }

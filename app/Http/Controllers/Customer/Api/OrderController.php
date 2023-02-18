@@ -18,7 +18,7 @@ class OrderController extends Controller
                 $order = Order::find($request->order_id);
                 $order->update([
                     'transaction_status' => 'completed',
-                    'status' => 'pending',
+                    'status' => 'awaiting_confirm',
                     'transaction_time' => $request->transaction_time,
                     'transaction_id' => $request->transaction_id,
                     'payment_type' => $request->payment_type ?? null,

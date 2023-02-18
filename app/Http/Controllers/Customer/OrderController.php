@@ -48,8 +48,13 @@ class OrderController extends Controller
         $json = json_decode($request->get('json'), false, 512, JSON_THROW_ON_ERROR);
 
         try {
+            if ($json->transaction_status === 'pending') {
+                $order->transaction_status = 'awaiting_payment';
+            } else {
+                $order->transaction_status = $json->transaction_status;
+            }
             $order->transaction_id = $json->transaction_id ?? null;
-            $order->transaction_status = $json->transaction_status;
+            $order->status = 'awaiting_payment';
             $order->payment_type = $json->payment_type ?? null;
             $order->payment_code = $json->payment_code ?? null;
             $transaction_time = $json->transaction_time ?? null;

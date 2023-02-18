@@ -51,13 +51,13 @@
                                 <i data-lucide="archive" class="w-4 h-4 text-slate-500 mr-2"></i>
                                 Status Pesanan:
                             </div>
-                            @if($order->status === 'pending')
+                            @if($order->status === 'awaiting')
                                 <span class="bg-blue-400 text-white px-2 rounded-md">Menunggu Konfirmasi Pelapak.</span>
-                            @elseif($order->status === 'processing')
-                                <span class="bg-blue-400 text-white px-2 rounded-md">Diproses.</span>
+                            @elseif($order->status === 'packing')
+                                <span class="bg-blue-400 text-white px-2 rounded-md">Dikemas.</span>
                             @elseif($order->status === 'completed')
                                 <span class="bg-blue-400 text-white px-2 rounded-md">Selesai.</span>
-                            @elseif($order->status === 'shipped')
+                            @elseif($order->status === 'delivered')
                                 <span class="bg-blue-400 text-white px-2 rounded-md">Dikirim.</span>
                             @endif
                         </div>
@@ -91,14 +91,14 @@
                         </div>
                         <div class="flex items-center mt-2">
                             <div class="inline-flex mr-2">
-                                @if($order -> transaction_status === 'pending' || $order -> transaction_status === 'completed')
+                                @if($order -> transaction_status === 'awaiting_payment' || $order -> transaction_status === 'completed')
                                     <div class="flex items-center justify-between">
                                         <span class="w-40 inline-flex"><i data-lucide="credit-card" class="w-4 h-4 text-slate-500 mr-2"></i>Status Transaksi</span>:
                                     </div>
                                 @endif
                             </div>
                             <div class="inline-flex">
-                                @if($order -> transaction_status === 'pending')
+                                @if($order -> transaction_status === 'awaiting_payment')
                                     <span class="bg-yellow-400 text-white px-2 rounded-md">Menunggu Pembayaran.</span>
                                 @elseif($order -> transaction_status === 'completed')
                                     <span class="bg-green-500 text-white px-2 rounded-md">Pembayaran Berhasil.</span>
@@ -109,7 +109,7 @@
                     <div class="box p-5 rounded-md mt-5">
                         <div class="flex items-center border-b border-slate-200/60 dark:border-darkmode-400 pb-5 mb-5">
                             <div class="font-medium text-base truncate">Detail Tagihan</div>
-                            @if($order->transaction_status === 'pending')
+                            @if($order->transaction_status === 'awaiting_payment')
                                 <div class="items-center ml-auto text-primary">
                                     <a href="{{ $order->pdf_url }}" class="inline-flex">
                                         <i data-lucide="file-text" class="w-4 h-4 mr-2"></i> Unduh Tagihan
@@ -151,7 +151,7 @@
                                 <div class="font-medium text-base truncate pb-5">Selesaikan Pembayaran</div>
                             @endif
                         </div>
-                        @if($order->transaction_status === 'pending' && $order->bank)
+                        @if($order->transaction_status === 'awaiting_payment' && $order->bank)
                             <div class="mt-2 rounded-lg">
                                 <div class="flex items-center">
                                     <div class="inline-flex">
@@ -183,7 +183,7 @@
                                     <span>Catatan: Perhatikan batas waktu pembayaran agar pesanan tidak dibatalkan otomatis oleh sistem.</span>
                                 </div>
                             </div>
-                        @elseif($order->transaction_status === 'pending' && $order->payment_code)
+                        @elseif($order->transaction_status === 'awaiting_payment' && $order->payment_code)
                             <div class="bg-green-100 p-2 mt-3 rounded-lg">
                                 <div class="flex items-center justify-between mt-2">
                                     <div class="inline-flex">

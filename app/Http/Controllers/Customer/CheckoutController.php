@@ -54,7 +54,7 @@ class CheckoutController extends Controller
         }
     }
 
-    public function getShippingCost($cart): array
+    public function getShippingCost($cart)
     {
         $totalWeight = 0;
         $subtotalWeight = 0;
@@ -140,7 +140,7 @@ class CheckoutController extends Controller
             $order = new Order;
             $order->id = $order_id;
             $order->user_id = Auth::id();
-            $order->store_id = $cart->store_id;
+            $order->store_id = $store_id;
             $order->snap_token = $snapToken;
             $order->customer_name = Auth::user()->name;
             $order->customer_phone = Auth::user()->phone;
