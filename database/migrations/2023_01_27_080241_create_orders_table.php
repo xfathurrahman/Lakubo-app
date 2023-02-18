@@ -36,6 +36,7 @@ return new class extends Migration
             $table->string('va_number')->nullable();
             $table->string('payment_code')->nullable();
             $table->string('note')->nullable();
+            $table->string('reject_msg')->nullable();
             $table->timestamps();
         });
 
