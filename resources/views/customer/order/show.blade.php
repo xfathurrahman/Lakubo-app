@@ -495,20 +495,6 @@
 
         <script>
             $(document).ready(function () {
-
-                @if(session('success'))
-                // Success notification
-                    Toastify({
-                        node: $("#confirm-notification-content").clone().removeClass("hidden")[0],
-                        duration: 3000,
-                        newWindow: true,
-                        close: true,
-                        gravity: "top",
-                        position: "center",
-                        stopOnFocus: true,
-                    }).showToast();
-                @endif
-
                 $("#copy-tracking-no").click(function() {
                     let copyText = document.getElementById("tracking_no");
                     copyText.setSelectionRange(0, 99999); // mengatur range seleksi dari karakter 0 hingga 99999
@@ -566,13 +552,7 @@
                     });
                 });
 
-                @isset($order->transaction_expire)
-                    countExpire();
-                @endisset
-
-            });
-
-            function countExpire() {
+                @if($order->transaction_expire)
                 // hitung countdown expire transaksi
                 const transactionExpire = new Date('<?= $order->transaction_expire ?>');
                 const countDownDate = new Date(transactionExpire).getTime();
@@ -590,7 +570,9 @@
                         countdown.html("Waktu Habis");
                     }
                 }, 1000);
-            }
+                @endif
+
+            });
 
         </script>
 

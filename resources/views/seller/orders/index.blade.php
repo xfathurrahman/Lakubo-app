@@ -159,7 +159,7 @@
                     // Success notification
                     Toastify({
                         node: $("#reject-notification-content").clone().removeClass("hidden")[0],
-                        duration: 3000,
+                        duration: 4000,
                         newWindow: true,
                         close: true,
                         gravity: "top",

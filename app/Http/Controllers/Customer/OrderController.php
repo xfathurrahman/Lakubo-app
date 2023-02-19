@@ -87,19 +87,21 @@ class OrderController extends Controller
             $order->bank = $bank;
             $order->pdf_url = $json->pdf_url ?? null;
             $order->update();
-
             return redirect()->back()->with('success', 'Pembayaran berhasil');
-
         } catch (Exception $e) {
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
 
-    public function confirmOrder($order_id) {
+    public function confirmOrder($order_id): RedirectResponse
+    {
         $order = Order::find($order_id);
         $order -> status = 'completed';
         $order -> update();
-        return redirect()->route('customer.orders')->with('success');
+
+        // Simpan data session pada controller
+        session()->flash('message');
+        return redirect()->route('customer.orders');
     }
 
 }

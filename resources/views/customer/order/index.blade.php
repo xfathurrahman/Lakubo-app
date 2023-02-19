@@ -136,6 +136,19 @@
         <script>
             $(document).ready(function() {
 
+                @if(session('message'))
+                // Success notification
+                Toastify({
+                    node: $("#confirm-notification-content").clone().removeClass("hidden")[0],
+                    duration: 3000,
+                    newWindow: true,
+                    close: true,
+                    gravity: "top",
+                    position: "center",
+                    stopOnFocus: true,
+                }).showToast();
+                @endif
+
                 @foreach($orders as $order)
                 $("#copy-tracking-no-" + {{ $order->id }}).click(function() {
                     var copyText = document.getElementById("tracking_no-{{ $order->id }}");
