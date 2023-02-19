@@ -84,7 +84,7 @@
                                                 @break
                                             @endif--}}
                                             <div class="w-10 h-10 image-fit zoom-in" style="margin-left: -0.70rem">
-                                                <img data-action="zoom" alt="Product-img" class="tooltip rounded-full" src="{{ asset("storage/product-image")."/".$image -> image_path }}" title="Uploaded {{ Carbon\Carbon::parse($product->created_at)->diffForHumans() }}">
+                                                <img data-action="zoom" alt="Product-img" class="rounded-full" src="{{ asset("storage/product-image")."/".$image -> image_path }}" title="Uploaded {{ Carbon\Carbon::parse($product->created_at)->diffForHumans() }}">
                                             </div>
                                         @endforeach
                                     </div>

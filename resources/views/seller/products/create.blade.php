@@ -119,8 +119,7 @@
                                                 <div class="input-group-text">Rp.</div>
                                                 <input name="price"
                                                        type="number"
-                                                       class="form-control"
-                                                       onkeypress="return onlyNumberKey(event)"
+                                                       class="form-control numeric-input"
                                                        placeholder="Masukan harga"
                                                        value="{{old('price')}}"
                                                        required=""
@@ -163,8 +162,7 @@
                                             <div class="input-group">
                                                 <input name="weight"
                                                        type="number"
-                                                       class="form-control"
-                                                       onkeypress="return onlyNumberKey(event)"
+                                                       class="form-control numeric-input"
                                                        placeholder="Berat"
                                                        value="{{old('weight')}}"
                                                        required=""
@@ -179,8 +177,7 @@
                                             <div>
                                                 <input name="quantity"
                                                        type="number"
-                                                       class="form-control mt-2 sm:mt-0"
-                                                       onkeypress="return onlyNumberKey(event)"
+                                                       class="form-control mt-2 sm:mt-0 numeric-input"
                                                        placeholder="Stok"
                                                        value="{{old('quantity')}}"
                                                        required=""
@@ -247,12 +244,6 @@
     @section('script')
 
         <script>
-            function onlyNumberKey(evt) {
-                // Only ASCII character in that range allowed
-                var ASCIICode = (evt.which) ? evt.which : evt.keyCode
-                return !(ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57));
-            }
-
             $('.form-navigation-product .submit').click(function(){
                 Parsley.addMessage('en', 'required', 'Wajib mengunggah gambar produk.');
             });

@@ -37,6 +37,19 @@
         </script>--}}
 
         <script>
+
+            // Ambil semua elemen input yang memiliki kelas "numeric-input"
+            const numericInputs = document.querySelectorAll('.numeric-input');
+            // Tambahkan event listener untuk setiap elemen input
+            numericInputs.forEach(function(input) {
+                input.addEventListener('input', function(e) {
+                    // Dapatkan nilai input dan hapus karakter selain angka
+                    const inputValue = e.target.value.replace(/[^0-9]/g, '');
+                    // Set nilai input yang sudah divalidasi
+                    e.target.value = inputValue;
+                });
+            });
+
             $(function(){
                 var $sections=$('.form-section');
                 function navigateTo(index){

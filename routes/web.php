@@ -118,6 +118,7 @@ Route::middleware(['auth', 'verified', 'role:customer'])->name('customer.')->pre
     Route::get('/orders', [OrderController::class, 'index'])->name('orders');
     Route::get('/order/detail/{order_id}', [OrderController::class, 'show'])->name('order.show');
     Route::put('/order/detail/{order_id}', [OrderController::class, 'update'])->name('order.update');
+    Route::put('/order/detail/confirm/{order_id}', [OrderController::class, 'confirmOrder'])->name('order.confirm');
 });
 
 Route::middleware('auth')->group(function () {

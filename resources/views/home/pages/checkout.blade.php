@@ -93,7 +93,7 @@
                                                 <span class="font-bold text-xs lg:text-sm">{{ $item -> products -> name }}</span>
                                                 @php $subtotalWeight = 0 @endphp
                                                 @php $subtotalWeight += $item -> products -> weight * $item->product_qty @endphp
-                                                <span class="text-xs my-1">{{ $subtotalWeight }} gram</span>
+                                                <span class="text-xs my-1">{{ $item -> products -> weight }} gram</span>
                                                 <span class="text-red-500 text-xs mt-1"><i class="fa-solid fa-tag mx-1"></i>{{ $item -> products -> productCategories -> name }}</span>
                                             </div>
                                         </div>

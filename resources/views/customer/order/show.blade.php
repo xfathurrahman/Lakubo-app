@@ -4,87 +4,72 @@
         {{ Breadcrumbs::render('my-order-detail') }}
     @endsection
 
+        <!-- BEGIN: Reject Confirmation Modal -->
+        <div id="confirm-order-modal" class="modal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body p-0">
+                        <div class="p-5 text-center">
+                            <div class="text-xl mt-5">Sudah terima pesanan?</div>
+                            <div class="text-slate-500 mt-2">
+                                Dengan mengkonfirmasi pesanan
+                                <br>
+                                Dana akan diteruskan ke pihak Pelapak.
+                            </div>
+                        </div>
+                        <form action="{{ route('customer.order.confirm', $order->id) }}" method="POST">
+                            @csrf
+                            @method('PUT')
+                            <div class="px-5 pb-8 text-center">
+                                <button type="button" data-tw-dismiss="modal" class="btn btn-outline-secondary w-24 mr-1">Batal</button>
+                                <button type="submit" class="btn btn-primary w-24">Ya</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END: Delete Confirmation Modal -->
+
     @if(isset($order))
         <!-- BEGIN: Content -->
         <div class="content mt-6">
-            {{--@if($order->transaction_status === 'completed')
-                <div class="alert bg-green-500 alert-dismissible show flex justify-center my-2" role="alert">
-                    <span class="font-medium text-lg text-white">Pembayaran anda telah kami terima, menunggu konfirmasi pelapak.</span>
-                    <button type="button" class="btn-close" data-tw-dismiss="alert" aria-label="Close">
-                        <i data-lucide="x" class="w-4 h-4 text-white"></i>
-                    </button>
-                </div>
-            @endif--}}
-            <div class="intro-y flex flex-col sm:flex-row items-center">
-                {{--<div class="w-full sm:w-auto flex mt-4 sm:mt-0">
-                    <button class="btn btn-primary shadow-md mr-2">Print</button>
-                    <div class="dropdown ml-auto sm:ml-0">
-                        <button class="dropdown-toggle btn px-2 box" aria-expanded="false" data-tw-toggle="dropdown">
-                            <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4"
-                                                                                       data-lucide="plus"></i> </span>
-                        </button>
-                        <div class="dropdown-menu w-40">
-                            <ul class="dropdown-content">
-                                <li>
-                                    <a href="" class="dropdown-item"> <i data-lucide="file" class="w-4 h-4 mr-2"></i>
-                                        Export Word </a>
-                                </li>
-                                <li>
-                                    <a href="" class="dropdown-item"> <i data-lucide="file" class="w-4 h-4 mr-2"></i>
-                                        Export PDF </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>--}}
-            </div>
             <!-- BEGIN: Transaction Details -->
             <div class="intro-y grid grid-cols-11 gap-5 mt-5">
                 <div class="col-span-12 lg:col-span-4 2xl:col-span-3">
                     <div class="box p-5 rounded-md">
-                        <div class="flex items-center border-b border-slate-200/60 dark:border-darkmode-400 pb-5 mb-5">
+                        <div class="flex items-center tool border-b border-slate-200/60 dark:border-darkmode-400 pb-5 mb-5">
                             <div class="font-medium text-base truncate">Detail Pesanan</div>
                         </div>
-                        @if($order->transaction_status === 'completed')
-                        <div class="flex items-center justify-between">
-                            <div class="inline-flex">
-                                <i data-lucide="archive" class="w-4 h-4 text-slate-500 mr-2"></i>
-                                Status Pesanan:
-                            </div>
-                            @if($order->status === 'awaiting')
-                                <span class="bg-blue-400 text-white px-2 rounded-md">Menunggu Konfirmasi Pelapak.</span>
-                            @elseif($order->status === 'packing')
-                                <span class="bg-blue-400 text-white px-2 rounded-md">Dikemas.</span>
-                            @elseif($order->status === 'completed')
-                                <span class="bg-blue-400 text-white px-2 rounded-md">Selesai.</span>
-                            @elseif($order->status === 'delivered')
-                                <span class="bg-blue-400 text-white px-2 rounded-md">Dikirim.</span>
-                            @endif
-                        </div>
-                        @endif
-                        @if($order->transaction_status === 'cancel')
-                            <div class="flex items-center justify-between">
-                                <div class="inline-flex">
-                                    <i data-lucide="archive" class="w-4 h-4 text-slate-500 mr-2"></i>
-                                    Status Pesanan:
-                                </div>
-                                @if($order->status === 'cancelled')
-                                    <span class="bg-red-400 text-white px-2 rounded-md">Pesanan Dibatalkan.</span>
-                                @endif
-                            </div>
-                        @endif
                         <div class="flex items-center mt-3">
                             <div class="inline-flex mr-2">
                                 <div class="flex items-center justify-between">
-                                    <span class="w-40 inline-flex"><i data-lucide="file-text" class="w-4 h-4 text-slate-500 mr-2"></i>ID Pesanan</span>:
+                                <span class="w-40 inline-flex">
+                                    <i class="fa-solid fa-passport mr-2 text-slate-500"></i>ID Pesanan
+                                </span>:
                                 </div>
                             </div>
                             {{ ($order->id) }}
                         </div>
-                        <div class="flex items-center mt-3">
+                        @isset($order->note)
+                            <div class="flex items-center mt-2">
+                                <div class="inline-flex mr-2">
+                                    <div class="flex items-center justify-between">
+                                    <span class="w-40 inline-flex">
+                                        <i class="fa-regular fa-note-sticky mr-2 text-slate-500"></i>Catatan
+                                    </span>:
+                                    </div>
+                                </div>
+                            </div>
+                            <textarea disabled class="mt-1 bg-gray-200 text-sm text-gray-600 w-full px-2 rounded-md">{{ $order->note }}</textarea>
+                        @endif
+                        <div class="flex items-center mt-2">
                             <div class="inline-flex mr-2">
                                 <div class="flex items-center justify-between">
-                                    <span class="w-40 inline-flex"><i data-lucide="calendar" class="w-4 h-4 text-slate-500 mr-2"></i>Pesanan Dibuat</span>:
+                                <span class="w-40 inline-flex">
+                                    <i class="fa-regular fa-calendar mr-2 text-slate-500"></i>
+                                    Pesanan Dibuat
+                                </span>:
                                 </div>
                             </div>
                             {{ Carbon\Carbon::parse($order->transaction_time)->format('d F Y (H:i)') }}
@@ -93,18 +78,89 @@
                             <div class="inline-flex mr-2">
                                 @if($order -> transaction_status === 'awaiting_payment' || $order -> transaction_status === 'completed')
                                     <div class="flex items-center justify-between">
-                                        <span class="w-40 inline-flex"><i data-lucide="credit-card" class="w-4 h-4 text-slate-500 mr-2"></i>Status Transaksi</span>:
+                                    <span class="w-40 inline-flex">
+                                        <i class="fa-solid fa-arrow-right-arrow-left mr-2 text-slate-500"></i>Status Pembayaran
+                                    </span>:
                                     </div>
                                 @endif
                             </div>
-                            <div class="inline-flex">
+                            <div class="inline-flex w-full">
                                 @if($order -> transaction_status === 'awaiting_payment')
-                                    <span class="bg-yellow-400 text-white px-2 rounded-md">Menunggu Pembayaran.</span>
+                                    <span class="bg-yellow-200 text-yellow-600 px-2 rounded-md">Menunggu Pembayaran</span>
                                 @elseif($order -> transaction_status === 'completed')
-                                    <span class="bg-green-500 text-white px-2 rounded-md">Pembayaran Berhasil.</span>
+                                    <span class="bg-green-200 text-green-600 px-2 rounded-md">Berhasil</span>
                                 @endif
                             </div>
                         </div>
+
+                        @if($order->status === 'awaiting_confirm')
+                            <div class="flex items-center mt-2">
+                                <div class="inline-flex mr-2">
+                                    <div class="flex items-center justify-between">
+                                        <span class="w-40 inline-flex"><i class="fa-solid fa-bolt-lightning mr-2 text-slate-500"></i>Status Pesanan</span>:
+                                    </div>
+                                </div>
+                                <span class="bg-blue-500 text-white px-2 rounded-md">Menunggu Konfirmasi.</span>
+                            </div>
+                        @elseif($order->status === 'confirmed')
+                            <div class="flex items-center mt-2">
+                                <div class="inline-flex mr-2">
+                                    <div class="flex items-center justify-between">
+                                        <span class="w-40 inline-flex"><i class="fa-solid fa-bolt-lightning mr-2 text-slate-500"></i>Status Pesanan</span>:
+                                    </div>
+                                </div>
+                                <span class="bg-green-200 text-green-600 px-2 rounded-md">Dikonfirmasi.</span>
+                            </div>
+                        @elseif($order->status === 'packing')
+                            <div class="flex items-center mt-2">
+                                <div class="inline-flex mr-2">
+                                    <div class="flex items-center justify-between">
+                                        <span class="w-40 inline-flex"><i class="fa-solid fa-bolt-lightning mr-2 text-slate-500"></i>Status Pesanan</span>:
+                                    </div>
+                                </div>
+                                <span class="bg-yellow-200 text-yellow-600 px-2 rounded-md">Dikemas.</span>
+                            </div>
+                        @elseif($order->status === 'delivered')
+                            <div class="flex items-center mt-2">
+                                <div class="inline-flex mr-2">
+                                    <div class="flex items-center justify-between">
+                                        <span class="w-40 inline-flex"><i class="fa-solid fa-bolt-lightning mr-2 text-slate-500"></i>Status Pesanan</span>:
+                                    </div>
+                                </div>
+                                <span class="bg-yellow-200 text-yellow-600 px-2 rounded-md">Dikirim</span>
+                            </div>
+                            <div class="items-center mt-4 pt-4 border-t border-slate-200">
+                                <div class="bg-yellow-200 text-yellow-600 p-2 mb-2 rounded-md text-center">
+                                    Silahkan konfirmasi pesanan jika pesanan anda sudah sampai.
+                                </div>
+                                <button type="button" class="btn btn-primary w-full mr-2"
+                                        data-tw-toggle="modal"
+                                        data-tw-target="#confirm-order-modal">
+                                    <i class="fa-regular fa-circle-xmark mr-2"></i> Konfirmasi
+                                </button>
+                            </div>
+                        @elseif($order->status === 'cancelled')
+                            <div class="flex items-center mt-2">
+                                <div class="inline-flex mr-2">
+                                    <div class="flex items-center justify-between">
+                                        <span class="w-40 inline-flex"><i class="fa-solid fa-bolt-lightning mr-2 text-slate-500"></i>Status Pesanan</span>:
+                                    </div>
+                                </div>
+                                <span class="bg-red-200 text-red-600 px-2 rounded-md">Dibatalkan.</span>
+                            </div>
+                            @isset($order->reject_msg)
+                                <div class="flex items-center mt-2">
+                                    <div class="inline-flex mr-2">
+                                        <div class="flex items-center justify-between">
+                                    <span class="w-40 inline-flex text-red-400">
+                                        <i class="fa-regular fa-circle-xmark mr-1 text-red-400"></i>Alasan Pembatalan
+                                    </span>:
+                                        </div>
+                                    </div>
+                                </div>
+                                <textarea disabled class="mt-1 bg-gray-200 text-sm text-gray-600 w-full px-2 rounded-md">{{ $order->reject_msg }}</textarea>
+                            @endif
+                        @endif
                     </div>
                     <div class="box p-5 rounded-md mt-5">
                         <div class="flex items-center border-b border-slate-200/60 dark:border-darkmode-400 pb-5 mb-5">
@@ -117,98 +173,142 @@
                                 </div>
                             @endif
                         </div>
-                        {{--<div class="flex items-center">
-                            <i data-lucide="clipboard" class="w-4 h-4 text-slate-500 mr-2"></i> Metode Pembayaran:
-                            <div class="ml-auto">{{ $order->payment_type }}</div>
-                        </div>--}}
                         <div class="flex items-center mt-3">
-                            <div class="flex items-center justify-between">
-                                <span class="w-40 inline-flex"><i data-lucide="credit-card" class="w-4 h-4 text-slate-500 mr-2"></i>Subtotal ({{ $order->orderItems->count() }} Item)</span>:
+                            <div class="flex items-center">
+                            <span class="w-40 inline-flex">
+                                <i class="fa-regular fa-credit-card mr-2 text-slate-500"></i>Metode Pembayaran
+                            </span>:
                             </div>
-                            <div class="ml-auto">@currency($order->subtotal)</div>
+                            @if($order->payment_type === 'bank_transfer')
+                                <div class="ml-2">Bank Transfer</div>
+                            @elseif($order->payment_type === 'cstore')
+                                <div class="ml-2">Indomaret</div>
+                            @endif
                         </div>
                         <div class="flex items-center mt-3">
                             <div class="flex items-center justify-between">
-                                <span class="w-40 inline-flex"><i data-lucide="credit-card" class="w-4 h-4 text-slate-500 mr-2"></i>Biaya Pengiriman</span>:
+                            <span class="w-40 inline-flex">
+                                <i class="fa-solid fa-dolly mr-2 text-slate-500"></i>Subtotal ({{ $order->orderItems->count() }} Item)
+                            </span>:
                             </div>
-                            <div class="ml-auto">@currency($order->orderShipping->shipping_cost)</div>
+                            <div class="ml-2">@currency($order->subtotal)</div>
+                        </div>
+                        <div class="flex items-center mt-3">
+                            <div class="flex items-center justify-between">
+                            <span class="w-40 inline-flex">
+                                <i class="fa-solid fa-truck-fast mr-2 text-slate-500"></i>Biaya Pengiriman
+                            </span>:
+                            </div>
+                            <div class="ml-2">@currency($order->orderShipping->shipping_cost)</div>
                         </div>
                         <div class="flex items-center mt-3 font-medium">
                             <div class="flex items-center justify-between">
-                                <span class="w-40 inline-flex"><i data-lucide="credit-card" class="w-4 h-4 text-slate-500 mr-2"></i>Total Tagihan</span>:
+                            <span class="w-40 inline-flex">
+                                <i class="fa-solid fa-circle-dollar-to-slot mr-2 text-slate-500"></i>Total Tagihan
+                            </span>:
                             </div>
-                            <div class="ml-auto">@currency($order->grand_total)</div>
+                            <div class="ml-2">@currency($order->grand_total)</div>
                         </div>
-                        <div class="flex items-center border-y border-slate-200/60 dark:border-darkmode-400 pt-5 mt-5">
-                            @if($order->transaction_status === 'unpaid')
+
+                        @if($order->transaction_status === 'unpaid')
+                            <div class="flex items-center border-y border-slate-200/60 dark:border-darkmode-400 pt-5 mt-5">
                                 <form id="submit_form" method="POST" action="{{ route('customer.order.update', $order->id) }}">
                                     @csrf
                                     @method('put')
                                     <input type="hidden" name="json" id="json_callback">
                                 </form>
                                 <button id="pay-button" class="h-12 w-full bg-red-400 rounded text-white focus:outline-none hover:bg-red-500">PILIH PEMBAYARAN</button>
-                            @else
+                            </div>
+                        @elseif($order->transaction_status === 'awaiting_payment')
+                            <div class="flex items-center border-y border-slate-200/60 dark:border-darkmode-400 pt-5 mt-5">
                                 <div class="font-medium text-base truncate pb-5">Selesaikan Pembayaran</div>
-                            @endif
-                        </div>
-                        @if($order->transaction_status === 'awaiting_payment' && $order->bank)
-                            <div class="mt-2 rounded-lg">
-                                <div class="flex items-center">
-                                    <div class="inline-flex">
+                            </div>
+                            @isset($order->bank)
+                                <div class="mt-2 rounded-lg">
+                                    <div class="flex items-center">
+                                        <div class="inline-flex">
+                                            <div class="flex items-center justify-between">
+                                                <span class="w-40 inline-flex">
+                                                    <i class="fa-solid fa-building-columns mr-2 text-slate-500"></i>Bank Tujuan
+                                                </span>:
+                                            </div>
+                                        </div>
+                                        <p class="ml-2 uppercase text-blue-500">{{ $order->bank }}</p>
+                                    </div>
+                                    <div class="flex items-center mt-2">
                                         <div class="flex items-center justify-between">
-                                            <span class="w-40 inline-flex"><i data-lucide="credit-card" class="w-4 h-4 text-slate-500 mr-2"></i>Bank Tujuan</span>:
+                                            <span class="w-40 inline-flex">
+                                                <i class="fa-solid fa-hashtag text-slate-500 mr-2"></i>Nomor VA
+                                            </span>:
+                                        </div>
+                                        <div class="relative inline-flex">
+                                            <span class="ml-2 underline decoration-solid decoration-red-400"> {{ $order->va_number }}</span>
+                                            <input id="va_number" class="hidden" value="{{ $order->va_number }}">
+                                            <button id="copy-va-number" class="text-gray-500 hover:text-gray-600 focus:outline-none ml-2">
+                                                <i class="fas fa-copy text-gray-400"></i>
+                                            </button>
                                         </div>
                                     </div>
-                                    <p class="ml-2 uppercase text-blue-500">{{ $order->bank }}</p>
-                                </div>
-                                <div class="flex items-center mt-2">
-                                    <div class="flex items-center justify-between">
-                                        <span class="w-40 inline-flex"><i data-lucide="credit-card" class="w-4 h-4 text-slate-500 mr-2"></i>Nomor VA</span>:
-                                    </div>
-                                    <span class="ml-2 underline decoration-solid decoration-red-400"> {{ $order->va_number }}</span>
-                                    <button class="relative font-bold px-2 rounded" id="copy-btn">
-                                        <i data-lucide="copy" class="w-4 h-4 text-slate-500 -mb-0.5"></i>
-                                        <span class="hidden absolute -top-10 -right-2 mt-2 py-1 px-2 bg-black opacity-50 text-white rounded" id="tooltip">Disalin!</span>
-                                    </button>
-                                </div>
-                                <div class="flex items-center mt-2">
-                                    <div class="inline-flex">
-                                        <div class="flex items-center justify-between">
-                                            <span class="w-40 inline-flex"><i data-lucide="clock" class="w-4 h-4 text-slate-500 mr-2"></i>Bayar Dalam</span>:
+                                    <div class="flex items-center mt-2">
+                                        <div class="inline-flex">
+                                            <div class="flex items-center justify-between">
+                                                <span class="w-40 inline-flex">
+                                                    <i class="fa-solid fa-hourglass-half text-slate-500 mr-2"></i>Bayar Dalam
+                                                </span>:
+                                            </div>
                                         </div>
+                                        <div class="text-blue-500 ml-2" id="countdown"></div>
                                     </div>
-                                    <div class="text-blue-500 ml-2" id="countdown"></div>
-                                </div>
-                                <div class="bg-yellow-200 rounded-md p-2 mt-2">
-                                    <span>Catatan: Perhatikan batas waktu pembayaran agar pesanan tidak dibatalkan otomatis oleh sistem.</span>
-                                </div>
-                            </div>
-                        @elseif($order->transaction_status === 'awaiting_payment' && $order->payment_code)
-                            <div class="bg-green-100 p-2 mt-3 rounded-lg">
-                                <div class="flex items-center justify-between mt-2">
-                                    <div class="inline-flex">
-                                        <i data-lucide="credit-card" class="w-4 h-4 text-slate-500 mr-2"></i>Gerai Pembayaran :
+                                    <div class="bg-yellow-200 rounded-md p-2 mt-2">
+                                        <span>Catatan: Perhatikan batas waktu pembayaran agar pesanan tidak dibatalkan otomatis oleh sistem.</span>
                                     </div>
-                                    <p class="ml-1 uppercase text-blue-500">Indomaret</p>
                                 </div>
-                                <div class="flex items-center mt-2">
-                                    <i data-lucide="activity" class="w-4 h-4 text-slate-500 mr-2"></i> Kode Pembayaran:
-                                </div>
-                                <div class="flex justify-center mt-2">{!! DNS2D::getBarcodeHTML($order->payment_code, 'QRCODE',6,6) !!}</div>
-                                <div class="flex justify-center mt-1">{{ $order->payment_code }}</div>
-                                <div class="flex items-center justify-between mt-2">
-                                    <div class="inline-flex">
-                                        <i data-lucide="calendar" class="w-4 h-4 text-slate-500 mr-2"></i>
-                                        Bayar dalam :
+                            @endisset
+                            @isset($order->payment_code)
+                                <div class="mt-2 rounded-lg">
+                                    <div class="flex items-center">
+                                        <div class="inline-flex">
+                                            <div class="flex items-center justify-between">
+                                                <span class="w-40 inline-flex">
+                                                    <i class="fa-solid fa-store text-slate-500 mr-2"></i>Gerai Pembayaran
+                                                </span>:
+                                            </div>
+                                        </div>
+                                        <p class="ml-2 uppercase text-blue-500">Indomaret</p>
                                     </div>
-                                    <div class="text-blue-500" id="countdown"></div>
-                                </div>
-                                <div class="bg-yellow-200 rounded-md p-2 mt-2">
-                                    <span>Catatan : Perhatikan batas waktu pembayaran agar pesanan tidak dibatalkan otomatis oleh sistem.</span>
-                                </div>
-                            </div>
-                        @endif
 
+                                    <div class="flex items-center mt-2">
+                                        <div class="flex items-center justify-between">
+                                            <span class="w-40 inline-flex">
+                                                <i class="fa-solid fa-hashtag text-slate-500 mr-2"></i>Kode Pembayaran
+                                            </span>:
+                                        </div>
+                                    </div>
+
+                                    <div class="w-full items-center text-center">
+                                        <div class="mt-2 flex justify-center">{!! DNS2D::getBarcodeHTML($order->payment_code, 'QRCODE',6,6) !!}</div>
+                                        <div class="relative inline-flex">
+                                            <div class="mt-1">{{ $order->payment_code }}</div>
+                                            <input id="payment_code" class="hidden" value="{{ $order->payment_code }}">
+                                            <button id="copy-payment-code" class="text-gray-500 hover:text-gray-600 focus:outline-none ml-2">
+                                                <i class="fas fa-copy text-gray-400"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-center justify-between mt-2">
+                                        <div class="inline-flex">
+                                            <i class="fa-solid fa-hourglass-half text-slate-500 mr-2"></i>
+                                            Bayar dalam :
+                                        </div>
+                                        <div class="text-blue-500" id="countdown"></div>
+                                    </div>
+                                    <div class="bg-yellow-200 rounded-md p-2 mt-2">
+                                        <span>Catatan : Perhatikan batas waktu pembayaran agar pesanan tidak dibatalkan otomatis oleh sistem.</span>
+                                    </div>
+                                </div>
+                            @endisset
+                        @endif
                     </div>
                 </div>
                 <div class="col-span-12 lg:col-span-7 2xl:col-span-8">
@@ -217,7 +317,7 @@
                             <table class="table table-striped">
                                 <thead>
                                 <tr>
-                                    <th class="whitespace-nowrap !py-5">Produk</th>
+                                    <th class="whitespace-nowrap py-5">Produk</th>
                                     <th class="whitespace-nowrap text-right">@Harga</th>
                                     <th class="whitespace-nowrap text-right">Kuantitas</th>
                                     <th class="whitespace-nowrap text-right">Subtotal</th>
@@ -247,20 +347,21 @@
                         </div>
                     </div>
                     <div class="box p-5 rounded-md mt-5">
-                        <div class="flex items-center border-b border-slate-200/60 dark:border-darkmode-400 pb-5 mb-5">
+                        <div class="flex items-center dark:border-darkmode-400">
                             <div class="font-medium text-base truncate">Detail Pengiriman</div>
                         </div>
+                        <div class="envelope-lines my-5"></div>
 
                         <div class="flex items-center mt-3">
                             <div class="flex items-center justify-between">
-                                <span class="w-40 inline-flex"><i data-lucide="user" class="w-4 h-4 text-slate-500 mr-2"></i>Nama Penerima</span>:
+                                <span class="w-40 inline-flex"><i class="fa-solid fa-people-carry-box text-slate-500 mr-2"></i>Nama Penerima</span>:
                             </div>
                             <span class="ml-2">{{ $order->customer_name }}</span>
                         </div>
 
                         <div class="flex items-center mt-3">
                             <div class="flex items-center justify-between">
-                                <span class="w-40 inline-flex"><i data-lucide="smartphone" class="w-4 h-4 text-slate-500 mr-2"></i>No Handphone</span>:
+                                <span class="w-40 inline-flex"><i class="fa-solid fa-phone-flip text-slate-500 mr-3"></i>No Handphone</span>:
                             </div>
                             <span class="ml-2">+62{{ ltrim($order->customer_phone, '0') }}</span>
                         </div>
@@ -268,10 +369,10 @@
                         <div class="lg:inline-flex lg:items-center">
                             <div class="flex items-center mt-3">
                                 <div class="flex items-center justify-between">
-                                    <span class="w-40 inline-flex"><i data-lucide="map" class="w-4 h-4 text-slate-500 mr-2"></i>Alamat Penerima</span>:
+                                    <span class="w-40 inline-flex"><i class="fa-solid fa-map-location-dot text-slate-500 mr-2.5"></i>Alamat Penerima</span>:
                                 </div>
                             </div>
-                            <div class="capitalize_address lg:-mb-3 bg-gray-200 rounded-md p-2 lg:bg-transparent lg:p-0">
+                            <div class="capitalize_address lg:-mb-3 mt-1 lg:mt-0 bg-gray-200 rounded-md p-2 lg:bg-transparent lg:p-0">
                                 {{ $order->orderAddress->detail_address }},
                                 {{ $order->orderAddress->village->name }},
                                 {{ $order->orderAddress->district->name }},
@@ -282,31 +383,44 @@
 
                         <div class="flex items-center mt-3">
                             <div class="flex items-center justify-between">
-                                <span class="w-40 inline-flex"><i data-lucide="zap" class="w-4 h-4 text-slate-500 mr-2"></i>Kurir</span>:
+                                <span class="w-40 inline-flex"><i class="fa-solid fa-truck-fast text-slate-500 mr-2"></i>Kurir</span>:
                             </div>
                             <span class="ml-2">JNE ({{ $order->orderShipping->service }})</span>
                         </div>
 
-                        <div class="flex items-center mt-3">
+                        <div class="flex items-center mt-3 mb-1">
                             <div class="flex items-center justify-between">
-                                <span class="w-40 inline-flex"><i data-lucide="calendar" class="w-4 h-4 text-slate-500 mr-2"></i>Estimasi Pengiriman</span>:
+                                <span class="w-40 inline-flex">
+                                    <i class="fa-solid fa-hourglass-start text-slate-500 w-4 h-4 mr-2 text-center"></i>Estimasi Pengiriman
+                                </span>:
                             </div>
-                            <span class="ml-2">{{ $order->orderShipping->etd }} Hari</span>
+                            @if($order->orderShipping->etd === '1-1')
+                                <span class="ml-2">1 Hari</span>
+                            @else
+                                <span class="ml-2">{{ $order->orderShipping->etd }} Hari pengiriman</span>
+                            @endif
                         </div>
 
-                        @isset($order->orderShipping->tracking_number)
-                            <div class="flex items-center mt-3">
-                                <div class="flex items-center mt-3">
-                                    <div class="flex items-center justify-between">
-                                        <span class="w-40 inline-flex"><i data-lucide="search" class="w-4 h-4 text-slate-500 mr-2"></i>Nomor Resi</span>:
-                                    </div>
-                                </div>
-                                <div class="inline-flex items-center">
-                                    <span class="w-32">{{ $order->orderShipping->tracking_number }}</span>
-                                    <i data-lucide="copy" class="w-4 h-4 text-slate-500 ml-2"></i>
-                                </div>
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center mt-3">
+                            <div class="flex items-start justify-between">
+                                <span class="w-40 inline-flex">
+                                    <i class="fa-solid fa-magnifying-glass-location text-slate-500 ml-0.5 mr-2"></i>Nomor Resi
+                                </span>:
                             </div>
-                        @endisset
+                            <div class="mt-2 sm:mt-0 xs:ml-2 flex items-center">
+                                @isset($order->orderShipping->tracking_number)
+                                    <div class="relative">
+                                        <input id="tracking_no" class="hidden" value="{{ $order->orderShipping->tracking_number }}">
+                                        <span class="w-full">{{ $order->orderShipping->tracking_number }}</span>
+                                        <button id="copy-tracking-no" class="text-gray-500 hover:text-gray-600 focus:outline-none ml-2">
+                                            <i class="fas fa-copy text-gray-400"></i>
+                                        </button>
+                                    </div>
+                                @else
+                                    <span class="w-full text-primary">Belum tersedia.</span>
+                                @endisset
+                            </div>
+                        </div>
 
                     </div>
                 </div>
@@ -381,20 +495,84 @@
 
         <script>
             $(document).ready(function () {
-                const copyBtn = $('#copy-btn');
-                const tooltip = $('#tooltip');
 
-                copyBtn.click(function () {
-                    navigator.clipboard.writeText('{{ $order->va_number }}').then(function () {
-                        tooltip.removeClass('hidden');
-                        setTimeout(function () {
-                            tooltip.addClass('hidden');
-                        }, 1500);
-                    }, function () {
-                        console.error('Gagal menyalin ke clipboard');
+                @if(session('success'))
+                // Success notification
+                    Toastify({
+                        node: $("#confirm-notification-content").clone().removeClass("hidden")[0],
+                        duration: 3000,
+                        newWindow: true,
+                        close: true,
+                        gravity: "top",
+                        position: "center",
+                        stopOnFocus: true,
+                    }).showToast();
+                @endif
+
+                $("#copy-tracking-no").click(function() {
+                    let copyText = document.getElementById("tracking_no");
+                    copyText.setSelectionRange(0, 99999); // mengatur range seleksi dari karakter 0 hingga 99999
+                    let button = this; // simpan referensi ke tombol yang diklik
+                    navigator.clipboard.writeText(copyText.value).then(function() {
+                        let tooltip = document.createElement("div");
+                        tooltip.innerHTML = "Disalin!";
+                        tooltip.classList.add("tooltip-copy");
+                        $(button).closest('div').append(tooltip);// gunakan referensi tombol untuk menambahkan tooltip
+                        setTimeout(function() {
+                            $(tooltip).fadeOut("fast", function() {
+                                $(this).remove();
+                            });
+                        }, 1000);
+                    }, function() {
+                        console.error("Tidak dapat menyalin teks");
                     });
                 });
+
+                $("#copy-payment-code").click(function() {
+                    let copyText = document.getElementById("payment_code");
+                    copyText.setSelectionRange(0, 99999); // mengatur range seleksi dari karakter 0 hingga 99999
+                    let button = this; // simpan referensi ke tombol yang diklik
+                    navigator.clipboard.writeText(copyText.value).then(function() {
+                        let tooltip = document.createElement("div");
+                        tooltip.innerHTML = "Disalin!";
+                        tooltip.classList.add("tooltip-copy");
+                        $(button).closest('div').append(tooltip);// gunakan referensi tombol untuk menambahkan tooltip
+                        setTimeout(function() {
+                            $(tooltip).fadeOut("fast", function() {
+                                $(this).remove();
+                            });
+                        }, 1000);
+                    }, function() {
+                        console.error("Tidak dapat menyalin teks");
+                    });
+                });
+
+                $("#copy-va-number").click(function() {
+                    let copyText = document.getElementById("va_number");
+                    copyText.setSelectionRange(0, 99999); // mengatur range seleksi dari karakter 0 hingga 99999
+                    let button = this; // simpan referensi ke tombol yang diklik
+                    navigator.clipboard.writeText(copyText.value).then(function() {
+                        let tooltip = document.createElement("div");
+                        tooltip.innerHTML = "Disalin!";
+                        tooltip.classList.add("tooltip-copy");
+                        $(button).closest('div').append(tooltip);// gunakan referensi tombol untuk menambahkan tooltip
+                        setTimeout(function() {
+                            $(tooltip).fadeOut("fast", function() {
+                                $(this).remove();
+                            });
+                        }, 1000);
+                    }, function() {
+                        console.error("Tidak dapat menyalin teks");
+                    });
+                });
+
                 @isset($order->transaction_expire)
+                    countExpire();
+                @endisset
+
+            });
+
+            function countExpire() {
                 // hitung countdown expire transaksi
                 const transactionExpire = new Date('<?= $order->transaction_expire ?>');
                 const countDownDate = new Date(transactionExpire).getTime();
@@ -412,8 +590,8 @@
                         countdown.html("Waktu Habis");
                     }
                 }, 1000);
-                @endisset
-            });
+            }
+
         </script>
 
     @endsection

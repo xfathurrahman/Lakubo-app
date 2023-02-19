@@ -3,13 +3,28 @@
         {{--<td class="w-10">
             <input class="form-check-input" type="checkbox">
         </td>--}}
-        <td class="w-40 !py-4"><a href="" class="underline decoration-dotted whitespace-nowrap">#{{ $order->id }}</a>
+        <td class="w-40 !py-4"><a href="{{ route('customer.order.show', $order->id) }}" class="underline decoration-dotted whitespace-nowrap">#{{ $order->id }}</a></td>
+        <td>
+            @foreach($order->orderItems as $item)
+                <div class="bg-gray-200 p-2 rounded my-1">
+                    <div class="whitespace-nowrap inline-flex items-center">
+                        <div class="w-10 h-10 image-fit zoom-in">
+                            <img data-action="zoom" alt="Product-img" class="tooltip rounded-full" src="{{ asset("storage/product-image")."/".$item-> products -> productImage -> image_path }}" title="Uploaded {{ Carbon\Carbon::parse($item -> products -> created_at)->diffForHumans() }}">
+                        </div>
+                        <div class="ml-2">
+                            {{ $item->products->name }} ({{ $item->quantity }} Item)
+                            <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5">{{ $item->products->productCategories->name }}</div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+
         </td>
         <td class="w-40">
-            <a href="" class="font-medium whitespace-nowrap">{{ $order->customer_name }}</a>
+            <a href="" class="font-medium whitespace-nowrap">{{ $order->orderItems->first()->products->stores->name }}</a>
             <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5 capitalize_address">
-                Kec.{{ $order->orderAddress->district->name }},
-                {{ str_replace('KABUPATEN ', '', $order->orderAddress->district->name) }}
+                Kec.{{ $order->orderItems->first()->products->stores->storeAddresses->district->name }},
+                {{ str_replace('KABUPATEN ', '', $order->orderItems->first()->products->stores->storeAddresses->district->name) }}
             </div>
         </td>
         <td class="text-center">
@@ -54,19 +69,11 @@
                 <div class="flex items-center justify-center whitespace-nowrap text-danger">
                     <i class="fa-regular fa-circle-xmark mr-2"></i> Dibatalkan
                 </div>
+            @else
+                <div class="flex items-center justify-center whitespace-nowrap text-yellow-500">
+                    <i class="fa-solid fa-money-bill-transfer mr-2"></i> Menunggu Pembayaran
+                </div>
             @endif
-        </td>
-        <td>
-            <div class="whitespace-nowrap">
-                @if($order->payment_type === 'bank_transfer')
-                    Bank Transfer
-                @elseif($order->payment_type === 'credit_card')
-                    Kartu Kredit
-                @elseif($order->payment_type === 'cstore')
-                    Gerai Indomaret
-                @endif
-            </div>
-            <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5">{{ Carbon\Carbon::parse($order->transaction_time)->format('d F Y (H:i)') }}</div>
         </td>
         <td class="w-40 text-right">
             <div class="pr-16 whitespace-nowrap">@currency($order->grand_total)</div>
@@ -74,7 +81,7 @@
         <td class="table-report__action">
             <div class="flex justify-center items-center">
                 <a class="flex items-center text-primary whitespace-nowrap mr-5"
-                   href="{{ route('seller.order.show', $order->id) }}"><i class="fa-solid fa-file-invoice mr-2"></i>Detail</a>
+                   href="{{ route('customer.order.show', $order->id) }}"><i class="fa-solid fa-file-invoice mr-2"></i>Detail</a>
             </div>
         </td>
     </tr>

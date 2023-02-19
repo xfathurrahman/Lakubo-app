@@ -5,7 +5,7 @@
         <div class="intro-y grid grid-cols-11 gap-5 mt-5">
             <div class="col-span-12 lg:col-span-4 2xl:col-span-3">
                 <div class="box p-5 rounded-md">
-                    <div class="flex items-center border-b border-slate-200/60 dark:border-darkmode-400 pb-5 mb-5">
+                    <div class="flex items-center tool border-b border-slate-200/60 dark:border-darkmode-400 pb-5 mb-5">
                         <div class="font-medium text-base truncate">Detail Pesanan</div>
                     </div>
                     <div class="flex items-center mt-3">
@@ -47,20 +47,6 @@
                             @endif
                         </div>
                     </div>
-                    <div class="flex items-center mt-2">
-                        <div class="inline-flex mr-2">
-                            <div class="flex items-center justify-between">
-                                <span class="w-40 inline-flex">
-                                    <i class="fa-regular fa-note-sticky mr-2 text-slate-500"></i>Catatan
-                                </span>:
-                            </div>
-                        </div>
-                        @if($order->note)
-                            <span class="bg-gray-200 text-gray-600 w-full h-auto px-2 rounded-md">{{ $order->note }}</span>
-                        @else
-                            <span class="bg-gray-200 text-gray-600 w-full px-2 rounded-md">-</span>
-                        @endif
-                    </div>
 
                     @if($order->transaction_status === 'completed')
                         @if($order->status === 'awaiting_confirm')
@@ -85,8 +71,8 @@
                             <div class="text-center mt-2">
                                 <select id="changeStatus">
                                     <option value="" disabled selected>Dikonfirmasi</option>
-                                    <option value="packing" {{ $order->status === 'packing' ? 'selected' : '' }}>Dikemas</option>
-                                    <option value="delivered" {{ $order->status === 'delivered' ? 'selected' : '' }}>Dikirim</option>
+                                    <option value="packing">Dikemas</option>
+                                    <option value="delivered">Dikirim</option>
                                 </select>
                             </div>
                         @elseif($order->status === 'packing')
@@ -100,7 +86,7 @@
                             <div class="text-center mt-2">
                                 <select id="changeStatus">
                                     <option value="" disabled selected>Dikemas</option>
-                                    <option value="delivered" {{ $order->status === 'delivered' ? 'selected' : '' }}>Dikirim</option>
+                                    <option value="delivered">Dikirim</option>
                                 </select>
                             </div>
                         @elseif($order->status === 'delivered')
@@ -115,17 +101,30 @@
                         @endif
                     @endif
 
-                    @if($order->transaction_status === 'cancel')
-                        <div class="flex items-center justify-between">
-                            <div class="inline-flex">
-                                <i class="fa-solid fa-bolt-lightning mr-2 text-slate-500"></i>
-                                Status Pesanan:
+                    @if($order->status === 'cancelled')
+                        <div class="flex items-center mt-2">
+                            <div class="inline-flex mr-2">
+                                <div class="flex items-center justify-between">
+                                    <span class="w-40 inline-flex"><i class="fa-solid fa-bolt-lightning mr-2 text-slate-500"></i>Status Pesanan</span>:
+                                </div>
                             </div>
-                            @if($order->status === 'cancelled')
-                                <span class="bg-red-400 text-white px-2 rounded-md">Pesanan Dibatalkan.</span>
-                            @endif
+                            <span class="bg-red-500 text-white px-2 rounded-md">Dibatalkan.</span>
                         </div>
                     @endif
+
+                    @isset($order->note)
+                        <div class="flex items-center mt-2">
+                            <div class="inline-flex mr-2">
+                                <div class="flex items-center justify-between">
+                                    <span class="w-40 inline-flex">
+                                        <i class="fa-regular fa-note-sticky mr-2 text-slate-500"></i>Catatan
+                                    </span>:
+                                </div>
+                            </div>
+                        </div>
+                        <textarea disabled class="mt-1 bg-gray-200 text-sm text-gray-600 w-full px-2 rounded-md">{{ $order->note }}</textarea>
+                    @endif
+
                 </div>
                 <div class="box p-5 rounded-md mt-5">
                     <div class="flex items-center border-b border-slate-200/60 dark:border-darkmode-400 pb-5 mb-5">
@@ -192,7 +191,7 @@
                         <table class="table table-striped">
                             <thead>
                             <tr>
-                                <th class="whitespace-nowrap !py-5">Produk</th>
+                                <th class="whitespace-nowrap py-5">Produk</th>
                                 <th class="whitespace-nowrap text-right">@Harga</th>
                                 <th class="whitespace-nowrap text-right">Kuantitas</th>
                                 <th class="whitespace-nowrap text-right">Subtotal</th>
@@ -222,9 +221,10 @@
                     </div>
                 </div>
                 <div class="box p-5 rounded-md mt-5">
-                    <div class="flex items-center border-b border-slate-200/60 dark:border-darkmode-400 pb-5 mb-5">
+                    <div class="flex items-center dark:border-darkmode-400">
                         <div class="font-medium text-base truncate">Detail Pengiriman</div>
                     </div>
+                    <div class="envelope-lines my-5"></div>
 
                     <div class="flex items-center mt-3">
                         <div class="flex items-center justify-between">
@@ -246,7 +246,7 @@
                                 <span class="w-40 inline-flex"><i class="fa-solid fa-map-location-dot text-slate-500 mr-2.5"></i>Alamat Penerima</span>:
                             </div>
                         </div>
-                        <div class="capitalize_address lg:-mb-3 bg-gray-200 rounded-md p-2 lg:bg-transparent lg:p-0">
+                        <div class="capitalize_address lg:-mb-3 mt-1 lg:mt-0 bg-gray-200 rounded-md p-2 lg:bg-transparent lg:p-0">
                             {{ $order->orderAddress->detail_address }},
                             {{ $order->orderAddress->village->name }},
                             {{ $order->orderAddress->district->name }},
@@ -271,27 +271,37 @@
                         @if($order->orderShipping->etd === '1-1')
                             <span class="ml-2">1 Hari</span>
                         @else
-                            <span class="ml-2">{{ $order->orderShipping->etd }} Hari</span>
+                            <span class="ml-2">{{ $order->orderShipping->etd }} Hari pengiriman</span>
                         @endif
                     </div>
 
                     @if($order->status === 'delivered')
-                        <div class="flex items-center">
-                            <div class="flex items-center mr-2">
-                                <div class="flex items-center justify-between">
-                                    <span class="w-40 inline-flex textsss"><i class="fa-solid fa-magnifying-glass-location text-slate-500 mr-2"></i>Nomor Resi</span>:
+                        <div class="flex flex-col md:flex-row items-start md:items-center mt-3 lg:mt-0">
+                            <div class="flex items-start justify-between">
+                                <span class="w-40 inline-flex"><i class="fa-solid fa-magnifying-glass-location text-slate-500 ml-0.5 mr-2"></i>Nomor Resi</span>:
+                            </div>
+                            <div class="mt-2 md:mt-0 md:ml-2 flex items-center">
+                                <div class="relative">
+                                    <input type="text"
+                                           id="tracking_no"
+                                           class="form-control w-full md:w-32"
+                                           placeholder="Masukan Resi"
+                                           value="{{ $order->orderShipping->tracking_number }}"
+                                           data-parsley-required
+                                           data-parsley-errors-container="#parsley-input-resi-msg"
+                                           data-parsley-required-message="Anda belum memasukan Nomor Resi.">
+                                    <button id="copy-tracking-no" class="absolute right-2 top-2 text-gray-500 hover:text-gray-600 focus:outline-none">
+                                        <i class="fas fa-copy text-gray-400"></i>
+                                    </button>
                                 </div>
+                                <button id="save-resi-btn" class="btn btn-primary px-2 ml-2">
+                                    <i class="fa-solid fa-check-to-slot mr-2"></i> Simpan
+                                </button>
                             </div>
-                            <div class="inline-flex intro-y items-center">
-                                <input type="number" id="tracking_no" class="form-control w-full md:w-32" placeholder="Masukan Resi" value="{{ $order->orderShipping->tracking_number }}">
-                            </div>
-                            <button id="save-resi-btn" class="btn btn-primary px-2 ml-2">
-                                <i class="fa-solid fa-check-to-slot mr-2"></i> Simpan
-                            </button>
-                            <div class="text-slate-500 ml-2 hidden" id="save-resi-response"></div>
+                            <div class="text-slate-500 lg:ml-2 hidden" id="save-resi-response"></div>
+                            <label class="text-red-400 lg:ml-2" id="parsley-input-resi-msg"></label>
                         </div>
                     @endif
-
                 </div>
             </div>
         </div>

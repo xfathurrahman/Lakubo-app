@@ -6,3 +6,23 @@
 .capitalize_address::first-line {
     text-transform: capitalize;
 }
+
+.envelope-lines {
+    height: 3px;
+    width: 100%;
+    background-position-x: -30px;
+    background-size: 116px 3px;
+    background-image: repeating-linear-gradient(45deg,#6fa6d6,#6fa6d6 33px,transparent 0,transparent 41px,#f18d9b 0,#f18d9b 74px,transparent 0,transparent 82px);
+}
+
+.tooltip-copy {
+    position: absolute;
+    top: -35px;
+    right: 0;
+    z-index: 1;
+    background-color: #8e929a;
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 12px;
+}

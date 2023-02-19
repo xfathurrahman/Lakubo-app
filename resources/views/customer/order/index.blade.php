@@ -1,133 +1,190 @@
 <x-app-layout>
 
+    <style>
+        .select2.select2-container {
+            width: 200px !important;
+        }
+
+        .select2.select2-container .select2-selection {
+            box-shadow: 0 3px 20px #0000000b;
+            position: relative;
+            border-radius: 0.375rem;
+            border-color: transparent;
+            --tw-bg-opacity: 1;
+            background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            height: 38px;
+            margin-bottom: 5px;
+            outline: none !important;
+            transition: all .15s ease-in-out;
+        }
+
+        .select2.select2-container .select2-selection .select2-selection__arrow {
+            background: #f8f8f8;
+            border-left: 1px solid #ccc;
+            -webkit-border-radius: 0 3px 3px 0;
+            -moz-border-radius: 0 3px 3px 0;
+            border-radius: 0 3px 3px 0;
+            height: 38px;
+            width: 33px;
+        }
+
+        .select2.select2-container .select2-selection .select2-selection__rendered {
+            color: #333;
+            line-height: 38px;
+            padding-right: 33px;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 26px;
+            position: absolute;
+            top: -1px;
+            right: -1px;
+            width: 20px;
+        }
+
+        .select2-container .select2-dropdown .select2-results ul {
+            background: #fff;
+            border: 1px solid #cecece;
+        }
+    </style>
+
     @section('breadcrumbs')
-        {{ Breadcrumbs::render('my-order') }}
+        {{ Breadcrumbs::render('orders') }}
     @endsection
 
-        @if(auth()->user()->orders)
-            <div class="grid grid-cols-12 gap-6 mt-5">
-                <!-- BEGIN: Data List -->
-                <div class="intro-y col-span-12 overflow-auto lg:overflow-visible">
-                    <table class="table table-report -mt-2">
-                        <thead>
-                        @if ($orders->count())
-                            <tr>
-                                <th class="text-center">PESANAN</th>
-                                <th class="text-center whitespace-nowrap">TOTAL TAGIHAN</th>
-                                <th class="text-center whitespace-nowrap">STATUS</th>
-                                <th class="text-center whitespace-nowrap">AKSI</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($orders as $order)
-                            <tr class="intro-x">
-                                <td class="text-left px-0">
-                                    <div class="my-2 inline-flex">
-                                        <div class="text-lg text-red-400">{{ $order->orderItems->first()->products->stores->name }}</div>
-                                        <a href="#" class="btn ml-2 h-6"><i class="fa-solid fa-store mr-2"></i>Kunjungi</a>
-                                    </div>
-                                    @foreach($order->orderItems as $item)
-                                    <div class="block ml-3">
-                                        <div class="inline-flex">
-                                            <div class="w-10 h-10 image-fit zoom-in">
-                                                <img data-action="zoom" alt="Product-img" class="tooltip rounded-full" src="{{ asset("storage/product-image")."/".$item-> products -> productImage -> image_path }}" title="Uploaded {{ Carbon\Carbon::parse($item -> products -> created_at)->diffForHumans() }}">
-                                            </div>
-                                            <div class="flex flex-col h-10 justify-center align-middle ml-5">
-                                                {{ $item -> products -> name }} ({{ $item -> quantity }} Item)
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @endforeach
-                                </td>
-                                <td class="text-center">@currency($order-> shipping + $order-> total_price)</td>
-                                <td class="w-40">
-                                    <div class="flex items-center justify-center text-success"> <i data-lucide="check-square" class="w-4 h-4 mr-2"></i> {{ $order-> status }} </div>
-                                </td>
-                                <td class="table-report__action w-56">
-                                    <div class="flex justify-center items-center">
-                                        <a class="flex items-center mr-3" href="{{ route('customer.order.show', $order->id) }}"> <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Detail </a>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforeach
-                        @else
-                            <tr>
-                                <td colspan="6">
-                                    <img class="max-w-3xl max-h-52 mx-auto" src="{{ asset('assets/images/app/not-found-store.png') }}" alt="iklan kosong">
-                                    <p class="text-center text-dark py-5">Pesanan anda masih kosong.</p>
-                                </td>
-                            </tr>
-                        @endif
-                        </tbody>
-                    </table>
-                </div>
-                <!-- END: Data List -->
-                <!-- BEGIN: Pagination -->
+    <!-- BEGIN: Reject Notification Content -->
+    <div id="confirm-notification-content" class="toastify-content hidden flex">
+        <i class="text-success" data-lucide="check-circle"></i>
+        <div class="ml-4 mr-4">
+            <div class="font-medium">Terimakasih Telah Berbelanja di Lakubo!</div>
+            <div class="text-slate-500 mt-1">Tempatnya jual - beli UMKM boyolali.</div>
+        </div>
+    </div>
+    <!-- END: Reject Notification Content -->
 
-                <!-- END: Pagination -->
+    <!-- BEGIN: Content -->
+    <div class="content">
+        <div class="grid grid-cols-12 gap-6 mt-5">
+            <div class="intro-y col-span-12 flex justify-between items-center mt-2">
+                <div class="flex w-full sm:w-auto">
+                    <div class="w-48 relative text-slate-500 mr-2">
+                        <input type="text" class="input form-control rounded w-48 box pr-10" placeholder="Cari...">
+                        <i class="w-4 h-4 absolute mt-2.5 mb-auto inset-y-0 mr-3 right-0" data-lucide="search"></i>
+                    </div>
+                    <select id="filterStatus">
+                        <option value="">Semua</option>
+                        <option value="awaiting_payment">Menunggu Pembayaran</option>
+                        <option value="awaiting_confirm">Menunggu Konfirmasi</option>
+                        <option value="confirmed">Dikonfirmasi</option>
+                        <option value="packing">Dikemas</option>
+                        <option value="delivered">Dikirim</option>
+                        <option value="completed">Selesai</option>
+                        <option value="cancelled">Dibatalkan</option>
+                    </select>
+                </div>
+                <div class="dropdown ml-2 md:ml-auto">
+                    <button class="dropdown-toggle btn px-2 box" aria-expanded="false" data-tw-toggle="dropdown">
+                      <span class="w-5 h-5 flex items-center justify-center">
+                        <i class="w-4 h-4" data-lucide="plus"></i>
+                      </span>
+                    </button>
+                    <div class="dropdown-menu w-40">
+                        <ul class="dropdown-content">
+                            <li>
+                                <a href="" class="dropdown-item">
+                                    <i data-lucide="file-text" class="w-4 h-4 mr-2"></i> Export Excel
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-        @else
-            <div class="intro-y col-span-11 alert alert-primary alert-dismissible show flex items-center mb-6" role="alert">
-                <span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="info" data-lucide="info" class="lucide lucide-info w-4 h-4 mr-2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg></span>
-                <span> Anda belum membuka lapak UMKM,
-                    <a
-                        data-tw-toggle="modal"
-                        data-tw-target="#create-store-form"
-                        href="#"
-                        class="dropdown-item hover:bg-white/5 underline">klik disini
-                    </a>
-                </span>&nbsp;untuk mendaftar.
-                <button type="button" class="btn-close text-white" data-tw-dismiss="alert" aria-label="Close"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="x" data-lucide="x" class="lucide lucide-x w-4 h-4"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> </button>
+
+            @if(auth()->user()->orders) @endif
+            <!-- BEGIN: Data List -->
+            <div class="intro-y col-span-12 overflow-auto 2xl:overflow-visible">
+                <table id="order-table" class="table table-report -mt-2">
+                    <thead>
+                    <tr>
+                        <th class="whitespace-nowrap">ID Pesanan</th>
+                        <th class="whitespace-nowrap">Pesanan</th>
+                        <th class="whitespace-nowrap">Pelapak</th>
+                        <th class="text-center whitespace-nowrap">Status</th>
+                        <th class="text-center whitespace-nowrap">
+                            <div class="pr-16">Tagihan</div>
+                        </th>
+                        <th class="text-center whitespace-nowrap">
+                            <div class="pr-4">Aksi</div>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @include('customer.order.partials.orders_table', ['orders' => $orders])
+                    </tbody>
+                </table>
             </div>
-        @endif
+            <!-- END: Data List -->
+
+        </div>
+    </div>
+    <!-- END: Content -->
 
     @section('script')
-            {{--<script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="config('midtrans.client_key')"></script>
 
-            <script type="text/javascript">
-                // For example trigger on button clicked, or any time you need
-                var payButton = document.getElementById('pay-button');
-                payButton.addEventListener('click', function () {
-                    // Trigger snap popup. @TODO: Replace TRANSACTION_TOKEN_HERE with your transaction token
-                    window.snap.pay('<?=$snapToken?>');
-                    // customer will be redirected after completing payment pop-up
+        <script>
+            $(document).ready(function() {
+
+                @foreach($orders as $order)
+                $("#copy-tracking-no-" + {{ $order->id }}).click(function() {
+                    var copyText = document.getElementById("tracking_no-{{ $order->id }}");
+                    copyText.setSelectionRange(0, 99999); // mengatur range seleksi dari karakter 0 hingga 99999
+                    var button = this; // simpan referensi ke tombol yang diklik
+                    navigator.clipboard.writeText(copyText.value).then(function() {
+                        var tooltip = document.createElement("div");
+                        tooltip.innerHTML = "Disalin!";
+                        tooltip.classList.add("tooltip-copy");
+                        $(button).closest('div').append(tooltip);// gunakan referensi tombol untuk menambahkan tooltip
+                        setTimeout(function() {
+                            $(tooltip).fadeOut("fast", function() {
+                                $(this).remove();
+                            });
+                        }, 1000);
+                    }, function() {
+                        console.error("Tidak dapat menyalin teks");
+                    });
                 });
-            </script>--}}
+                @endforeach
 
-            {{--<script>
-                document.getElementById('pay-button').onclick = function (){
+                $('#filterStatus').select2({
+                    minimumResultsForSearch: Infinity,
+                });
 
-                    var resultType = document.getElementById('result-type');
-                    var resultType = document.getElementById('result-data');
-
-                    function changeResult(type,data) {
-                        $("#result-type").val(type);
-                        $("#result-data").val(JSON.stringify(data));
-                    }
-
-                    snap.pay('<?=$snapToken?>', {
-                        onSuccess: function (result) {
-                            changeResult('success', result);
-                            console.log(result.status_message);
-                            console.log(result);
-                            $("#payment-form".submit());
+                $('#filterStatus').change(function() {
+                    let selectedStatus = $(this).val();
+                    $.ajax({
+                        url: '{{ route('customer.orders') }}',
+                        data: {status: selectedStatus},
+                        success: function(result) {
+                            $('#order-table tbody').html(result);
                         },
-                        onPending: function (result) {
-                            changeResult('pending', result);
-                            console.log(result.status_message);
-                            console.log(result);
-                            $("#payment-form".submit());
-                        },
-                        onError: function (result) {
-                            changeResult('error', result);
-                            console.log(result.status_message);
-                            console.log(result);
-                            $("#payment-form".submit());
-                        },
-                    })
+                    });
+                });
+                $('input[type="text"]').on('keyup', searchTable);
+            });
 
-                }
-            </script>--}}
+            function searchTable() {
+                // Ambil nilai input pencarian
+                var input = $(this).val().toLowerCase();
+                // Iterasi setiap baris pada tbody tabel
+                $('#order-table tr').filter(function () {
+                    // Jika nilai pencarian tidak ditemukan pada baris ini, sembunyikan baris ini
+                    $(this).toggle($(this).text().toLowerCase().indexOf(input) > -1);
+                });
+            }
+        </script>
+
     @endsection
 
 </x-app-layout>

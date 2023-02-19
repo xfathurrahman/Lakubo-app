@@ -19,12 +19,31 @@ use Midtrans\Transaction;
 
 class OrderController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $orders = Order::with('orderItems')->where('user_id', Auth::id())
-            ->orderBy('created_at', 'DESC')
-            ->get();
+        // Mengambil status yang dipilih dari request, atau defaultnya adalah null
+        $status = $request->input('status', null);
 
+        // Membuat query builder untuk model Order dengan filter status
+        $query = Order::with('orderItems')->where('user_id', Auth::id())
+            ->whereNotNull('status')
+            ->orderBy('created_at', 'desc');
+
+        if ($status) {
+            $query->where('status', $status);
+        }
+
+        // Mengambil data orders yang sudah difilter
+        $orders = $query->get();
+
+        // Jika request merupakan ajax, maka hanya akan merespon dengan data tabel saja
+        if ($request->ajax()) {
+            return view('customer.order.partials.orders_table', [
+                'orders' => $orders,
+            ])->render();
+        }
+
+        // Jika request bukan ajax, maka akan merespon dengan halaman lengkap
         return view('customer.order.index',[
             'orders' => $orders,
         ]);
@@ -75,4 +94,12 @@ class OrderController extends Controller
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
+
+    public function confirmOrder($order_id) {
+        $order = Order::find($order_id);
+        $order -> status = 'completed';
+        $order -> update();
+        return redirect()->route('customer.orders')->with('success');
+    }
+
 }

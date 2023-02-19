@@ -19,7 +19,9 @@ class SellerOrderController extends Controller
         $status = $request->input('status', null);
 
         // Membuat query builder untuk model Order dengan filter status
-        $query = Order::where('store_id', $seller_id)->whereNotNull('status');
+        $query = Order::where('store_id', $seller_id)
+            ->whereNotNull('status')
+            ->orderBy('created_at', 'asc');
 
         if ($status) {
             $query->where('status', $status);

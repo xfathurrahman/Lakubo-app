@@ -25,6 +25,7 @@
                                 <span id="parsley-msg" class="inline-flex float-right text-red-400"></span>
                                 <input type="text"
                                        id="reject-msg"
+                                       name="rejectMsg"
                                        class="form-control w-full mt-2"
                                        placeholder="Masukan alasan pembatalan"
                                        data-parsley-minlength="15"
@@ -65,7 +66,7 @@
         <!-- END: Notification Content -->
 
         <div id="detail-order">
-            @include('seller.orders.partials.detail_order', ['order' => $order]);
+            @include('seller.orders.partials.detail_order', ['order' => $order])
         </div>
 
         @section('script')
@@ -74,9 +75,9 @@
                 const updateResiUrl = "{{ route('seller.order.update.resi', $order->id) }}";
                 const updateStatusUrl = "{{ route('seller.order.update.status', $order->id) }}";
                 const updateConfirmUrl = "{{ route('seller.order.confirm', $order->id) }}";
-                const scriptElement = $("<script>").attr("src", "{{ asset('js/detail-order.js') }}");
+                const scriptElement = $("<script>").attr("src", "{{ asset('js/seller/detail-order.js') }}");
             </script>
-            <script src="{{ asset('js/detail-order.js') }}"></script>
+            <script src="{{ asset('js/seller/detail-order.js') }}"></script>
         @endsection
 
 </x-app-layout>

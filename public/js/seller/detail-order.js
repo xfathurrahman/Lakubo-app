@@ -4,20 +4,26 @@ $(document).ready(function () {
         minimumResultsForSearch: Infinity,
     });
 
-    // copas
-    const copyBtn = $('#copy-btn');
-    const tooltip = $('#tooltip');
-
-    copyBtn.click(function () {
-        navigator.clipboard.writeText('{{ $order->va_number }}').then(function () {
-            tooltip.removeClass('hidden');
-            setTimeout(function () {
-                tooltip.addClass('hidden');
-            }, 1500);
-        }, function () {
-            console.error('Gagal menyalin ke clipboard');
+    $("#copy-tracking-no").click(function() {
+        var copyText = document.getElementById("tracking_no");
+        copyText.setSelectionRange(0, 99999); // mengatur range seleksi dari karakter 0 hingga 99999
+        var button = this; // simpan referensi ke tombol yang diklik
+        navigator.clipboard.writeText(copyText.value).then(function() {
+            var tooltip = document.createElement("div");
+            tooltip.innerHTML = "Disalin!";
+            tooltip.classList.add("tooltip-copy");
+            $(button).parent().append(tooltip); // gunakan referensi tombol untuk menambahkan tooltip
+            setTimeout(function() {
+                $(tooltip).fadeOut("fast", function() {
+                    $(this).remove();
+                });
+            }, 1000);
+        }, function() {
+            console.error("Tidak dapat menyalin teks");
         });
     });
+
+
 
     // hitung countdown expire transaksi
     const countDownDate = new Date(transactionExpire).getTime();
@@ -57,7 +63,7 @@ $(document).ready(function () {
                     newWindow: true,
                     close: true,
                     gravity: "top",
-                    position: "right",
+                    position: "center",
                     stopOnFocus: true,
                 }).showToast();
                 // Refresh a specific div
@@ -125,7 +131,7 @@ $(document).ready(function () {
                     newWindow: true,
                     close: true,
                     gravity: "top",
-                    position: "right",
+                    position: "center",
                     stopOnFocus: true,
                 }).showToast();
                 // Refresh a specific div
@@ -147,25 +153,29 @@ $(document).ready(function () {
 
     saveResiBtn.click(function () {
         let trackingNo = $('#tracking_no').val();
-        console.log(trackingNo);
-        $.ajax({
-            type: 'PUT',
-            url: updateResiUrl,
-            data: { trackingNo: trackingNo },
-            success: function (response) {
-                saveResiResponse.removeClass('hidden').text(response.success);
-                // Menampilkan pesan selama 3 detik
-                setTimeout(function() {
-                    saveResiResponse.addClass('hidden');
-                }, 2000);
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                saveResiResponse.removeClass('hidden').text("Terjadi kesalahan.");
-                setTimeout(function() {
-                    saveResiResponse.addClass('hidden');
-                }, 2000);
-            }
-        });
+        let isValid = $('#tracking_no').parsley().validate();
+
+        if (isValid === true) {
+            $.ajax({
+                type: 'PUT',
+                url: updateResiUrl,
+                data: { trackingNo: trackingNo },
+                success: function (response) {
+                    saveResiResponse.removeClass('hidden').text(response.success);
+                    // Menampilkan pesan selama 3 detik
+                    setTimeout(function() {
+                        saveResiResponse.addClass('hidden');
+                    }, 2000);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    saveResiResponse.removeClass('hidden').text("Terjadi kesalahan.");
+                    setTimeout(function() {
+                        saveResiResponse.addClass('hidden');
+                    }, 2000);
+                }
+            });
+        }
+
     });
 
 });
