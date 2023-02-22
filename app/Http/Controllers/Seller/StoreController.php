@@ -24,7 +24,11 @@ class StoreController extends Controller
         $districts = District::where('regency_id', $storeAddresses->regency_id)->get();
         $villages = Village::where('district_id', $storeAddresses->district_id)->get();
 
-        return view('seller.store.index', compact('storeCategories','districts','villages','storeAddresses'));
+        $countSuccessOrders = auth()->user()->stores->with(['orders' => function ($query) {
+            $query->where('status', 'completed');
+        }])->get()->pluck('orders')->flatten()->count();
+
+        return view('seller.store.index', compact('storeCategories','districts','villages','storeAddresses','countSuccessOrders'));
     }
 
     /**

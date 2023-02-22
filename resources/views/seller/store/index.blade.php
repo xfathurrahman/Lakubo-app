@@ -34,11 +34,13 @@
                             <div class="text-slate-500">Produk</div>
                         </div>
                         <div class="text-center rounded-md w-20 py-3">
-                            <div class="font-medium text-primary text-xl">0</div>
+                            <div class="font-medium text-primary text-xl">{{ count(auth()->user()->stores->orders) }}</div>
                             <div class="text-slate-500">Pesanan</div>
                         </div>
                         <div class="text-center rounded-md w-20 py-3">
-                            <div class="font-medium text-primary text-xl">0</div>
+                            <div class="font-medium text-primary text-xl">
+                                {{ $countSuccessOrders }}
+                            </div>
                             <div class="text-slate-500">Penjualan</div>
                         </div>
                     </div>

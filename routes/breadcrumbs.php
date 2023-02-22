@@ -118,15 +118,28 @@ Breadcrumbs::for('profile', function (BreadcrumbTrail $trail) {
 
 // Pesanan saya
 Breadcrumbs::for('my-order', function (BreadcrumbTrail $trail) {
-    $trail->parent('Homepage');
+    $trail->parent('profile');
     $trail->push('Pesanan Saya', route('customer.orders'));
 });
 
 // Pesanan saya / detail
 Breadcrumbs::for('my-order-detail', function (BreadcrumbTrail $trail) {
     $trail->parent('my-order');
-    $trail->push('Detail Pesanan', url('#'));
+    $trail->push('Detail Pesanan ', url('#'));
 });
+
+// Transaksi saya
+Breadcrumbs::for('transaction', function (BreadcrumbTrail $trail) {
+    $trail->parent('profile');
+    $trail->push('Transaksi Saya', route('customer.transaction.index'));
+});
+
+// Penarikan Dana
+Breadcrumbs::for('withdraw', function (BreadcrumbTrail $trail) {
+    $trail->parent('profile');
+    $trail->push('Penarikan Dana', route('customer.withdraw.index'));
+});
+
 
 /*END: Customer Page*/
 

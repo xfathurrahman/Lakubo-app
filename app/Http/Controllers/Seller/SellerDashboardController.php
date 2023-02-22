@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Seller;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
+use App\Models\Product;
 use App\Models\Store;
 use Illuminate\Http\Request;
 
@@ -11,13 +13,27 @@ class SellerDashboardController extends Controller
     public function index()
     {
 
-        $store = Store::where('user_id', auth()->user()->id)->get();
-
-        if ($store == ''){
+        if (is_null(auth()->user()->stores)){
             return back()->with('error','Anda belum memiliki Lapak UMKM');
         }
 
-        return view('seller.index');
+        $countSuccessOrders = auth()->user()->stores->with(['orders' => function ($query) {
+            $query->where('status', 'completed');
+        }])->get()->pluck('orders')->flatten()->count();
+
+        $countNewOrders = auth()->user()->stores->with(['orders' => function ($query) {
+            $query->where('status', 'awaiting_confirm');
+        }])->get()->pluck('orders')->flatten()->count();
+
+        $topProductSales = Product::where('store_id', auth()->user()->stores->id)->take(4)->get();
+        $transactionSuccess = Order::where('store_id', auth()->user()->stores->id)->where('status', 'completed')->take(12)->get();
+
+        return view('seller.index')->with([
+            'countSuccessOrders' => $countSuccessOrders,
+            'countNewOrders' => $countNewOrders,
+            'topProductSales' => $topProductSales,
+            'transactionSuccess' => $transactionSuccess,
+        ]);
     }
 
     public function create()

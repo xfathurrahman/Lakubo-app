@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Seller;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
-use App\Models\OrderShipping;
+use App\Models\User;
+use App\Models\UserTransaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class SellerOrderController extends Controller
 {
@@ -69,6 +69,17 @@ class SellerOrderController extends Controller
         $order->status = 'cancelled';
         $order->reject_msg = $reject_msg;
         $order->update();
+
+        $user = User::where('id',$order->user_id)->first();
+        $user->balance += $order->grand_total;
+        $user->update();
+
+        UserTransaction::create([
+            'user_id' => $order->user_id,
+            'order_id' => $order_id,
+            'amount' => $order->grand_total,
+            'payment_type' => 'refund',
+        ]);
 
         return redirect()->route('seller.orders.index')->with('success', $order_id );
     }

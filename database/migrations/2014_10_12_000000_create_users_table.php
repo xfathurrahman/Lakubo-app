@@ -21,8 +21,11 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('bank_name')->nullable();
+            $table->string('bank_account_name')->nullable();
+            $table->string('bank_account_number')->nullable();
+            $table->bigInteger('balance')->default(0);
             $table->text('profile_photo_path')->nullable();
-            $table->boolean('has_store')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });
@@ -38,6 +41,7 @@ return new class extends Migration
             $table->string('detail_address');
             $table->timestamps();
         });
+
     }
 
     public function down()

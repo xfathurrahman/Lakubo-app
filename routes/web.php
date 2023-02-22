@@ -5,14 +5,14 @@ use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\AdminStoreController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\PermissionController;
-use App\Http\Controllers\Admin\ProductCategoryController;
 use App\Http\Controllers\Admin\RoleController;
-use App\Http\Controllers\Admin\StoreCategoryController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Customer\CartController;
 use App\Http\Controllers\Customer\CheckoutController;
 use App\Http\Controllers\Customer\CustomerController;
+use App\Http\Controllers\Customer\CustomerTransactionController;
 use App\Http\Controllers\Customer\OrderController;
+use App\Http\Controllers\Customer\CustomerWithdrawalController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\IndoRegionController;
 use App\Http\Controllers\ProfileController;
@@ -109,8 +109,8 @@ Route::middleware(['auth', 'verified', 'role:customer'])->name('customer.')->pre
     Route::post('/delete-cart-item',[CartController::class,'deleteCartItem'])->name('delete.cartItem');
     Route::put('/update-cart-item',[CartController::class,'updateCartItem'])->name('update.cartItem');
     // CHECKOUT
-    Route::get('/checkout/{store_id}', [CheckoutController::class,'index'])->name('checkout.index');
-    Route::post('/checkout/{store_id}', [CheckoutController::class,'store'])->name('checkout.store');
+    Route::get('/checkout/{cart_id}', [CheckoutController::class,'index'])->name('checkout.index');
+    Route::post('/checkout/{cart_id}', [CheckoutController::class,'store'])->name('checkout.store');
     Route::post('/get-shipping-data', [CheckoutController::class,'store'])->name('shipping.data');
     Route::put('/update-shipping',[CheckoutController::class,'updateShipping'])->name('update.shipping');
     Route::post('/get-snap-token',[CheckoutController::class,'getSnapToken'])->name('snap.token');
@@ -119,11 +119,17 @@ Route::middleware(['auth', 'verified', 'role:customer'])->name('customer.')->pre
     Route::get('/order/detail/{order_id}', [OrderController::class, 'show'])->name('order.show');
     Route::put('/order/detail/{order_id}', [OrderController::class, 'update'])->name('order.update');
     Route::put('/order/detail/confirm/{order_id}', [OrderController::class, 'confirmOrder'])->name('order.confirm');
+    // WD
+    Route::get('/withdraw', [CustomerWithdrawalController::class, 'index'])->name('withdraw.index');
+    Route::post('/withdraw/store', [CustomerWithdrawalController::class, 'store'])->name('withdraw.store');
+    // TRANSACTION
+    Route::get('/transaction', [CustomerTransactionController::class, 'index'])->name('transaction.index');
 });
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::patch('/profile/update-bank', [ProfileController::class, 'updateBankAccount'])->name('profile.update.bank');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 

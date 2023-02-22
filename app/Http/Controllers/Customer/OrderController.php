@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\UserTransaction;
 use Carbon\Carbon;
 use DateInterval;
 use DateTime;
@@ -87,6 +88,15 @@ class OrderController extends Controller
             $order->bank = $bank;
             $order->pdf_url = $json->pdf_url ?? null;
             $order->update();
+
+            UserTransaction::create([
+                'user_id' => $order->user_id,
+                'order_id' => $order->id,
+                'amount' => $order->grand_total,
+                'payment_method' => $json->payment_type ?? null,
+                'payment_type' => 'purchase',
+            ]);
+
             return redirect()->back()->with('success', 'Pembayaran berhasil');
         } catch (Exception $e) {
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());

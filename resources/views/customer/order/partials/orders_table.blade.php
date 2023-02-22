@@ -1,30 +1,69 @@
 @foreach($orders as $order)
     <tr class="intro-x order-row">
+        <style>
+            label:after {
+                content: '\f103';
+                font-family: "Font Awesome 5 Free", serif;
+                font-weight: 900;
+                color: #000000;
+                position: absolute;
+                top: 0.5rem;
+                right: 1em;
+            }
+
+            input:checked + label:after {
+                content: "\f102";
+                font-family: "Font Awesome 5 Free", serif;
+                font-weight: 900;
+                color: #000000;
+                line-height: .8em;
+            }
+
+            .accordion__content{
+                max-height: 0;
+                transition: all 0.4s cubic-bezier(0.865, 0.14, 0.095, 0.87);
+            }
+            input[name='panel']:checked ~ .accordion__content {
+                /* Get this as close to what height you expect */
+                max-height: 50em;
+            }
+        </style>
         {{--<td class="w-10">
             <input class="form-check-input" type="checkbox">
         </td>--}}
         <td class="w-40 !py-4"><a href="{{ route('customer.order.show', $order->id) }}" class="underline decoration-dotted whitespace-nowrap">#{{ $order->id }}</a></td>
         <td>
-            @foreach($order->orderItems as $item)
-                <div class="bg-gray-200 p-2 rounded my-1">
-                    <div class="whitespace-nowrap inline-flex items-center">
-                        <div class="w-10 h-10 image-fit zoom-in">
-                            <img data-action="zoom" alt="Product-img" class="tooltip rounded-full" src="{{ asset("storage/product-image")."/".$item-> products -> productImage -> image_path }}" title="Uploaded {{ Carbon\Carbon::parse($item -> products -> created_at)->diffForHumans() }}">
-                        </div>
-                        <div class="ml-2">
-                            {{ $item->products->name }} ({{ $item->quantity }} Item)
-                            <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5">{{ $item->products->productCategories->name }}</div>
-                        </div>
+            <div class="accordion flex flex-col items-center justify-center">
+                <!--  Panel 1  -->
+                <div class="w-full">
+                    <input type="checkbox" name="panel" id="panel-{{ $order->id }}" class="hidden">
+                    <label for="panel-{{ $order->id }}" class="relative block">
+                        <span class="font-medium whitespace-nowrap">
+                            <a href="#" class="text-primary">
+                                {{ $order->orderItems->first()->products->stores->name }}
+                            </a>
+                        </span>
+                        <p class="text-slate-500 text-xs whitespace-nowrap mt-0.5 capitalize_address">
+                            Kec.{{ $order->orderItems->first()->products->stores->storeAddresses->district->name }},
+                            {{ str_replace('KABUPATEN ', '', $order->orderItems->first()->products->stores->storeAddresses->district->name) }}
+                        </p>
+                    </label>
+                    <div class="accordion__content overflow-hidden">
+                        @foreach($order->orderItems as $item)
+                            <div class="bg-gray-200 p-2 rounded my-1">
+                                <div class="whitespace-nowrap inline-flex items-center">
+                                    <div class="w-10 h-10 image-fit zoom-in">
+                                        <img data-action="zoom" alt="Product-img" class="tooltip rounded-full" src="{{ asset("storage/product-image")."/".$item-> products -> productImage -> image_path }}" title="Uploaded {{ Carbon\Carbon::parse($item -> products -> created_at)->diffForHumans() }}">
+                                    </div>
+                                    <div class="ml-2">
+                                        {{ $item->products->name }} ({{ $item->quantity }} Item)
+                                        <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5">{{ $item->products->productCategories->name }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
-            @endforeach
-
-        </td>
-        <td class="w-40">
-            <a href="" class="font-medium whitespace-nowrap">{{ $order->orderItems->first()->products->stores->name }}</a>
-            <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5 capitalize_address">
-                Kec.{{ $order->orderItems->first()->products->stores->storeAddresses->district->name }},
-                {{ str_replace('KABUPATEN ', '', $order->orderItems->first()->products->stores->storeAddresses->district->name) }}
             </div>
         </td>
         <td class="text-center">

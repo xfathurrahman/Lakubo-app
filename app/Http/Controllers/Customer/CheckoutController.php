@@ -11,7 +11,9 @@ use App\Models\OrderItem;
 use App\Models\OrderShipping;
 use App\Models\Product;
 use App\Models\UserAddress;
+use App\Models\UserTransaction;
 use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -21,54 +23,45 @@ use Midtrans\Snap;
 
 class CheckoutController extends Controller
 {
-    public function index($store_id) {
+    public function index($cart_id) {
 
-        $cart = $this->getCartItems($store_id);
-        $services  = $this->getShippingCost($cart);
-        return view('home.pages.checkout', [
-            'cart' => $cart,
-            'services' => $services,
-        ]);
-    }
+        if ($cart_id)
+        {
+            $cart = Cart::with('cartItems')->where('user_id', Auth::id())->where('id', $cart_id)->first();
+            $services  = $this->getShippingCost($cart);
 
-    public function getCartItems($store_id) {
-        $cart = Cart::with('cartItems')->where('user_id', Auth::id())->where('store_id', $store_id)->first();
-        if (!$cart || $cart->cartItems->count() < 1) {
-            session()->flash('error', 'Anda belum bisa checkout, Anda dialihkan ke halaman keranjang.');
-            return redirect('customer/cart');
+            return view('home.pages.checkout', [
+                'cart' => $cart,
+                'services' => $services,
+            ]);
         }
-        return $cart;
+
+        session()->flash('error', 'Anda belum memilih produk untuk di checkout, Anda dialihkan ke halaman keranjang.');
+        return redirect()->route('customer.cart.index');
     }
 
-    public function updateShipping(Request $request)
-    {
+    public function updateShipping(Request $request) {
         $cart_id = $request->input('cart_id');
         $shipping_cost = $request->input('shipping_cost');
-
         if(Cart::where('id', $cart_id)->where('user_id', Auth::id())->exists()) {
             $cart = Cart::where('id', $cart_id)->where('user_id', Auth::id())->first();
             $cart -> shipping_cost = $shipping_cost;
             $cart->update();
-
             return response()->json(['status' => "Biaya pengiriman di ubah"]);
         }
     }
 
-    public function getShippingCost($cart)
-    {
+    public function getShippingCost($cart) {
         $totalWeight = 0;
         $subtotalWeight = 0;
         foreach ($cart->cartItems as $item) {
             $subtotalWeight += $item -> products -> weight * $item->product_qty;
         }
         $totalWeight += $subtotalWeight;
-
         $userAddress = UserAddress::find(Auth::id());
         $userRegency = str_replace(array('KABUPATEN ', 'KOTA '), '', $userAddress->regency->name);
-
         $regency = RajaOngkir::kota()->search($userRegency)->get();
         $regency_id = $regency[0]['city_id'];
-
         $cost = RajaOngkir::ongkosKirim([
             'origin'        => 91,              // ID kota/kabupaten asal // 91 adalah Boyolali
             'destination'   => $regency_id,     // ID kota/kabupaten tujuan
@@ -87,10 +80,7 @@ class CheckoutController extends Controller
         return $services;
     }
 
-    /**
-     * @throws Exception
-     */
-    public function store(Request $request, $store_id)
+    public function store(Request $request, $cart_id)
     {
         // ambil data dari inputan
         $note = $request->input('note');
@@ -110,8 +100,8 @@ class CheckoutController extends Controller
             $orderExists = DB::table('orders')->where('id', $order_id)->exists();
         } while ($orderExists);
 
+        $cart = Cart::with('cartItems')->where('user_id', Auth::id())->where('id', $cart_id)->first();
         // hitung total harga
-        $cart = $this->getCartItems($store_id);
         $totalPrice = 0;
         $subtotalPrice = 0;
         foreach ($cart->cartItems as $item) {
@@ -140,7 +130,7 @@ class CheckoutController extends Controller
             $order = new Order;
             $order->id = $order_id;
             $order->user_id = Auth::id();
-            $order->store_id = $store_id;
+            $order->store_id = $cart->store_id;
             $order->snap_token = $snapToken;
             $order->customer_name = Auth::user()->name;
             $order->customer_phone = Auth::user()->phone;

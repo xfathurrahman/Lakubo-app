@@ -9,6 +9,10 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
+/**
+ * @method static where(string $string, int|string|null $id)
+ * @method static find(int|string|null $id)
+ */
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
@@ -30,9 +34,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected $appends = [
-        'profile_photo_url',
-    ];
 
     public function stores()
     {
@@ -57,6 +58,11 @@ class User extends Authenticatable
     public function orders()
     {
         return $this->hasManyThrough(Order::class,OrderItem::class,'order_id','user_id', 'id');
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(UserTransaction::class,'user_id', 'id');
     }
 
 }

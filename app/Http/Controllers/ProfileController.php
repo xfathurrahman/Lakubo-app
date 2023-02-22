@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BankUpdateRequest;
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\District;
 use App\Models\Province;
 use App\Models\Regency;
+use App\Models\User;
 use App\Models\UserAddress;
 use App\Models\Village;
 use Illuminate\Http\Request;
@@ -54,6 +56,24 @@ class ProfileController extends Controller
         $request->user()->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
+    }
+
+    public function updateBankAccount(BankUpdateRequest $request)
+    {
+        $request->user()->fill($request->validated());
+
+        $bank_info = User::where('id', Auth::id())->first();
+
+        $bank_acc_name = $request->input('bank_acc_name');
+        $bank_acc_number = $request->input('bank_acc_number');
+        $bank_name = $request->input('bank_name');
+
+        $bank_info -> bank_account_name = $bank_acc_name;
+        $bank_info -> bank_account_number = $bank_acc_number;
+        $bank_info -> bank_name = $bank_name;
+        $bank_info -> update();
+
+        return back()->with('status', 'bank-updated');
     }
 
     public function destroy(Request $request)

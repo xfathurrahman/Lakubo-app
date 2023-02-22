@@ -43,7 +43,7 @@
                     <li>
                         <a href="{{ route('seller.products.index') }}" class="side-menu {{ Request::is('seller/products') ? 'side-menu--active' : '' }}">
                             <div class="side-menu__icon"> <i data-lucide="package"></i> </div>
-                            <div class="side-menu__title">Produk</div>
+                            <div class="side-menu__title">Produk Saya</div>
                         </a>
                     </li>
                     <li>
@@ -146,16 +146,27 @@
                 @endif
             @else
                 <li>
-                    <a href="{{ url('profile') }}" class="side-menu {{ Request::is('profile') ? 'side-menu--active' : '' }}">
-                        <div class="side-menu__icon"> <i data-lucide="user"></i> </div>
-                        <div class="side-menu__title"> Akun Saya</div>
-                    </a>
-                </li>
-
-                <li>
                     <a href="{{ route('customer.orders') }}" class="side-menu {{ Request::is('customer/order*') ? 'side-menu--active' : '' }}">
                         <div class="side-menu__icon"> <i data-lucide="shopping-bag"></i> </div>
-                        <div class="side-menu__title"> Pesanan Saya </div>
+                        <div class="side-menu__title"> Pesanan </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('customer.transaction.index') }}" class="side-menu {{ Request::is('customer/transaction*') ? 'side-menu--active' : '' }}">
+                        <div class="side-menu__icon"> <i data-lucide="zap"></i> </div>
+                        <div class="side-menu__title"> Transaksi </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('customer.withdraw.index') }}" class="side-menu {{ Request::is('customer/withdraw*') ? 'side-menu--active' : '' }}">
+                        <div class="side-menu__icon"> <i data-lucide="wallet"></i> </div>
+                        <div class="side-menu__title"> Penarikan Dana </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url('profile') }}" class="side-menu {{ Request::is('profile') ? 'side-menu--active' : '' }}">
+                        <div class="side-menu__icon"> <i data-lucide="user"></i> </div>
+                        <div class="side-menu__title"> Akun </div>
                     </a>
                 </li>
             @endif
@@ -173,3 +184,4 @@
     </div>
     <!-- END: Content -->
 </div>
+

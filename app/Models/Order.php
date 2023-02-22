@@ -18,6 +18,11 @@ class Order extends Model
 
     protected $guarded = [];
 
+    public function stores()
+    {
+        return $this->belongsTo(Store::class,'store_id', 'id');
+    }
+
     public function orderItems(): HasMany
     {
         return $this->hasMany( OrderItem::class,'order_id','id');
