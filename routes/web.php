@@ -50,7 +50,8 @@ Route::middleware(['auth', 'verified', 'role:admin'])->name('admin.')->prefix('a
     /*-----------------------------------------------Lapak-------------------------------------------------------*/
     Route::get('/stores',[AdminStoreController::class,'index'])->name('stores');
     /*-----------------------------------------------Kategori-------------------------------------------------------*/
-    Route::get('/categories',[CategoryController::class,'index'])->name('categories');
+    Route::get('/categories/products',[CategoryController::class,'getProduct'])->name('categories.products');
+    Route::get('/categories/stores',[CategoryController::class,'getStore'])->name('categories.stores');
     Route::post('/categories/products/create',[CategoryController::class,'storeCateProd'])->name('product.category.store');
     Route::post('/categories/stores/create',[CategoryController::class,'storeCateStore'])->name('store.category.store');
     Route::put('/categories/products/{id}/edit',[CategoryController::class,'updateCateProd'])->name('product.category.update');
@@ -129,6 +130,9 @@ Route::middleware(['auth', 'verified', 'role:customer'])->name('customer.')->pre
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile/update-photo', [ProfileController::class, 'updatePhoto'])->name('profile.update.photo');
+    Route::get('/profile/get-session-message', [ProfileController::class, 'getSessionMessage']);
+    Route::post('/profile/destroy-photo', [ProfileController::class, 'destroyPhoto'])->name('profile.destroy.photo');
     Route::patch('/profile/update-bank', [ProfileController::class, 'updateBankAccount'])->name('profile.update.bank');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });

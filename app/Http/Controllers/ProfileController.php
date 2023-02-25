@@ -13,7 +13,6 @@ use App\Models\Village;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Session;
 
 class ProfileController extends Controller
 {
@@ -75,6 +74,51 @@ class ProfileController extends Controller
 
         return back()->with('status', 'bank-updated');
     }
+
+    public function updatePhoto(Request $request)
+    {
+
+        $user = User::find(Auth::id());
+
+        if($request->hasFile('profile_photo'))
+        {
+            if ($user->profile_photo_path) {
+
+                $path = public_path('storage/profile-photos/'.$user->profile_photo_path);
+                if (file_exists($path)) {
+                    unlink($path);
+                }
+            }
+            $file = $request ->file('profile_photo');
+            $image_name = preg_replace('~[\\\\/:*?"<>|& ]~', '', $file->getClientOriginalName());
+            $fileName = date('mYdhs').'_'.$image_name;
+            $path   = public_path('/storage/profile-photos');
+            $file  -> move($path, $fileName);
+            $user->profile_photo_path = $fileName;
+            $user->update();
+
+            return response()->json(['message' => 'Success to update profile photo']);
+        }
+        return response()->json(['message' => 'Failed to update profile photo']);
+    }
+
+    public function destroyPhoto()
+    {
+        $user = User::find(Auth::id());
+        if ($user->profile_photo_path)
+        {
+            $path = public_path('storage/profile-photos/'.$user->profile_photo_path);
+            if (file_exists($path)) {
+                unlink($path);
+            }
+            $user -> profile_photo_path = null;
+            $user -> save();
+
+            return response()->json(['message' => 'Success to delete profile photo']);
+        }
+        return response()->json(['message' => 'Photo already Empty']);
+    }
+
 
     public function destroy(Request $request)
     {

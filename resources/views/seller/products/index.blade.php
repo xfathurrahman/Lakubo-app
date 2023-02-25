@@ -91,7 +91,11 @@
                                 </td>
                                 <td>
                                     <a href="" class="font-medium whitespace-nowrap">{{ $product->name }}</a>
-                                    <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5">{{ $product->productCategories->name }}</div>
+                                    @isset($product->productCategories)
+                                        <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5">{{ $product->productCategories->name }}</div>
+                                    @else
+                                        <div class="text-red-500 text-xs whitespace-nowrap mt-0.5">Belum dikategorikan</div>
+                                    @endif
                                 </td>
                                 <td class="text-center">{{ $product-> quantity }}</td>
                                 <td class="text-center">{{ $product-> weight }} Gram</td>

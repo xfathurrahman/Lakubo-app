@@ -1,1 +1,10 @@
 @import "./_tailwind.css";
+
+@layer utilities {
+    .container-lg {
+    @container;
+        max-width: 1024px;
+        padding-right: 2rem;
+        padding-left: 2rem;
+    }
+}

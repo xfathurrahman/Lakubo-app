@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CreateCategoryRequest;
+use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\ProductImage;
@@ -11,140 +13,126 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Intervention\Image\Facades\Image;
 
 class CategoryController extends Controller
 {
-    public function index()
+    public function getProduct()
     {
-        $productCategories = ProductCategory::all();
-        $storeCategories = StoreCategory::all();
+        $productCategories = ProductCategory::orderBy('created_at', 'desc')->paginate(8);
 
-        return view('admin.category.index', compact('productCategories','storeCategories'));
+        return view('admin.category.products.index', compact('productCategories'));
     }
 
-    public function storeCateProd(Request $request)
+    public function getStore()
     {
-        Validator::make($request->all(), [
-            'name'=>'required|string',
-            'image' => 'required',
-        ])->validate();
+        $storeCategories = StoreCategory::orderBy('created_at', 'desc')->paginate(8);
 
-        if ($request->hasfile('image')) {
-            $files = $request->file('image');
-            foreach($files as $file) {
-                $image  = new ProductCategory;
-                $name   = time().'.'.$file->getClientOriginalName();
-                $path   = public_path('/storage/product-category');
-                $file  -> move($path, $name);
-                $image -> name = $request->name;
-                $image -> image_path=$name;
-                $image -> save();
-            }
-            return redirect('admin/categories')->with("success", "Kategori Produk berhasi ditambahkan");
+        return view('admin.category.stores.index', compact('storeCategories'));
+    }
+
+    public function storeCateProd(CreateCategoryRequest $request)
+    {
+        if ($request->hasFile('image')) {
+            $image = new ProductCategory;
+            $name = time() . '.' . $request->image->getClientOriginalExtension();
+            $path = public_path('storage/product-category/'.$name);
+            Image::make($request->image->getRealPath())->resize(350, 350)->save($path);
+            $image->name = $request->name;
+            $image->image_path = $name;
+            $image->save();
+            return back()->with("success", "Kategori Produk berhasil ditambahkan");
         }
     }
 
-    public function storeCateStore(Request $request)
+    public function storeCateStore(CreateCategoryRequest $request)
     {
-        Validator::make($request->all(), [
-            'nama_kategori'=>'required|string',
-            'gambar_kategori_lapak' => 'required',
-        ])->validate();
-
-        if ($request->hasfile('gambar_kategori_lapak')) {
-            $files = $request->file('gambar_kategori_lapak');
-            foreach($files as $file) {
-                $image  = new StoreCategory;
-                $name   = time().'.'.$file->getClientOriginalName();
-                $path   = public_path('/storage/store-category');
-                $file  -> move($path, $name);
-                $image -> name = $request-> nama_kategori;
-                $image -> image_path = $name;
-                $image -> save();
-            }
-            return redirect('admin/categories')->with("success", "Kategori Lapak berhasi ditambahkan");
+        if ($request->hasFile('image')) {
+            $image  = new StoreCategory;
+            $name   = time().'.'.$request->image->getClientOriginalExtension();
+            $path   = public_path('storage/store-category/'.$name);
+            Image::make($request->image->getRealPath())->resize(350, 350)->save($path);
+            $image -> name = $request->name;
+            $image -> image_path = $name;
+            $image -> save();
+            return back()->with("success", "Kategori Lapak berhasil ditambahkan");
         }
     }
 
-    public function updateCateProd(Request $request, $id)
+    public function updateCateProd(UpdateCategoryRequest $request, $id)
     {
-        $data = $request->all();
-        Validator::make($request->all(), [
-            'name'=>'required|string',
-        ])->validate();
-        $category = ProductCategory::findOrFail($id);
-        if($request -> hasFile('image'))
-        {
-            $path = public_path('storage/product-category/'.$category->image_path);
-            if (file_exists($path)) {
-                unlink($path);
-            }
-            $file = $request ->file('image');
-            $ext = $file->getClientOriginalName();
-            $fileName = time().".".$ext;
-            $path = public_path('/storage/product-category');
-            $file->move($path, $fileName);
-            $category->image_path = $fileName;
+        $prod_cate = ProductCategory::find($id);
+
+        if (!$prod_cate) {
+            return redirect()->back()->with('error', 'Kategori produk tidak ditemukan.');
         }
-        $category->name = $request->input('name');
-        $category->update();
-        return redirect('admin/categories')->with("success", "Kategori Produk berhasi diubah");
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $name = time().'.'.$image->getClientOriginalExtension();
+            $path = public_path('storage/product-category/'.$name);
+            Image::make($image->getRealPath())->resize(350, 350)->save($path);
+            if ($prod_cate->image_path) {
+                Storage::delete('public/product-category/'.$prod_cate->image_path);
+            }
+            $prod_cate->image_path = $name;
+        }
+        $prod_cate->name = $request->name;
+        $prod_cate->save();
+        return back()->with("success", "Kategori produk berhasil diubah.");
     }
 
-    public function updateCateStore(Request $request, $id)
+
+
+    public function updateCateStore(UpdateCategoryRequest $request, $id)
     {
-        $data = $request->all();
-        Validator::make($request->all(), [
-            'name'=>'required|string',
-        ])->validate();
-        $category = StoreCategory::findOrFail($id);
-        if($request -> hasFile('image'))
-        {
-            if (file_exists(public_path('storage/store-category/'.$category->image_path))) {
-                unlink(public_path('storage/store-category/'.$category->image_path));
-            }
-            $file = $request ->file('image');
-            $ext = $file->getClientOriginalName();
-            $fileName = time().".".$ext;
-            $path = public_path('/storage/store-category');
-            $file->move($path, $fileName);
-            $category->image_path = $fileName;
+        $store_cate = StoreCategory::find($id);
+
+        if (!$store_cate) {
+            return redirect()->back()->with('error', 'Kategori Lapak tidak ditemukan.');
         }
-        $category->name = $request->input('name');
-        $category->update();
-        return redirect('admin/categories')->with("success", "Kategori Lapak berhasi diubah");
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $name = time().'.'.$image->getClientOriginalExtension();
+            $path = public_path('storage/store-category/'.$name);
+            Image::make($image->getRealPath())->resize(350, 350)->save($path);
+            if ($store_cate->image_path) {
+                Storage::delete('public/store-category/'.$store_cate->image_path);
+            }
+            $store_cate->image_path = $name;
+        }
+        $store_cate->name = $request->name;
+        $store_cate->save();
+        return back()->with("success", "Kategori Lapak berhasil diubah.");
     }
 
     public function deleteCateProd($id)
     {
         $prod_cate = ProductCategory::find($id);
-        $product = Product::where('category_id',$id)->first();
-
         if ($prod_cate)
         {
-            foreach ( $product->productImages as $image)
-            {
-                $prod_img_path = public_path('storage/product-image/'.$image->image_path);
-                if (file_exists($prod_img_path)) {
-                    unlink($prod_img_path);
-                }
-            }
             $path = public_path('storage/product-category/'.$prod_cate->image_path);
             if (file_exists($path)) {
                 unlink($path);
             }
-            $product->productImages()->delete();
-            $product->delete();
             $prod_cate->delete();
             return back()->with('success', 'Kategori Produk berhasil dihapus.');
         }
-        return back()->with('error', 'kategori id tidak ditemukan.');
+        return back()->with('error', 'kategori Produk tidak ditemukan.');
     }
 
     public function deleteCateStore($id)
     {
-        StoreCategory::findOrFail($id)->delete();
-        return back()->with('success', 'Kategori Lapak di hapus.');
+        $store_cate = StoreCategory::find($id);
+        if ($store_cate)
+        {
+            $path = public_path('storage/store-category/'.$store_cate->image_path);
+            if (file_exists($path)) {
+                unlink($path);
+            }
+            $store_cate->delete();
+            return back()->with('success', 'Kategori Lapak berhasil dihapus.');
+        }
+        return back()->with('error', 'kategori Lapak tidak ditemukan.');
     }
 
 }

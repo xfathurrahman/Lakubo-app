@@ -46,7 +46,7 @@
     background: rgb(var(--color-primary));
     height: 30px;
     width: 30px;
-    padding-top: 2.5px;
+    padding-top: 3px;
     justify-content: center;
     align-items: center;
 }
@@ -57,7 +57,7 @@
     background: rgb(250, 112, 112);
     height: 30px;
     width: 30px;
-    padding-top: 2.5px;
+    padding-top: 3px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -69,7 +69,6 @@
 
 .carousel-product .tag-img {
     height: 20px;
-    background-image: url("http://127.0.0.1:8000/assets/images/app/tagbgred.png");
     background-position: right bottom;
     background-repeat: no-repeat;
     background-size: cover;
@@ -158,15 +157,16 @@
     height: 20px;
     width: 101px;
     position: absolute;
-    top: 82%;
-    left: 28%;
-    transform: translateX(-50%,-50%);
+    top: calc(84% - 10px);
+    left: 60%;
+    transform: translateX(-50%);
     overflow: hidden;
 }
 
 .owner-name:before {
     content: attr(data-hover-before);
-    transform: translateX(-50%,-50%);
+    transform: translate(0);
+    color: #ff6b6b;
     left: 10%;
     top: 10%;
     position: absolute;
@@ -175,7 +175,6 @@
 
 .owner-name:after {
     content: attr(data-hover-after);
-    transform: translateX(-50%,-50%);
     position: absolute;
     top: 100%;
     left: 10%;

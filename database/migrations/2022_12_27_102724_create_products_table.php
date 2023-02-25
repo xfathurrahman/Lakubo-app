@@ -20,7 +20,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('store_id');
             $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
-            $table->unsignedBigInteger('category_id');
+            $table->unsignedBigInteger('category_id')->default(0)->nullable();
             $table->foreign('category_id')->references('id')->on('product_categories')->onDelete('cascade');
             $table->string('name');
             $table->bigInteger('price');

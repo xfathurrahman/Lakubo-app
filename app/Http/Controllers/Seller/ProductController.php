@@ -42,7 +42,7 @@ class ProductController extends Controller
         $request->validated();
 
         $product  = new Product;
-        $product -> name = $data['name'];
+        $product -> name = $data['product_name'];
         $product -> price = $data['price'];
         $product -> category_id = $data['kategori'];
         $product -> description =  $data['description'];
@@ -65,7 +65,7 @@ class ProductController extends Controller
             }
         }
 
-        if ($request->get('action') == 'save_and_new') {
+        if ($request->get('action') === 'save_and_new') {
             return redirect('seller/products/create')->with("success", "Produk berhasil ditambahkan");
         }
 
@@ -96,7 +96,7 @@ class ProductController extends Controller
         $data = $request->all();
 
         Validator::make($request->all(), [
-            'name'=>'required|string|max:120',
+            'product_name'=>'required|string|max:120',
             'kategori'=>'required',
             'price'=>'required|max:10',
             'quantity'=>'required|max:7',
@@ -127,7 +127,7 @@ class ProductController extends Controller
                 }
             }
 
-            $product -> name = $data['name'];
+            $product -> name = $data['product_name'];
             $product -> price = $data['price'];
             $product -> category_id = $data['kategori'];
             $product -> description =  $data['description'];

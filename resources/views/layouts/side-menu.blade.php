@@ -41,7 +41,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('seller.products.index') }}" class="side-menu {{ Request::is('seller/products') ? 'side-menu--active' : '' }}">
+                        <a href="{{ route('seller.products.index') }}" class="side-menu {{ Request::is('seller/products*') ? 'side-menu--active' : '' }}">
                             <div class="side-menu__icon"> <i data-lucide="package"></i> </div>
                             <div class="side-menu__title">Produk Saya</div>
                         </a>
@@ -86,13 +86,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('admin.categories') }}" class="side-menu {{ Request::is('admin/categories') ? 'side-menu--active' : '' }}">
-                            <div class="side-menu__icon"> <i data-lucide="package"></i> </div>
-                            <div class="side-menu__title">Kategori</div>
-                        </a>
-                    </li>
-                    {{--<li>
-                        <a href="#" class="side-menu {{ Request::is('admin/categories/*') ? 'side-menu--active' : '' }}">
+                        <a href="#" class="side-menu">
                             <div class="side-menu__icon"> <i data-lucide="tag"></i> </div>
                             <div class="side-menu__title">
                                 Kelola Kategori
@@ -101,19 +95,19 @@
                         </a>
                         <ul>
                             <li>
-                                <a href="{{ route('admin.product.categories') }}" class="side-menu {{ Request::is('admin/categories/products') ? 'side-menu--active' : '' }}">
+                                <a href="{{ route('admin.categories.products') }}" class="side-menu {{ Request::is('admin/categories/products') ? 'side-menu--active' : '' }}">
                                     <div class="side-menu__icon"> <i data-lucide="zap"></i> </div>
                                     <div class="side-menu__title"> Produk </div>
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ route('admin.store.categories') }}" class="side-menu {{ Request::is('admin/categories/stores') ? 'side-menu--active' : '' }}">
+                                <a href="{{ route('admin.categories.stores') }}" class="side-menu {{ Request::is('admin/categories/stores') ? 'side-menu--active' : '' }}">
                                     <div class="side-menu__icon"> <i data-lucide="zap"></i> </div>
                                     <div class="side-menu__title"> Lapak </div>
                                 </a>
                             </li>
                         </ul>
-                    </li>--}}
+                    </li>
                     <li>
                         <a href="#" class="side-menu {{ Request::is('admin/manage/*') ? 'side-menu--active' : '' }}">
                             <div class="side-menu__icon"> <i data-lucide="users"></i> </div>

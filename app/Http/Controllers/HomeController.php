@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
-    public function index()
+    public function index(): Factory|View|Application
     {
         $products = Product::orderBy('created_at', 'DESC')->get();
         $categories = ProductCategory::orderBy('id', 'asc')->get();
@@ -25,23 +25,25 @@ class HomeController extends Controller
         return view('home.pages.index', compact('products','categories'));
     }
 
-    public function getProduct($id)
+    public function getProduct($id): Factory|View|Application
     {
         $product = Product::find($id);
+        $images = ProductImage::where('product_id',$id)->orderBy('id','asc')->get();
+        $province = ucwords(strtolower(Province::find('33')->name));
+        $regency = ucwords(strtolower(Regency::find('3309')->name));
+        $district = ucwords(strtolower(District::where('regency_id', $product->stores->storeAddresses->regency_id )->first()->name));
+        $village = ucwords(strtolower(Village::where('district_id', $product->stores->storeAddresses->district_id)->first()->name));
+        $detail_address = ucwords(strtolower($product->stores->storeAddresses->detail_address));
 
-        $images = ProductImage::where('product_id',$id)
-            ->orderBy('id','asc')
-            ->get();
-
-        $province = Province::find('33');
-        $regency = Regency::find('3309');
-        $district = District::where('regency_id', $product->stores->storeAddresses->regency_id )->first();
-        $village = Village::where('district_id', $product->stores->storeAddresses->district_id)->first();
-
-        return view('home.pages.product-detail', compact
-        (
-            'product','images', 'province', 'regency', 'district', 'village'
-        ));
+        return view('home.pages.product-detail', [
+            'product' => $product,
+            'images' => $images,
+            'province' => $province,
+            'regency' => $regency,
+            'district' => $district,
+            'village' => $village,
+            'detail_address' => $detail_address,
+        ]);
     }
 
 }

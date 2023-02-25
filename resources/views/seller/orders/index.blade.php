@@ -64,68 +64,66 @@
         <!-- END: Reject Notification Content -->
 
     <!-- BEGIN: Content -->
-    <div class="content">
-        <div class="grid grid-cols-12 gap-6 mt-5">
-            <div class="intro-y col-span-12 flex justify-between items-center mt-2">
-                <div class="flex w-full sm:w-auto">
-                    <div class="w-48 relative text-slate-500 mr-2">
-                        <input type="text" class="input form-control rounded w-48 box pr-10" placeholder="Cari...">
-                        <i class="w-4 h-4 absolute mt-2.5 mb-auto inset-y-0 mr-3 right-0" data-lucide="search"></i>
-                    </div>
-                    <select id="filterStatus">
-                        <option value="">Semua</option>
-                        <option value="awaiting_payment">Menunggu Pembayaran</option>
-                        <option value="awaiting_confirm">Menunggu Konfirmasi</option>
-                        <option value="confirmed">Dikonfirmasi</option>
-                        <option value="packing">Dikemas</option>
-                        <option value="delivered">Dikirim</option>
-                        <option value="completed">Selesai</option>
-                        <option value="cancelled">Dibatalkan</option>
-                    </select>
+    <div class="grid grid-cols-12 gap-6 mt-5">
+        <div class="intro-y col-span-12 flex justify-between items-center mt-2">
+            <div class="flex w-full sm:w-auto">
+                <div class="w-48 relative text-slate-500 mr-2">
+                    <input type="text" class="input form-control rounded w-48 box pr-10" placeholder="Cari...">
+                    <i class="w-4 h-4 absolute mt-2.5 mb-auto inset-y-0 mr-3 right-0" data-lucide="search"></i>
                 </div>
-                <div class="dropdown ml-2 md:ml-auto">
-                    <button class="dropdown-toggle btn px-2 box" aria-expanded="false" data-tw-toggle="dropdown">
+                <select id="filterStatus">
+                    <option value="">Semua</option>
+                    <option value="awaiting_payment">Menunggu Pembayaran</option>
+                    <option value="awaiting_confirm">Menunggu Konfirmasi</option>
+                    <option value="confirmed">Dikonfirmasi</option>
+                    <option value="packing">Dikemas</option>
+                    <option value="delivered">Dikirim</option>
+                    <option value="completed">Selesai</option>
+                    <option value="cancelled">Dibatalkan</option>
+                </select>
+            </div>
+            <div class="dropdown ml-2 md:ml-auto">
+                <button class="dropdown-toggle btn px-2 box" aria-expanded="false" data-tw-toggle="dropdown">
                       <span class="w-5 h-5 flex items-center justify-center">
                         <i class="w-4 h-4" data-lucide="plus"></i>
                       </span>
-                    </button>
-                    <div class="dropdown-menu w-40">
-                        <ul class="dropdown-content">
-                            <li>
-                                <a href="" class="dropdown-item">
-                                    <i data-lucide="file-text" class="w-4 h-4 mr-2"></i> Export Excel
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+                </button>
+                <div class="dropdown-menu w-40">
+                    <ul class="dropdown-content">
+                        <li>
+                            <a href="" class="dropdown-item">
+                                <i data-lucide="file-text" class="w-4 h-4 mr-2"></i> Export Excel
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
-
-            <!-- BEGIN: Data List -->
-            <div class="intro-y col-span-12 overflow-auto 2xl:overflow-visible">
-                <table id="order-table" class="table table-report -mt-2">
-                    <thead>
-                    <tr>
-                        {{--<th class="whitespace-nowrap">
-                            <input class="form-check-input" type="checkbox">
-                        </th>--}}
-                        <th class="whitespace-nowrap">ID Pesanan</th>
-                        <th class="whitespace-nowrap">Pelanggan</th>
-                        <th class="text-center whitespace-nowrap">Status</th>
-                        <th class="whitespace-nowrap">Pembayaran</th>
-                        <th class="text-right whitespace-nowrap">
-                            <div class="pr-16">Tagihan</div>
-                        </th>
-                        <th class="text-center whitespace-nowrap">Aksi</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        @include('seller.orders.partials.orders_table', ['orders' => $orders])
-                    </tbody>
-                </table>
-            </div>
-            <!-- END: Data List -->
         </div>
+
+        <!-- BEGIN: Data List -->
+        <div class="intro-y col-span-12 overflow-auto 2xl:overflow-visible">
+            <table id="order-table" class="table table-report -mt-2">
+                <thead>
+                <tr>
+                    {{--<th class="whitespace-nowrap">
+                        <input class="form-check-input" type="checkbox">
+                    </th>--}}
+                    <th class="whitespace-nowrap">ID Pesanan</th>
+                    <th class="whitespace-nowrap">Pelanggan</th>
+                    <th class="text-center whitespace-nowrap">Status</th>
+                    <th class="whitespace-nowrap">Pembayaran</th>
+                    <th class="text-right whitespace-nowrap">
+                        <div class="pr-16">Tagihan</div>
+                    </th>
+                    <th class="text-center whitespace-nowrap">Aksi</th>
+                </tr>
+                </thead>
+                <tbody>
+                @include('seller.orders.partials.orders_table', ['orders' => $orders])
+                </tbody>
+            </table>
+        </div>
+        <!-- END: Data List -->
     </div>
     <!-- END: Content -->
 

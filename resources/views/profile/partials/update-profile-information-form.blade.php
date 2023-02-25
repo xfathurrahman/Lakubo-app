@@ -46,7 +46,7 @@
                                             </label>
                                             <select id="selectProvince" name="provinsi" class="js-states form-control" required>
                                                 @foreach( $provinces as $provinsi )
-                                                    @if($provinsi -> id == $userAddresses->province_id)
+                                                    @if($provinsi -> id === $userAddresses->province_id)
                                                         <option selected value="{{ $provinsi-> id }}">{{ $provinsi->name }}</option>
                                                     @else
                                                         <option value="{{ $provinsi -> id }}">{{ $provinsi -> name }}</option>
@@ -60,7 +60,7 @@
                                             </label>
                                             <select id="selectRegency" name="kabupaten" class="w-full form-control" required>
                                                 @foreach( $regencies as $regency )
-                                                    @if($regency -> id == $userAddresses->regency_id)
+                                                    @if($regency -> id === $userAddresses->regency_id)
                                                         <option selected value="{{ $regency-> id }}">{{ $regency->name }}</option>
                                                     @else
                                                         <option value="{{ $regency -> id }}">{{ $regency -> name }}</option>
@@ -74,7 +74,7 @@
                                             </label>
                                             <select name="kecamatan" id="selectDistrict" class="w-full form-control" required>
                                                 @foreach( $districts as $district )
-                                                    @if($district -> id == $userAddresses->district_id)
+                                                    @if($district -> id === $userAddresses->district_id)
                                                         <option selected value="{{ $district-> id }}">{{ $district->name }}</option>
                                                     @else
                                                         <option value="{{ $district -> id }}">{{ $district -> name }}</option>
@@ -88,7 +88,7 @@
                                             </label>
                                             <select name="desa" id="selectVillage" class="w-full form-control">
                                                 @foreach( $villages as $village )
-                                                    @if($village -> id == $userAddresses->village_id)
+                                                    @if($village -> id === $userAddresses->village_id)
                                                         <option selected value="{{ $village-> id }}">{{ $village->name }}</option>
                                                     @else
                                                         <option value="{{ $village -> id }}">{{ $village -> name }}</option>
@@ -121,13 +121,23 @@
                             </div>
                             <div class="w-52 mx-auto xl:mr-0 xl:ml-6">
                                 <div class="border-2 border-dashed shadow-sm border-slate-200/60 dark:border-darkmode-400 rounded-md p-5">
-                                    <div class="h-40 relative image-fit cursor-pointer zoom-in mx-auto">
-                                        <img class="rounded-md" alt="Midone - HTML Admin Template" src="{{ asset('assets/images/profile-13.jpg') }}">
-                                        <div title="Remove this profile photo?" class="tooltip w-5 h-5 flex items-center justify-center absolute rounded-full text-white bg-danger right-0 top-0 -mr-2 -mt-2"> <i data-lucide="x" class="w-4 h-4"></i> </div>
+                                    <div class="h-40 relative mx-auto">
+                                        <div id="loading-bg" class="absolute inset-0 bg-white/40 -mb-2 hidden"></div> <!-- layer background putih dengan opacity 20% -->
+                                        @if(auth()->user()->profile_photo_path)
+                                            <img id="preview-photo" class="rounded-md" alt="Profile-photo-preview" src="{{ asset('storage/profile-photos/'. $user->profile_photo_path) }}">
+                                        @else
+                                            <img id="preview-photo" class="rounded-md" alt="Profile-photo-preview" src="https://ui-avatars.com/api/?size=100&name={{ Auth::user()->name }}">
+                                        @endif
+                                        <div id="reset-photo" title="Remove this profile photo?" class="tooltip w-5 h-5 flex items-center justify-center absolute rounded-full text-white bg-danger right-0 top-0 -mr-2 -mt-2 hidden">
+                                            <i data-lucide="x" class="w-4 h-4"></i>
+                                        </div>
+                                        <span id="loading-icon" class="hidden">
+                                            <i class="text-success absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8" data-loading-icon="three-dots"></i>
+                                        </span>
                                     </div>
                                     <div class="mx-auto cursor-pointer relative mt-5">
-                                        <button type="button" class="btn btn-primary w-full">Change Photo</button>
-                                        <input type="file" class="w-full h-full top-0 left-0 absolute opacity-0">
+                                        <button type="button" class="btn btn-primary w-full">Ubah Foto</button>
+                                        <input name="profile_photo" id="profile-photo" accept="image/*" type="file" class="w-full h-full top-0 left-0 absolute opacity-0">
                                     </div>
                                 </div>
                             </div>

@@ -79,7 +79,9 @@
                             </td>
                             <td>
                                 <a href="" class="font-medium whitespace-nowrap">{{ $product->name }}</a>
-                                <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5">{{ $product->productCategories->name }}</div>
+                                @isset($product->productCategories)
+                                    <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5">{{ $product->productCategories->name }}</div>
+                                @endif
                             </td>
                             <td>
                                 <a href="" class="font-medium whitespace-nowrap">{{ $product->stores->name }}</a>

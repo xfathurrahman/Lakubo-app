@@ -54,7 +54,7 @@
                             <rect y="107.48" width="152" height="152" rx="8" transform="rotate(-45 0 107.48)" fill="white"/>
                         </svg>
                         <div class="relative pt-2 px-2 md:pt-5 md:px-5 flex items-center justify-center">
-                            <div class="block absolute w-20 h-20 bottom-0 left-0 -mb-24 ml-3" style="background: radial-gradient(black, transparent 60%); transform: rotate3d(0, 0, 1, 20deg) scale3d(1, 0.6, 1); opacity: 0.2;"></div>
+                            {{--<div class="block absolute w-20 h-20 bottom-0 left-0 -mb-24 ml-3" style="background: radial-gradient(black, transparent 60%); transform: rotate3d(0, 0, 1, 20deg) scale3d(1, 0.6, 1); opacity: 0.2;"></div>--}}
                             <img class="image-product" src="{{ asset("storage/product-category")."/".$category -> image_path }}" alt="category-image">
                         </div>
                         <div class="relative text-center text-white px-1 pb-1 mt-1 md:px-3 md:pb-3 md:mt-3">
@@ -76,51 +76,24 @@
                 <div class="item ml-2">
                     <div class="card shadow-xl bg-gray-200">
                         <div class="date-option bg-red-400 text-center">
-                        <span class="date-post">
-                            <p class="mb-5">{{ $product -> created_at -> diffForHumans() }}</p>
-                        </span>
+                            <span class="date-post">
+                                <p class="mb-5">{{ $product -> created_at -> diffForHumans() }}</p>
+                            </span>
                         </div>
-                        @if (Auth::check())
-                            @if(auth()->user()->stores)
-                                @if(auth()->user()->hasRole('seller') && $product->store_id == auth()->user()->stores->id)
-                                    <a href="{{ route('seller.products.edit', $product->id) }}" class="add-to-cart product_data">
-                                        <i class="fa-solid fa-pencil"></i>
-                                    </a>
-                                @elseif($product->quantity > 0)
-                                <div class="add-to-cart product_data">
-                                    <button class="">
-                                        <input type="hidden" class="qty_input" name="product_qty" value="1">
-                                        <input type="hidden" class="prod_id" name="product_id" value="{{ $product->id }}">
-                                        <input type="hidden" class="store_id" name="store_id" value="{{ $product->stores->id }}">
-                                        <button type="button" class="btn addToCartBtn">
-                                            <i class="fa fa-cart-plus" aria-hidden="true"></i>
-                                        </button>
-                                    </button>
-                                </div>
-                                @endif
-                            @elseif($product->quantity > 0)
-                                <div class="add-to-cart product_data">
-                                    <button class="">
-                                        <input type="hidden" class="qty_input" name="product_qty" value="1">
-                                        <input type="hidden" class="prod_id" name="product_id" value="{{ $product->id }}">
-                                        <input type="hidden" class="store_id" name="store_id" value="{{ $product->stores->id }}">
-                                        <button type="button" class="btn addToCartBtn">
-                                            <i class="fa fa-cart-plus" aria-hidden="true"></i>
-                                        </button>
-                                    </button>
-                                </div>
+                        @php
+                            $isAuthenticated = auth()->check();
+                            $isSeller = $isAuthenticated && auth()->user()->hasRole('seller');
+                            $isProductStoreSameAsUserStore = $isSeller && $product->stores->id === auth()->user()->stores->id;
+                            $canEditProduct = $isProductStoreSameAsUserStore;
+                        @endphp
+                        @if ($product->quantity > 0)
+                            @if ($canEditProduct)
+                                <a href="{{ route('seller.products.edit', $product->id) }}" class="add-to-cart product_data">
+                                    <i class="fa-solid fa-pencil"></i>
+                                </a>
+                            @else
+                                @include('home.pages.partials.add-to-cart-btn', ['product' => $product])
                             @endif
-                        @elseif($product->quantity > 0)
-                            <div class="add-to-cart product_data">
-                                <button class="">
-                                    <input type="hidden" class="qty_input" name="product_qty" value="1">
-                                    <input type="hidden" class="prod_id" name="product_id" value="{{ $product->id }}">
-                                    <input type="hidden" class="store_id" name="store_id" value="{{ $product->stores->id }}">
-                                    <button type="button" class="btn addToCartBtn">
-                                        <i class="fa fa-cart-plus" aria-hidden="true"></i>
-                                    </button>
-                                </button>
-                            </div>
                         @endif
                         <a class="a-link" href="{{ route('getProduct', $product -> id) }}">
                             <img class="image-product" src="{{ asset("storage/product-image")."/".$product -> productImage -> image_path }}" alt="Image from {{ $product->stores->name }}">
@@ -137,12 +110,15 @@
                                 <div class="px-2 product-name text-left">{{ $product -> name }}</div>
                                 <div class="px-2 owner-info">
                                     <div class="owner-pp">
+                                        @isset($product->stores->users->profile_photo_path)
+                                        <img class="rounded-full" src="{{ asset('storage/profile-photos/'. $product->stores->users->profile_photo_path) }}" alt="pp-owner"/>
+                                        @else
                                         <img class="rounded-full" src="https://ui-avatars.com/api/?name={{ $product -> stores -> name }}&amp;color=7F9CF5&amp;background=EBF4FF" alt="pp-owner"/>
+                                        @endisset
                                     </div>
-                                    <div class="owner-name overflow-ellipsis font-medium"
+                                    <div class="owner-name whitespace-nowrap font-bold"
                                          data-hover-before="{{  $product -> stores -> name }}"
-                                         data-hover-after="{{  $product -> stores -> users -> name }}"
-                                         type="button">
+                                         data-hover-after="{{  $product -> stores -> users -> name }}">
                                     </div>
                                 </div>
                             </div>
@@ -155,6 +131,26 @@
             <h5 class="m-0 p-0 align-middle"><a href="#" class="btn-new-product-all font-bold text-decoration-none">Lihat Semua</a></h5>
         </div>
     </div>
+
+    <!-- BEGIN: Reject Notification Content -->
+    <div id="added-to-cart-notif" class="toastify-content hidden flex items-center">
+        <i class="fa-solid fa-cart-plus text-xl text-green-500"></i>
+        <div class="ml-4 mr-4">
+            <div class="text-green-500 font-medium">Pesanan Berhasil ditambah ke Keranjang.</div>
+            <div class="text-green-500 mt-1">Klik ikon keranjang pada Toolbar untuk melihat.</div>
+        </div>
+    </div>
+    <!-- END: Reject Notification Content -->
+
+    <!-- BEGIN: Already Notification Content -->
+    <div id="already-add-notif" class="toastify-content hidden flex items-center">
+        <i class="fa-solid fa-cart-arrow-down text-xl text-red-400"></i>
+        <div class="ml-4 mr-4">
+            <div class="text-red-500 font-medium">Pesanan sudah ada di Keranjang.</div>
+            <div class="text-red-500 mt-1">Klik ikon keranjang pada Toolbar untuk melihat.</div>
+        </div>
+    </div>
+    <!-- END: Already Notification Content -->
 
     <style>
         .swal2-popup {
@@ -299,21 +295,33 @@
                         loadCart();
                         $('#refreshcart').load(location.href + " #refreshcart");
                         if (response.success) {
-                            Swal.fire({
-                                position: 'center',
-                                icon: 'success',
-                                title: response.success,
-                                showConfirmButton: false,
-                                timer: 1500
-                            });
+                            Toastify({
+                                node: $("#added-to-cart-notif").clone().removeClass("hidden")[0],
+                                duration: 2000,
+                                newWindow: true,
+                                close: true,
+                                gravity: "top",
+                                position: "right",
+                                stopOnFocus: true,
+                                closeOthers: true,
+                                offset: {
+                                    y: 50 // vertical axis - can be a number or a string indicating unity. eg: '2em'
+                                },
+                            }).showToast();
                         } else{
-                            Swal.fire({
-                                position: 'center',
-                                icon: 'info',
-                                title: response.error,
-                                showConfirmButton: false,
-                                timer: 1500
-                            });
+                            Toastify({
+                                node: $("#already-add-notif").clone().removeClass("hidden")[0],
+                                duration: 2000,
+                                newWindow: true,
+                                close: true,
+                                gravity: "top",
+                                position: "right",
+                                stopOnFocus: true,
+                                closeOthers: true,
+                                offset: {
+                                    y: 50 // vertical axis - can be a number or a string indicating unity. eg: '2em'
+                                },
+                            }).showToast();
                         }
                     }
                 });
@@ -329,7 +337,6 @@
                     confirmButtonText: '<a href="{{route('login')}}">Masuk</a>'
                 });
             });
-
         @endif
 
         /*##########################################################

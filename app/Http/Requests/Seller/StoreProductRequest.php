@@ -9,7 +9,7 @@ class StoreProductRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'=>'required|string|max:120',
+            'product_name'=>'required|string|max:120',
             'kategori'=>'required',
             'price'=>'required|max:10',
             'quantity'=>'required|max:7',

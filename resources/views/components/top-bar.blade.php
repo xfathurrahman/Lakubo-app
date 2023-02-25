@@ -7,7 +7,11 @@
     <div class="intro-x dropdown w-8 h-8">
         <div class="dropdown-toggle w-8 h-8 rounded-full overflow-hidden shadow-lg image-fit zoom-in" role="button"
              aria-expanded="false" data-tw-toggle="dropdown">
-            <img src="https://ui-avatars.com/api/?size=100&name={{ Auth::user()->name }}"/>
+            @if(auth()->user()->profile_photo_path)
+                <img id="preview-photo-top-bar" alt="Profile-photo-preview" src="{{ asset('storage/profile-photos/'. auth()->user()->profile_photo_path) }}">
+            @else
+                <img id="preview-photo-top-bar" alt="Profile-photo-preview" src="https://ui-avatars.com/api/?size=100&name={{ Auth::user()->name }}">
+            @endif
         </div>
         <div class="dropdown-menu dropdown-menu-main-top w-56" style="z-index: 999!important;">
             <ul class="dropdown-content bg-primary text-white">

@@ -74,7 +74,7 @@
                                 </div>
                                 <div class="w-full mt-3 xl:mt-0 flex-1">
                                     <input id="product-name"
-                                           name="name"
+                                           name="product_name"
                                            type="text"
                                            class="form-control"
                                            placeholder="Nama Produk"
@@ -101,9 +101,8 @@
                                             <div class="input-group">
                                                 <div class="input-group-text">Rp.</div>
                                                 <input name="price"
-                                                       type="number"
-                                                       class="form-control"
-                                                       onkeypress="return onlyNumberKey(event)"
+                                                       type="text"
+                                                       class="form-control numeric-input"
                                                        placeholder="Masukan harga"
                                                        value="{{ $product->price }}"
                                                        required=""
@@ -120,11 +119,17 @@
                                                     id="selectCateProd"
                                                     class="w-full form-control"
                                                     required
-                                                    data-parsley-required-message="Wajib memilih Kategori Produk"
-                                            >
+                                                    data-parsley-required-message="Wajib memilih Kategori Produk">
                                                 <option selected disabled>Pilih Kategori</option>
                                                 @foreach($listCateProd as $category)
-                                                    <option @if( old('kategori')  == $category->id) selected="selected" @endif value="{{ $category -> id }}">{{ $category -> name }}</option>
+                                                    @if($product->productCategories)
+                                                        @php
+                                                            $selected = (old('kategori') === $category->id || $category->id === $product->productCategories->id) ? 'selected="selected"' : '';
+                                                        @endphp
+                                                        <option {{ $selected }} value="{{ $category->id }}">{{ $category->name }}</option>
+                                                    @else
+                                                        <option value="{{ $category->id }}" {{ old('kategori') === $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                                                    @endif
                                                 @endforeach
                                             </select>
                                         </div>
@@ -142,15 +147,16 @@
                                 </div>
                                 <div class="w-full mt-3 xl:mt-0 flex-1">
                                     <div class="grid grid-cols-12 gap-x-5">
-                                        <div class="col-span-12 2xl:col-span-6" id="parsley_error">
+                                        <div class="col-span-12 2xl:col-span-6" id="parsley_error_weight">
                                             <div class="input-group">
+                                                <div class="input-group-text"><i class="fa-solid fa-scale-unbalanced"></i></div>
                                                 <input name="weight"
-                                                       type="number"
-                                                       class="form-control"
-                                                       onkeypress="return onlyNumberKey(event)"
-                                                       placeholder="Berat"
+                                                       type="text"
+                                                       class="form-control numeric-input"
+                                                       placeholder="Masukan Berat Produk Anda dalam satuan Gram"
                                                        value="{{ $product->weight }}"
                                                        required=""
+                                                       data-parsley-errors-container="#parsley_error_weight"
                                                        data-parsley-maxlength="7"
                                                        data-parsley-required-message="Wajib memasukan Berat produk"
                                                        data-parsley-maxlength-message="Maksimal 7 digit..."
@@ -158,19 +164,21 @@
                                                 <div class="input-group-text">Gram</div>
                                             </div>
                                         </div>
-                                        <div class="col-span-12 2xl:col-span-6">
-                                            <div>
-                                                <input name="quantity"
-                                                       type="number"
-                                                       class="form-control mt-2 sm:mt-0"
-                                                       onkeypress="return onlyNumberKey(event)"
-                                                       placeholder="Stok"
-                                                       value="{{ $product->quantity }}"
-                                                       required=""
-                                                       data-parsley-maxlength="7"
-                                                       data-parsley-required-message="Wajib memasukan Stok produk"
-                                                       data-parsley-maxlength-message="Maksimal 7 digit..."
-                                                >
+
+                                        <div class="col-span-12 2xl:col-span-6" id="parsley_error_stock">
+                                            <div class="input-group">
+                                                <div class="input-group-text"><i class="fa-solid fa-cubes-stacked"></i></div>
+                                                    <input name="quantity"
+                                                           type="text"
+                                                           class="form-control mt-2 sm:mt-0 numeric-input"
+                                                           placeholder="Masukan Stok Produk Anda"
+                                                           value="{{ $product->quantity }}"
+                                                           required=""
+                                                           data-parsley-maxlength="7"
+                                                           data-parsley-errors-container="#parsley_error_stock"
+                                                           data-parsley-required-message="Wajib memasukan Stok produk"
+                                                           data-parsley-maxlength-message="Maksimal 7 digit..."
+                                                    >
                                             </div>
                                         </div>
                                     </div>

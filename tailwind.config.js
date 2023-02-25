@@ -13,6 +13,10 @@ module.exports = {
             fontFamily: {
                 sans: ['Nunito', ...defaultTheme.fontFamily.sans],
             },
+            height: {
+                '30rem': '30rem',
+                '28.3rem': '28rem',
+            },
         },
         screens: {
             'xs': '450px',
@@ -36,5 +40,6 @@ module.exports = {
 
     plugins: [
         require('@tailwindcss/forms'),
+        require('@tailwindcss/line-clamp'),
     ],
 };

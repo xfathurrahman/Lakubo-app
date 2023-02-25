@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static id()
  * @method static find($id)
  * @method static orderBy(string $string, string $string1)
+ * @method static findOrFail($id)
  */
 class ProductCategory extends Model
 {

@@ -107,6 +107,7 @@
 
         <script>
             $(document).ready(function() {
+
                 function copy(obj) {
                   try {
                     if (obj) selectContent(obj)
@@ -116,7 +117,7 @@
                   } catch (err) {
                     console.log(err)
                   }
-                };
+                }
 
                 function selectContent(obj) {
                   if (window.getSelection && document.createRange) {
@@ -130,10 +131,12 @@
                     textRange.moveToElementText(obj)
                     textRange.select()
                   }
-                };
+                }
+
                 $('#panel1').mouseover(function(){
                  selectContent(this);
                 });
+
             });
         </script>
 
