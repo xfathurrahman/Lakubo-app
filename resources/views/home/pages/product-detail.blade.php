@@ -12,7 +12,7 @@
         }
     </style>
 
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 bg-white pb-6 mb-16 rounded-b-md">
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 bg-white mb-16 rounded-b-md">
         <div class="font-medium text-xl ml-4 pb-4 flex items-center border-b">Informasi Produk</div>
         <div class="flex flex-wrap justify-center">
             <div class="w-full lg:w-2/5 p-4">
@@ -40,11 +40,11 @@
                 <div class="h-10 flex items-center">
                     <div class="flex justify-between w-full items-center">
                         <span class="text-red-400 text-2xl md:text-3xl font-semibold tracking-wide">@currency( $product -> price )</span>
-                        <a href="#" class="w-40 h-12 inline-flex bg-red-100 p-1 rounded mt-6">
+                        <a href="#" class="w-40 h-12 inline-flex bg-red-100 p-1 rounded mt-6 items-center">
                             @isset($product -> stores -> users -> profile_photo_path)
-                                <img class="rounded-full" src="{{ asset('storage/profile-photos/'. $product -> stores -> users -> profile_photo_path) }}" alt="pp-owner"/>
+                                <img class="rounded-full w-10 h-10" src="{{ asset('storage/profile-photos/'. $product -> stores -> users -> profile_photo_path) }}" alt="pp-owner"/>
                             @else
-                                <img class="rounded-full" src="https://ui-avatars.com/api/?name={{ $product -> stores -> name }}&amp;color=7F9CF5&amp;background=EBF4FF" alt="pp-owner"/>
+                                <img class="rounded-full w-10 h-10" src="https://ui-avatars.com/api/?name={{ $product -> stores -> name }}&amp;color=7F9CF5&amp;background=EBF4FF" alt="pp-owner"/>
                             @endisset
                             <span class="ml-2 capitalize text-sm font-medium text-red-400 line-clamp-2 text-justify">{{ $product -> stores -> name }}</span>
                         </a>
@@ -96,7 +96,10 @@
                             @if($product->stores->storeAddresses->embedded_map)
                                 <div class="google-maps w-full">{!! $product->stores->storeAddresses->embedded_map !!}</div>
                             @else
-                                <div class="w-full text-center h-full pt-32 bg-gray-100">Pelapak tidak menyematkan Lokasi UMKM</div>
+                                <div class="w-full text-center text-gray-400 h-full pt-28 bg-gray-100">
+                                    <i class="fa-solid fa-map-location-dot text-3xl"></i> <br>
+                                    Pelapak tidak menyematkan Lokasi UMKM
+                                </div>
                             @endif
                         </div>
                     </div>
