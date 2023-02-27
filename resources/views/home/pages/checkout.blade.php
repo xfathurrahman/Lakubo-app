@@ -121,12 +121,18 @@
                                     <div class="text-md text-gray-400">
                                         <div class="shipment" id="center-option">
                                             <label for="select_shipping" class="text-white">Pilih Pengiriman<span class="text-yellow-300 inline-block float-right" id="parsley_error"></span></label>
-                                            <select id="select_shipping" name="service" class="js-states py-3" required data-parsley-required-message="Anda belum memilih jasa pengiriman!" data-parsley-errors-container="#parsley_error">
-                                                <option value="" selected disabled>Layanan Pengiriman</option>
-                                                @foreach( $services as $service )
-                                                    <option value="{{ $service['description'] }}" data-harga="{{ $service['biaya'] }}" data-etd="{{ $service['etd'] }}">{{ $service['description'] }} (@currency($service['biaya'])) | {{ $service['etd'] }} Hari Pengiriman</option>
-                                                @endforeach
-                                            </select>
+                                            @if (isset($errorMessage))
+                                                <select disabled id="select_shipping" name="service" class="js-states py-3" required data-parsley-required-message="Anda belum memilih jasa pengiriman!" data-parsley-errors-container="#parsley_error">
+                                                    <option value=" "> {{ $errorMessage }} </option>
+                                                </select>
+                                            @else
+                                                <select id="select_shipping" name="service" class="js-states py-3" required data-parsley-required-message="Anda belum memilih jasa pengiriman!" data-parsley-errors-container="#parsley_error">
+                                                    <option value="" selected disabled>Layanan Pengiriman</option>
+                                                    @foreach( $services as $service )
+                                                        <option value="{{ $service['description'] }}" data-harga="{{ $service['biaya'] }}" data-etd="{{ $service['etd'] }}">{{ $service['description'] }} (@currency($service['biaya'])) | {{ $service['etd'] }} Hari Pengiriman</option>
+                                                    @endforeach
+                                                </select>
+                                            @endif
                                         </div>
                                     </div>
                                     <div class="pt-3">
@@ -145,7 +151,11 @@
                                         <span class="text-grey-400">Total:</span>
                                         <span class="inline-block text-right" id="grand_total">@currency($total)</span>
                                     </div>
-                                    <button type="submit" class="h-12 w-full float-right bg-red-500 rounded text-white focus:outline-none hover:bg-red-600">Konfirmasi Pesanan</button>
+                                    @if(isset($errorMessage))
+                                        <button disabled type="submit" class="h-12 w-full float-right bg-gray-400 rounded text-white focus:outline-none">Konfirmasi Pesanan</button>
+                                    @else
+                                        <button type="submit" class="h-12 w-full float-right bg-red-500 rounded text-white focus:outline-none hover:bg-red-600">Konfirmasi Pesanan</button>
+                                    @endisset
                                 </form>
                             </div>
                         </div>

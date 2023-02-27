@@ -4,32 +4,33 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
-use App\Models\CartItem;
 use App\Models\Order;
 use App\Models\OrderAddress;
 use App\Models\OrderItem;
 use App\Models\OrderShipping;
-use App\Models\Product;
 use App\Models\UserAddress;
-use App\Models\UserTransaction;
 use Exception;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Kavist\RajaOngkir\Facades\RajaOngkir;
+use Illuminate\Support\Facades\Http;
 use Midtrans\Config;
 use Midtrans\Snap;
 
 class CheckoutController extends Controller
 {
     public function index($cart_id) {
-
         if ($cart_id)
         {
             $cart = Cart::with('cartItems')->where('user_id', Auth::id())->where('id', $cart_id)->first();
             $services  = $this->getShippingCost($cart);
-
+            if (empty($services)) {
+                $errorMessage = "Maaf, tidak ada layanan pengiriman yang tersedia saat ini.";
+                return view('home.pages.checkout', [
+                    'cart' => $cart,
+                    'errorMessage' => $errorMessage,
+                ]);
+            }
             return view('home.pages.checkout', [
                 'cart' => $cart,
                 'services' => $services,
@@ -51,31 +52,56 @@ class CheckoutController extends Controller
         }
     }
 
-    public function getShippingCost($cart) {
+    public function searchCityByName(string $searchQuery)
+    {
+        $response = Http::withHeaders([
+            'key' => env('RAJAONGKIR_API_KEY'),
+        ])->get(env('RAJAONGKIR_API_URL') . '/city');
+        $cities = collect($response['rajaongkir']['results'])->map(function ($city) {
+            return [
+                'id' => $city['city_id'],
+                'name' => $city['city_name']
+            ];
+        });
+        $filteredCities = $cities->filter(function ($city) use ($searchQuery) {
+            return str_contains(strtolower($city['name']), strtolower($searchQuery));
+        });
+        return $filteredCities->pluck('id')->first(); // Mengembalikan ID kota pertama yang cocok
+    }
+
+    public function getShippingCost($cart)
+    {
         $totalWeight = 0;
         $subtotalWeight = 0;
         foreach ($cart->cartItems as $item) {
-            $subtotalWeight += $item -> products -> weight * $item->product_qty;
+            $subtotalWeight += $item->products->weight * $item->product_qty;
         }
+
         $totalWeight += $subtotalWeight;
         $userAddress = UserAddress::find(Auth::id());
         $userRegency = str_replace(array('KABUPATEN ', 'KOTA '), '', $userAddress->regency->name);
-        $regency = RajaOngkir::kota()->search($userRegency)->get();
-        $regency_id = $regency[0]['city_id'];
-        $cost = RajaOngkir::ongkosKirim([
+        $searchQuery = $userRegency;
+        $result = $this->searchCityByName($searchQuery);
+        $destination = (int)$result;
+
+        $cost = Http::withHeaders([
+            'key' => env('RAJAONGKIR_API_KEY')
+        ])->post(env('RAJAONGKIR_API_URL') . '/cost', [
             'origin'        => 91,              // ID kota/kabupaten asal // 91 adalah Boyolali
-            'destination'   => $regency_id,     // ID kota/kabupaten tujuan
+            'destination'   => $destination,    // ID kota/kabupaten tujuan
             'weight'        => $totalWeight,    // berat barang dalam gram
             'courier'       => 'jne'            // kode kurir pengiriman: ['jne', 'tiki', 'pos'] untuk starter
-        ])->get();
+        ]);
 
         $services = [];
-        foreach($cost[0]['costs'] as $row) {
-            $services[] = array(
-                'description'   => $row['description'],
-                'biaya'         => $row['cost'][0]['value'],
-                'etd'           => $row['cost'][0]['etd'],
-            );
+        if (isset($cost['rajaongkir']['status']['code']) && $cost['rajaongkir']['status']['code'] === 200) {
+            foreach($cost['rajaongkir']['results'][0]['costs'] as $row) {
+                $services[] = array(
+                    'description'   => $row['description'],
+                    'biaya'         => $row['cost'][0]['value'],
+                    'etd'           => $row['cost'][0]['etd'],
+                );
+            }
         }
         return $services;
     }

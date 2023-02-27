@@ -115,6 +115,7 @@ Route::middleware(['auth', 'verified', 'role:customer'])->name('customer.')->pre
     Route::post('/get-shipping-data', [CheckoutController::class,'store'])->name('shipping.data');
     Route::put('/update-shipping',[CheckoutController::class,'updateShipping'])->name('update.shipping');
     Route::post('/get-snap-token',[CheckoutController::class,'getSnapToken'])->name('snap.token');
+    Route::get('/cities', [CheckoutController::class, 'getCities'])->name('getCities');
     // CUSTOMER ORDER
     Route::get('/orders', [OrderController::class, 'index'])->name('orders');
     Route::get('/order/detail/{order_id}', [OrderController::class, 'show'])->name('order.show');

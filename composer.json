@@ -10,7 +10,6 @@
         "diglactic/laravel-breadcrumbs": "^8.0",
         "guzzlehttp/guzzle": "^7.5",
         "intervention/image": "^2.7",
-        "kavist/rajaongkir": "1.1",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
