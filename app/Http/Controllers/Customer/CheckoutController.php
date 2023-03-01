@@ -19,37 +19,25 @@ use Midtrans\Snap;
 
 class CheckoutController extends Controller
 {
-    public function index($cart_id) {
-        if ($cart_id)
-        {
+    public function index($cart_id)
+    {
+        if ($cart_id) {
             $cart = Cart::with('cartItems')->where('user_id', Auth::id())->where('id', $cart_id)->first();
             $services  = $this->getShippingCost($cart);
             if (empty($services)) {
                 $errorMessage = "Maaf, tidak ada layanan pengiriman yang tersedia saat ini.";
                 return view('home.pages.checkout', [
-                    'cart' => $cart,
+                    'cart'         => $cart,
                     'errorMessage' => $errorMessage,
                 ]);
             }
             return view('home.pages.checkout', [
-                'cart' => $cart,
+                'cart'     => $cart,
                 'services' => $services,
             ]);
         }
-
         session()->flash('error', 'Anda belum memilih produk untuk di checkout, Anda dialihkan ke halaman keranjang.');
         return redirect()->route('customer.cart.index');
-    }
-
-    public function updateShipping(Request $request) {
-        $cart_id = $request->input('cart_id');
-        $shipping_cost = $request->input('shipping_cost');
-        if(Cart::where('id', $cart_id)->where('user_id', Auth::id())->exists()) {
-            $cart = Cart::where('id', $cart_id)->where('user_id', Auth::id())->first();
-            $cart -> shipping_cost = $shipping_cost;
-            $cart->update();
-            return response()->json(['status' => "Biaya pengiriman di ubah"]);
-        }
     }
 
     public function searchCityByName(string $searchQuery)
@@ -59,14 +47,14 @@ class CheckoutController extends Controller
         ])->get(env('RAJAONGKIR_API_URL') . '/city');
         $cities = collect($response['rajaongkir']['results'])->map(function ($city) {
             return [
-                'id' => $city['city_id'],
+                'id'   => $city['city_id'],
                 'name' => $city['city_name']
             ];
         });
         $filteredCities = $cities->filter(function ($city) use ($searchQuery) {
             return str_contains(strtolower($city['name']), strtolower($searchQuery));
         });
-        return $filteredCities->pluck('id')->first(); // Mengembalikan ID kota pertama yang cocok
+        return $filteredCities->pluck('id')->first();
     }
 
     public function getShippingCost($cart)
@@ -78,11 +66,11 @@ class CheckoutController extends Controller
         }
 
         $totalWeight += $subtotalWeight;
-        $userAddress = UserAddress::find(Auth::id());
-        $userRegency = str_replace(array('KABUPATEN ', 'KOTA '), '', $userAddress->regency->name);
-        $searchQuery = $userRegency;
-        $result = $this->searchCityByName($searchQuery);
-        $destination = (int)$result;
+        $userAddress  = UserAddress::find(Auth::id());
+        $userRegency  = str_replace(array('KABUPATEN ', 'KOTA '), '', $userAddress->regency->name);
+        $searchQuery  = $userRegency;
+        $result       = $this->searchCityByName($searchQuery);
+        $destination  = (int)$result;
 
         $cost = Http::withHeaders([
             'key' => env('RAJAONGKIR_API_KEY')

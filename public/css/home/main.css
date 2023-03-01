@@ -27,91 +27,20 @@
     padding: 0;
 }
 
-html , body {
-    overflow-x: hidden;
-}
-
 #main-app {
     margin: 0;
-    position: relative;
-    min-width: 500px;
+    padding: 0;
+    font-size: 16px;
+    line-height: 1.5;
     min-height: 100%;
     background-color: rgba(238, 238, 238, 0.93);
 }
 
-.search-input-auth {
-    width: 180px;
-}
-
-/*MIN WIDHT*/
-@media (min-width: 640px) {
-    .search-input {
-        width: 315px;
-    }
-    .search-input-auth {
-        width: 290px;
-    }
-}
-
-@media (min-width: 768px) {
-    .login-btn {
-        display: block;
-    }
-    .search-input {
-        width: 348px;
-    }
-    .search-input-auth {
-        width: 430px;
-    }
-}
-
-@media (min-width: 1024px) {
-    .search-input {
-        width: 500px;
-    }
-    .search-input-auth {
-        width: 600px;
-    }
-}
-
-@media (min-width: 1280px) {
-    .search-input {
-        width: 564px;
-    }
-}
-
-@media (min-width: 1526px) {
-    .search-input {
-        width: 825px;
-    }
-    .search-input-auth {
-        width: 850px;
-    }
-}
-
-
-/*MAX WIDHT*/
-@media (min-width: 640px) {
-
-}
-
-@media (min-width: 768px) {
-
-}
-
-@media (min-width: 1024px) {
-
-}
-
-@media (max-width: 1280px) {
-
-}
-
-@media (max-width: 1526px) {
-    .slick-wrapper .slick-prev{
-        top: -25%;
-    }
-    .slick-wrapper .slick-next{
-        top: -25%;
+@media only screen and (max-width: 320px) {
+    /* kode CSS untuk mengunci tampilan */
+    #main-app {
+        overflow-x: hidden;
+        width: 320px;
+        margin: 0 auto;
     }
 }

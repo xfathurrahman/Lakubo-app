@@ -13,40 +13,23 @@
     <body class="pr-4 pt-2">
         @include('components.mobile-menu')
         @include('layouts.side-menu')
-        <script type="text/javascript" src="{{ asset('js/midone_app.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('js/jquery-3.6.1.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('js/parsley.min.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('js/image-uploader.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('js/select2.min.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('js/select2-searchInputPlaceholder.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('js/alertify.js') }}"></script>
-        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/js/all.min.js"></script>
-        <script type="text/javascript" src="https://cdn.ckeditor.com/ckeditor5/35.4.0/classic/ckeditor.js"></script>
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-
-        {{--<script>
-            const url = window.location.pathname;
-            let bgColor = "blue";
-            if (url.startsWith("/customer/")) {
-                bgColor = "red";
-            } else if (url.startsWith("/admin/")) {
-                bgColor = "green";
-            }
-            document.querySelector("html").style.backgroundColor = bgColor;
-        </script>--}}
+        <script src="{{ asset('js/midone_app.js') }}"></script>
+        <script src="{{ asset('js/jquery-3.6.1.js') }}"></script>
+        <script src="{{ asset('js/parsley.min.js') }}"></script>
+        <script src="{{ asset('js/image-uploader.js') }}"></script>
+        <script src="{{ asset('js/select2.min.js') }}"></script>
+        <script src="{{ asset('js/select2-searchInputPlaceholder.js') }}"></script>
+        <script src="{{ asset('js/alertify.js') }}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/js/all.min.js"></script>
+        <script src="https://cdn.ckeditor.com/ckeditor5/35.4.0/classic/ckeditor.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
         <script>
-
-            // Ambil semua elemen input yang memiliki kelas "numeric-input"
             const numericInputs = document.querySelectorAll('.numeric-input');
-            // Tambahkan event listener untuk setiap elemen input
             numericInputs.forEach(function(input) {
                 input.addEventListener('input', function(e) {
-                    // Dapatkan nilai input dan hapus karakter selain angka
-                    const inputValue = e.target.value.replace(/[^0-9]/g, '');
-                    // Set nilai input yang sudah divalidasi
-                    e.target.value = inputValue;
+                    e.target.value = e.target.value.replace(/[^0-9]/g, '');
                 });
             });
 

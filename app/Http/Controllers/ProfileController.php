@@ -10,93 +10,93 @@ use App\Models\Regency;
 use App\Models\User;
 use App\Models\UserAddress;
 use App\Models\Village;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 
 class ProfileController extends Controller
 {
-    public function edit(Request $request)
+    public function edit(): Factory|View|RedirectResponse|Application
     {
-        $userAddresses['userAddresses'] = UserAddress::with('users')->where('user_id', $request->user()->id)->first();
-        $address = UserAddress::with('users')->where('user_id', $request->user()->id)->first();
-        $provinces = Province::all();
-        $regencies = Regency::where('province_id', $address['province_id'])->get();
-        $districts = District::where('regency_id', $address['regency_id'])->get();
-        $villages = Village::where('district_id', $address['district_id'])->get();
-        return view('profile.edit', [
-                'user' => $request->user(),]
-            ,compact('provinces','regencies','districts','villages'))->with($userAddresses);
+        if (isset(Auth::user()->address)){
+            $userAddress = Auth::user()->address;
+            $provinces = Province::all();
+            $regencies = Regency::where('province_id', $userAddress['province_id'])->get();
+            $districts = District::where('regency_id', $userAddress['regency_id'])->get();
+            $villages = Village::where('district_id', $userAddress['district_id'])->get();
+            return view('profile.edit', [
+                'provinces' => $provinces,
+                'regencies' => $regencies,
+                'districts' => $districts,
+                'villages' => $villages,
+            ]);
+        }
+        return redirect()->route('home')->with('error', 'Silahkan Login dulu.');
     }
 
     public function update(ProfileUpdateRequest $request)
     {
-        $request->user()->fill($request->validated());
+        $province = $request-> input('provinsi');
+        $regency = $request -> input('kabupaten');
+        $district = $request-> input('kecamatan');
+        $village = $request -> input('desa');
+        $detail_address = $request-> input('detail_alamat');
 
-        $province = $request-> provinsi;
-        $regency = $request -> kabupaten;
-        $district = $request-> kecamatan;
-        $village = $request -> desa;
-        $detail_address = $request->detail_alamat;
-
-        $user_address = UserAddress::find(Auth::user()->id);
-        $user_address -> province_id = $province;
-        $user_address -> regency_id = $regency;
-        $user_address -> district_id = $district;
-        $user_address -> village_id = $village;
-        $user_address -> detail_address = $detail_address;
-
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        if (isset(Auth::user()->id)) {
+            $request->user()->fill($request->validated());
+            $user_address = UserAddress::find(Auth::user()->id);
+            $user_address -> province_id = $province;
+            $user_address -> regency_id = $regency;
+            $user_address -> district_id = $district;
+            $user_address -> village_id = $village;
+            $user_address -> detail_address = $detail_address;
+            if ($request->user()->isDirty('email')) {
+                $request->user()->email_verified_at = null;
+            }
+            $user_address->update();
+            $request->user()->save();
+            return Redirect::route('profile.edit')->with('status', 'profile-updated');
         }
-
-        $user_address->update();
-
-        $request->user()->save();
-
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        return redirect()->route('home')->with('error', 'Silahkan Login dulu.');
     }
 
     public function updateBankAccount(BankUpdateRequest $request)
     {
         $request->user()->fill($request->validated());
-
-        $bank_info = User::where('id', Auth::id())->first();
-
         $bank_acc_name = $request->input('bank_acc_name');
         $bank_acc_number = $request->input('bank_acc_number');
         $bank_name = $request->input('bank_name');
-
+        $bank_info = User::where('id', Auth::id())->first();
         $bank_info -> bank_account_name = $bank_acc_name;
         $bank_info -> bank_account_number = $bank_acc_number;
         $bank_info -> bank_name = $bank_name;
         $bank_info -> update();
-
         return back()->with('status', 'bank-updated');
     }
 
     public function updatePhoto(Request $request)
     {
-
         $user = User::find(Auth::id());
 
-        if($request->hasFile('profile_photo'))
-        {
-            if ($user->profile_photo_path) {
-
-                $path = public_path('storage/profile-photos/'.$user->profile_photo_path);
-                if (file_exists($path)) {
-                    unlink($path);
-                }
+        if (!$user) {
+            return redirect()->back()->with('error', 'User tidak ditemukan.');
+        }
+        if ($request->hasFile('profile_photo')) {
+            $image = $request->file('profile_photo');
+            $name = time().'.'.$image->getClientOriginalExtension();
+            $path = public_path('/storage/profile-photos/'.$name);
+            Image::make($image->getRealPath())->resize(350, 350)->save($path);
+            if ($user->image_path) {
+                Storage::delete('public/storage/profile-photos/'.$user->profile_photo_path);
             }
-            $file = $request ->file('profile_photo');
-            $image_name = preg_replace('~[\\\\/:*?"<>|& ]~', '', $file->getClientOriginalName());
-            $fileName = date('mYdhs').'_'.$image_name;
-            $path   = public_path('/storage/profile-photos');
-            $file  -> move($path, $fileName);
-            $user->profile_photo_path = $fileName;
+            $user->profile_photo_path = $name;
             $user->update();
-
             return response()->json(['message' => 'Success to update profile photo']);
         }
         return response()->json(['message' => 'Failed to update profile photo']);
@@ -113,7 +113,6 @@ class ProfileController extends Controller
             }
             $user -> profile_photo_path = null;
             $user -> save();
-
             return response()->json(['message' => 'Success to delete profile photo']);
         }
         return response()->json(['message' => 'Photo already Empty']);
@@ -125,16 +124,11 @@ class ProfileController extends Controller
         $validator = $request->validateWithBag('userDeletion', [
             'password' => ['required', 'current-password'],
         ]);
-
         $user = $request->user();
-
         Auth::logout();
-
         $user->delete();
-
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-
         return Redirect::to('/');
     }
 }

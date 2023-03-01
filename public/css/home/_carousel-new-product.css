@@ -4,7 +4,6 @@
     display: block;
     box-shadow: rgba(49,53,59,0.12) 0 1px 6px 0;
     margin-bottom: 24px;
-    border-radius: 12px;
     background-color: white;
 }
 
@@ -202,70 +201,23 @@
 }
 
 .carousel-product .owl-prev {
-    width: 40px;
-    height: 40px;
+    width: 2rem;
+    height: 2rem;
     position: absolute;
-    top: -33.5%;
-    left: 20px;
+    top: -19%;
+    left: 0;
     display: block !important;
     border:0 solid black;
 }
 .carousel-product .owl-next {
-    width: 40px;
-    height: 40px;
+    width: 2rem;
+    height: 2rem;
     position: absolute;
-    top: -33.5%;
-    right: 20px;
+    top: -19%;
+    right: 0;
     display: block !important;
     border:0 solid black;
 }
 
-.carousel-product .owl-prev i {transform : scale(2); color: rgb(var(--color-primary-soft));}
-.carousel-product .owl-next i {transform : scale(2); color: rgb(var(--color-primary-soft));}
-/*End Owl Products Carousel Navigation*/
-
-/*Lihat Semua Animation*/
-
-.btn-new-product-all {
-    display: inline-block;
-    padding: 0.75rem 1.25rem;
-    border-radius: 10rem;
-    margin-right: 7px;
-    margin-top: 5px;
-    color: #fff;
-    text-transform: capitalize;
-    font-size: 0.7rem;
-    letter-spacing: 0.15rem;
-    transition: all 0.3s;
-    position: relative;
-    overflow: hidden;
-    z-index: 1;
-}
-
-.btn-new-product-all:after {
-    content: "";
-    position: absolute;
-    bottom: -2%;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgb(var(--color-primary-soft));
-    border-radius: 10rem;
-    z-index: -2;
-}
-
-.btn-new-product-all:before {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0;
-    height: 100%;
-    background-color: rgb(var(--color-primary));
-    transition: all 0.3s;
-    border-radius: 10rem;
-    z-index: -1;
-}
-
-.btn-new-product-all:hover { color: #fff; }
-.btn-new-product-all:hover:before { width: 100%; }
+.carousel-product .owl-prev i {color: rgb(var(--color-primary-soft));}
+.carousel-product .owl-next i {color: rgb(var(--color-primary-soft));}

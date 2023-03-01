@@ -239,7 +239,7 @@
                 <div class="form-navigation-product flex justify-end flex-col md:flex-row gap-2 mt-5">
                     <a href="{{ route('seller.products.index') }}" type="button" class="btn py-3 border-slate-300 dark:border-darkmode-400 text-slate-500 w-full md:w-52">Batal</a>
                     <button type="submit" name="action" value="save_and_new" class="btn btn-twitter py-3 w-full md:w-52">Simpan & Tambah Baru</button>
-                    <button type="submit" name="action" value="save" class="btn submit py-3 btn-primary w-full md:w-52">Simpan</button>
+                    <button type="submit" onclick="this.disabled=true;this.form.submit();" name="action" value="save" class="btn submit py-3 btn-primary w-full md:w-52">Simpan</button>
                 </div>
             </form>
         </div>

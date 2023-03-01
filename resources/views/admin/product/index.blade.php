@@ -122,21 +122,6 @@
                 </table>
             </div>
             <!-- END: Data List -->
-            <!-- BEGIN: Pagination -->
-            <div class="intro-y col-span-12 flex flex-wrap sm:flex-row sm:flex-nowrap items-center">
-                <nav class="w-full sm:w-auto sm:mr-auto">
-                    <div class=float-right>
-                        {{ $products->links() }}
-                    </div>
-                </nav>
-                <select class="w-20 form-select box mt-3 sm:mt-0">
-                    <option>10</option>
-                    <option>25</option>
-                    <option>35</option>
-                    <option>50</option>
-                </select>
-            </div>
-            <!-- END: Pagination -->
         </div>
 
     @include('.admin.product.partials.delete-product-modal')

@@ -2,6 +2,17 @@
     <div class="grid grid-cols-12 gap-2 sm:px-3 lg:px-5">
         <div class="col-span-12 lg:col-span-12 2xl:col-span-12 box">
             <!-- BEGIN: Display Information -->
+            @php
+                $user = auth()->user();
+                if (isset($user->address)) {
+                    $userAddress = $user->address;
+                    $userProvinceId = $userAddress->province->id;
+                    $userRegencyId = $userAddress->regency->id;
+                    $userDistrictId = $userAddress->district->id;
+                    $userVillageId = $userAddress->village->id;
+                    $userDetailAddress = $userAddress->detail_address;
+                }
+            @endphp
             <div class="intro-y mt-0">
                 <form method="post" action="{{ route('profile.update') }}" class="space-y-3">
                     @csrf
@@ -46,7 +57,7 @@
                                             </label>
                                             <select id="selectProvince" name="provinsi" class="js-states form-control" required>
                                                 @foreach( $provinces as $provinsi )
-                                                    @if($provinsi -> id === $userAddresses->province_id)
+                                                    @if($provinsi -> id === $userProvinceId)
                                                         <option selected value="{{ $provinsi-> id }}">{{ $provinsi->name }}</option>
                                                     @else
                                                         <option value="{{ $provinsi -> id }}">{{ $provinsi -> name }}</option>
@@ -60,7 +71,7 @@
                                             </label>
                                             <select id="selectRegency" name="kabupaten" class="w-full form-control" required>
                                                 @foreach( $regencies as $regency )
-                                                    @if($regency -> id === $userAddresses->regency_id)
+                                                    @if($regency -> id === $userRegencyId)
                                                         <option selected value="{{ $regency-> id }}">{{ $regency->name }}</option>
                                                     @else
                                                         <option value="{{ $regency -> id }}">{{ $regency -> name }}</option>
@@ -74,7 +85,7 @@
                                             </label>
                                             <select name="kecamatan" id="selectDistrict" class="w-full form-control" required>
                                                 @foreach( $districts as $district )
-                                                    @if($district -> id === $userAddresses->district_id)
+                                                    @if($district -> id === $userDistrictId)
                                                         <option selected value="{{ $district-> id }}">{{ $district->name }}</option>
                                                     @else
                                                         <option value="{{ $district -> id }}">{{ $district -> name }}</option>
@@ -88,7 +99,7 @@
                                             </label>
                                             <select name="desa" id="selectVillage" class="w-full form-control">
                                                 @foreach( $villages as $village )
-                                                    @if($village -> id === $userAddresses->village_id)
+                                                    @if($village -> id === $userVillageId)
                                                         <option selected value="{{ $village-> id }}">{{ $village->name }}</option>
                                                     @else
                                                         <option value="{{ $village -> id }}">{{ $village -> name }}</option>
@@ -102,7 +113,7 @@
                                             <label for="detail-address" class="flex justify-between form-label">Detail alamat
                                                 <span class="text-slate-500"><x-input-error :messages="$errors->get('detail_alamat')"/></span>
                                             </label>
-                                            <textarea id="detail-address" name="detail_alamat" class="form-control" placeholder="Masukan detail alamat kamu">{{ $userAddresses->detail_address }}</textarea>
+                                            <textarea id="detail-address" name="detail_alamat" class="form-control" placeholder="Masukan detail alamat kamu">{{ $userDetailAddress }}</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -123,11 +134,11 @@
                                 <div class="border-2 border-dashed shadow-sm border-slate-200/60 dark:border-darkmode-400 rounded-md p-5">
                                     <div class="h-40 relative mx-auto">
                                         <div id="loading-bg" class="absolute inset-0 bg-white/40 -mb-2 hidden"></div> <!-- layer background putih dengan opacity 20% -->
-                                        @if(auth()->user()->profile_photo_path)
-                                            <img id="preview-photo" class="rounded-md" alt="Profile-photo-preview" src="{{ asset('storage/profile-photos/'. $user->profile_photo_path) }}">
+                                        @isset($user->profile_photo_path)
+                                            <img id="preview-photo" class="rounded-md w-full filled-photo max-h-full" alt="Profile-photo-preview" src="{{ asset('storage/profile-photos/'. Auth::user()->profile_photo_path) }}">
                                         @else
-                                            <img id="preview-photo" class="rounded-md" alt="Profile-photo-preview" src="https://ui-avatars.com/api/?size=100&name={{ Auth::user()->name }}">
-                                        @endif
+                                            <img id="preview-photo" class="rounded-md w-full max-h-full" alt="Profile-photo-preview" src="https://ui-avatars.com/api/?size=100&name={{ Auth::user()->name }}">
+                                        @endisset
                                         <div id="reset-photo" title="Remove this profile photo?" class="tooltip w-5 h-5 flex items-center justify-center absolute rounded-full text-white bg-danger right-0 top-0 -mr-2 -mt-2 hidden">
                                             <i data-lucide="x" class="w-4 h-4"></i>
                                         </div>

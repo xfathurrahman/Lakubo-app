@@ -3,10 +3,10 @@
 @section('content')
     <div id="refreshcart">
         @if ( $userCarts->count() < 1 )
-            <div class="w-full mx-auto bg-gray-100 shadow-lg rounded-lg my-8">
+            <div class="w-full mx-auto bg-white shadow-lg rounded-lg my-8">
                 <div class="md:flex ">
                     <div class="w-full p-4 px-5 py-5 mb-8 mt-1">
-                        <img class="mr-auto mt-16 ml-auto" style="max-width: 400px" src="{{ asset('assets/images/empty-cart.png') }}" alt="">
+                        <img class="mr-auto mt-16 ml-auto" style="max-width: 100%" src="{{ asset('assets/images/empty-cart.png') }}" alt="">
                         <h5 class="h-10 text-center py-12">Anda belum memasukan barang apapun ke keranjang</h5>
                         <hr>
                     </div>

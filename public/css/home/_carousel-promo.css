@@ -37,6 +37,6 @@
     border:0 solid black;
 }
 
-.carousel-promo .owl-prev i, .owl-next i {transform : scale(2); color: transparent;}
+.carousel-promo .owl-prev i, .carousel-promo .owl-next i {transform : scale(2); color: transparent;}
 .carousel:hover .owl-prev i {transform : scale(2); color: rgb(var(--color-primary));}
 .carousel:hover .owl-next i {transform : scale(2); color: rgb(var(--color-primary));}

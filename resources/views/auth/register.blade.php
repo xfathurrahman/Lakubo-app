@@ -23,17 +23,7 @@
 
             <!-- BEGIN: Register Form -->
             <div class="h-screen xl:h-auto flex py-5 xl:py-0 my-10 xl:my-0">
-                <div class="my-auto bg-white shadow-lg p-10 sm:px-20 rounded-md shadow-md w-full">
-                    <div class="relative before:hidden before:lg:block before:absolute before:w-[69%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 sm:px-20">
-                        <div class="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-                            <button class="w-10 h-10 rounded-full btn btn-primary step0">1</button>
-                            <div class="lg:w-32 font-medium text-base lg:mt-3 ml-3 lg:mx-auto">Identitas</div>
-                        </div>
-                        <div class="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                            <button class="w-10 h-10 rounded-full btn text-slate-500 bg-slate-100 dark:bg-darkmode-400 dark:border-darkmode-400 step1">2</button>
-                            <div class="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-slate-600 dark:text-slate-400">Alamat</div>
-                        </div>
-                    </div>
+                <div class="my-auto mx-auto xl:ml-20 bg-white px-5 sm:px-8 py-8 rounded-md shadow-md xl:shadow-none w-full p-10 sm:px-20">
                     @if(count($errors) > 0)
                         <div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert">
                             <span class="font-medium">Data anda tidak valid ! lengkapi lalu coba lagi.<br></span>
@@ -42,7 +32,7 @@
                             @endforeach
                         </div>
                     @endif
-                    <h2 class="intro-x pb-5 mt-10 font-bold text-2xl xl:text-3xl text-center xl:text-left">Mendaftar</h2>
+                    <h2 class="intro-x pb-5 font-bold text-2xl xl:text-3xl text-center xl:text-left">Mendaftar</h2>
                     <form action="{{ route('register') }}" method="POST" class="seller-form" role="form" enctype="multipart/form-data">
                         @csrf
                         <div class="form-section">
@@ -65,18 +55,17 @@
                                 <!-- Phone -->
                                 <div class="intro-y col-span-12 sm:col-span-6">
                                     <label for="phone" class="form-label">Nomor Handphone</label>
-                                    <input id="phone" type="tel" name="phone" class="form-control" onkeypress="return onlyNumberKey(event)" placeholder="0812********" required data-parsley-minlength="8" data-parsley-maxlength="13">
+                                    <input id="phone" type="text" name="phone" class="form-control numeric-input" placeholder="0812********" required data-parsley-minlength="8" data-parsley-maxlength="13">
                                 </div>
                                 <!-- Password -->
-                                <div class="relative intro-y col-span-12 sm:col-span-6">
-                                    <div class="absolute mr-1 right-0 flex items-center" style="margin-top: 1.95rem;">
-                                        <input class="hidden js-password-toggle" id="toggle" type="checkbox" />
-                                        <label class="bg-gray-300 hover:bg-gray-400 rounded px-2 py-1 text-sm text-gray-600 font-mono cursor-pointer js-password-label" for="toggle">
-                                            <i data-lucide="eye-off"></i>
-                                        </label>
-                                    </div>
+                                <div class="intro-y col-span-12 sm:col-span-6">
                                     <label for="password" class="form-label">Kata Sandi</label>
-                                    <input type="password" name="password" class="form-control js-password" placeholder="Masukan kata sandi" id="password" autocomplete="off" required data-parsley-minlength="8">
+                                    <div class="relative">
+                                        <input type="password" name="password" class="form-control pr-10" placeholder="Masukan kata sandi" id="password" autocomplete="off" required data-parsley-minlength="8">
+                                        <button type="button" class="toggle-password absolute inset-y-0 right-0 pr-4 mr-2 flex items-center text-slate-400 focus:outline-none">
+                                            <i class="fa-regular fa-eye-slash h-6 w-6"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -117,14 +106,19 @@
                                 <textarea id="detail_address" class="form-control" name="detail_address" placeholder="Jl.Lakubo no..." minlength="10" required=""></textarea>
                             </div>
                         </div>
-
-                        <p style="margin-top: 30px" class="text-gray-500 ml-1">Sudah mendaftar?</p>
-                        <a href="http://127.0.0.1:8000/login" class="w-24 text-center float-left btn btn-outline-secondary intro-y col-span-12 flex items-center" style="margin-top: 20px">Masuk</a>
-
-                        <div class="form-navigation intro-y col-span-12 flex items-center justify-end mt-5">
-                            <button type="button" class="previous btn btn-secondary w-24">Sebelumnya</button>
-                            <button type="button" class="next btn btn-primary w-24 ml-2">Selanjutnya</button>
-                            <button type="submit" class="btn btn-primary float-right w-24 ml-2">Mendaftar</button>
+                        <p style="margin-top: 30px" class="text-gray-500 ml-1 mb-1">Sudah mendaftar?</p>
+                        <div class="items-center w-full flex flex-col sm:flex-row justify-between">
+                            <a href="http://127.0.0.1:8000/login" class="login-btn btn btn-outline-secondary w-full sm:w-auto">Masuk</a>
+                            <div class="form-navigation mt-2 sm:mt-0 w-full sm:w-auto ml-auto">
+                                <button type="button" class="next btn btn-primary w-full sm:w-auto">Selanjutnya</button>
+                                <button type="button" class="previous btn btn-secondary w-full sm:w-auto">Sebelumnya</button>
+                                <button type="submit" class="btn btn-primary mt-2 sm:mt-0 w-full sm:w-auto">Mendaftar</button>
+                            </div>
+                        </div>
+                        <div class="intro-x pt-5 text-slate-600 dark:text-slate-500 text-center xl:text-left">
+                            Dengan Mendaftar, anda telah menyetujui
+                            <a class="text-primary dark:text-slate-200" href="">Terms and Conditions</a> &
+                            <a class="text-primary dark:text-slate-200" href="">Privacy Policy</a> Lakubo.
                         </div>
                     </form>
                 </div>
@@ -136,29 +130,56 @@
     @section('script')
 
         <script>
-            // Password Toggler
-            const passwordToggle = document.querySelector('.js-password-toggle')
 
-            passwordToggle.addEventListener('change', function() {
-                const password = document.querySelector('.js-password'),
-                    passwordLabel = document.querySelector('.js-password-label')
+            $(document).ready(function () {
+                // Disable text input
+                const numericInputs = document.querySelectorAll('.numeric-input');
+                numericInputs.forEach(function (input) {
+                    input.addEventListener('input', function (e) {
+                        e.target.value = e.target.value.replace(/[^0-9]/g, '');
+                    });
+                });
 
-                if (password.type === 'password') {
-                    password.type = 'text'
-                    passwordLabel.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="eye-off" data-lucide="eye-off" class="lucide lucide-eye-off block mx-auto"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>'
-                } else {
-                    password.type = 'password'
-                    passwordLabel.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="eye" data-lucide="eye" class="lucide lucide-eye block mx-auto"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>'
+                // Atur Section
+                var $sections = $('.form-section');
+
+                function navigateTo(index) {
+                    $sections.removeClass('current').eq(index).addClass('current');
+                    $('.form-navigation .previous').toggle(index > 0);
+                    var atTheEnd = index >= $sections.length - 1;
+                    $('.form-navigation .next').toggle(!atTheEnd);
+                    $('.form-navigation [Type=submit]').toggle(atTheEnd);
+
+                    const step = document.querySelector('.step' + index);
+                    step.style.backgroundColor = "#ff5656";
+                    step.style.color = "white";
                 }
 
-                password.focus()
-            })
-        </script>
+                function curIndex() {
+                    return $sections.index($sections.filter('.current'));
+                }
 
-        <script>
+                $('.form-navigation .previous').click(function () {
+                    navigateTo(curIndex() - 1);
+                });
+                $('.form-navigation .next').click(function () {
+                    Parsley.addMessage('en', 'required', 'Kolom ini wajib di isi');
+                    Parsley.addMessage('en', 'maxlength', 'Maksimal %s digit');
+                    Parsley.addMessage('en', 'minlength', 'Minimal %s digit');
+                    $('.seller-form').parsley().whenValidate({
+                        group: 'block-' + curIndex()
+                    }).done(function () {
+                        navigateTo(curIndex() + 1);
+                    });
+                });
+                $sections.each(function (index, section) {
+                    $(section).find(':input').attr('data-parsley-group', 'block-' + index);
+                });
+                navigateTo(0);
+            });
 
-            $(document).ready(function (){
 
+            $(document).ready(function () {
                 $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -268,48 +289,7 @@
                         }
                     });
                 });
-
             });
-
-        </script>
-
-        <script>
-
-            $(function(){
-                var $sections=$('.form-section');
-                function navigateTo(index){
-                    $sections.removeClass('current').eq(index).addClass('current');
-                    $('.form-navigation .previous').toggle(index>0);
-                    var atTheEnd = index >= $sections.length - 1;
-                    $('.form-navigation .next').toggle(!atTheEnd);
-                    $('.form-navigation [Type=submit]').toggle(atTheEnd);
-
-                    const step= document.querySelector('.step'+index);
-                    step.style.backgroundColor="#ff5656";
-                    step.style.color="white";
-                }
-                function curIndex(){
-                    return $sections.index($sections.filter('.current'));
-                }
-                $('.form-navigation .previous').click(function(){
-                    navigateTo(curIndex() - 1);
-                });
-                $('.form-navigation .next').click(function(){
-                    Parsley.addMessage('en', 'required', 'Kolom ini wajib di isi');
-                    Parsley.addMessage('en', 'maxlength', 'Maksimal %s digit');
-                    Parsley.addMessage('en', 'minlength', 'Minimal %s digit');
-                    $('.seller-form').parsley().whenValidate({
-                        group:'block-'+curIndex()
-                    }).done(function(){
-                        navigateTo(curIndex()+1);
-                    });
-                });
-                $sections.each(function(index,section){
-                    $(section).find(':input').attr('data-parsley-group','block-'+index);
-                });
-                navigateTo(0);
-            });
-
         </script>
 
     @endsection

@@ -15,8 +15,8 @@
         }
     </style>
 
-    <div class="md:py-5 mb-14">
-        <div class="w-full mx-auto bg-gray-100 shadow-lg rounded-lg">
+    <div class="md:pb-5 mb-14">
+        <div class="w-full mx-auto bg-white shadow-lg rounded-lg">
             <div class="md:flex ">
                 <div class="w-full p-4 px-5 py-5">
                     <div class="flex justify-between border-b pb-5 mb-5">
@@ -74,89 +74,98 @@
                     @else
                         <div class="flex flex-wrap lg:justify-between pt-6">
                             <div class="w-full lg:w-1/2 lg:pr-5">
-                                <div class="flex border-b pb-3 pt-3">
-                                    <h3 class="font-semibold text-gray-600 text-xs uppercase w-2/5">Detail Produk</h3>
-                                    <h3 class="font-semibold text-center text-gray-600 text-xs uppercase w-1/5 text-center">Kuantitas</h3>
-                                    <h3 class="font-semibold text-center text-gray-600 text-xs uppercase w-1/5 text-center">@Harga</h3>
-                                    <h3 class="font-semibold text-center text-gray-600 text-xs uppercase w-1/5 text-center">Subtotal</h3>
-                                </div>
                                 @php $total = 0 @endphp
                                 @php $totalWeight = 0 @endphp
                                 @php $totalProduct = 0 @endphp
                                 @foreach($cart->cartItems as $item)
-                                    <div class="flex items-center p-2 border-b">
-                                        <div class="flex grid grid-cols-4 w-2/5">
-                                            <div class="w-16 col-span-4 lg:col-span-1 mx-auto">
-                                                <img class="h-16" src="{{ asset("storage/product-image")."/".$item -> products -> productImage -> image_path }}" alt="">
+                                    <div class="flex items-center mb-2">
+                                        <div class="inline-flex items-center text-xs lg:text-sm w-full h-fit bg-gray-100 rounded-lg transform hover:translate-y-1 hover:shadow-xl transition duration-300 border-1">
+                                            <span class="absolute top-0 right-0 text-white bg-red-400 text-xs rounded-tr rounded-bl px-2">
+                                                <i class="fa-solid fa-tag mx-1"></i>
+                                                {{ $item -> products -> productCategories -> name }}
+                                            </span>
+                                            <div class="p-2 w-2/12">
+                                                <img class="rounded-md mx-auto h-16 w-8 object-cover" src="{{ asset("storage/product-image")."/".$item -> products -> productImage -> image_path }}" alt="">
+                                                <span class="flex justify-center font-medium text-xs truncate">{{ $item -> product_qty }} Item</span>
                                             </div>
-                                            <div class="col-span-4 lg:col-span-3 flex flex-col justify-between text-center lg:text-left mt-2 lg:ml-8 lg:mt-0 flex-grow">
-                                                <span class="font-bold text-xs lg:text-sm">{{ $item -> products -> name }}</span>
+                                            <div class="p-2 border-l w-10/12">
+                                                <span class="w-fullline-clamp-2 pt-2 flex items-center font-medium">{{ $item->products->name }}</span>
                                                 @php $subtotalWeight = 0 @endphp
                                                 @php $subtotalWeight += $item -> products -> weight * $item->product_qty @endphp
-                                                <span class="text-xs my-1">{{ $item -> products -> weight }} gram</span>
-                                                <span class="text-red-500 text-xs mt-1"><i class="fa-solid fa-tag mx-1"></i>{{ $item -> products -> productCategories -> name }}</span>
+                                                <span class="text-xs my-1">{{ $item -> products -> weight }} gram</span><br>
+                                                <span class="text-xs my-1">@ @currency($item->products->price)</span>
                                             </div>
+                                            <span class="absolute bottom-0 right-0 text-red-400 font-medium text-lg rounded-tr rounded-bl px-2">
+                                                <i class="fa-solid fa-sack-dollar m-1 text-orange-400"></i>
+                                                @php $subtotal = 0 @endphp
+                                                @php $subtotal += $item->products->price * $item->product_qty; @endphp
+                                                @currency($subtotal)
+                                            </span>
                                         </div>
-                                        <span class="text-center w-1/5 font-semibold text-sm">{{ $item -> product_qty }}</span>
-                                        <span class="text-center w-1/5 font-semibold text-sm">@currency($item->products->price)</span>
-                                        @php $subtotal = 0 @endphp
-                                        @php $subtotal += $item->products->price * $item->product_qty; @endphp
-                                        <span class="text-center w-1/5 font-semibold text-sm">@currency($subtotal)</span>
                                     </div>
                                     @php $total += $item->products->price * $item->product_qty; @endphp
                                     @php $totalWeight += $subtotalWeight; @endphp
                                     @php $totalProduct += $item -> product_qty; @endphp
                                 @endforeach
-                                <div class="text-md text-gray-400 mt-2">Berat total ({{ $totalProduct }}):
+                                <div class="text-md text-gray-400 mt-4">Berat total ({{ $totalProduct }}):
                                     <div class="text-md inline-block text-center ml-2 text-red-500">{{ $totalWeight }} gram</div>
                                 </div>
                             </div>
-                            <div class="w-full lg:w-1/2 p-2 mt-6 lg:mt-0 bg-red-400 rounded-lg lg:p-6 text-white">
-                                <form id="submit_form" method="POST" action="{{ route('customer.checkout.store', $cart->id) }}" data-parsley-validate="" role="form">
-                                    @csrf
-                                    <input type="hidden" name="price" id="price" value="{{ $total }}">
-                                    <input type="hidden" name="shipping_cost" id="shipping_cost" value="0">
-                                    <input type="hidden" name="etd" id="etd" value="0">
+                            <div class="w-full lg:w-1/2 mt-6 lg:mt-0 text-white">
+                                <div class="main-floating-div h-25rem lg:h-full w-full relative flex justify-center">
+                                    <div class="floating-div floating-div-top relative w-full bg-red-400 rounded-lg px-4 pb-8 pt-4 flex justify-center">
+                                        <form class="w-full" id="submit_form"
+                                              method="POST"
+                                              action="{{ route('customer.checkout.store', $cart->id) }}"
+                                              data-parsley-validate=""
+                                              role="form"
+                                        >
+                                        @csrf
+                                        <input type="hidden" name="price" id="price" value="{{ $total }}">
+                                        <input type="hidden" name="shipping_cost" id="shipping_cost" value="0">
+                                        <input type="hidden" name="etd" id="etd" value="0">
 
-                                    <div class="text-md text-gray-400">
-                                        <div class="shipment" id="center-option">
-                                            <label for="select_shipping" class="text-white">Pilih Pengiriman<span class="text-yellow-300 inline-block float-right" id="parsley_error"></span></label>
-                                            @if (isset($errorMessage))
-                                                <select disabled id="select_shipping" name="service" class="js-states py-3" required data-parsley-required-message="Anda belum memilih jasa pengiriman!" data-parsley-errors-container="#parsley_error">
-                                                    <option value=" "> {{ $errorMessage }} </option>
-                                                </select>
-                                            @else
-                                                <select id="select_shipping" name="service" class="js-states py-3" required data-parsley-required-message="Anda belum memilih jasa pengiriman!" data-parsley-errors-container="#parsley_error">
-                                                    <option value="" selected disabled>Layanan Pengiriman</option>
-                                                    @foreach( $services as $service )
-                                                        <option value="{{ $service['description'] }}" data-harga="{{ $service['biaya'] }}" data-etd="{{ $service['etd'] }}">{{ $service['description'] }} (@currency($service['biaya'])) | {{ $service['etd'] }} Hari Pengiriman</option>
-                                                    @endforeach
-                                                </select>
-                                            @endif
+                                        <div class="text-md text-gray-400">
+                                            <div class="shipment" id="center-option">
+                                                <label for="select_shipping" class="text-white">Pilih Pengiriman<span class="text-yellow-300 inline-block float-right" id="parsley_error"></span></label>
+                                                @if (isset($errorMessage))
+                                                    <select disabled id="select_shipping" name="service" class="js-states py-3" required data-parsley-required-message="Anda belum memilih jasa pengiriman!" data-parsley-errors-container="#parsley_error">
+                                                        <option value=" "> {{ $errorMessage }} </option>
+                                                    </select>
+                                                @else
+                                                    <select id="select_shipping" name="service" class="js-states py-3" required data-parsley-required-message="Anda belum memilih jasa pengiriman!" data-parsley-errors-container="#parsley_error">
+                                                        <option value="" selected disabled>Layanan Pengiriman</option>
+                                                        @foreach( $services as $service )
+                                                            <option value="{{ $service['description'] }}" data-harga="{{ $service['biaya'] }}" data-etd="{{ $service['etd'] }}">{{ $service['description'] }} (@currency($service['biaya'])) | {{ $service['etd'] }} Hari Pengiriman</option>
+                                                        @endforeach
+                                                    </select>
+                                                @endif
+                                            </div>
                                         </div>
+                                        <div class="pt-3">
+                                            <label for="note" class="text-md text-gray-400"></label>
+                                            <textarea id="note" name="note" class="resize-none border border-gray-400 rounded w-full py-2 px-3 focus:outline-none focus:ring-gray-100 text-black" placeholder="Tambah catatan (opsional)"></textarea>
+                                        </div>
+                                        <div class="flex justify-between border-b-2 py-3">
+                                            <span class="text-grey-400">Subtotal:</span>
+                                            <span class="inline-block text-right">@currency($subtotal)</span>
+                                        </div>
+                                        <div class="flex justify-between border-b-2 py-3">
+                                            <span class="text-grey-400">Biaya Pengiriman:</span>
+                                            <span class="inline-block text-right" id="shippingCost">0</span>
+                                        </div>
+                                        <div class="flex justify-between py-3 text-xl">
+                                            <span class="text-grey-400">Total:</span>
+                                            <span class="inline-block text-right" id="grand_total">@currency($total)</span>
+                                        </div>
+                                        @if(isset($errorMessage))
+                                            <button disabled type="submit" class="h-12 w-full float-right bg-gray-400 rounded text-white focus:outline-none">Konfirmasi Pesanan</button>
+                                        @else
+                                            <button type="submit" class="h-12 w-full float-right bg-red-500 rounded text-white focus:outline-none hover:bg-red-600">Konfirmasi Pesanan</button>
+                                        @endisset
+                                    </form>
                                     </div>
-                                    <div class="pt-3">
-                                        <label for="note" class="text-md text-gray-400"></label>
-                                        <textarea id="note" name="note" class="resize-none border border-gray-400 rounded w-full py-2 px-3 focus:outline-none focus:ring-gray-100 text-black" placeholder="Tambah catatan (opsional)"></textarea>
-                                    </div>
-                                    <div class="flex justify-between border-b-2 py-3">
-                                        <span class="text-grey-400">Subtotal:</span>
-                                        <span class="inline-block text-right">@currency($subtotal)</span>
-                                    </div>
-                                    <div class="flex justify-between border-b-2 py-3">
-                                        <span class="text-grey-400">Biaya Pengiriman:</span>
-                                        <span class="inline-block text-right" id="shippingCost">0</span>
-                                    </div>
-                                    <div class="flex justify-between py-3 text-xl">
-                                        <span class="text-grey-400">Total:</span>
-                                        <span class="inline-block text-right" id="grand_total">@currency($total)</span>
-                                    </div>
-                                    @if(isset($errorMessage))
-                                        <button disabled type="submit" class="h-12 w-full float-right bg-gray-400 rounded text-white focus:outline-none">Konfirmasi Pesanan</button>
-                                    @else
-                                        <button type="submit" class="h-12 w-full float-right bg-red-500 rounded text-white focus:outline-none hover:bg-red-600">Konfirmasi Pesanan</button>
-                                    @endisset
-                                </form>
+                                </div>
                             </div>
                         </div>
                     @endif
@@ -164,17 +173,72 @@
             </div>
         </div>
     </div>
+
+
+    <style>
+        @media (min-width: 1024px) {
+            .floating-div {
+                height: fit-content;
+                position: absolute!important;
+            }
+            .floating-div-fixed {
+                position: fixed!important;
+                top: 10%;
+            }
+            .floating-div-top {
+                position: absolute;
+                top: 0;
+            }
+            .floating-div-bottom {
+                position: absolute;
+                bottom: 0;
+            }
+        }
+
+    </style>
+
 @endsection
 
 
 @section('script')
 
     <script>
-        function onlyNumberKey(evt) {
-            // Only ASCII character in that range allowed
-            var ASCIICode = (evt.which) ? evt.which : evt.keyCode
-            return !(ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57));
+
+        // Function to set the width of floating-div-fixed
+        function setWidth() {
+            var parentWidth = $('.main-floating-div').width();
+            $('.floating-div-fixed').width(parentWidth - 33);
         }
+
+
+        // Set the width of floating-div-fixed on page load
+        $(document).ready(function() {
+            setWidth();
+        });
+
+        // Set the width of floating-div-fixed whenever the window is resized
+        $(window).resize(function() {
+            setWidth();
+        });
+
+        const floatPosStart = $('.floating-div').offset().top - (parseFloat($('.floating-div').css('paddingTop').replace(/auto/, 0)) + 60);
+        const floatPosEnd = $('.main-floating-div').offset().top + $('.main-floating-div').innerHeight() - $('.floating-div').outerHeight(true) - 89 - 20;
+
+        $(window).scroll(function () {
+            setWidth();
+            const y = $(this).scrollTop();
+            if (y >= floatPosStart && y <= floatPosEnd) {
+                $('.floating-div').removeClass('floating-div-top').addClass('floating-div-fixed');
+                setWidth();
+            } else if ( y >= floatPosEnd){
+                $('.floating-div').removeClass('floating-div-fixed').addClass('floating-div-bottom');
+                setWidth();
+            } else {
+                $('.floating-div').removeClass('floating-div-fixed').addClass('floating-div-top');
+                setWidth();
+            }
+            setWidth();
+        });
     </script>
 
     <script>

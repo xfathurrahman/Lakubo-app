@@ -9996,8 +9996,8 @@ html body{
     background-color: rgb(var(--color-slate-200) / var(--tw-bg-opacity));
     padding-top: 0.75rem;
     padding-bottom: 0.75rem;
-    padding-left: 2rem;
-    padding-right: 2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
 }
 .dark .login{
     --tw-bg-opacity: 1;

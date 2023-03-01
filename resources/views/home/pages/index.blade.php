@@ -39,26 +39,25 @@
         </div>
     </div>
 
-    <div class="carousel-category my-5">
-        <div class="mb-2 text-center font-semibold">
-            <h4>Kategori</h4>
-            <hr class="mt-1.5 mx-2">
+    <div class="carousel-category my-5 rounded-lg">
+        <div class="pt-2 px-4 text-center md:font-semibold">
+            <span id="arrowNav" class="flex justify-between">Kategori</span>
+            <hr class="mt-2">
         </div>
-
         <div class="slick-wrapper px-4">
-            <div id="sc-category-carousel" class="pb-3">
+            <div id="sc-category-carousel" class="overflow-hidden" style="max-height: 450px;" data-slick='{"lazyLoad": "ondemand"}'>
                 @foreach($categories as $category)
                     <a href="#" class="flex-shrink-0 my-2 relative overflow-hidden content-box rounded-lg max-w-xs shadow-lg">
                         <svg class="absolute bottom-0 left-0 mb-8" viewBox="0 0 375 283" fill="none" style="transform: scale(1.5); opacity: 0.1;">
                             <rect x="159.52" y="175" width="152" height="152" rx="8" transform="rotate(-45 159.52 175)" fill="white"/>
                             <rect y="107.48" width="152" height="152" rx="8" transform="rotate(-45 0 107.48)" fill="white"/>
                         </svg>
-                        <div class="relative pt-2 px-2 md:pt-5 md:px-5 flex items-center justify-center">
+                        <div class="slider relative pt-2 px-2 md:pt-5 md:px-5 flex items-center justify-center">
                             {{--<div class="block absolute w-20 h-20 bottom-0 left-0 -mb-24 ml-3" style="background: radial-gradient(black, transparent 60%); transform: rotate3d(0, 0, 1, 20deg) scale3d(1, 0.6, 1); opacity: 0.2;"></div>--}}
-                            <img class="image-product" src="{{ asset("storage/product-category")."/".$category -> image_path }}" alt="category-image">
+                            <img class="image-product max-w-full lazy" data-lazy="{{ asset("storage/product-category")."/".$category -> image_path }}">
                         </div>
-                        <div class="relative text-center text-white px-1 pb-1 mt-1 md:px-3 md:pb-3 md:mt-3">
-                            <span class="block font-semibold text-xs overflow-ellipsis capitalize md:uppercase ">{{ $category -> name }}</span>
+                        <div class="p-1 md:p-3 h-10 flex items-center justify-center">
+                            <span class="text-xs text-center font-semibold capitalize md:uppercase line-clamp-2">{{ $category -> name }}</span>
                         </div>
                     </a>
                 @endforeach
@@ -66,8 +65,8 @@
         </div>
     </div>
 
-    <div class="carousel-product my-4">
-        <div class="mb-8 w-100 text-center ">
+    <div class="carousel-product my-4 rounded-lg">
+        <div class="mb-2 text-center ">
             <h4 class="mx-4 mb-3 font-semibold">Produk Terbaru</h4>
             <hr>
         </div>
@@ -127,8 +126,8 @@
                 </div>
             @endforeach
         </div>
-        <div class="text-end">
-            <h5 class="m-0 p-0 align-middle"><a href="#" class="btn-new-product-all font-bold text-decoration-none">Lihat Semua</a></h5>
+        <div class="text-end mt-2 -mb-3 -mr-2.5">
+            <a href="#" class="text-white text-sm btn bg-red-400 rounded-tl-lg rounded-br-lg px-2 text-decoration-none">Lihat Semua</a>
         </div>
     </div>
 
@@ -208,6 +207,7 @@
         /*##########################################################
                               *CAROUSEL CATEGORY*
         ##########################################################*/
+
         $('#sc-category-carousel').slick({
             rows: 2,
             infinite: false,
@@ -217,8 +217,9 @@
             arrows: true,
             dots: false,
             lazyLoad: 'ondemand',
-            prevArrow: "<button type='button' class='slick-prev pull-left'><i class='fa fa-angle-left' aria-hidden='true'></i></button>",
-            nextArrow: "<button type='button' class='slick-next pull-right'><i class='fa fa-angle-right' aria-hidden='true'></i></button>",
+            appendArrows: $('#arrowNav'),
+            prevArrow: "<button type='button' class='slick-prev pull-left flex items-center justify-center bg-white text-red-400 p-2 hover:bg-white-300 hover:shadow-sm hover:shadow-gray-400 hover:ring-gray-500 rounded-full w-8 h-8'><i class='fa fa-angle-left' aria-hidden='true'></i></button>",
+            nextArrow: "<button type='button' class='slick-next pull-right flex items-center justify-center bg-white text-red-400 p-2 hover:bg-white-300 hover:shadow-sm hover:shadow-gray-400 hover:ring-gray-500 rounded-full w-8 h-8'><i class='fa fa-angle-right' aria-hidden='true'></i></button>",
             responsive: [
                 {
                     breakpoint: 850,
@@ -230,8 +231,8 @@
                 {
                     breakpoint: 650,
                     settings: {
-                        slidesToShow: 5,
-                        slidesToScroll: 5,
+                        slidesToShow: 4,
+                        slidesToScroll: 4,
                     }
                 }
             ]
@@ -255,7 +256,12 @@
                 navText: ['<i class="fa fa-angle-left" aria-hidden="true"></i>', '<i class="fa fa-angle-right" aria-hidden="true"></i>'],
                 dots: false,
                 responsive: {
-                    350: {
+                    0:{
+                        items:1,
+                        slideBy: 1,
+                        margin: 5,
+                    },
+                    320: {
                         items: 2,
                         slideBy: 2,
                         margin: 5,
@@ -305,7 +311,7 @@
                                 stopOnFocus: true,
                                 closeOthers: true,
                                 offset: {
-                                    y: 50 // vertical axis - can be a number or a string indicating unity. eg: '2em'
+                                    y: 40 // vertical axis - can be a number or a string indicating unity. eg: '2em'
                                 },
                             }).showToast();
                         } else{
@@ -319,7 +325,7 @@
                                 stopOnFocus: true,
                                 closeOthers: true,
                                 offset: {
-                                    y: 50 // vertical axis - can be a number or a string indicating unity. eg: '2em'
+                                    y: 40 // vertical axis - can be a number or a string indicating unity. eg: '2em'
                                 },
                             }).showToast();
                         }

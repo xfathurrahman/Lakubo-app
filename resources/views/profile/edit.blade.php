@@ -103,8 +103,7 @@
                         reader.readAsDataURL(this.files[0]);
                     });
 
-
-                    if ($("#preview-photo").prop('src').includes("profile-photos")) {
+                    if ($("#preview-photo").prop('class').includes("filled-photo")) {
                         $("#reset-photo").removeClass("hidden");
                         // Ketika tombol "Reset Foto" diklik, ganti gambar di preview dengan foto default
                         $("#reset-photo").click(function () {

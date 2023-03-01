@@ -15,8 +15,8 @@
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 bg-white mb-16 rounded-b-md">
         <div class="font-medium text-xl ml-4 pb-4 flex items-center border-b">Informasi Produk</div>
         <div class="flex flex-wrap justify-center">
-            <div class="w-full lg:w-2/5 p-4">
-                <div class="relative h-28rem">
+            <div class="w-full lg:w-2/5 p-4 border-b sm:border-0">
+                <div class="relative h-62 lg:h-28rem">
                     @php $first = true; @endphp
                     @foreach($images as $image)
                         <img class="slide rounded-2xl md:mt-0 h-full w-full {{ $first ? ' block' : ' hidden' }}" src="{{ asset('storage/product-image').'/'.$image->image_path }}" alt="product">
@@ -27,7 +27,7 @@
                     @foreach($images as $image)
                         <div class="w-1/5 flex justify-center">
                             <button aria-label="product-thumbnail" data-image-path="{{ asset('storage/product-image').'/'.$image->image_path }}" class="thumbnail-button rounded-2xl{{ $loop->first ? ' ring-2 opacity-50' : '' }}">
-                                <img class="rounded-2xl hover:opacity-50 w-20 h-20" src="{{ asset('storage/product-image').'/'.$image->image_path }}" alt="image-product">
+                                <img class="rounded-2xl hover:opacity-50 w-full h-14 sm:h-20" src="{{ asset('storage/product-image').'/'.$image->image_path }}" alt="image-product">
                             </button>
                         </div>
                     @endforeach
@@ -39,15 +39,19 @@
                 </div>
                 <div class="h-10 flex items-center">
                     <div class="flex justify-between w-full items-center">
-                        <span class="text-red-400 text-2xl md:text-3xl font-semibold tracking-wide">@currency( $product -> price )</span>
-                        <a href="#" class="w-40 h-12 inline-flex bg-red-100 p-1 rounded mt-6 items-center">
-                            @isset($product -> stores -> users -> profile_photo_path)
-                                <img class="rounded-full w-10 h-10" src="{{ asset('storage/profile-photos/'. $product -> stores -> users -> profile_photo_path) }}" alt="pp-owner"/>
-                            @else
-                                <img class="rounded-full w-10 h-10" src="https://ui-avatars.com/api/?name={{ $product -> stores -> name }}&amp;color=7F9CF5&amp;background=EBF4FF" alt="pp-owner"/>
-                            @endisset
-                            <span class="ml-2 capitalize text-sm font-medium text-red-400 line-clamp-2 text-justify">{{ $product -> stores -> name }}</span>
-                        </a>
+                        <span class="w-3/5 text-red-400 text-2xl md:text-3xl font-semibold tracking-wide">@currency( $product -> price )</span>
+                        <span class="w-28 mt-2 flex items-center">
+                            <div class="relative w-full">
+                                  <a href="#" class="flex items-center w-full h-auto bg-red-100 p-1 rounded">
+                                      <span class="pl-12 flex-1 capitalize text-sm font-medium text-red-400 line-clamp-2 text-justify">{{ $product->stores->name }}</span>
+                                      @isset($product->stores->users->profile_photo_path)
+                                          <img class="rounded-full p-0.5 border-2 border-red-200 w-10 h-10 absolute top-1/2 transform -translate-y-1/2 left-1.5" src="{{ asset('storage/profile-photos/'. $product->stores->users->profile_photo_path) }}" alt="pp-owner">
+                                      @else
+                                          <img class="rounded-full p-0.5 border-2 border-red-200 w-10 h-10 absolute top-1/2 transform -translate-y-1/2 left-1.5" src="https://ui-avatars.com/api/?name={{ $product->stores->name }}&amp;color=7F9CF5&amp;background=EBF4FF" alt="pp-owner">
+                                      @endisset
+                                  </a>
+                            </div>
+                        </span>
                     </div>
                 </div>
                 <div class="rounded-lg w-full">
