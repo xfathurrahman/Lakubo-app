@@ -4,10 +4,10 @@
     <body id="main-app" class="font-sans leading-normal tracking-normal">
 
     <nav class="px-4 py-2 shadow bg-white fixed w-full z-20 top-0 left-0 border-b border-gray-200">
-        @include('home.components.navbar')
-    </nav>
+            @include('home.components.navbar')
+        </nav>
 
-    <div class="container mx-auto mt-20 xl:px-32">
+        <div class="container mx-auto mt-20 xl:px-32">
             @yield('content')
         </div>
 
@@ -22,11 +22,12 @@
         <script src="{{ asset('js/easyzoom.js') }}"></script>
         <script src="{{ asset('js/select2.min.js') }}"></script>
         <script src="{{ asset('js/select2-searchInputPlaceholder.js') }}"></script>
-
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.ckeditor.com/ckeditor5/35.4.0/classic/ckeditor.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.8.3/dist/lazyload.min.js"></script>
+        <script src="{{ asset('js/loading-page.js') }}"></script>
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdn.ckeditor.com/ckeditor5/35.4.0/classic/ckeditor.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.8.3/dist/lazyload.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.8/lottie.min.js"></script>
 
     <script>
         @if(Auth::check())

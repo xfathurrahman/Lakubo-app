@@ -80,13 +80,13 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="side-menu {{ Request::is('admin/') ? 'side-menu--active' : '' }}">
+                        <a href="{{ route('admin.carousels.index') }}" class="side-menu {{ Request::is('admin/carousels') ? 'side-menu--active' : '' }}">
                             <div class="side-menu__icon"> <i data-lucide="package"></i> </div>
                             <div class="side-menu__title">Carousel</div>
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="side-menu">
+                        <a href="#" class="side-menu {{ Request::is('admin/categories/*') ? 'side-menu--active' : '' }}">
                             <div class="side-menu__icon"> <i data-lucide="tag"></i> </div>
                             <div class="side-menu__title">
                                 Kelola Kategori

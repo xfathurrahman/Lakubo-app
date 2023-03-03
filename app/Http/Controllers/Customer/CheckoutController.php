@@ -23,17 +23,17 @@ class CheckoutController extends Controller
     {
         if ($cart_id) {
             $cart = Cart::with('cartItems')->where('user_id', Auth::id())->where('id', $cart_id)->first();
-            $services  = $this->getShippingCost($cart);
+            /*$services  = $this->getShippingCost($cart);
             if (empty($services)) {
                 $errorMessage = "Maaf, tidak ada layanan pengiriman yang tersedia saat ini.";
                 return view('home.pages.checkout', [
                     'cart'         => $cart,
                     'errorMessage' => $errorMessage,
                 ]);
-            }
+            }*/
             return view('home.pages.checkout', [
                 'cart'     => $cart,
-                'services' => $services,
+                /*'services' => $services,*/
             ]);
         }
         session()->flash('error', 'Anda belum memilih produk untuk di checkout, Anda dialihkan ke halaman keranjang.');
@@ -44,21 +44,27 @@ class CheckoutController extends Controller
     {
         $response = Http::withHeaders([
             'key' => env('RAJAONGKIR_API_KEY'),
-        ])->get(env('RAJAONGKIR_API_URL') . '/city');
+        ])->get(env('RAJAONGKIR_API_URL') . '/city', [
+            'query' => $searchQuery
+        ]);
+
         $cities = collect($response['rajaongkir']['results'])->map(function ($city) {
             return [
                 'id'   => $city['city_id'],
                 'name' => $city['city_name']
             ];
         });
-        $filteredCities = $cities->filter(function ($city) use ($searchQuery) {
-            return str_contains(strtolower($city['name']), strtolower($searchQuery));
-        });
-        return $filteredCities->pluck('id')->first();
+
+        return $cities->pluck('id')->first();
     }
 
-    public function getShippingCost($cart)
+    public function getShippingCost(Request $request)
     {
+
+        $shipping_agent = $request->input('shipping_agent');
+        $cart_id = $request->input('cart_id');
+
+        $cart = Cart::find($cart_id);
         $totalWeight = 0;
         $subtotalWeight = 0;
         foreach ($cart->cartItems as $item) {
@@ -69,8 +75,8 @@ class CheckoutController extends Controller
         $userAddress  = UserAddress::find(Auth::id());
         $userRegency  = str_replace(array('KABUPATEN ', 'KOTA '), '', $userAddress->regency->name);
         $searchQuery  = $userRegency;
-        $result       = $this->searchCityByName($searchQuery);
-        $destination  = (int)$result;
+        $city         = $this->searchCityByName($searchQuery);
+        $destination  = (int)$city;
 
         $cost = Http::withHeaders([
             'key' => env('RAJAONGKIR_API_KEY')
@@ -78,16 +84,20 @@ class CheckoutController extends Controller
             'origin'        => 91,              // ID kota/kabupaten asal // 91 adalah Boyolali
             'destination'   => $destination,    // ID kota/kabupaten tujuan
             'weight'        => $totalWeight,    // berat barang dalam gram
-            'courier'       => 'jne'            // kode kurir pengiriman: ['jne', 'tiki', 'pos'] untuk starter
+            'courier'       => $shipping_agent  // kode kurir pengiriman: ['jne', 'tiki', 'pos'] untuk starter
         ]);
 
         $services = [];
         if (isset($cost['rajaongkir']['status']['code']) && $cost['rajaongkir']['status']['code'] === 200) {
             foreach($cost['rajaongkir']['results'][0]['costs'] as $row) {
+                $etd = $row['cost'][0]['etd'];
+                if (str_contains($etd, 'HARI')) {
+                    $etd = str_replace('HARI', '', $etd);
+                }
                 $services[] = array(
                     'description'   => $row['description'],
-                    'biaya'         => $row['cost'][0]['value'],
-                    'etd'           => $row['cost'][0]['etd'],
+                    'shipping_cost' => $row['cost'][0]['value'],
+                    'etd'           => $etd,
                 );
             }
         }

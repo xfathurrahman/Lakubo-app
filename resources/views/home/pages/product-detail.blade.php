@@ -1,6 +1,10 @@
 @extends('home.main')
 @section('content')
 
+    <div id="loading-background">
+        <div id="loading-animation" data-animation-path="{{ asset('assets/json/loading-shop.json') }}"></div>
+    </div>
+
     @include('home.components.bc-product')
 
     <style>

@@ -3,6 +3,8 @@
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\AdminStoreController;
+use App\Http\Controllers\Admin\AdminTransactionController;
+use App\Http\Controllers\Admin\CarouselController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
@@ -47,8 +49,21 @@ Route::middleware(['auth', 'verified', 'role:admin'])->name('admin.')->prefix('a
     Route::get('/dashboard',[AdminDashboardController::class,'index'])->name('dashboard');
     /*-----------------------------------------------Produk-------------------------------------------------------*/
     Route::get('/products',[AdminProductController::class,'index'])->name('products');
+    Route::put('/products/update/{id}',[AdminProductController::class,'update'])->name('products.update');
+    Route::delete('/products/delete/{id}',[AdminProductController::class,'destroy'])->name('products.delete');
     /*-----------------------------------------------Lapak-------------------------------------------------------*/
     Route::get('/stores',[AdminStoreController::class,'index'])->name('stores');
+    Route::put('/stores/update/{id}',[AdminStoreController::class,'update'])->name('stores.update');
+    Route::delete('/stores/delete/{id}',[AdminStoreController::class,'delete'])->name('stores.delete');
+    /*-----------------------------------------------Carousels-------------------------------------------------------*/
+    Route::get('/carousels', [CarouselController::class,'index'])->name('carousels.index');
+    Route::post('/carousels/store', [CarouselController::class,'store'])->name('carousels.store');
+    Route::put('/carousels/update/{id}', [CarouselController::class,'update'])->name('carousels.update');
+    Route::delete('/carousels/delete/{id}', [CarouselController::class,'destroy'])->name('carousels.destroy');
+    /*-----------------------------------------------Transactions-------------------------------------------------------*/
+    Route::get('/transactions', [AdminTransactionController::class,'index'])->name('transactions.index');
+    Route::put('/transactions/update/{id}', [AdminTransactionController::class,'update'])->name('transactions.update');
+    Route::delete('/transactions/delete/{id}', [AdminTransactionController::class,'delete'])->name('transactions.delete');
     /*-----------------------------------------------Kategori-------------------------------------------------------*/
     Route::get('/categories/products',[CategoryController::class,'getProduct'])->name('categories.products');
     Route::get('/categories/stores',[CategoryController::class,'getStore'])->name('categories.stores');
@@ -67,7 +82,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->name('admin.')->prefix('a
     Route::post('/permissions/create',[PermissionController::class,'store'])->name('permissions.store');
     Route::put('/permissions/{permission}/update',[PermissionController::class,'update'])->name('permissions.update');
     Route::delete('/permissions/{permission}/delete',[PermissionController::class,'destroy'])->name('permissions.delete');
-    /*-----------------------------------------------Pengguna-------------------------------------------------------*/
+    /*-------------------------------------------------Pengguna-------------------------------------------------------*/
     Route::get('/manage/users', [UserController::class, 'index'])->name('users.index');
     Route::get('/manage/users/{user}', [UserController::class, 'show'])->name('users.show');
     Route::put('/users/{user}', [UserController::class, 'updateUserAccount'])->name('users.account.update');
@@ -78,18 +93,18 @@ Route::middleware(['auth', 'verified', 'role:admin'])->name('admin.')->prefix('a
 
 Route::middleware(['auth', 'verified', 'role:seller'])->name('seller.')->prefix('seller')->group(function (){
     Route::get('/dashboard',[SellerDashboardController::class,'index'])->name('dashboard');
-    // MY STORE
+    /*-----------------------------------------------MY STORE---------------------------------------------------------*/
     Route::get('/store',[StoreController::class,'index'])->name('store.index');
     Route::put('/store/{store}/update',[StoreController::class,'update'])->name('store.update');
     Route::delete('/store',[StoreController::class,'destroy'])->name('store.destroy');
-    // PRODUCTS
+    /*-----------------------------------------------PRODUCTS---------------------------------------------------------*/
     Route::get('/products', [ProductController::class,'index'])->name('products.index');
     Route::get('/products/create', [ProductController::class,'create'])->name('products.create');
     Route::post('/products/create', [ProductController::class,'store'])->name('products.store');
     Route::get('/products/{product}/edit', [ProductController::class,'edit'])->name('products.edit');
     Route::put('/products/{product}/update', [ProductController::class,'update'])->name('products.update');
     Route::delete('/products/{product}/delete', [ProductController::class,'destroy'])->name('products.delete');
-    // ORDER
+    /*-----------------------------------------------ORDERS-----------------------------------------------------------*/
     Route::get('/orders', [SellerOrderController::class,'index'])->name('orders.index');
     Route::get('/orders/detail/{order_id}', [SellerOrderController::class,'show'])->name('order.show');
     Route::put('/orders/detail/status/{order_id}', [SellerOrderController::class,'updateStatus'])->name('order.update.status');
@@ -103,28 +118,25 @@ Route::middleware(['auth', 'verified', 'role:customer'])->name('customer.')->pre
     Route::get('/store/district', [CustomerController::class,'getDistrict'])->name('store.getDistrict');
     Route::get('/store/categories/', [CustomerController::class,'getStoreCate'])->name('store.getStoreCate');
     Route::get('/orders', [OrderController::class,'index'])->name('orders');
-    // CART
+    /*-----------------------------------------------CARTS------------------------------------------------------------*/
     Route::get('/cart', [CartController::class,'index'])->name('cart.index');
     Route::post('/add-to-cart',[CartController::class,'addProductToCart'])->name('addToCart');
     Route::get('/load-cart-data',[CartController::class,'cartCount'])->name('cartCount');
     Route::post('/delete-cart-item',[CartController::class,'deleteCartItem'])->name('delete.cartItem');
     Route::put('/update-cart-item',[CartController::class,'updateCartItem'])->name('update.cartItem');
-    // CHECKOUT
+    /*-----------------------------------------------CHECK OUT--------------------------------------------------------*/
     Route::get('/checkout/{cart_id}', [CheckoutController::class,'index'])->name('checkout.index');
     Route::post('/checkout/{cart_id}', [CheckoutController::class,'store'])->name('checkout.store');
-    Route::post('/get-shipping-data', [CheckoutController::class,'store'])->name('shipping.data');
-    Route::put('/update-shipping',[CheckoutController::class,'updateShipping'])->name('update.shipping');
-    Route::post('/get-snap-token',[CheckoutController::class,'getSnapToken'])->name('snap.token');
-    Route::get('/cities', [CheckoutController::class, 'getCities'])->name('getCities');
-    // CUSTOMER ORDER
+    Route::post('/get-shipping-data', [CheckoutController::class,'getShippingCost'])->name('shipping.cost');
+    /*-----------------------------------------------ORDERS-----------------------------------------------------------*/
     Route::get('/orders', [OrderController::class, 'index'])->name('orders');
     Route::get('/order/detail/{order_id}', [OrderController::class, 'show'])->name('order.show');
     Route::put('/order/detail/{order_id}', [OrderController::class, 'update'])->name('order.update');
     Route::put('/order/detail/confirm/{order_id}', [OrderController::class, 'confirmOrder'])->name('order.confirm');
-    // WD
+    /*-----------------------------------------------WITHDRAW---------------------------------------------------------*/
     Route::get('/withdraw', [CustomerWithdrawalController::class, 'index'])->name('withdraw.index');
     Route::post('/withdraw/store', [CustomerWithdrawalController::class, 'store'])->name('withdraw.store');
-    // TRANSACTION
+    /*-----------------------------------------------TRANSACTIONS-----------------------------------------------------*/
     Route::get('/transaction', [CustomerTransactionController::class, 'index'])->name('transaction.index');
 });
 
