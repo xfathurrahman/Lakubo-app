@@ -3,11 +3,15 @@
 @section('body')
     <body id="main-app" class="font-sans leading-normal tracking-normal">
 
+    <div id="loading-background">
+        <img class="absolute w-52 h-24 lg:w-80 lg:h-40 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" src="{{ asset('assets/images/loading-lakubo-cow.gif') }}"></img>
+    </div>
+
     <nav class="px-4 py-2 shadow bg-white fixed w-full z-20 top-0 left-0 border-b border-gray-200">
             @include('home.components.navbar')
         </nav>
 
-        <div class="container mx-auto mt-20 xl:px-32">
+    <div class="container mx-auto mt-20 xl:px-32">
             @yield('content')
         </div>
 
@@ -21,13 +25,66 @@
         <script src="{{ asset('js/parsley.min.js') }}"></script>
         <script src="{{ asset('js/easyzoom.js') }}"></script>
         <script src="{{ asset('js/select2.min.js') }}"></script>
-        <script src="{{ asset('js/select2-searchInputPlaceholder.js') }}"></script>
+        <script src="{{ asset('js/select2-custom.js') }}"></script>
         <script src="{{ asset('js/loading-page.js') }}"></script>
         <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="https://cdn.ckeditor.com/ckeditor5/35.4.0/classic/ckeditor.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
         <script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.8.3/dist/lazyload.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.8/lottie.min.js"></script>
+
+
+    <script>
+        $(document).ready(function() {
+            $(".dropdown-menu").hide();
+
+            $(".dropdown-toggle").on("click", function() {
+                $(".dropdown-menu").toggle();
+            });
+
+            $(".dropdown-item").on("click", function() {
+                const selectedOption = $(this).text();
+                const category = $(this).data('category');
+                $(".dropdown-text").text(selectedOption);
+                $(".dropdown-menu").hide();
+                $("#search").data('category', category);
+            });
+
+            $("#search-btn").on("click", function() {
+                const query = $("#search").val();
+                const category = $("#search").data('category');
+
+                if(!query) {
+                    $("#search").attr('required', true);
+                    $("#search").focus();
+                    return false;
+                }
+
+                $.ajax({
+                    url: "{{ route('product.search') }}",
+                    type: 'GET',
+                    data: {query: query, category: category},
+                    success: function(response) {
+                        if (response.length > 0) {
+                            window.location.href = "{{ route('product.search.result') }}?query="+query+"&category="+category;
+                        } else {
+                            window.location.href = "{{ route('product.search.result') }}?query="+query+"&category="+category+"&error=1";
+                        }
+                    },
+                    error: function(xhr) {
+                        /*console.log(xhr.responseText);*/
+                    }
+                });
+            });
+
+            $(document).on("click", function(event) {
+                if (!$(event.target).closest(".dropdown").length) {
+                    $(".dropdown-menu").hide();
+                }
+            });
+        });
+    </script>
+
 
     <script>
         @if(Auth::check())

@@ -235,15 +235,15 @@
                                         </div>
                                         <p class="ml-2 uppercase text-blue-500">{{ $order->bank }}</p>
                                     </div>
-                                    <div class="flex items-center mt-2">
-                                        <div class="flex items-center justify-between">
+                                    <div class="lg:flex flex-col lg:flex-row items-center mt-2">
+                                        <div class="lg:flex items-center justify-between mr-2">
                                             <span class="w-40 inline-flex">
                                                 <i class="fa-solid fa-hashtag text-slate-500 mr-2"></i>Nomor VA
                                             </span>:
                                         </div>
-                                        <div class="relative inline-flex">
-                                            <span class="ml-2 underline decoration-solid decoration-red-400"> {{ $order->va_number }}</span>
+                                        <div class="relative bg-gray-200 p-2 rounded flex justify-between">
                                             <input id="va_number" class="hidden" value="{{ $order->va_number }}">
+                                            <span class="underline decoration-solid decoration-red-400"> {{ $order->va_number }}</span>
                                             <button id="copy-va-number" class="text-gray-500 hover:text-gray-600 focus:outline-none ml-2">
                                                 <i class="fas fa-copy text-gray-400"></i>
                                             </button>
@@ -257,9 +257,9 @@
                                                 </span>:
                                             </div>
                                         </div>
-                                        <div class="text-blue-500 ml-2" id="countdown"></div>
                                     </div>
                                     <div class="bg-yellow-200 rounded-md p-2 mt-2">
+                                        <div class="text-blue-500 mb-2 text-center" id="countdown"></div>
                                         <span>Catatan: Perhatikan batas waktu pembayaran agar pesanan tidak dibatalkan otomatis oleh sistem.</span>
                                     </div>
                                 </div>
@@ -313,40 +313,42 @@
                 </div>
                 <div class="col-span-12 lg:col-span-7 2xl:col-span-8">
                     <div class="box p-5 rounded-md">
-                        <div class="overflow-auto lg:overflow-visible -mt-3">
-                            <table class="table table-striped">
-                                <thead>
-                                <tr>
-                                    <th class="whitespace-nowrap py-5">Produk</th>
-                                    <th class="whitespace-nowrap text-right">@Harga</th>
-                                    <th class="whitespace-nowrap text-right">Kuantitas</th>
-                                    <th class="whitespace-nowrap text-right">Subtotal</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($order->orderItems as $item)
-                                    <tr>
-                                        <td class="!py-4">
-                                            <div class="flex items-center">
-                                                <div class="w-10 h-10 image-fit zoom-in">
-                                                    <img alt="#"
-                                                         src="{{ asset("storage/product-image")."/".$item-> products -> productImage -> image_path }}"
-                                                         title="Uploaded {{ Carbon\Carbon::parse($item -> products -> created_at)->diffForHumans() }}">
-                                                </div>
-                                                <a href=""
-                                                   class="font-medium whitespace-nowrap ml-4">{{ $item -> products -> name }}</a>
-                                            </div>
-                                        </td>
-                                        <td class="text-right">@currency($item->products->price)</td>
-                                        <td class="text-right">{{ $item -> quantity }}</td>
-                                        <td class="text-right">@currency($item->subtotal)</td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
+                        <div class="flex items-center border-b border-slate-200/60 dark:border-darkmode-400 pb-5 mb-5">
+                            <div class="font-medium text-base truncate">Produk yang dipesan</div>
+                        </div>
+                        @php $totalWeight = 0 @endphp
+                        @php $totalProduct = 0 @endphp
+                        @foreach($order->orderItems as $item)
+                            <div class="flex items-center mb-2">
+                                <div class="inline-flex items-center text-xs lg:text-sm w-full h-fit bg-gray-100 rounded-lg transform hover:translate-y-1 hover:shadow-xl transition duration-300 border-1">
+                                    <span class="absolute top-0 right-0 text-white bg-red-400 text-xs rounded-tr rounded-bl px-2">
+                                        <i class="fa-solid fa-tag mx-1"></i>
+                                        {{ $item -> products -> productCategories -> name }}
+                                    </span>
+                                    <div class="p-2 w-2/12">
+                                        <img class="rounded-md mx-auto h-16 w-8 object-cover" src="{{ asset("storage/product-image")."/".$item -> products -> productImage -> image_path }}" alt="">
+                                        <span class="flex justify-center font-medium text-xs truncate">{{ $item -> quantity }} Item</span>
+                                    </div>
+                                    <div class="p-2 border-l w-10/12">
+                                        <span class="w-full truncate pt-2 flex items-center font-medium">{{ $item->products->name }}</span>
+                                        @php $subtotalWeight = 0 @endphp
+                                        @php $subtotalWeight += $item -> products -> weight * $item->quantity @endphp
+                                        <span class="text-xs my-1">{{ $item -> products -> weight }} gram</span><br>
+                                        <span class="text-xs my-1">@ @currency($item->products->price)</span>
+                                    </div>
+                                    <span class="absolute bottom-0 right-0 text-red-400 font-medium text-lg rounded-tr rounded-bl px-2">
+                                        @currency($item->subtotal)
+                                    </span>
+                                </div>
+                            </div>
+                            @php $totalWeight += $subtotalWeight; @endphp
+                            @php $totalProduct += $item -> quantity; @endphp
+                        @endforeach
+                        <div class="text-md text-gray-400 mt-4">Berat total ({{ $totalProduct }}) produk:
+                            <div class="text-md inline-block text-center ml-2 text-red-500">{{ $totalWeight }} gram</div>
                         </div>
                     </div>
-                    <div class="box p-5 rounded-md mt-5">
+                    <div class="box p-5 rounded-md mt-5 mb-4">
                         <div class="flex items-center dark:border-darkmode-400">
                             <div class="font-medium text-base truncate">Detail Pengiriman</div>
                         </div>
@@ -433,7 +435,7 @@
     @endif
 
     @section('script')
-        <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js"
+        <script type="text/javascript" src="https://app.midtrans.com/snap/snap.js"
                 data-client-key="config('midtrans.client_key')"></script>
 
         <script type="text/javascript">

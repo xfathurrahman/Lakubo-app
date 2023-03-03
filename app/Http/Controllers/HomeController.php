@@ -13,6 +13,7 @@ use App\Models\Village;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
@@ -23,6 +24,16 @@ class HomeController extends Controller
         $categories = ProductCategory::orderBy('id', 'asc')->get();
 
         return view('home.pages.index', compact('products','categories'));
+    }
+
+    public function termAndConditions(): View|\Illuminate\Foundation\Application|Factory|Application
+    {
+        return view('home.pages.term-and-conditions');
+    }
+
+    public function privacyPolicy(): View|\Illuminate\Foundation\Application|Factory|Application
+    {
+        return view('home.pages.privacy-policy');
     }
 
     public function getProduct($id): Factory|View|Application
@@ -45,5 +56,39 @@ class HomeController extends Controller
             'detail_address' => $detail_address,
         ]);
     }
+
+    public function searchProduct(Request $request)
+    {
+        $query = $request->query('query');
+        $category = $request->query('category');
+
+        if (empty($category) || $category === "undefined") {
+            $products = Product::where('name', 'LIKE', '%'.$query.'%')->get();
+        } else {
+            $products = Product::where('category_id', $category)->where('name', 'LIKE', '%'.$query.'%')->get();
+        }
+
+        return response()->json($products);
+    }
+
+
+    public function searchResult(Request $request)
+    {
+        $query = $request->query('query');
+        $category = $request->query('category');
+        $error = $request->input('error');
+
+        if (empty($category) || $category === "undefined") {
+            $products = Product::where('name', 'LIKE', '%'.$query.'%')->get();
+        } else {
+            $products = Product::where('category_id', $category)->where('name', 'LIKE', '%'.$query.'%')->get();
+        }
+
+        $searchTerm = $query;
+        $category = ProductCategory::find($category);
+
+        return view('home.pages.search-results', compact('products', 'searchTerm' , 'category', 'error'));
+    }
+
 
 }

@@ -1,67 +1,17 @@
 <x-app-layout>
 
-    <style>
-        .select2.select2-container {
-            width: 200px !important;
-        }
-
-        .select2.select2-container .select2-selection {
-            box-shadow: 0 3px 20px #0000000b;
-            position: relative;
-            border-radius: 0.375rem;
-            border-color: transparent;
-            --tw-bg-opacity: 1;
-            background-color: rgb(255 255 255 / var(--tw-bg-opacity));
-            -webkit-border-radius: 3px;
-            -moz-border-radius: 3px;
-            height: 38px;
-            margin-bottom: 5px;
-            outline: none !important;
-            transition: all .15s ease-in-out;
-        }
-
-        .select2.select2-container .select2-selection .select2-selection__arrow {
-            background: #f8f8f8;
-            border-left: 1px solid #ccc;
-            -webkit-border-radius: 0 3px 3px 0;
-            -moz-border-radius: 0 3px 3px 0;
-            border-radius: 0 3px 3px 0;
-            height: 38px;
-            width: 33px;
-        }
-
-        .select2.select2-container .select2-selection .select2-selection__rendered {
-            color: #333;
-            line-height: 38px;
-            padding-right: 33px;
-        }
-
-        .select2-container--default .select2-selection--single .select2-selection__arrow {
-            height: 26px;
-            position: absolute;
-            top: -1px;
-            right: -1px;
-            width: 20px;
-        }
-
-        .select2-container .select2-dropdown .select2-results ul {
-            background: #fff;
-            border: 1px solid #cecece;
-        }
-    </style>
-
     @section('breadcrumbs')
         {{ Breadcrumbs::render('orders') }}
     @endsection
 
-        <!-- BEGIN: Reject Notification Content -->
-        <div id="reject-notification-content" class="toastify-content hidden flex"> <i class="text-success" data-lucide="check-circle"></i>
-            <div class="ml-4 mr-4">
-                <div class="font-medium">Pesanan Berhasil Diperbarui.</div>
-                <div class="text-slate-500 mt-1">Pesanan dengan id #<b>{{ session('success') }}</b> Berhasil di tolak.</div>
-            </div>
+    <!-- BEGIN: Reject Notification Content -->
+    <div id="reject-notification-content" class="toastify-content hidden flex"> <i class="text-success" data-lucide="check-circle"></i>
+        <div class="ml-4 mr-4">
+            <div class="font-medium">Pesanan Berhasil Diperbarui.</div>
+            <div class="text-slate-500 mt-1">Pesanan dengan id #<b>{{ session('success') }}</b> Berhasil di tolak.</div>
         </div>
-        <!-- END: Reject Notification Content -->
+    </div>
+    <!-- END: Reject Notification Content -->
 
     <!-- BEGIN: Content -->
     <div class="grid grid-cols-12 gap-6 mt-5">

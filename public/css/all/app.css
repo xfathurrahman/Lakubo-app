@@ -38,12 +38,3 @@
     background: rgba(255, 255, 255, 1);
     z-index: 9999;
 }
-
-#loading-animation {
-    position: absolute;
-    width: 200px;
-    height: 200px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}

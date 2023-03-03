@@ -15,10 +15,6 @@
         }
     </style>
 
-    <div id="loading-background">
-        <div id="loading-animation" data-animation-path="{{ asset('assets/json/loading-wallet.json') }}"></div>
-    </div>
-
     <div class="md:pb-5 mb-14">
         <div class="w-full mx-auto bg-white shadow-lg rounded-lg">
             <div class="md:flex ">
@@ -36,7 +32,7 @@
                                 <div class="flex mr-4">
                                     <i class="fa-solid fa-location-dot"></i>
                                 </div>
-                                <div>alamat pengiriman</div>
+                                <div>Alamat pengiriman</div>
                                 <div class="text-blue-400 capitalize cursor-pointer mr-0 ml-auto">
                                     <a href="{{ route('profile.edit') }}">ubah</a>
                                 </div>
@@ -115,7 +111,7 @@
                                     <div class="text-md inline-block text-center ml-2 text-red-500">{{ $totalWeight }} gram</div>
                                 </div>
                             </div>
-                            <div class="w-full lg:w-1/2 mt-6 lg:mt-0 text-white">
+                            <div class="w-full lg:w-1/2 mt-6 lg:mt-0 text-white" style="min-height: 450px">
                                 <div class="main-floating-div h-25rem lg:h-full w-full relative flex justify-center">
                                     <div class="floating-div floating-div-top relative w-full bg-red-300 rounded-lg p-4 flex justify-center">
                                         <form class="w-full" id="submit_form"
@@ -141,7 +137,9 @@
                                             </div>
                                             <div class="shipment" id="center-option">
                                                 <label for="select_service" class="text-white">Pilih Pengiriman<span class="text-yellow-300 inline-block float-right" id="parsley_error_service"></span></label>
-                                                <select style="max-height: 33px;" id="select_service" name="service" class="w-full py-3" required data-parsley-required-message="Anda belum memilih layanan pengiriman!" data-parsley-errors-container="#parsley_error_service"></select>
+                                                <select style="max-height: 33px;" id="select_service" name="service" class="w-full py-3" required data-parsley-required-message="Anda belum memilih layanan pengiriman!" data-parsley-errors-container="#parsley_error_service">
+                                                    {{--<option value="0">free</option>--}}
+                                                </select>
                                             </div>
                                         </div>
 
@@ -161,15 +159,11 @@
                                             <span class="text-grey-400">Total Tagihan:</span>
                                             <span class="inline-block text-right" id="grand_total">@currency($total)</span>
                                         </div>
-                                        @if(isset($errorMessage))
-                                            <button disabled type="submit" class="h-12 w-full float-right bg-gray-400 rounded text-white focus:outline-none">Konfirmasi Pesanan</button>
-                                        @else
-                                            <button type="submit" class="h-12 w-full float-right bg-red-500 rounded text-white focus:outline-none hover:bg-red-600">Konfirmasi Pesanan</button>
-                                        @endisset
-                                    </form>
+                                            <button type="submit" class="h-12 mt-6 w-full float-right bg-red-500 rounded text-white focus:outline-none hover:bg-red-600">Konfirmasi Pesanan</button>
+                                        </form>
                                     </div>
                                 </div>
-                            </div>
+                            </div >
                         </div>
                     @endif
                 </div>

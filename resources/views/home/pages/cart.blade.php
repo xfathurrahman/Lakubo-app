@@ -2,10 +2,6 @@
 
 @section('content')
 
-    <div id="loading-background">
-        <div id="loading-animation" data-animation-path="{{ asset('assets/json/loading-cart.json') }}"></div>
-    </div>
-
     <div id="refreshcart">
         @if ( $userCarts->count() < 1 )
             <div class="w-full mx-auto bg-white shadow-lg rounded-lg my-8">

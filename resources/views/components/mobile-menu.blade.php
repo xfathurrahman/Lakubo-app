@@ -1,12 +1,12 @@
 <!-- BEGIN: Mobile Menu -->
-<div class="mobile-menu md:hidden">
+<div class="mobile-menu md:hidden px-4">
     <div class="mobile-menu-bar">
         <a href="" class="flex mr-auto">
             <img alt="Lakubo - Lapak UMKM Boyolali" class="w-6" src="{{ asset('assets/images/logo.svg') }}">
         </a>
         <a href="javascript:;" class="mobile-menu-toggler"> <i data-lucide="bar-chart-2" class="w-8 h-8 text-white transform -rotate-90"></i> </a>
     </div>
-    <div class="scrollable">
+    <div class="scrollable" style="margin-right: 16px">
         <a href="javascript:;" class="mobile-menu-toggler"> <i data-lucide="x-circle" class="w-8 h-8 text-white transform -rotate-90"></i> </a>
         <ul class="scrollable__content py-2">
             <li>

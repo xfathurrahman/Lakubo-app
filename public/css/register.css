@@ -1,3 +1,7 @@
+@import "./dashboard/midone_app.css";
+@import "./all/select2.min.css";
+@import "./all/select2-custom.css";
+
 iframe, object, embed{max-width: 100%;}
 
 .form-section {

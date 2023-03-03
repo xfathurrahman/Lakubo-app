@@ -12,10 +12,6 @@
         </div>
     @endif
 
-    <div id="loading-background">
-        <div id="loading-animation" data-animation-path="{{ asset('assets/json/loading-shop.json') }}"></div>
-    </div>
-
     <div class="main-carousel-promo carousel mb-2">
         <div class="owl-carousel owl-theme owl-wrapper carousel-promo">
             <div class="carousel-promo-item">

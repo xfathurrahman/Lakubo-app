@@ -38,35 +38,36 @@
 </div>
 </div>
 
-<div class="md:flex md:justify-between p-4 bg-white">
-
-    <div class="w-full mr-4">
-        <iframe class="rounded-lg"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31643.309120811362!2d110.5812002686112!3d-7.529782102424532!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a6981de9c1c0b%3A0x5bbc7978e04fe13!2sDinas%20Koperasi%20dan%20Tenaga%20Kerja%20Kabupaten%20Boyolali!5e0!3m2!1sid!2sid!4v1667952144124!5m2!1sid!2sid"
-                width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade"></iframe>
+<div class="md:flex md:justify-between p-4 bg-white w-full">
+    <div class="mr-4 h-28 w-full lg:w-8/12 xl:w-9/12">
+        <iframe class="rounded-lg" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31643.309120811362!2d110.5812002686112!3d-7.529782102424532!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a6981de9c1c0b%3A0x5bbc7978e04fe13!2sDinas%20Koperasi%20dan%20Tenaga%20Kerja%20Kabupaten%20Boyolali!5e0!3m2!1sid!2sid!4v1667952144124!5m2!1sid!2sid" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>
+    <div class="w-full flex lg:w-4/12 xl:w-3/12 justify-center items-center">
 
-    <div class="grid grid-cols-7 gap-2 text-center mt-3">
-        <div class="mx-2 col-span-12">
-            <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase">Kontak Kami</h2>
-            <ul class="text-gray-600">
-                <li class="mb-4">
-                    <a href="#" class="hover:underline">+6287785523796</a>
-                </li>
-                <li>
-                    <a href="#" class="hover:underline">kontak@lakubo.com</a>
-                </li>
-            </ul>
+        <div class="mx-2 flex flex-col w-1/2 h-full">
+            <span class="my-2 sm:my-2 md:my-0 text-sm text-center font-semibold text-gray-900 uppercase w-full">Kebijakan</span>
+            <div class="flex flex-col text-gray-600 h-full items-center justify-center">
+                <a href="{{ route('PP') }}" class="text-xs sm:text-sm hover:underline w-full flex justify-center mb-3">Kebijakan Privasi</a>
+                <a href="{{ route('TAC') }}" class="text-xs sm:text-sm hover:underline w-full flex justify-center">Syarat dan Ketentuan</a>
+            </div>
         </div>
+
+        <div class="mx-2 flex flex-col w-1/2 h-full">
+            <span class="my-2 sm:my-2 md:my-0 text-sm text-center font-semibold text-gray-900 uppercase w-full">Kontak Kami</span>
+            <div class="flex flex-col text-gray-600 h-full items-center justify-center">
+                <a href="{{ route('TAC') }}" class="text-xs sm:text-sm hover:underline w-full flex justify-center mb-3">087785523796</a>
+                <a href="{{ route('PP') }}" class="text-xs sm:text-sm hover:underline w-full flex justify-center">contact@lakubo.shop</a>
+            </div>
+        </div>
+
     </div>
 </div>
 
 <hr class="border-t-4 m-0 border-gray-200 sm:mx-auto">
 
-<div class="sm:flex sm:items-center sm:justify-between p-6 bg-white">
-        <span class="text-sm text-gray-500 sm:text-center">© 2023 <a href="#" class="hover:underline">LAKUBO™</a>. All Rights Reserved.
-        </span>
+<div class="h-10 flex items-center justify-center">©2023<a href="#" class="mx-1 hover:underline">Lakubo™</a>All Rights Reserved.</div>
+
+{{--<div class="sm:flex sm:items-center sm:justify-between p-6 bg-white">
     <div class="flex mt-4 space-x-6 sm:justify-center sm:mt-0">
         <a href="#" class="text-gray-500 hover:text-gray-900">
             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd"></path></svg>
@@ -85,4 +86,4 @@
             <span class="sr-only">GitHub account</span>
         </a>
     </div>
-</div>
+</div>--}}

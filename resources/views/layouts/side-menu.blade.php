@@ -169,7 +169,7 @@
     </nav>
     <!-- END: Side Menu -->
     <!-- BEGIN: Content -->
-    <div class="content" style="min-height: 97.5vh;">
+    <div class="content">
         @include('components.top-bar')
         <!-- Page Content -->
         <main>

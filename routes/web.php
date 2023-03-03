@@ -36,8 +36,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [HomeController::class,'index'])->name('home');
-Route::get('/detail/product/{id}', [HomeController::class,'getProduct'])->name('getProduct');
+Route::get('/term-and-conditions', [HomeController::class,'termAndConditions'])->name('TAC');
+Route::get('/privacy-policy', [HomeController::class,'privacyPolicy'])->name('PP');
+Route::get('/', [HomeController::class,'index'])->name('home');
+Route::get('/search', [HomeController::class, 'searchProduct'])->name('product.search');
+Route::get('/search/result', [HomeController::class, 'searchResult'])->name('product.search.result');
 
+Route::get('/detail/product/{id}', [HomeController::class,'getProduct'])->name('getProduct');
 Route::get('/indoregion/boyolali', [IndoRegionController::class,'getBoyolali'])->name('getBoyolali');
 Route::get('/indoregion/province', [IndoRegionController::class, 'getProvince'])->name('getProvince');
 Route::get('/indoregion/regency/{id}', [IndoRegionController::class, 'getRegency'])->name('getRegency');

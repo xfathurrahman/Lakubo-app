@@ -116,7 +116,7 @@ class CheckoutController extends Controller
         Config::$serverKey = config('midtrans.server_key');         // Set your Merchant Server Key
         Config::$isProduction = config('midtrans.is_production');   // Set to true for Production Environment.
         Config::$isSanitized = true;                                    // Set sanitization on (default)
-        Config::$is3ds = true;                                          // Set 3DS transaction for credit card to true
+        Config::$is3ds = false;                                          // Set 3DS transaction for credit card to true
 
         // membuat order_id unik
         do {
