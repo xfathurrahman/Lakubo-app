@@ -5,18 +5,22 @@
 @endsection
 
 @section('content')
-    <div class="carousel-product my-4 rounded-lg">
+
+    <div class="carousel-product rounded-lg py-2.5">
         <div class="mb-2 text-left">
             @if(isset($category))
-                <h4 class="mx-4 mb-3 font-semibold">Menampilkan hasil pencarian untuk '{{ $searchTerm }}' dengan kategori '{{ $category->name }}'</h4>
+                <h4 class="mx-4 mb-3">Menampilkan hasil pencarian untuk '<b>{{ $searchTerm }}</b>' dari kategori <a href="#" class="text-red-400 hover:underline font-medium">{{ $category->name }}</a> </h4>
             @elseif(isset($searchTerm) || $category === "undefined")
-                <h4 class="mx-4 mb-3 font-semibold">Menampilkan hasil pencarian untuk '{{ $searchTerm }}' dari Semua Kategori.</h4>
+                <h4 class="mx-4 mb-3">Menampilkan hasil pencarian untuk '<b>{{ $searchTerm }}</b>' dari <a class="text-red-400 hover:underline font-medium" href="{{ route('home') }}">Semua Kategori</a> </h4>
             @endif
             <hr>
         </div>
 
         @if($error)
-            <p>Produk tidak ditemukan.</p>
+            <div class="w-full h-96 flex flex-col justify-center items-center">
+                <img class="mx-auto h-3/4" style="max-width: 100%" src="{{ asset('assets/images/empty-box.svg') }}" alt="">
+                <p class="text-center">Produk tidak ditemukan.</p>
+            </div>
         @endif
 
         <div class="owl-carousel sc-products-carousel owl-theme">
@@ -40,7 +44,16 @@
                                     <i class="fa-solid fa-pencil"></i>
                                 </a>
                             @else
-                                @include('home.pages.partials.add-to-cart-btn', ['product' => $product])
+                                <div class="add-to-cart product_data bg-red-400">
+                                    <button>
+                                        <input type="hidden" class="qty_input" name="product_qty" value="1">
+                                        <input type="hidden" class="prod_id" name="product_id" value="{{ $product->id }}">
+                                        <input type="hidden" class="store_id" name="store_id" value="{{ $product->stores->id }}">
+                                        <button type="button" class="btn addToCartBtn">
+                                            <i class="fa fa-cart-plus" aria-hidden="true"></i>
+                                        </button>
+                                    </button>
+                                </div>
                             @endif
                         @endif
                         <a class="a-link" href="{{ route('getProduct', $product -> id) }}">
@@ -74,9 +87,6 @@
                     </div>
                 </div>
             @endforeach
-        </div>
-        <div class="text-end mt-2 -mb-3 -mr-2.5">
-            <a href="#" class="text-white text-sm btn bg-red-400 rounded-tl-lg rounded-br-lg px-2 text-decoration-none">Lihat Semua</a>
         </div>
     </div>
 

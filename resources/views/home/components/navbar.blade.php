@@ -1,25 +1,29 @@
-@php use App\Models\ProductCategory; @endphp
+@php
+    use App\Models\ProductCategory;
+    $categoryName = "Semua";
+    if(request()->filled('category')) {
+    $category = ProductCategory::find(request()->input('category'));
+    if($category) {
+        $categoryName = $category->name;
+    }
+}
+@endphp
+
 <div class="sm:container xl:px-32 mx-auto">
     <div class="flex justify-between">
         <div class="flex items-center w-full">
             <a href="{{ route('home') }}" class="flex items-center xs:mx-3 w-24 lg:w-28 h-8">
                 <img src="{{ asset('assets/images/logo-app.svg') }}">
             </a>
-            <button data-search class="p-2 ml-4 sm:hidden focus:outline-none bg-red-300 hover:bg-red-300 rounded-md"
-                    type="button">
+            <button data-search class="p-2 ml-4 sm:hidden focus:outline-none bg-red-400 hover:bg-red-300 rounded-md" type="button">
                 <i class="fa-solid fa-magnifying-glass text-lg text-white"></i>
             </button>
-            <div data-search-form
-                 class="absolute top-full left-0 w-full sm:w-fit sm:top-auto sm:left-auto sm:inline-block sm:relative mr-14 flex-grow">
+            <div data-search-form class="absolute top-full left-0 w-full sm:w-fit sm:top-auto sm:left-auto sm:inline-block sm:relative mr-14 flex-grow hidden ml-4">
                 <div class="relative">
                     <div class="flex items-center bg-red-400 xs:rounded-md">
                         <div class="text-left dropdown">
                             <button type="button" class="py-2 px-4 rounded inline-flex items-center dropdown-toggle text-white hover:text-red-500">
-                                @if($category !== "undefined" && $category)
-                                    <span class="dropdown-text w-24 truncate font-semibold text-xs xs:text-sm">{{ $category->name }}</span>
-                                @else
-                                    <span class="dropdown-text w-24 truncate font-semibold text-xs xs:text-sm">Semua</span>
-                                @endif
+                                <span class="dropdown-text w-24 truncate font-semibold text-xs xs:text-sm">{{ $categoryName }}</span>
                                 <i class="fa-solid fa-caret-down mt-0.5 text-md"></i>
                             </button>
                             <div class="absolute z-10 mt-0 sm:mt-3 w-full bg-red-400 text-white sm:rounded-md shadow-md shadow-gray-600">
@@ -39,7 +43,11 @@
                                 </div>
                             </div>
                         </div>
-                        <input type="text" placeholder="Cari..." name="search" id="search" class="h-auto w-full my-1 mr-12 text-sm border-0 rounded-md focus:bg-white focus:ring-0">
+                        @if(request()->has('query'))
+                            <input value="{{ request()->input('query') }}" type="text" placeholder="Cari..." name="search" id="search" class="h-auto w-full my-1 mr-12 text-sm border-0 rounded-md focus:bg-white focus:ring-0">
+                        @else
+                            <input type="text" placeholder="Cari..." name="search" id="search" class="h-auto w-full my-1 mr-12 text-sm border-0 rounded-md focus:bg-white focus:ring-0">
+                        @endif
                         <button type="button" id="search-btn" class="absolute inset-y-1 right-0 z-10 p-2 bg-white rounded-md hover:bg-gray-200 mr-2">
                             <i class="fa-solid fa-magnifying-glass text-lg text-red-400"></i>
                         </button>
@@ -67,12 +75,8 @@
                                 <img class="h-8 w-8 rounded-full" alt="Profile-photo-preview"
                                      src="https://ui-avatars.com/api/?size=100&name={{ Auth::user()->name }}">
                             @endif
-                            <span
-                                class="ml-4 text-sm hidden md:inline-block max-w-full w-24 truncate text-white">{{ Auth::user()->name }}</span>
-                            <svg class="fill-current w-3 ml-2" viewBox="0 0 407.437 407.437">
-                                <path
-                                    d="M386.258 91.567l-182.54 181.945L21.179 91.567 0 112.815 203.718 315.87l203.719-203.055z"/>
-                            </svg>
+                            <span class="ml-4 text-sm hidden md:inline-block max-w-full w-24 truncate text-white">{{ Auth::user()->name }}</span>
+                                <i class="fa-solid fa-caret-down hidden sm:block text-white text-md ml-2"></i>
                         @endauth
                     </button>
                     <div id="toggle-menu-profile"
@@ -81,8 +85,7 @@
                             <li class="px-2 flex items-center">
                                 <div class="p-2">
                                     <div class="font-medium">{{ Auth::user()->name }}</div>
-                                    <div
-                                        class="text-xs text-white text-opacity-70 mt-0.5">{{ Auth::user()->email }}</div>
+                                    <div class="text-xs text-white text-opacity-70 mt-0.5">{{ Auth::user()->email }}</div>
                                 </div>
                             </li>
                             <li>

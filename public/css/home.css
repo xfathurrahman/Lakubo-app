@@ -1,7 +1,6 @@
 @import "./home/owl.theme.default.css";
 @import "./home/owl.carousel.css";
 @import "./home/slick.css";
-@import "./home/main.css";
 @import "./home/footer.css";
 @import "./home/_carousel-promo.css";
 @import "./home/_carousel-category.css";
@@ -9,11 +8,36 @@
 @import "./home/detail-product.css";
 @import "./home/easyzoom.css";
 @import "./home/ckeditor.css";
-@import "./home/cart.css";
 @import "./all/alertify.css";
-@import "./home/checkout.css";
 @import "./all/select2.min.css";
 @import "./all/select2-custom.css";
 @import "./all/toastify-custom.css";
 @import "./all/app.css";
 @import "./all/font-awesome_6.2.1_all.css";
+
+:root {
+    --color-primary: 255 86 86;
+    --color-primary-soft: 252 104 104;
+    --color-secondary: 226 232 240;
+    --color-success: 132 204 22;
+    --color-info: 6 182 212;
+    --color-warning: 250 204 21;
+    --color-pending: 249 115 22;
+    --color-danger: 220 38 38;
+    --color-light: 241 245 249;
+    --color-dark: 30 41 59;
+    --color-slate-50: 248 250 252;
+    --color-slate-100: 241 245 249;
+    --color-slate-200: 226 232 240;
+    --color-slate-300: 203 213 225;
+    --color-slate-400: 148 163 184;
+    --color-slate-500: 100 116 139;
+    --color-slate-600: 71 85 105;
+    --color-slate-700: 51 65 85;
+    --color-slate-800: 30 41 59;
+    --color-slate-900: 15 23 42;
+}
+
+html body {
+    min-width: 320px;
+}

@@ -1,23 +1,23 @@
 @extends('home.base')
 
 @section('body')
-    <body id="main-app" class="font-sans leading-normal tracking-normal">
+    <body id="main-app" class="font-sans flex flex-col min-h-screen">
 
     <div id="loading-background">
         <img class="absolute w-52 h-24 lg:w-80 lg:h-40 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" src="{{ asset('assets/images/loading-lakubo-cow.gif') }}"></img>
     </div>
 
     <nav class="px-4 py-2 shadow bg-white fixed w-full z-20 top-0 left-0 border-b border-gray-200">
-            @include('home.components.navbar')
-        </nav>
+        @include('home.components.navbar')
+    </nav>
 
-    <div class="container mx-auto mt-20 xl:px-32">
-            @yield('content')
-        </div>
+    <main class="container mx-auto xl:px-32 mt-20 flex-auto">
+        @yield('content')
+    </main>
 
-        <footer class="bg-white w-full">
-            @include('home.components.footer')
-        </footer>
+    <footer>
+        @include('home.components.footer')
+    </footer>
 
         <script src="{{ asset('js/jquery-3.6.1.js') }}"></script>
         <script src="{{ asset('js/owl.carousel.js') }}"></script>

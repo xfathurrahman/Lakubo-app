@@ -38,7 +38,7 @@
         </div>
     </div>
 
-    <div class="carousel-category my-5 rounded-lg">
+    <div class="carousel-category my-5 rounded-lg pb-8">
         <div class="pt-2 px-4 text-center md:font-semibold">
             <span id="arrowNav" class="flex justify-between">Kategori</span>
             <hr class="mt-2">
@@ -51,7 +51,7 @@
                             <rect x="159.52" y="175" width="152" height="152" rx="8" transform="rotate(-45 159.52 175)" fill="white"/>
                             <rect y="107.48" width="152" height="152" rx="8" transform="rotate(-45 0 107.48)" fill="white"/>
                         </svg>
-                        <div class="slider relative pt-2 px-2 md:pt-5 md:px-5 flex items-center justify-center">
+                        <div class="slider relative flex items-center justify-center">
                             {{--<div class="block absolute w-20 h-20 bottom-0 left-0 -mb-24 ml-3" style="background: radial-gradient(black, transparent 60%); transform: rotate3d(0, 0, 1, 20deg) scale3d(1, 0.6, 1); opacity: 0.2;"></div>--}}
                             <img class="image-product max-w-full lazy" data-lazy="{{ asset("storage/product-category")."/".$category -> image_path }}">
                         </div>
@@ -64,12 +64,12 @@
         </div>
     </div>
 
-    <div class="carousel-product my-4 rounded-lg">
-        <div class="mb-2 text-center ">
-            <h4 class="mx-4 mb-3 font-semibold">Produk Terbaru</h4>
+    <div class="carousel-product py-4 rounded-lg">
+        <div class="mb-2 text-start ">
+            <h4 class="mx-4 mb-4 font-semibold">Produk Terbaru</h4>
             <hr>
         </div>
-        <div class="owl-carousel sc-products-carousel owl-theme">
+        <div class="owl-carousel sc-products-carousel owl-theme mb-8">
             @foreach($products as $product)
                 <div class="item ml-2">
                     <div class="card shadow-xl bg-gray-200">
@@ -90,7 +90,16 @@
                                     <i class="fa-solid fa-pencil"></i>
                                 </a>
                             @else
-                                @include('home.pages.partials.add-to-cart-btn', ['product' => $product])
+                                <div class="add-to-cart product_data bg-red-400">
+                                    <button>
+                                        <input type="hidden" class="qty_input" name="product_qty" value="1">
+                                        <input type="hidden" class="prod_id" name="product_id" value="{{ $product->id }}">
+                                        <input type="hidden" class="store_id" name="store_id" value="{{ $product->stores->id }}">
+                                        <button type="button" class="btn addToCartBtn">
+                                            <i class="fa fa-cart-plus" aria-hidden="true"></i>
+                                        </button>
+                                    </button>
+                                </div>
                             @endif
                         @endif
                         <a class="a-link" href="{{ route('getProduct', $product -> id) }}">
@@ -125,9 +134,7 @@
                 </div>
             @endforeach
         </div>
-        <div class="text-end mt-2 -mb-3 -mr-2.5">
-            <a href="#" class="text-white text-sm btn bg-red-400 rounded-tl-lg rounded-br-lg px-2 text-decoration-none">Lihat Semua</a>
-        </div>
+        <a href="#" class="absolute bottom-0 right-0 h-8 bg-red-400 rounded-tl-lg rounded-br-lg flex items-center text-white text-sm px-2 text-decoration-none">Lihat Semua</a>
     </div>
 
     <!-- BEGIN: Reject Notification Content -->
@@ -211,8 +218,8 @@
             rows: 2,
             infinite: false,
             speed: 300,
-            slidesToShow: 7,
-            slidesToScroll: 7,
+            slidesToShow: 12,
+            slidesToScroll: 12,
             arrows: true,
             dots: false,
             lazyLoad: 'ondemand',
@@ -223,15 +230,15 @@
                 {
                     breakpoint: 850,
                     settings: {
-                        slidesToShow: 6,
-                        slidesToScroll: 6,
+                        slidesToShow: 8,
+                        slidesToScroll: 8,
                     }
                 },
                 {
                     breakpoint: 650,
                     settings: {
-                        slidesToShow: 4,
-                        slidesToScroll: 4,
+                        slidesToShow: 5,
+                        slidesToScroll: 5,
                     }
                 }
             ]

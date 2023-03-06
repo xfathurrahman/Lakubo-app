@@ -1,41 +1,41 @@
 <!--Info-->
 <div class="wrap-footer-content">
     <div class="wrap-function-info pt-0 mt-0">
-    <div style="background: #ff5656">
-        <ul class="text-white">
-            <li class="fc-info-item">
-                <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
-                <div class="wrap-left-info">
-                    <h4 class="fc-name">PENGEMBALIAN</h4>
-                    <p class="fc-desc">Barang yang sudah dibeli tidak bisa dikembalikan.</p>
-                </div>
-            </li>
-            <li class="fc-info-item">
-                <i class="fas fa-route" aria-hidden="true"></i>
-                <div class="wrap-left-info">
-                    <h4 class="fc-name">PENGIRIMAN</h4>
-                    <p class="fc-desc">Pastikan menulis alamat dengan benar.</p>
-                </div>
-            </li>
-            <li class="fc-info-item">
-                <i class="fas fa-search-dollar" aria-hidden="true"></i>
-                <div class="wrap-left-info">
-                    <h4 class="fc-name">PEMBAYARAN</h4>
-                    <p class="fc-desc">Teliti sebelum melakukan pembayaran.
+        <div style="background: #ff5656">
+            <ul class="text-white">
+                <li class="fc-info-item">
+                    <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
+                    <div class="wrap-left-info">
+                        <h4 class="fc-name">PENGEMBALIAN</h4>
+                        <p class="fc-desc">Barang yang sudah dibeli tidak bisa dikembalikan.</p>
+                    </div>
+                </li>
+                <li class="fc-info-item">
+                    <i class="fas fa-route" aria-hidden="true"></i>
+                    <div class="wrap-left-info">
+                        <h4 class="fc-name">PENGIRIMAN</h4>
+                        <p class="fc-desc">Pastikan menulis alamat dengan benar.</p>
+                    </div>
+                </li>
+                <li class="fc-info-item">
+                    <i class="fas fa-search-dollar" aria-hidden="true"></i>
+                    <div class="wrap-left-info">
+                        <h4 class="fc-name">PEMBAYARAN</h4>
+                        <p class="fc-desc">Teliti sebelum melakukan pembayaran.
 
-                    </p>
-                </div>
-            </li>
-            <li class="fc-info-item">
-                <i class="fas fa-hand-holding-usd" aria-hidden="true"></i>
-                <div class="wrap-left-info">
-                    <h4 class="fc-name">PEMBELIAN</h4>
-                    <p class="fc-desc">Barang akan dikirim setelah pembayaran dikonfirmasi.</p>
-                </div>
-            </li>
-        </ul>
+                        </p>
+                    </div>
+                </li>
+                <li class="fc-info-item">
+                    <i class="fas fa-hand-holding-usd" aria-hidden="true"></i>
+                    <div class="wrap-left-info">
+                        <h4 class="fc-name">PEMBELIAN</h4>
+                        <p class="fc-desc">Barang akan dikirim setelah pembayaran dikonfirmasi.</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
     </div>
-</div>
 </div>
 
 <div class="md:flex md:justify-between p-4 bg-white w-full">
