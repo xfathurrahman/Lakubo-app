@@ -39,9 +39,8 @@
     </div>
 
     <div class="carousel-category my-5 rounded-lg pb-8">
-        <div class="pt-2 px-4 text-center md:font-semibold">
+        <div class="p-4 text-center md:font-semibold border-b">
             <span id="arrowNav" class="flex justify-between">Kategori</span>
-            <hr class="mt-2">
         </div>
         <div class="slick-wrapper px-4">
             <div id="sc-category-carousel" class="overflow-hidden" style="max-height: 450px;" data-slick='{"lazyLoad": "ondemand"}'>
