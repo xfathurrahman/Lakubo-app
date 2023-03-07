@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property mixed $id
  * @method static where(string $string, string $string1)
+ * @method static find($id)
  */
 class Store extends Model
 {

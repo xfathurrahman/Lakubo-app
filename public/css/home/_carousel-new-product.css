@@ -116,7 +116,6 @@
     margin-bottom: 4px;
     margin-top: 4px;
     font-size: 0.86rem;
-    color: rgba(49, 53, 59, 0.96);
     max-width: 100%;
     max-height: 100%;
     text-overflow: ellipsis;
@@ -212,7 +211,7 @@
     width: 2rem;
     height: 2rem;
     position: absolute;
-    top: -19%;
+    top: -21%;
     left: 0;
     display: block !important;
     border:0 solid black;
@@ -221,11 +220,11 @@
     width: 2rem;
     height: 2rem;
     position: absolute;
-    top: -19%;
+    top: -21%;
     right: 0;
     display: block !important;
     border:0 solid black;
 }
 
-.carousel-product .owl-prev i {color: rgb(var(--color-primary-soft));}
-.carousel-product .owl-next i {color: rgb(var(--color-primary-soft));}
+.carousel-product .owl-prev svg {color: rgb(var(--color-primary-soft));}
+.carousel-product .owl-next svg {color: rgb(var(--color-primary-soft));}

@@ -11,4 +11,12 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    /*resolve: {
+        alias: {
+            '@fortawesome/fontawesome-free/css/all.css': '@fortawesome/fontawesome-free/css/all.min.css'
+        }
+    },*/
+    build: {
+        chunkSizeWarningLimit: 100000000,
+    },
 });

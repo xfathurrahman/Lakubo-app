@@ -2,23 +2,25 @@
 
 @section('content')
 
+    @include('home.components.breadcrumbs.bc-cart')
+
     <div id="refresh-cart">
         <div class="w-full bg-white rounded-lg mb-8" style="box-shadow: rgba(49,53,59,0.12) 0 1px 6px 0;">
             @if ( $userCarts->count() < 1 )
-                <div class="border-b p-2.5 flex items-center">
-                    <div class="font-medium text-lg">Keranjang</div>
-                </div>
                 <div class="w-full h-96 flex flex-col justify-center items-center">
                     <img class="mx-auto h-1/2" style="max-width: 100%" src="{{ asset('assets/images/empty-cart.png') }}" alt="">
                     <p class="text-center">Anda belum memasukan barang apapun ke keranjang</p>
                 </div>
             @else
                 @foreach($userCarts as $store)
-
                     <div class="mx-auto">
                         <div class="flex justify-between items-center border-b p-2 lg:p-4 font-medium">
                             <span class="text-sm lg:text-lg">Pesanan {{ $loop -> iteration }}</span>
-                            <span class="text-red-400"><i class="fa-solid fa-store mr-2"></i>{{ $store->stores->name }}</span>
+                            <span class="text-red-400"><i class="fa-solid fa-store mr-2"></i>
+                                <a href="{{ route('store.details', $store->stores->id) }}">
+                                    {{ $store->stores->name }}
+                                </a>
+                            </span>
                         </div>
                         <div class="px-2 lg:px-4 pt-2 lg:pt-4">
                             @php $total = 0 @endphp
@@ -27,7 +29,7 @@
                                 <div class="flex items-center">
                                     <img class="w-20 h-20 object-cover rounded mb-2 md:mb-0 md:mr-2" src="{{ asset("storage/product-image")."/".$cart_item -> products -> productImage -> image_path }}" alt="Gambar Produk">
                                     <div class="ml-2 flex-grow">
-                                        <p class="font-medium text-sm lg:font-bold line-clamp-2">{{ $cart_item -> products -> name }}</p>
+                                        <a href="{{ route('product.detail', $cart_item->products->id) }}" class="font-medium text-sm lg:font-bold line-clamp-2 hover:text-red-400">{{ $cart_item -> products -> name }}</a>
                                         <p class="font-bold">@currency($cart_item->products->price)</p>
                                         <div class="flex items-center">
                                             <p class="text-xs lg:text-sm text-gray-600">{{ $cart_item -> products -> productCategories -> name }}</p>

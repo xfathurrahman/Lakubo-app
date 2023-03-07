@@ -48,10 +48,11 @@ Route::get('/getimage/{id}', [ProductController::class, 'getImage'])->name('getI
 
 Route::get('/search', [HomeController::class, 'searchProduct'])->name('product.search');
 Route::get('/search/result', [HomeController::class, 'searchResult'])->name('product.search.result');
-Route::get('/detail/product/{id}', [HomeController::class,'getProduct'])->name('product.detail');
-Route::get('/detail/product/{id}', [HomeController::class,'getProduct'])->name('product.detail');
-Route::get('/detail/new-product', [HomeController::class,'getNewProduct'])->name('product.detail.new');
-Route::get('/detail/category/{id}', [HomeController::class,'getProductByCategory'])->name('category.detail');
+Route::get('/details/product/{id}', [HomeController::class,'getProduct'])->name('product.detail');
+Route::get('/details/product/{id}', [HomeController::class,'getProduct'])->name('product.detail');
+Route::get('/details/new-product', [HomeController::class,'getNewProduct'])->name('product.detail.new');
+Route::get('/details/category/{id}', [HomeController::class,'getProductByCategory'])->name('category.detail');
+Route::get('/details/store/{id}', [HomeController::class,'getStoreDetail'])->name('store.details');
 
 Route::middleware(['auth', 'verified', 'role:admin'])->name('admin.')->prefix('admin')->group(function (){
     Route::get('/dashboard',[AdminDashboardController::class,'index'])->name('dashboard');

@@ -18,6 +18,13 @@ module.exports = {
                 '28.3rem': '28rem',
                 '25rem': '25rem',
             },
+            fontSize: {
+                '2xs': '.5rem',
+                'xxs': '.6rem',
+            },
+            lineHeight: {
+              '2': '.5rem'
+            },
         },
         screens: {
             'xs': '450px',

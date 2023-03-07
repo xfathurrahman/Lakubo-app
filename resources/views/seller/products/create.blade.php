@@ -276,8 +276,8 @@
         </script>
 
         <script>
-            ClassicEditor
-                .create( document.querySelector( '#editor' ), {
+            $(document).ready(function (){
+                ClassicEditor.create(document.querySelector('#editor'), {
                     toolbar: { items: [
                             'heading',
                             'bold',
@@ -294,9 +294,10 @@
                             'redo'
                         ] }
                 } )
-                .catch( error => {
-                    console.log( error );
-                } );
+                    .catch( error => {
+                        console.log( error );
+                    } );
+            });
         </script>
 
         <script>

@@ -8,6 +8,7 @@ use App\Models\ProductCategory;
 use App\Models\ProductImage;
 use App\Models\Province;
 use App\Models\Regency;
+use App\Models\Store;
 use App\Models\StoreAddress;
 use App\Models\Village;
 use Illuminate\Contracts\Foundation\Application;
@@ -46,7 +47,7 @@ class HomeController extends Controller
         $village = ucwords(strtolower(Village::where('district_id', $product->stores->storeAddresses->district_id)->first()->name));
         $detail_address = ucwords(strtolower($product->stores->storeAddresses->detail_address));
 
-        return view('home.pages.product-detail', [
+        return view('home.pages.product-details', [
             'product' => $product,
             'images' => $images,
             'province' => $province,
@@ -90,7 +91,6 @@ class HomeController extends Controller
         return response()->json($products);
     }
 
-
     public function searchResult(Request $request)
     {
         $query = $request->query('query');
@@ -107,6 +107,22 @@ class HomeController extends Controller
         $category = ProductCategory::find($category);
 
         return view('home.pages.search-results', compact('products', 'searchTerm' , 'category', 'error'));
+    }
+
+    public function getStoreDetail($id): View|\Illuminate\Foundation\Application|Factory|Application
+    {
+        $store = Store::find($id);
+        $storeProducts = Product::where('store_id', $id)->paginate(16);
+
+        $countSuccessOrders = $store->with(['orders' => function ($query) {
+            $query->where('status', 'completed');
+        }])->get()->pluck('orders')->flatten()->count();
+
+        return view('home.pages.store-details', [
+            'store' => $store,
+            'storeProducts' => $storeProducts,
+            'countSuccessOrders' => $countSuccessOrders,
+        ]);
     }
 
 }

@@ -6,22 +6,67 @@
 
 @section('content')
 
-    @include('home.components.breadcrumbs.bc-new-product')
+    @include('home.components.breadcrumbs.bc-store-details')
 
-    <div class="carousel-detail-product relative block shadow-lg rounded-lg py-2.5" style="box-shadow: rgba(49,53,59,0.12) 0 1px 6px 0;">
-        <div class="mb-2 text-left">
-            <h4 class="mx-4 mb-3 font-medium">Produk Terbaru</h4>
-            <hr>
+    <!-- BEGIN: Profile Info -->
+    <div class="carousel-detail-product relative block shadow-lg rounded-lg py-2.5 mb-6" style="box-shadow: rgba(49,53,59,0.12) 0 1px 6px 0;">
+        <div class="flex flex-col lg:flex-row border-b border-gray-200 pb-5">
+            <div class="flex flex-1 px-5 items-center justify-center lg:justify-start">
+                <div class="w-20 h-20 sm:w-24 sm:h-24 flex-none lg:w-32 lg:h-32 relative">
+                    @if($store->users->profile_photo_path)
+                        <img class="rounded-full h-full" alt="Profile-photo-preview" src="{{ asset('storage/profile-photos/'. $store->users->profile_photo_path) }}">
+                    @else
+                        <img class="rounded-full h-full" alt="Profile-photo-preview" src="https://ui-avatars.com/api/?size=100&name={{ $store->name }}">
+                    @endif
+                </div>
+                <div class="ml-5">
+                    <div class="w-full sm:w-40 truncate sm:whitespace-normal font-medium text-lg">{{ $store->name }}</div>
+                    <div class="text-gray-500 text-sm">{{ $store->storeCategories->name }}</div>
+                </div>
+            </div>
+            <div class="mt-6 lg:mt-0 flex-1 px-5 border-l border-r border-slate-200/60 dark:border-darkmode-400 border-t lg:border-t-0 pt-5 lg:pt-0">
+                <div class="font-medium lg:mt-3 flex justify-center lg:justify-between">Kontak Lapak
+                    @if(Auth::user()->stores && Auth::user()->stores->id === $store->id)
+                        <span class="inline-flex">
+                            <a href="{{ route('profile.edit') }}" class="inline-flex text-red-400"><i class="fa-regular fa-pen-to-square mr-2 my-auto"></i>Edit</a>
+                        </span>
+                    @endif
+                </div>
+                <div class="flex flex-col justify-center items-center lg:items-start mt-4 text-gray-700">
+                    <div class="truncate sm:whitespace-normal flex items-center"> <i class="fa-regular fa-envelope mr-2"></i> {{ $store->users->email }} </div>
+                    <div class="truncate sm:whitespace-normal flex items-center mt-2"> <i class="fa-solid fa-mobile-screen ml-0.5 mr-2"></i> {{ $store->users->phone }} </div>
+                </div>
+            </div>
+            <div class="mt-6 lg:mt-0 flex-1 flex items-center justify-center px-5 border-t lg:border-0 border-slate-200/60 dark:border-darkmode-400 pt-5 lg:pt-0">
+                <div class="text-center rounded-md w-20 py-3">
+                    <div class="font-medium text-red-400 text-xl">{{ count($storeProducts) }}</div>
+                    <div class="text-slate-500">Produk</div>
+                </div>
+                <div class="text-center rounded-md w-20 py-3">
+                    <div class="font-medium text-red-400 text-xl">{{ count($store->orders) }}</div>
+                    <div class="text-slate-500">Pesanan</div>
+                </div>
+                <div class="text-center rounded-md w-20 py-3">
+                    <div class="font-medium text-red-400 text-xl">
+                        {{ $countSuccessOrders }}
+                    </div>
+                    <div class="text-slate-500">Penjualan</div>
+                </div>
+            </div>
         </div>
 
-        @if($products -> count() < 1)
+        <div class="py-4 pl-4 text-left">
+            <h4 class="font-medium">Produk</h4>
+        </div>
+
+        @if($storeProducts -> count() < 1)
             <div class="w-full h-96 flex flex-col justify-center items-center">
                 <img class="mx-auto h-3/4" style="max-width: 100%" src="{{ asset('assets/images/empty-box.svg') }}" alt="">
                 <p class="text-center">Produk tidak ditemukan.</p>
             </div>
         @else
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-x-2 gap-y-4 md:gap-x-4 px-4 py-2">
-                @foreach ($products as $product)
+                @foreach ($storeProducts as $product)
                     <div class="card-detail mb-2 lg:mb-0 overflow-hidden relative shadow-lg shadow-gray-200 rounded-lg transform hover:translate-y-1 hover:shadow-xl transition duration-300">
                         <img class="h-40 w-full object-cover rounded-t-lg" src="{{ asset("storage/product-image")."/".$product -> productImage -> image_path }}" alt="{{ $product->name }}">
                         @php
@@ -77,9 +122,9 @@
                                 </a>
                             </div>
                             <div class="bg-red-400 text-center rounded-b-lg">
-                                    <span class="text-sm text-white">
-                                        {{ $product -> created_at -> diffForHumans() }}
-                                    </span>
+                                <span class="text-sm text-white">
+                                    {{ $product -> created_at -> diffForHumans() }}
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -87,13 +132,14 @@
             </div>
         @endif
 
-        @if($products->count() > 16)
+        @if($storeProducts->count() > 16)
             <div class="px-4 py-2">
-                {{ $products->links() }}
+                {{ $storeProducts->links() }}
             </div>
         @endif
 
     </div>
+    <!-- END: Profile Info -->
 
     @include('home.components.notifications.cart-notification')
 

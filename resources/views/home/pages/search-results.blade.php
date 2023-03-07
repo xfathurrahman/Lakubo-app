@@ -6,6 +6,8 @@
 
 @section('content')
 
+    @include('home.components.breadcrumbs.bc-search-results')
+
     <div class="carousel-detail-product relative block shadow-lg rounded-lg py-2.5 mb-6" style="box-shadow: rgba(49,53,59,0.12) 0 1px 6px 0;">
         <div class="mb-2 text-left">
             @if(isset($category))
@@ -23,7 +25,7 @@
             </div>
         @endif
 
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-8 gap-2 px-4 py-2">
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-x-2 gap-y-4 md:gap-x-4 px-4 py-2">
             @foreach ($products as $product)
                 <div class="card-detail mb-2 lg:mb-0 overflow-hidden relative shadow-lg shadow-gray-200 rounded-lg transform hover:translate-y-1 hover:shadow-xl transition duration-300">
                     <img class="h-40 w-full object-cover rounded-t-lg" src="{{ asset("storage/product-image")."/".$product -> productImage -> image_path }}" alt="{{ $product->name }}">
@@ -35,7 +37,7 @@
                     @endphp
                     @if ($product->quantity > 0)
                         @if ($canEditProduct)
-                            <a href="{{ route('seller.products.edit', $product->id) }}" class="absolute top-0 right-0 product_data">
+                            <a href="{{ route('seller.products.edit', $product->id) }}" class="absolute top-0 right-0 product_data bg-red-400 text-lg text-white px-1 rounded-tr-lg rounded-bl-lg">
                                 <i class="fa-solid fa-pencil"></i>
                             </a>
                         @else
@@ -61,24 +63,28 @@
                                 <span class="block font-semibold text-xs overflow-ellipsis">@currency($product->price)</span>
                             </div>
                         </div>
-                        <div class="px-2 line-clamp-2 text-xs py-1 text-gray-700 text-left">{{ $product -> name }}</div>
+                        <a class="a-link" href="{{ route('product.detail', $product -> id) }}">
+                            <div class="px-2 line-clamp-2 text-xs py-1 text-gray-700 hover:text-red-400 text-left">{{ $product -> name }}</div>
+                        </a>
                         <div class="px-2 owner-info">
-                            <div class="owner-pp">
-                                @isset($product->stores->users->profile_photo_path)
-                                    <img class="rounded-full" src="{{ asset('storage/profile-photos/'. $product->stores->users->profile_photo_path) }}" alt="pp-owner"/>
-                                @else
-                                    <img class="rounded-full" src="https://ui-avatars.com/api/?name={{ $product -> stores -> name }}&amp;color=7F9CF5&amp;background=EBF4FF" alt="pp-owner"/>
-                                @endisset
-                            </div>
-                            <div class="owner-name truncate whitespace-nowrap font-bold mt-1"
-                                 data-hover-before="{{  $product -> stores -> name }}"
-                                 data-hover-after="{{  $product -> stores -> users -> name }}">
-                            </div>
+                            <a href="{{ route('store.details', $product->stores->id) }}">
+                                <div class="owner-pp">
+                                    @isset($product->stores->users->profile_photo_path)
+                                        <img class="rounded-full" src="{{ asset('storage/profile-photos/'. $product->stores->users->profile_photo_path) }}" alt="pp-owner"/>
+                                    @else
+                                        <img class="rounded-full" src="https://ui-avatars.com/api/?name={{ $product -> stores -> name }}&amp;color=7F9CF5&amp;background=EBF4FF" alt="pp-owner"/>
+                                    @endisset
+                                </div>
+                                <div class="owner-name truncate whitespace-nowrap font-bold mt-1"
+                                     data-hover-before="{{  $product -> stores -> name }}"
+                                     data-hover-after="{{  $product -> stores -> users -> name }}">
+                                </div>
+                            </a>
                         </div>
                         <div class="bg-red-400 text-center rounded-b-lg">
-                                <span class="text-sm text-white">
-                                    <p>{{ $product -> created_at -> diffForHumans() }}</p>
-                                </span>
+                            <span class="text-sm text-white">
+                                {{ $product -> created_at -> diffForHumans() }}
+                            </span>
                         </div>
                     </div>
                 </div>

@@ -71,7 +71,7 @@ $(document).ready(function (){
             }
         },
         ajax: {
-            url: "{{ url('customer/store/categories' )}}",
+            url: categoriesUrl,
             processResults: function({data}){
                 return {
                     results: $.map(data, function(item){
@@ -94,7 +94,7 @@ $(document).ready(function (){
             }
         },
         ajax: {
-            url: "{{ route('getBoyolali' )}}",
+            url: getBoyolaliUrl,
             processResults: function({data}){
                 return {
                     results: $.map(data, function(item){

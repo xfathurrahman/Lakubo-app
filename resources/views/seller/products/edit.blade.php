@@ -274,29 +274,33 @@
         </script>
 
         <script>
-            ClassicEditor.create( document.querySelector( '#editor' ), {
-                toolbar: { items: [
-                        'heading',
-                        'bold',
-                        'italic',
-                        'blockQuote',
-                        'bulletedList',
-                        'numberedList',
-                        'insertTable',
-                        'outdent',
-                        'indent',
-                        'undo',
-                        'redo'
-                    ] }
-            } )
-                /*.then( editor => {
-                    const toolbarElement = editor.ui.view.toolbar.element;
-                        toolbarElement.style.display = 'none'
-                        editor.enableReadOnlyMode( 'feature-id' )
-                } )*/
-                .catch( error => {
-                    console.log( error );
-                } );
+            $(document).ready(function () {
+                ClassicEditor.create(document.querySelector('#editor'), {
+                    toolbar: {
+                        items: [
+                            'heading',
+                            'bold',
+                            'italic',
+                            'blockQuote',
+                            'bulletedList',
+                            'numberedList',
+                            'insertTable',
+                            'outdent',
+                            'indent',
+                            'undo',
+                            'redo'
+                        ]
+                    }
+                })
+                    /*.then( editor => {
+                        const toolbarElement = editor.ui.view.toolbar.element;
+                            toolbarElement.style.display = 'none'
+                            editor.enableReadOnlyMode( 'feature-id' )
+                    } )*/
+                    .catch(error => {
+                        console.log(error);
+                    });
+            });
         </script>
 
     @endsection

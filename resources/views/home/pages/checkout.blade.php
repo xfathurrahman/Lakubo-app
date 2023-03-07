@@ -22,7 +22,7 @@
                     <div class="flex justify-between border-b pb-5 mb-5">
                         <h1 class="font-semibold text-2xl">Checkout</h1>
                         <div class="my-2 inline-flex">
-                            <a href="#" class="text-red-400 font-medium"><i class="fa-solid fa-store mr-2"></i>{{ $cart->stores->name }}</a>
+                            <a href="{{ route('store.details', $cart->stores->id) }}" class="text-red-400 font-medium"><i class="fa-solid fa-store mr-2"></i>{{ $cart->stores->name }}</a>
                         </div>
                     </div>
                     <div class="bg-gray-200 rounded-lg p-4">
@@ -79,29 +79,32 @@
                                 @php $totalProduct = 0 @endphp
                                 @foreach($cart->cartItems as $item)
                                     <div class="flex items-center mb-2">
-                                        <div class="inline-flex items-center text-xs lg:text-sm w-full h-fit bg-gray-100 rounded-lg transform hover:translate-y-1 hover:shadow-xl transition duration-300 border-1">
-                                            <span class="absolute top-0 right-0 text-white bg-red-400 text-xs rounded-tr rounded-bl px-2">
-                                                <i class="fa-solid fa-tag mx-1"></i>
-                                                {{ $item -> products -> productCategories -> name }}
-                                            </span>
-                                            <div class="p-2 w-2/12">
-                                                <img class="rounded-md mx-auto h-16 w-8 object-cover" src="{{ asset("storage/product-image")."/".$item -> products -> productImage -> image_path }}" alt="">
-                                                <span class="flex justify-center font-medium text-xs truncate">{{ $item -> product_qty }} Item</span>
+                                        <a class="w-full" href="{{ route('product.detail', $item->products->id) }}">
+                                            <div class="inline-flex items-center text-xs lg:text-sm w-full h-fit bg-gray-100 rounded-lg transform hover:translate-y-1 hover:shadow-xl transition duration-300 border-1">
+                                                <span class="absolute top-0 right-0 text-white bg-red-400 text-xs rounded-tr rounded-bl px-2">
+                                                    <i class="fa-solid fa-tag mx-1"></i>
+                                                    {{ $item -> products -> productCategories -> name }}
+                                                </span>
+                                                <div class="p-2 w-2/12">
+                                                    <img class="rounded-md mx-auto h-16 w-8 object-cover" src="{{ asset("storage/product-image")."/".$item -> products -> productImage -> image_path }}" alt="">
+                                                    <span class="flex justify-center font-medium text-xs truncate">{{ $item -> product_qty }} Item</span>
+                                                </div>
+                                                <div class="p-2 border-l w-10/12">
+                                                    <span class="w-full line-clamp-2 pt-2 flex items-center font-medium">
+                                                        {{ $item->products->name }}
+                                                    </span>
+                                                    @php $subtotalWeight = 0 @endphp
+                                                    @php $subtotalWeight += $item -> products -> weight * $item->product_qty @endphp
+                                                    <span class="text-xs my-1">{{ $item -> products -> weight }} gram</span><br>
+                                                    <span class="text-xs my-1">@ @currency($item->products->price)</span>
+                                                </div>
+                                                <span class="absolute bottom-0 right-0 text-red-400 font-medium text-lg rounded-tr rounded-bl px-2">
+                                                    @php $subtotal = 0 @endphp
+                                                    @php $subtotal += $item->products->price * $item->product_qty; @endphp
+                                                    @currency($subtotal)
+                                                </span>
                                             </div>
-                                            <div class="p-2 border-l w-10/12">
-                                                <span class="w-full line-clamp-2 pt-2 flex items-center font-medium">{{ $item->products->name }}</span>
-                                                @php $subtotalWeight = 0 @endphp
-                                                @php $subtotalWeight += $item -> products -> weight * $item->product_qty @endphp
-                                                <span class="text-xs my-1">{{ $item -> products -> weight }} gram</span><br>
-                                                <span class="text-xs my-1">@ @currency($item->products->price)</span>
-                                            </div>
-                                            <span class="absolute bottom-0 right-0 text-red-400 font-medium text-lg rounded-tr rounded-bl px-2">
-                                                <i class="fa-solid fa-money-bill-wave m-1 text-red-400"></i>
-                                                @php $subtotal = 0 @endphp
-                                                @php $subtotal += $item->products->price * $item->product_qty; @endphp
-                                                @currency($subtotal)
-                                            </span>
-                                        </div>
+                                        </a>
                                     </div>
                                     @php $total += $item->products->price * $item->product_qty; @endphp
                                     @php $totalWeight += $subtotalWeight; @endphp

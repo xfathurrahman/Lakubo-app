@@ -9,7 +9,7 @@
                         <span class="intro-y">
                             <img class="mx-auto lg:w-36" width="100px" src="{{ asset('assets/images/app/not-found-store.png') }}" alt="">
                         </span>
-                        <p>Anda belum mempunyai Lapak UMKM,<br>Lengkapi data dibawah untuk mendaftar.</p>
+                        <p>Untuk Buka Lapak UMKM,<br>silahkan lengkapi data dibawah.</p>
                     </h2>
                 </div>
                 <div class="mt-3 relative before:hidden before:lg:block before:absolute before:w-[69%] before:h-[3px] before:top-0 before:bottom-0 before:mt-4 before:bg-slate-100 before:dark:bg-darkmode-400 flex flex-col lg:flex-row justify-center px-5 sm:px-20">
@@ -103,3 +103,14 @@
     </div>
     <!-- END: Modal -->
 </section>
+
+
+<script>
+    // karena script dipanggil sebelum memanggil jquery jadi pakai js native
+    let selectDistrictStore = document.getElementById("selectDistrictStore");
+    let id = selectDistrictStore.value;
+
+    const categoriesUrl     = "{{ route('customer.store.getStoreCate') }}";
+    const getBoyolaliUrl    = "{{ route('getBoyolali') }}";
+    const getDesaUrl        = "{{ route('getVillage', ['id' => ':id']) }}";
+</script>
