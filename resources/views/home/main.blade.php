@@ -35,6 +35,22 @@
 
 
     <script>
+
+        /*$(document).ready(function() {
+            // Tampilkan modal saat tombol dibuka diklik
+            $("#open-modal-btn").click(function() {
+                $("#modal-background").show();
+                $("#modal").show();
+            });
+
+            // Sembunyikan modal saat tombol tutup atau latar belakang diklik
+            $("#modal-close-btn, #modal-background").click(function() {
+                $("#modal-background").hide();
+                $("#modal").hide();
+            });
+        });*/
+
+
         $(document).ready(function() {
             $(".dropdown-menu").hide();
 
@@ -51,8 +67,8 @@
             });
 
             $("#search-btn").on("click", function() {
-                const query = $("#search").val();
-                const category = $("#search").data('category');
+                let query = $("#search").val();
+                let category = $("#search").data('category');
 
                 if(!query) {
                     $("#search").attr('required', true);

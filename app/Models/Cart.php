@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * @method static where(string $string, mixed $product_id)
  * @method static find($cart_id)
+ * @property int|mixed|string|null $user_id
+ * @property mixed $store_id
  */
 class Cart extends Model
 {

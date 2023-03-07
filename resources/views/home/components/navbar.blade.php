@@ -30,7 +30,7 @@
                                 <div class="dropdown-menu space-y-2 p-2">
                                     <div class="grid grid-cols-12 gap-2">
                                         <div class="col-span-6 lg:col-span-4 text-left text-sm xl:text-lg lg:font-normal">
-                                            <a href="#" class="w-full dropdown-item px-4 hover:text-red-600" data-category="undefined">Semua</a>
+                                            <a href="#" class="w-full dropdown-item px-4 hover:text-red-600" data-category="">Semua</a>
                                         </div>
                                         @foreach ($productCategories->chunk(1) as $chunk)
                                             <div class="col-span-6 lg:col-span-4 text-left text-sm xl:text-lg lg:font-normal">
@@ -91,6 +91,15 @@
                             <li>
                                 <hr class="border-white opacity-50 mb-2">
                             </li>
+                            @if(Auth::user()->hasRole('admin'))
+                                <li class="px-2 flex items-center">
+                                    <a href="{{ route('profile.edit') }}"
+                                       class="rounded-md px-2 py-1 w-full hover:bg-white hover:bg-opacity-20">
+                                        <i class="fa-solid fa-key mr-2.5"></i>
+                                        Admin Dashboard
+                                    </a>
+                                </li>
+                            @endif
                             @if(Auth::user()->stores)
                                 <li class="px-2 flex items-center">
                                     <a href="{{ route('seller.dashboard') }}"
@@ -99,20 +108,14 @@
                                         Lapak Saya
                                     </a>
                                 <li>
-                            @else
-                                <li class="px-2 flex items-center">
-                                    <a href="#" class="rounded-md px-2 py-1 w-full hover:bg-white hover:bg-opacity-20">
-                                        <i class="fa-solid fa-store mr-2"></i>
-                                        Buka Lapak
-                                    </a>
-                                <li>
                             @endif
                             <li class="px-2 flex items-center">
                                 <a href="{{ route('profile.edit') }}"
                                    class="rounded-md px-2 py-1 w-full hover:bg-white hover:bg-opacity-20">
                                     <i class="fa-solid fa-id-badge mr-3 ml-0.5"></i>
-                                    Akun Saya
+                                    Profil Saya
                                 </a>
+                            </li>
                             <li>
                                 <hr class="border-white opacity-50 my-2">
                             </li>

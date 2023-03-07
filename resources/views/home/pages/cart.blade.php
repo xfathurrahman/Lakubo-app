@@ -16,12 +16,9 @@
                 @foreach($userCarts as $store)
 
                     <div class="mx-auto">
-                        <div class="flex justify-between items-center border-b p-2 lg:p-4">
-                            <div class="flex flex-col font-medium">
-                                <span class="text-sm lg:text-lg">Pesanan {{ $loop -> iteration }}</span>
-                                <span class="text-red-400"><i class="fa-solid fa-store mr-2"></i>{{ $store->stores->name }}</span>
-                            </div>
-                            <div class="font-medium text-sm lg:text-lg">{{ $store->cartItems->count() }} Item</div>
+                        <div class="flex justify-between items-center border-b p-2 lg:p-4 font-medium">
+                            <span class="text-sm lg:text-lg">Pesanan {{ $loop -> iteration }}</span>
+                            <span class="text-red-400"><i class="fa-solid fa-store mr-2"></i>{{ $store->stores->name }}</span>
                         </div>
                         <div class="px-2 lg:px-4 pt-2 lg:pt-4">
                             @php $total = 0 @endphp

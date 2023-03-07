@@ -18,7 +18,7 @@
     <div class="md:pb-5 mb-14">
         <div class="w-full mx-auto bg-white shadow-lg rounded-lg">
             <div class="md:flex ">
-                <div class="w-full p-4 px-5 py-5">
+                <div class="w-full p-4 px-5 pt-5 pb-12">
                     <div class="flex justify-between border-b pb-5 mb-5">
                         <h1 class="font-semibold text-2xl">Checkout</h1>
                         <div class="my-2 inline-flex">
@@ -96,7 +96,7 @@
                                                 <span class="text-xs my-1">@ @currency($item->products->price)</span>
                                             </div>
                                             <span class="absolute bottom-0 right-0 text-red-400 font-medium text-lg rounded-tr rounded-bl px-2">
-                                                <i class="fa-solid fa-sack-dollar m-1 text-orange-400"></i>
+                                                <i class="fa-solid fa-money-bill-wave m-1 text-red-400"></i>
                                                 @php $subtotal = 0 @endphp
                                                 @php $subtotal += $item->products->price * $item->product_qty; @endphp
                                                 @currency($subtotal)

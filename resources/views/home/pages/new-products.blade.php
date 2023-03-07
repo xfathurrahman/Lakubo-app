@@ -6,9 +6,9 @@
 
 @section('content')
 
-    <div class="carousel-detail-product relative block shadow-lg rounded-lg py-2.5 mb-6" style="box-shadow: rgba(49,53,59,0.12) 0 1px 6px 0;">
+    <div class="carousel-detail-product relative block shadow-lg rounded-lg py-2.5" style="box-shadow: rgba(49,53,59,0.12) 0 1px 6px 0;">
         <div class="mb-2 text-left">
-            <h4 class="mx-4 mb-3">Menampilkan produk berdasar Kategori "<b class="text-red-400">{{ $productsCategoryName }}</b>"</h4>
+            <h4 class="mx-4 mb-3 font-medium">Produk Terbaru</h4>
             <hr>
         </div>
 

@@ -12,8 +12,8 @@
         }
     </style>
 
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 bg-white mb-16 rounded-b-md">
-        <div class="font-medium text-xl ml-4 pb-4 flex items-center border-b">Informasi Produk</div>
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 bg-white mb-16 rounded-b-md shadow-lg">
+        <div class="font-medium text-xl pb-4 flex items-center border-b">Informasi Produk</div>
         <div class="flex flex-wrap justify-center">
             <div class="w-full lg:w-2/5 p-4 border-b sm:border-0">
                 <div class="relative h-62 lg:h-28rem">
@@ -35,7 +35,7 @@
             </div>
             <div class="w-full lg:w-3/5 p-4">
                 <div class="h-14 flex items-center">
-                    <span class="text-xl text-red-400 font-bold line-clamp-2 text-justify lg:text-left">{{ $product -> name }}</span>
+                    <span class="text-sm sm:text-lg lg:text-xl text-red-400 font-bold line-clamp-2 text-justify lg:text-left">{{ $product -> name }}</span>
                 </div>
                 <div class="h-10 flex items-center">
                     <div class="flex justify-between w-full items-center">
@@ -124,19 +124,19 @@
                         @else
                         <div class="mt-5 lg:grid lg:grid-cols-3 lg:justify-items-center lg:gap-5 lg:mt-8 lg:px-5">
                             <div class="mt-3 px-5 w-full lg:mt-0 lg:px-0">
-                                <h3 class="sr-only">increase or decrease items</h3>
                                 <div class="flex justify-between h-full items-center bg-gray-100 py-2 px-4 rounded-xl" >
                                     <button class="w-6 h-6" id="minus-btn" aria-label="icon-minus">
-                                        <img src="{{ asset('assets/images/ecommerce/icon-minus.svg') }}" alt="minus">
+                                        <i class="fa-solid fa-minus text-red-400 text-lg"></i>
                                     </button>
                                     <p id="count">1</p>
                                     <button class="w-6 h-6" id="plus-btn" aria-label="icon-plus">
-                                        <img src="{{ asset('assets/images/ecommerce/icon-plus.svg') }}" alt="plus">
+                                        <i class="fa-solid fa-plus text-red-400 text-lg"></i>
                                     </button>
                                 </div>
                             </div>
                             <input type="hidden" value="{{ $product->id }}" id="product_id">
                             <input type="hidden" value="{{ $product->stores->id }}" id="store_id">
+                            <input type="hidden" value="1" id="qty">
                             <div class="w-full mt-3 px-5 md:col-span-2 lg:mt-0 lg:px-0">
                                 <button id="add-to-cart" class="flex justify-center items-center w-full rounded-lg py-4 md:py-[14px] shadow-orange-200 shadow-2xl hover:bg-red-500 text-sm gap-3 font-semibold bg-red-400 text-white">
                                     <i class="fa-solid fa-cart-plus text-xl"></i>Tambah ke Keranjang
@@ -149,25 +149,7 @@
         </div>
     </div>
 
-    <!-- BEGIN: Reject Notification Content -->
-    <div id="added-to-cart-notif" class="toastify-content hidden flex items-center">
-        <i class="fa-solid fa-cart-plus text-xl text-green-500"></i>
-        <div class="ml-4 mr-4">
-            <div class="text-green-500 font-medium">Pesanan Berhasil ditambah ke Keranjang.</div>
-            <div class="text-green-500 mt-1">Klik ikon keranjang pada Toolbar untuk melihat.</div>
-        </div>
-    </div>
-    <!-- END: Reject Notification Content -->
-
-    <!-- BEGIN: Already Notification Content -->
-    <div id="already-add-notif" class="toastify-content hidden flex items-center">
-        <i class="fa-solid fa-cart-arrow-down text-xl text-red-400"></i>
-        <div class="ml-4 mr-4">
-            <div class="text-red-500 font-medium">Pesanan sudah ada di Keranjang.</div>
-            <div class="text-red-500 mt-1">Klik ikon keranjang pada Toolbar untuk melihat.</div>
-        </div>
-    </div>
-    <!-- END: Already Notification Content -->
+    @include('home.components.notifications.cart-notification')
 
 @endsection
 
@@ -180,12 +162,14 @@
                     e.preventDefault(e);
                     let product_id = $("#product_id").val();
                     let store_id = $("#store_id").val();
+                    let qty = $("#qty").val();
                     $.ajax({
                         method: "POST",
                         url: "{{ route('customer.addToCart') }}",
                         data: {
                             'product_id': product_id,
                             'store_id': store_id,
+                            'qty': qty,
                         },
                         success: function (response) {
                             loadCart();
@@ -224,7 +208,7 @@
                 });
             @else
                 $("#add-to-cart").click( function (e) {
-                e.preventDefault(e);
+                    e.preventDefault(e);
                     Swal.fire({
                         position: 'center',
                         icon: 'info',
@@ -270,6 +254,7 @@
                 if (count > 1) {
                     count--;
                     $('#count').text(count);
+                    $('#qty').val(count);
                 }
             });
 
@@ -277,6 +262,7 @@
                 if (count < maxValue) {
                     count++;
                     $('#count').text(count);
+                    $('#qty').val(count);
                 }
             });
 

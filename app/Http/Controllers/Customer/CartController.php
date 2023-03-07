@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\UserAddress;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Kavist\RajaOngkir\Facades\RajaOngkir;
@@ -19,14 +20,14 @@ class CartController extends Controller
         return view('home.pages.cart', [
             'userCarts' => $userCarts,
         ]);
-
     }
 
-    public function addProductToCart(Request $request)
+    public function addProductToCart(Request $request): JsonResponse
     {
         $userId = Auth::id();
         $product_id = $request->input('product_id');
         $store_id = $request->input('store_id');
+        $qty = $request->input('qty');
 
         $cart = Cart::where('user_id', $userId)->where('store_id', $store_id)->first();
         $cartItem = CartItem::where('user_id', $userId)->where('product_id', $product_id)->first();
@@ -44,6 +45,7 @@ class CartController extends Controller
             $cartItem->cart_id = $cart->id;
             $cartItem->user_id = $userId;
             $cartItem->product_id = $product_id;
+            $cartItem -> product_qty = $qty;
             $cartItem->save();
             return response()->json(['success' => "ditambahkan ke keranjang"]);
         }

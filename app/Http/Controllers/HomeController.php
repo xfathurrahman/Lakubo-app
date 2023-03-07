@@ -57,6 +57,25 @@ class HomeController extends Controller
         ]);
     }
 
+    public function getProductByCategory($id): Factory|View|Application
+    {
+        $products = Product::where('category_id', $id)->orderBy('created_at', 'DESC')->paginate(16);
+        $productsCategory = ProductCategory::find($id)->name;
+
+        return view('home.pages.category-detail', [
+            'products' => $products,
+            'productsCategoryName' => $productsCategory,
+        ]);
+    }
+
+    public function getNewProduct(): View|\Illuminate\Foundation\Application|Factory|Application
+    {
+        $products = Product::orderBy('created_at', 'DESC')->paginate(16);
+        return view('home.pages.new-products', [
+            'products' => $products,
+        ]);
+    }
+
     public function searchProduct(Request $request)
     {
         $query = $request->query('query');
@@ -89,6 +108,5 @@ class HomeController extends Controller
 
         return view('home.pages.search-results', compact('products', 'searchTerm' , 'category', 'error'));
     }
-
 
 }

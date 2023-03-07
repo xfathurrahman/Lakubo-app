@@ -30,7 +30,7 @@
                     <i class="fas fa-hand-holding-usd" aria-hidden="true"></i>
                     <div class="wrap-left-info">
                         <h4 class="fc-name">PEMBELIAN</h4>
-                        <p class="fc-desc">Barang akan dikirim setelah pembayaran dikonfirmasi.</p>
+                        <p class="fc-desc">Barang akan dikirim setelah pesanan dikonfirmasi.</p>
                     </div>
                 </li>
             </ul>

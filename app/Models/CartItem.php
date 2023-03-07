@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @method static where(string $string, mixed $product_id)
+ * @property mixed $cart_id
+ * @property int|mixed|string|null $user_id
+ * @property mixed $product_id
+ * @property mixed $product_qty
  */
 class CartItem extends Model
 {

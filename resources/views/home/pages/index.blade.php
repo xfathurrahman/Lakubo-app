@@ -45,7 +45,7 @@
         <div class="slick-wrapper px-4">
             <div id="sc-category-carousel" class="overflow-hidden" style="max-height: 450px;" data-slick='{"lazyLoad": "ondemand"}'>
                 @foreach($categories as $category)
-                    <a href="#" class="flex-shrink-0 my-2 relative overflow-hidden content-box rounded-lg max-w-xs shadow-lg">
+                    <a href="{{ route('category.detail', $category->id) }}" class="flex-shrink-0 my-2 relative overflow-hidden content-box rounded-lg max-w-xs shadow-lg">
                         <svg class="absolute bottom-0 left-0 mb-8" viewBox="0 0 375 283" fill="none" style="transform: scale(1.5); opacity: 0.1;">
                             <rect x="159.52" y="175" width="152" height="152" rx="8" transform="rotate(-45 159.52 175)" fill="white"/>
                             <rect y="107.48" width="152" height="152" rx="8" transform="rotate(-45 0 107.48)" fill="white"/>
@@ -55,7 +55,7 @@
                             <img class="image-product max-w-full lazy" data-lazy="{{ asset("storage/product-category")."/".$category -> image_path }}">
                         </div>
                         <div class="p-1 md:p-3 h-10 flex items-center justify-center">
-                            <span class="text-xs text-center font-semibold capitalize md:uppercase line-clamp-2">{{ $category -> name }}</span>
+                            <span class="text-xs text-center font-normal md:font-semibold capitalize md:uppercase line-clamp-2 text-gray-700">{{ $category -> name }}</span>
                         </div>
                     </a>
                 @endforeach
@@ -101,7 +101,7 @@
                                 </div>
                             @endif
                         @endif
-                        <a class="a-link" href="{{ route('getProduct', $product -> id) }}">
+                        <a class="a-link" href="{{ route('product.detail', $product -> id) }}">
                             <img class="image-product" src="{{ asset("storage/product-image")."/".$product -> productImage -> image_path }}" alt="Image from {{ $product->stores->name }}">
                             <div class="card-body bg-red-100">
                                 <div class="relative overflow-hidden py-0.5 rounded-br-lg bg-red-400 shadow-lg">
@@ -133,28 +133,10 @@
                 </div>
             @endforeach
         </div>
-        <a href="#" class="absolute bottom-0 right-0 h-8 bg-red-400 rounded-tl-lg rounded-br-lg flex items-center text-white text-sm px-2 text-decoration-none">Lihat Semua</a>
+        <a href="{{ route('product.detail.new') }}" class="absolute bottom-0 right-0 h-8 bg-red-400 rounded-tl-lg rounded-br-lg flex items-center text-white text-sm px-2 text-decoration-none">Lihat Semua</a>
     </div>
 
-    <!-- BEGIN: Reject Notification Content -->
-    <div id="added-to-cart-notif" class="toastify-content hidden flex items-center">
-        <i class="fa-solid fa-cart-plus text-xl text-green-500"></i>
-        <div class="ml-4 mr-4">
-            <div class="text-green-500 font-medium">Pesanan Berhasil ditambah ke Keranjang.</div>
-            <div class="text-green-500 mt-1">Klik ikon keranjang pada Toolbar untuk melihat.</div>
-        </div>
-    </div>
-    <!-- END: Reject Notification Content -->
-
-    <!-- BEGIN: Already Notification Content -->
-    <div id="already-add-notif" class="toastify-content hidden flex items-center">
-        <i class="fa-solid fa-cart-arrow-down text-xl text-red-400"></i>
-        <div class="ml-4 mr-4">
-            <div class="text-red-500 font-medium">Pesanan sudah ada di Keranjang.</div>
-            <div class="text-red-500 mt-1">Klik ikon keranjang pada Toolbar untuk melihat.</div>
-        </div>
-    </div>
-    <!-- END: Already Notification Content -->
+    @include('home.components.notifications.cart-notification')
 
     <style>
         .swal2-popup {
@@ -294,12 +276,14 @@
                 e.preventDefault();
                 var product_id = $(this).closest('.product_data').find('.prod_id').val();
                 var store_id = $(this).closest('.product_data').find('.store_id').val();
+                var qty = $(this).closest('.product_data').find('.qty_input').val();
                 $.ajax({
                     method: "POST",
                     url: "{{route('customer.addToCart')}}",
                     data: {
                         'product_id': product_id,
                         'store_id': store_id,
+                        'qty': qty,
                     },
                     success: function (response) {
                         // window.location.reload();

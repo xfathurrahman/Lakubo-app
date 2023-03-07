@@ -153,7 +153,8 @@
 
 .owner-name {
     height: 20px;
-    width: 101px;
+    min-width: 101px;
+    max-width: 200px;
     position: absolute;
     top: calc(84% - 10px);
     left: 60%;
@@ -184,6 +185,14 @@
 }
 
 .carousel-product .card:hover .owner-name:after {
+    top: 0;
+}
+
+.carousel-detail-product .card-detail:hover .owner-name:before {
+    top: -100%;
+}
+
+.carousel-detail-product .card-detail:hover .owner-name:after {
     top: 0;
 }
 

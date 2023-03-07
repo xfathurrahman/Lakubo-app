@@ -6,7 +6,7 @@
 
 @section('content')
 
-    <div class="carousel-product rounded-lg py-2.5">
+    <div class="carousel-detail-product relative block shadow-lg rounded-lg py-2.5 mb-6" style="box-shadow: rgba(49,53,59,0.12) 0 1px 6px 0;">
         <div class="mb-2 text-left">
             @if(isset($category))
                 <h4 class="mx-4 mb-3">Menampilkan hasil pencarian untuk '<b>{{ $searchTerm }}</b>' dari kategori <a href="#" class="text-red-400 hover:underline font-medium">{{ $category->name }}</a> </h4>
@@ -23,137 +23,76 @@
             </div>
         @endif
 
-        <div class="owl-carousel sc-products-carousel owl-theme">
-            @foreach($products as $product)
-                <div class="item ml-2">
-                    <div class="card shadow-xl bg-gray-200">
-                        <div class="date-option bg-red-400 text-center">
-                            <span class="date-post">
-                                <p class="mb-5">{{ $product -> created_at -> diffForHumans() }}</p>
-                            </span>
-                        </div>
-                        @php
-                            $isAuthenticated = auth()->check();
-                            $isSeller = $isAuthenticated && auth()->user()->hasRole('seller');
-                            $isProductStoreSameAsUserStore = $isSeller && $product->stores->id === auth()->user()->stores->id;
-                            $canEditProduct = $isProductStoreSameAsUserStore;
-                        @endphp
-                        @if ($product->quantity > 0)
-                            @if ($canEditProduct)
-                                <a href="{{ route('seller.products.edit', $product->id) }}" class="add-to-cart product_data">
-                                    <i class="fa-solid fa-pencil"></i>
-                                </a>
-                            @else
-                                <div class="add-to-cart product_data bg-red-400">
-                                    <button>
-                                        <input type="hidden" class="qty_input" name="product_qty" value="1">
-                                        <input type="hidden" class="prod_id" name="product_id" value="{{ $product->id }}">
-                                        <input type="hidden" class="store_id" name="store_id" value="{{ $product->stores->id }}">
-                                        <button type="button" class="btn addToCartBtn">
-                                            <i class="fa fa-cart-plus" aria-hidden="true"></i>
-                                        </button>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-8 gap-2 px-4 py-2">
+            @foreach ($products as $product)
+                <div class="card-detail mb-2 lg:mb-0 overflow-hidden relative shadow-lg shadow-gray-200 rounded-lg transform hover:translate-y-1 hover:shadow-xl transition duration-300">
+                    <img class="h-40 w-full object-cover rounded-t-lg" src="{{ asset("storage/product-image")."/".$product -> productImage -> image_path }}" alt="{{ $product->name }}">
+                    @php
+                        $isAuthenticated = auth()->check();
+                        $isSeller = $isAuthenticated && auth()->user()->hasRole('seller');
+                        $isProductStoreSameAsUserStore = $isSeller && $product->stores->id === auth()->user()->stores->id;
+                        $canEditProduct = $isProductStoreSameAsUserStore;
+                    @endphp
+                    @if ($product->quantity > 0)
+                        @if ($canEditProduct)
+                            <a href="{{ route('seller.products.edit', $product->id) }}" class="absolute top-0 right-0 product_data">
+                                <i class="fa-solid fa-pencil"></i>
+                            </a>
+                        @else
+                            <div class="absolute top-0 right-0 product_data bg-red-400 text-lg text-white px-1 rounded-tr-lg rounded-bl-lg">
+                                <button>
+                                    <input type="hidden" class="qty_input" name="product_qty" value="1">
+                                    <input type="hidden" class="prod_id" name="product_id" value="{{ $product->id }}">
+                                    <input type="hidden" class="store_id" name="store_id" value="{{ $product->stores->id }}">
+                                    <button type="button" class="btn addToCartBtn">
+                                        <i class="fa fa-cart-plus" aria-hidden="true"></i>
                                     </button>
-                                </div>
-                            @endif
-                        @endif
-                        <a class="a-link" href="{{ route('getProduct', $product -> id) }}">
-                            <img class="image-product" src="{{ asset("storage/product-image")."/".$product -> productImage -> image_path }}" alt="Image from {{ $product->stores->name }}">
-                            <div class="card-body bg-red-100">
-                                <div class="relative overflow-hidden py-0.5 rounded-br-lg bg-red-400 shadow-lg">
-                                    <svg class="absolute bottom-0 left-0 mb-8" viewBox="0 0 375 283" fill="none" style="transform: scale(1.5); opacity: 0.1;">
-                                        <rect x="159.52" y="175" width="152" height="152" rx="8" transform="rotate(-45 159.52 175)" fill="white"/>
-                                        <rect y="107.48" width="152" height="152" rx="8" transform="rotate(-45 0 107.48)" fill="white"/>
-                                    </svg>
-                                    <div class="relative px-2 text-white">
-                                        <span class="block font-semibold text-xs overflow-ellipsis">@currency($product->price)</span>
-                                    </div>
-                                </div>
-                                <div class="px-2 product-name text-left">{{ $product -> name }}</div>
-                                <div class="px-2 owner-info">
-                                    <div class="owner-pp">
-                                        @isset($product->stores->users->profile_photo_path)
-                                            <img class="rounded-full" src="{{ asset('storage/profile-photos/'. $product->stores->users->profile_photo_path) }}" alt="pp-owner"/>
-                                        @else
-                                            <img class="rounded-full" src="https://ui-avatars.com/api/?name={{ $product -> stores -> name }}&amp;color=7F9CF5&amp;background=EBF4FF" alt="pp-owner"/>
-                                        @endisset
-                                    </div>
-                                    <div class="owner-name whitespace-nowrap font-bold"
-                                         data-hover-before="{{  $product -> stores -> name }}"
-                                         data-hover-after="{{  $product -> stores -> users -> name }}">
-                                    </div>
-                                </div>
+                                </button>
                             </div>
-                        </a>
+                        @endif
+                    @endif
+                    <div class="rounded-lg shadow-lg bg-red-100">
+                        <div class="relative overflow-hidden py-0.5 rounded-br-lg bg-red-400 shadow-lg">
+                            <svg class="absolute bottom-0 left-0 mb-8" viewBox="0 0 375 283" fill="none" style="transform: scale(1.5); opacity: 0.1;">
+                                <rect x="159.52" y="175" width="152" height="152" rx="8" transform="rotate(-45 159.52 175)" fill="white"/>
+                                <rect y="107.48" width="152" height="152" rx="8" transform="rotate(-45 0 107.48)" fill="white"/>
+                            </svg>
+                            <div class="relative px-2 text-white">
+                                <span class="block font-semibold text-xs overflow-ellipsis">@currency($product->price)</span>
+                            </div>
+                        </div>
+                        <div class="px-2 line-clamp-2 text-xs py-1 text-gray-700 text-left">{{ $product -> name }}</div>
+                        <div class="px-2 owner-info">
+                            <div class="owner-pp">
+                                @isset($product->stores->users->profile_photo_path)
+                                    <img class="rounded-full" src="{{ asset('storage/profile-photos/'. $product->stores->users->profile_photo_path) }}" alt="pp-owner"/>
+                                @else
+                                    <img class="rounded-full" src="https://ui-avatars.com/api/?name={{ $product -> stores -> name }}&amp;color=7F9CF5&amp;background=EBF4FF" alt="pp-owner"/>
+                                @endisset
+                            </div>
+                            <div class="owner-name truncate whitespace-nowrap font-bold mt-1"
+                                 data-hover-before="{{  $product -> stores -> name }}"
+                                 data-hover-after="{{  $product -> stores -> users -> name }}">
+                            </div>
+                        </div>
+                        <div class="bg-red-400 text-center rounded-b-lg">
+                                <span class="text-sm text-white">
+                                    <p>{{ $product -> created_at -> diffForHumans() }}</p>
+                                </span>
+                        </div>
                     </div>
                 </div>
             @endforeach
         </div>
+
     </div>
 
-    <!-- BEGIN: Reject Notification Content -->
-    <div id="added-to-cart-notif" class="toastify-content hidden flex items-center">
-        <i class="fa-solid fa-cart-plus text-xl text-green-500"></i>
-        <div class="ml-4 mr-4">
-            <div class="text-green-500 font-medium">Pesanan Berhasil ditambah ke Keranjang.</div>
-            <div class="text-green-500 mt-1">Klik ikon keranjang pada Toolbar untuk melihat.</div>
-        </div>
-    </div>
-    <!-- END: Reject Notification Content -->
-
-    <!-- BEGIN: Already Notification Content -->
-    <div id="already-add-notif" class="toastify-content hidden flex items-center">
-        <i class="fa-solid fa-cart-arrow-down text-xl text-red-400"></i>
-        <div class="ml-4 mr-4">
-            <div class="text-red-500 font-medium">Pesanan sudah ada di Keranjang.</div>
-            <div class="text-red-500 mt-1">Klik ikon keranjang pada Toolbar untuk melihat.</div>
-        </div>
-    </div>
-    <!-- END: Already Notification Content -->
+    @include('home.components.notifications.cart-notification')
 
 @endsection
 
 @section('script')
     <script>
-        /*##########################################################
-                             *CAROUSEL PRODUCT*
-        ##########################################################*/
-        $(document).ready(function () {
-            $('.sc-products-carousel').owlCarousel({
-                loop: false,
-                center: false,
-                margin: 3,
-                lazyLoad: true,
-                autoWidth: true,
-                nav: true,
-                item: 7,
-                slideBy: 7,
-                navText: ['<i class="fa fa-angle-left" aria-hidden="true"></i>', '<i class="fa fa-angle-right" aria-hidden="true"></i>'],
-                dots: false,
-                responsive: {
-                    0:{
-                        items:1,
-                        slideBy: 1,
-                        margin: 5,
-                    },
-                    320: {
-                        items: 2,
-                        slideBy: 2,
-                        margin: 5,
-                    },
-                    600: {
-                        items: 4,
-                        slideBy: 4
-                    },
-                    1000: {
-                        items: 5,
-                        slideBy: 5
-                    }
-                }
-            })
-        });
-        /*##########################################################
-                          *CAROUSEL PRODUCT END*
-        ##########################################################*/
         /*##########################################################
                        *TAMBAH PRODUCT KE KERANJANG*
         ##########################################################*/
@@ -161,14 +100,16 @@
         @if(Auth::check())
         $(document).on('click','.addToCartBtn', function (e) {
             e.preventDefault();
-            var product_id = $(this).closest('.product_data').find('.prod_id').val();
-            var store_id = $(this).closest('.product_data').find('.store_id').val();
+            let product_id = $(this).closest('.product_data').find('.prod_id').val();
+            let store_id = $(this).closest('.product_data').find('.store_id').val();
+            let qty = $(this).closest('.product_data').find('.qty_input').val();
             $.ajax({
                 method: "POST",
                 url: "{{route('customer.addToCart')}}",
                 data: {
                     'product_id': product_id,
                     'store_id': store_id,
+                    'qty': qty,
                 },
                 success: function (response) {
                     // window.location.reload();
