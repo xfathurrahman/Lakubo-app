@@ -7,8 +7,7 @@
             <!-- BEGIN: Login Info -->
             <div class="hidden xl:flex flex-col min-h-screen">
                 <a href="{{ route('home') }}" class="-intro-x flex items-center pt-5">
-                    <img alt="Lakubo - Lapak UMKM Boyolali" class="w-6" src="{{ asset('assets/images/logo.svg') }}">
-                    <span class="text-white text-lg ml-3">Lakubo</span>
+                    <img alt="Lakubo - Lapak UMKM Boyolali" class="h-6 rounded-2xl px-4 bg-white" src="{{ asset('assets/images/logo-app.svg') }}">
                 </a>
                 <div class="my-auto">
                     <img alt="Lakubo - Lapak UMKM Boyolali" class="-intro-x w-1/2 -mt-16"
@@ -94,7 +93,7 @@
                                        data-parsley-minlength-message="Minimal 8 karakter."
                                        data-parsley-errors-container="#password_error"
                                 >
-                                <button type="button" class="toggle-password absolute inset-y-0 right-0 pr-4 mr-2 flex items-center text-slate-400 focus:outline-none">
+                                <button type="button" class="toggle-password absolute inset-y-0 right-0 pl-1 pr-3 flex items-center text-slate-400 focus:outline-none">
                                     <i class="fa-regular fa-eye-slash h-6 w-6"></i>
                                 </button>
                             </div>
