@@ -26,11 +26,13 @@
             </div>
             <div class="mt-6 lg:mt-0 flex-1 px-5 border-l border-r border-slate-200/60 dark:border-darkmode-400 border-t lg:border-t-0 pt-5 lg:pt-0">
                 <div class="font-medium lg:mt-3 flex justify-center lg:justify-between">Kontak Lapak
-                    @if(Auth::user()->stores && Auth::user()->stores->id === $store->id)
-                        <span class="inline-flex">
+                    @auth()
+                        @if(Auth::user()->stores && Auth::user()->stores->id === $store->id)
+                            <span class="inline-flex">
                             <a href="{{ route('profile.edit') }}" class="inline-flex text-red-400"><i class="fa-regular fa-pen-to-square mr-2 my-auto"></i>Edit</a>
                         </span>
-                    @endif
+                        @endif
+                    @endauth
                 </div>
                 <div class="flex flex-col justify-center items-center lg:items-start mt-4 text-gray-700">
                     <div class="truncate sm:whitespace-normal flex items-center"> <i class="fa-regular fa-envelope mr-2"></i> {{ $store->users->email }} </div>

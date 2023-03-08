@@ -50,9 +50,8 @@
                             class="w-3/5 text-red-400 text-2xl md:text-3xl font-semibold tracking-wide">@currency( $product -> price )</span>
                         <span class="w-28 mt-2 flex items-center">
                             <div class="relative w-full">
-                                  <a href="#" class="flex items-center w-full h-auto bg-red-100 p-1 rounded">
-                                      <span
-                                          class="pl-12 flex-1 capitalize text-sm font-medium text-red-400 line-clamp-2 text-justify">{{ $product->stores->name }}</span>
+                                  <a href="{{ route('store.details', $product->stores->id) }}" class="flex items-center w-full h-auto bg-red-100 p-1 rounded">
+                                      <span class="pl-12 flex-1 capitalize text-sm font-medium text-red-400 line-clamp-2 text-justify">{{ $product->stores->name }}</span>
                                       @isset($product->stores->users->profile_photo_path)
                                           <img
                                               class="rounded-full p-0.5 border-2 border-red-200 w-10 h-10 absolute top-1/2 transform -translate-y-1/2 left-1.5"

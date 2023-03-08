@@ -139,13 +139,6 @@
     </div>
 
     @include('home.components.notifications.cart-notification')
-
-    <style>
-        .swal2-popup {
-            font-size: 0.8rem !important;
-        }
-    </style>
-
 @endsection
 
 @section('script')
