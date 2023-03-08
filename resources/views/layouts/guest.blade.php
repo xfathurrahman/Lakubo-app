@@ -8,7 +8,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         @yield('style')
     </head>
-    <body class="login" id="auth">
+    <body class="login sm:!overflow-hidden" id="auth">
         {{ $slot }}
         <script src="{{ asset('js/midone_app.js') }}"></script>
         <script src="{{ asset('js/jquery-3.6.1.js') }}"></script>

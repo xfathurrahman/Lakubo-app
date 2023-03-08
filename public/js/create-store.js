@@ -120,7 +120,7 @@ $(document).ready(function (){
                 }
             },
             ajax: {
-                url: "{{ url('indoregion/village')}}/"+ id,
+                url: getDesaUrl + id,
                 processResults: function({data}){
                     return {
                         results: $.map(data, function(item){

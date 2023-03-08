@@ -13,14 +13,13 @@
         @include('layouts.side-menu')
         <script src="{{ asset('js/midone_app.js') }}"></script>
         <script src="{{ asset('js/jquery-3.6.1.js') }}"></script>
-        <script src="{{ asset('js/alertify.js') }}"></script>
         <script src="{{ asset('js/toastify.js') }}"></script>
         <script src="{{ asset('js/sweetalert2.js') }}"></script>
         <script src="{{ asset('js/parsley.min.js') }}"></script>
         <script src="{{ asset('js/image-uploader.js') }}"></script>
         <script src="{{ asset('js/select2.min.js') }}"></script>
         <script src="{{ asset('js/select2-custom.js') }}"></script>
-        <script src="{{ asset('js/create-store.js') }}"></script>
         @yield('script')
+        @yield('script-navbar')
     </body>
 </html>

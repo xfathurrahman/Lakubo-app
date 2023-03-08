@@ -93,8 +93,8 @@
                                        data-parsley-minlength-message="Minimal 8 karakter."
                                        data-parsley-errors-container="#password_error"
                                 >
-                                <button type="button" class="toggle-password absolute inset-y-0 right-0 pl-1 pr-3 flex items-center text-slate-400 focus:outline-none">
-                                    <i class="fa-regular fa-eye-slash h-6 w-6"></i>
+                                <button type="button" class="toggle-password absolute inset-y-0 right-0 w-10 flex items-center justify-center text-slate-400 focus:outline-none">
+                                    <i class="fa-regular fa-eye-slash h-6 w-6 mx-auto"></i>
                                 </button>
                             </div>
                         </div>
@@ -103,7 +103,7 @@
                             <a href="{{ route('register') }}" class="btn btn-outline-secondary py-3 px-4 w-full xl:w-32 mt-3 xl:mt-0 align-top">Mendaftar</a>
                         </div>
                         <div class="intro-x mt-5 text-slate-600 dark:text-slate-500 text-center xl:text-left">
-                            Dengan masuk, anda telah menyetujui
+                            Dengan Masuk, anda telah menyetujui
                             <a class="text-primary dark:text-slate-200" href="{{ route('TAC') }}">Syarat dan Ketentuan</a> &
                             <a class="text-primary dark:text-slate-200" href="{{ route('PP') }}">Kebijakan Privasi</a> Lakubo.
                         </div>

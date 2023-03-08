@@ -9992,7 +9992,6 @@ html body{
 }
 .login{
     position: relative;
-    overflow: hidden;
     --tw-bg-opacity: 1;
     background-color: rgb(255 255 255 / var(--tw-bg-opacity));
     padding: 0.75rem;

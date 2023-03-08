@@ -52,7 +52,7 @@
                         </svg>
                         <div class="slider relative flex items-center justify-center">
                             {{--<div class="block absolute w-20 h-20 bottom-0 left-0 -mb-24 ml-3" style="background: radial-gradient(black, transparent 60%); transform: rotate3d(0, 0, 1, 20deg) scale3d(1, 0.6, 1); opacity: 0.2;"></div>--}}
-                            <img class="image-product max-w-full lazy" data-lazy="{{ asset("storage/product-category")."/".$category -> image_path }}">
+                            <img class="image-product max-w-full lazy" data-lazy="{{ asset("storage/product-category")."/".$category -> image_path }}" alt="category-img">
                         </div>
                         <div class="p-1 md:p-3 h-6 md:h-10 flex items-center justify-center">
                             <span class="text-2xs leading-2 md:text-xxs md:leading-3 lg:text-xs text-center text-white font-semibold capitalize md:uppercase line-clamp-2 text-gray-700">{{ $category -> name }}</span>

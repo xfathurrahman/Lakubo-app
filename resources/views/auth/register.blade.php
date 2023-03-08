@@ -2,7 +2,7 @@
     @section('style')
         <link rel="stylesheet" href="{{ asset('css/register.css') }}">
     @endsection
-    <div class="container sm:px-10" style="min-height: 90vh;">
+    <div class="container sm:px-10 sm:overflow-hidden" style="min-height: 90vh;">
         <div class="block xl:grid grid-cols-2 gap-4">
             <!-- BEGIN: Register Info -->
             <div class="hidden xl:flex flex-col min-h-screen">
@@ -123,8 +123,8 @@
                                                data-parsley-required-message="Wajib di isi."
                                                data-parsley-errors-container="#password_error"
                                         >
-                                        <button type="button" class="toggle-password absolute inset-y-0 right-0 pl-1 pr-3 flex items-center text-slate-400 focus:outline-none">
-                                            <i class="fa-regular fa-eye-slash h-6 w-6"></i>
+                                        <button type="button" class="toggle-password absolute inset-y-0 right-0 w-10 flex items-center justify-center text-slate-400 focus:outline-none">
+                                            <i class="fa-regular fa-eye-slash h-6 w-6 mx-auto"></i>
                                         </button>
                                     </div>
                                 </div>
@@ -215,17 +215,17 @@
                         </div>
                         <p style="margin-top: 30px" class="text-gray-500 ml-1 mb-1">Sudah mendaftar?</p>
                         <div class="items-center w-full flex flex-col sm:flex-row justify-between">
-                            <a href="http://127.0.0.1:8000/login" class="login-btn btn btn-outline-secondary w-full sm:w-auto">Masuk</a>
+                            <a href="{{ route('login') }}" class="login-btn btn btn-outline-secondary w-full sm:w-auto">Masuk</a>
                             <div class="form-navigation mt-2 sm:mt-0 w-full sm:w-auto ml-auto">
                                 <button type="button" class="next btn btn-primary w-full sm:w-auto">Selanjutnya</button>
                                 <button type="button" class="previous btn btn-secondary w-full sm:w-auto">Sebelumnya</button>
                                 <button type="submit" class="btn btn-primary mt-2 sm:mt-0 w-full sm:w-auto">Mendaftar</button>
                             </div>
                         </div>
-                        <div class="intro-x pt-5 text-slate-600 dark:text-slate-500 text-center xl:text-left">
+                        <div class="intro-x mt-5 text-slate-600 dark:text-slate-500 text-center xl:text-left">
                             Dengan Mendaftar, anda telah menyetujui
-                            <a class="text-primary dark:text-slate-200" href="">Terms and Conditions</a> &
-                            <a class="text-primary dark:text-slate-200" href="">Privacy Policy</a> Lakubo.
+                            <a class="text-primary dark:text-slate-200" href="{{ route('TAC') }}">Syarat dan Ketentuan</a> &
+                            <a class="text-primary dark:text-slate-200" href="{{ route('PP') }}">Kebijakan Privasi</a> Lakubo.
                         </div>
                     </form>
                 </div>

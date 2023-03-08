@@ -39,9 +39,9 @@
 </div>
 
 <div class="md:flex md:justify-between p-4 bg-white w-full">
-    <div class="mr-4 h-28 w-full lg:w-8/12 xl:w-9/12">
-        <iframe class="rounded-lg" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31643.309120811362!2d110.5812002686112!3d-7.529782102424532!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a6981de9c1c0b%3A0x5bbc7978e04fe13!2sDinas%20Koperasi%20dan%20Tenaga%20Kerja%20Kabupaten%20Boyolali!5e0!3m2!1sid!2sid!4v1667952144124!5m2!1sid!2sid" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-    </div>
+    <a href="https://goo.gl/maps/f7nPofSVnBwH4TC28" class="mr-4 h-28 w-full lg:w-8/12 rounded-lg xl:w-9/12 overflow-hidden">
+        <img class="object-cover transform hover:scale-150 cursor-zoom-in h-28 w-full" src="{{ asset('assets/images/maps.png') }}" alt="maps">
+    </a>
     <div class="w-full flex lg:w-4/12 xl:w-3/12 justify-center items-center">
 
         <div class="mx-2 flex flex-col w-1/2 h-full">
