@@ -9,13 +9,13 @@ class StoreProductRequest extends FormRequest
     public function rules()
     {
         return [
-            'product_name'=>'required|string|max:120',
-            'kategori'=>'required',
-            'price'=>'required|max:10',
-            'quantity'=>'required|max:7',
-            'weight'=>'required|max:7',
-            'description'=>'required|string|max:1000',
             'files' => 'required',
+            'nama_produk'=>'required|string|max:120',
+            'kategori'=>'required',
+            'harga'=>'required|max:10',
+            'stok'=>'required|max:7',
+            'berat'=>'required|max:7',
+            'deskripsi'=>'required|string|max:1000',
         ];
     }
 

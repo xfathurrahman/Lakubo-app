@@ -42,12 +42,12 @@ class ProductController extends Controller
         $request->validated();
 
         $product  = new Product;
-        $product -> name = $data['product_name'];
-        $product -> price = $data['price'];
+        $product -> name = $data['nama_produk'];
+        $product -> price = $data['harga'];
         $product -> category_id = $data['kategori'];
-        $product -> description =  $data['description'];
-        $product -> quantity =  $data['quantity'];
-        $product -> weight =  $data['weight'];
+        $product -> description =  $data['deskripsi'];
+        $product -> quantity =  $data['stok'];
+        $product -> weight =  $data['berat'];
         $product -> store_id = Auth::user()->stores->id;
         $product -> save();
 
