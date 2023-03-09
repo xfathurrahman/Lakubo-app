@@ -1,28 +1,26 @@
 <x-app-layout>
+
+    <!-- BEGIN: Error Notification Content -->
+    <div id="error-notification-list" class="toastify-content hidden flex"> <i class="fa-solid fa-circle-exclamation text-primary text-lg"></i>
+        <div class="ml-4 mr-4 w-72">
+            <div class="font-medium truncate">Data anda tidak valid !</div>
+            <div class="text-slate-500 mt-1 space-y">
+                @foreach($errors->all() as $error)
+                    <span class="flex flex-col">{{ $loop->iteration }}. {{ $error }}&nbsp;</span>
+                @endforeach
+            </div>
+        </div>
+    </div>
+    <!-- END: Error Notification Content -->
+
     <div class="grid grid-cols-11 gap-x-6 mt-5 pb-20">
-        <!-- BEGIN: Notification -->
 
         @section('breadcrumbs')
             {{ Breadcrumbs::render('product_edit') }}
         @endsection
 
-        @if(Session::has('error'))
-            <div class="intro-y col-span-11 alert alert-primary alert-dismissible show flex items-center mb-6" role="alert">
-                <span><i data-lucide="info" class="w-4 h-4 mr-2"></i></span>
-                <div class="font-medium">Data anda tidak valid :&emsp;</div>
-                <div class="block">
-                    {{ Session::get('error') }}
-                    @php
-                        Session::forget('error');
-                    @endphp
-                </div>
-                <button type="button" class="btn-close text-white" data-tw-dismiss="alert" aria-label="Close"> <i data-lucide="x" class="w-4 h-4"></i> </button>
-            </div>
-        @endif
-
-        <!-- BEGIN: Notification -->
         <div class="intro-y col-span-12 2xl:col-span-12">
-            <form method="POST" action="{{ route('seller.products.update', $product->id) }}" data-parsley-validate="" role="form" enctype="multipart/form-data">
+            <form method="POST" action="{{ route('seller.products.update', $product->id) }}" data-parsley-validate role="form" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <!-- BEGIN: Uplaod Product -->
@@ -41,6 +39,7 @@
                                             <div class="font-medium">Foto Produk</div>
                                             <div class="ml-2 px-2 py-0.5 bg-slate-200 text-slate-600 dark:bg-darkmode-300 dark:text-slate-400 text-xs rounded-md">Wajib</div>
                                         </div>
+                                        <p class="mt-2" id="parsley_error_image"></p>
                                         <div class="leading-relaxed text-slate-500 text-xs mt-3 mb-3">
                                             <div>Format gambar .jpg .jpeg .png dan ukuran minimum 300 x 300px (Untuk gambar optimal gunakan ukuran minimum 700 x 700 px).</div>
                                             <div class="mt-2">Pilih foto produk atau tarik dan letakkan hingga maksimal 5 foto sekaligus di sini.</div>
@@ -69,20 +68,24 @@
                                             <label for="product-name" class="font-medium">Nama Produk</label>
                                             <div class="ml-2 px-2 py-0.5 bg-slate-200 text-slate-600 dark:bg-darkmode-300 dark:text-slate-400 text-xs rounded-md">Wajib</div>
                                         </div>
+                                        <p class="mt-2" id="parsley_error_product_name"></p>
                                         <div class="leading-relaxed text-slate-500 text-xs mt-3"> Buat nama produk yang dapat menarik minat pembeli. Gunakan minimal 20 karakter. </div>
                                     </div>
                                 </div>
                                 <div class="w-full mt-3 xl:mt-0 flex-1">
                                     <input id="product-name"
-                                           name="product_name"
+                                           name="nama_produk"
                                            type="text"
                                            class="form-control"
                                            placeholder="Nama Produk"
                                            value="{{ $product->name }}"
-                                           required=""
+                                           required
                                            data-parsley-maxlength="120"
-                                           data-parsley-required-message="Wajib memasukan Nama Produk"
-                                           data-parsley-maxlength-message="Maksimal 120 karakter..."
+                                           data-parsley-minlength="20"
+                                           data-parsley-required-message="- Wajib memasukan Nama Produk"
+                                           data-parsley-maxlength-message="- Maksimal 120 karakter..."
+                                           data-parsley-minlength-message="- Minimal 20 karakter..."
+                                           data-parsley-errors-container="#parsley_error_product_name"
                                     >
                                 </div>
                             </div>
@@ -93,23 +96,25 @@
                                             <label for="selectCateProd" class="font-medium">Harga & Kategori</label>
                                             <div class="ml-2 px-2 py-0.5 bg-slate-200 text-slate-600 dark:bg-darkmode-300 dark:text-slate-400 text-xs rounded-md">Wajib</div>
                                         </div>
+                                        <p class="mt-2" id="parsley_error_price"></p>
+                                        <p class="mt-2" id="parsley_error_category"></p>
                                     </div>
                                 </div>
                                 <div class="w-full mt-3 xl:mt-0 flex-1">
                                     <div class="grid grid-cols-12 gap-x-5">
-                                        <div class="col-span-12 2xl:col-span-6" id="parsley_error">
+                                        <div class="col-span-12 2xl:col-span-6">
                                             <div class="input-group">
                                                 <div class="input-group-text">Rp.</div>
-                                                <input name="price"
+                                                <input name="harga"
                                                        type="text"
                                                        class="form-control numeric-input"
                                                        placeholder="Masukan harga"
                                                        value="{{ $product->price }}"
-                                                       required=""
-                                                       data-parsley-errors-container="#parsley_error"
+                                                       required
+                                                       data-parsley-errors-container="#parsley_error_price"
                                                        data-parsley-maxlength="10"
-                                                       data-parsley-required-message="Wajib memasukan Harga produk"
-                                                       data-parsley-maxlength-message="Maksimal 10 digit..."
+                                                       data-parsley-required-message="- Wajib memasukan Harga produk"
+                                                       data-parsley-maxlength-message="- Maksimal 10 digit..."
                                                        data-parsley-group="block1"
                                                 >
                                             </div>
@@ -119,7 +124,8 @@
                                                     id="selectCateProd"
                                                     class="w-full form-control"
                                                     required
-                                                    data-parsley-required-message="Wajib memilih Kategori Produk">
+                                                    data-parsley-required-message="- Wajib memilih Kategori Produk"
+                                                    data-parsley-errors-container="#parsley_error_category">
                                                 <option selected disabled>Pilih Kategori</option>
                                                 @foreach($listCateProd as $category)
                                                     @if($product->productCategories)
@@ -143,14 +149,16 @@
                                             <div class="font-medium">Berat & Kuantitas</div>
                                             <div class="ml-2 px-2 py-0.5 bg-slate-200 text-slate-600 dark:bg-darkmode-300 dark:text-slate-400 text-xs rounded-md">Wajib</div>
                                         </div>
+                                        <p class="mt-2" id="parsley_error_weight"></p>
+                                        <p class="mt-2" id="parsley_error_stock"></p>
                                     </div>
                                 </div>
                                 <div class="w-full mt-3 xl:mt-0 flex-1">
                                     <div class="grid grid-cols-12 gap-x-5">
-                                        <div class="col-span-12 2xl:col-span-6" id="parsley_error_weight">
+                                        <div class="col-span-12 2xl:col-span-6">
                                             <div class="input-group">
                                                 <div class="input-group-text"><i class="fa-solid fa-scale-unbalanced"></i></div>
-                                                <input name="weight"
+                                                <input name="berat"
                                                        type="text"
                                                        class="form-control numeric-input"
                                                        placeholder="Masukan Berat Produk Anda dalam satuan Gram"
@@ -158,26 +166,26 @@
                                                        required=""
                                                        data-parsley-errors-container="#parsley_error_weight"
                                                        data-parsley-maxlength="7"
-                                                       data-parsley-required-message="Wajib memasukan Berat produk"
-                                                       data-parsley-maxlength-message="Maksimal 7 digit..."
+                                                       data-parsley-required-message="- Wajib memasukan Berat produk"
+                                                       data-parsley-maxlength-message="- Maksimal 7 digit..."
                                                 >
                                                 <div class="input-group-text">Gram</div>
                                             </div>
                                         </div>
 
-                                        <div class="col-span-12 2xl:col-span-6" id="parsley_error_stock">
+                                        <div class="col-span-12 2xl:col-span-6 mt-2 2xl:mt-0">
                                             <div class="input-group">
                                                 <div class="input-group-text"><i class="fa-solid fa-cubes-stacked"></i></div>
-                                                    <input name="quantity"
+                                                    <input name="stok"
                                                            type="text"
-                                                           class="form-control mt-2 sm:mt-0 numeric-input"
+                                                           class="form-control numeric-input"
                                                            placeholder="Masukan Stok Produk Anda"
                                                            value="{{ $product->quantity }}"
                                                            required=""
                                                            data-parsley-maxlength="7"
                                                            data-parsley-errors-container="#parsley_error_stock"
-                                                           data-parsley-required-message="Wajib memasukan Stok produk"
-                                                           data-parsley-maxlength-message="Maksimal 7 digit..."
+                                                           data-parsley-required-message="- Wajib memasukan Stok produk"
+                                                           data-parsley-maxlength-message="- Maksimal 7 digit..."
                                                     >
                                             </div>
                                         </div>
@@ -200,6 +208,7 @@
                                             <div class="font-medium">Product Description</div>
                                             <div class="ml-2 px-2 py-0.5 bg-slate-200 text-slate-600 dark:bg-darkmode-300 dark:text-slate-400 text-xs rounded-md">Wajib</div>
                                         </div>
+                                        <p class="mt-2" id="parsley_error_description"></p>
                                         <div class="leading-relaxed text-slate-500 text-xs mt-3">
                                             <div>Pastikan deskripsi produk memberikan penjelasan detail tentang produk Anda sehingga mudah untuk memahami dan menemukan produk Anda.</div>
                                             <div class="mt-2">Disarankan untuk tidak memasukkan info nomor ponsel, email, dll ke dalam deskripsi produk untuk melindungi data pribadi Anda.</div>
@@ -207,13 +216,18 @@
                                     </div>
                                 </div>
                                 <div class="w-full mt-3 xl:mt-0 flex-1">
-                                    <textarea name="description"
+                                    <textarea name="deskripsi"
                                               class="editor"
                                               id="editor"
-                                              required=""
+                                              maxlength="1000"
+                                              placeholder="Deskripsikan produkmu..."
+                                              required
                                               data-parsley-maxlength="1000"
+                                              data-parsley-minlength="50"
                                               data-parsley-required-message="Wajib memasukan Deskripsi Produk"
                                               data-parsley-maxlength-message="Maksimal 1000 karakter..."
+                                              data-parsley-minlength-message="Masukan minimal 50 karakter..."
+                                              data-parsley-errors-container="#parsley_error_description"
                                     >{{ $product->description }}</textarea>
                                 </div>
                             </div>
@@ -223,7 +237,7 @@
                 <!-- END: Product Detail -->
                 <div class="form-navigation-product-edit flex justify-end flex-col md:flex-row gap-2 mt-5">
                     <a href="{{ url('/seller/products') }}" class="btn py-3 border-slate-300 dark:border-darkmode-400 text-slate-500 w-full md:w-52">Batal</a>
-                    <button type="submit" class="submit btn py-3 btn-primary w-full md:w-52">Simpan</button>
+                    <button type="submit" class="btn py-3 btn-primary w-full md:w-52">Simpan</button>
                 </div>
             </form>
         </div>
@@ -237,30 +251,30 @@
 
     @section('script')
 
-        <script>
-            $('.form-navigation-product-edit .submit').click(function(){
-                Parsley.addMessage('en', 'required', 'Wajib mengunggah gambar produk.');
-            });
-        </script>
+        <script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>
 
         <script>
-            let preloaded = [
-                    @foreach($product -> productImages as $image)
-                {id: {{ $image->id }}, src: '{{ asset("storage/product-image")."/".$image -> image_path }}'},
-                @endforeach
-            ];
-
-            $('.input-images-1').imageUploader({
-                preloaded: preloaded,
-                imagesInputName: 'files',
-                preloadedInputName: 'old',
-                maxSize: 2 * 1024 * 1024,
-                maxFiles: 5
-            });
+            @if(count($errors) > 0)
+                Toastify({
+                    node: $("#error-notification-list").clone().removeClass("hidden")[0],
+                    duration: -1,
+                    newWindow: true,
+                    close: true,
+                    gravity: "top",
+                    position: "right",
+                    stopOnFocus: true,
+                    closeOthers: true,
+                    offset: {
+                        y: 80
+                    },
+                }).showToast();
+            @endif
         </script>
 
         <script>
             $(document).ready(function (){
+
+                // define select2
                 $("#selectCateProd").select2({
                     placeholder:'Pilih Kategori Produk',
                     searchInputPlaceholder: 'Cari kategori...',
@@ -270,36 +284,58 @@
                         }
                     }
                 });
-            });
-        </script>
 
-        <script>
-            $(document).ready(function () {
-                ClassicEditor.create(document.querySelector('#editor'), {
-                    toolbar: {
-                        items: [
-                            'heading',
-                            'bold',
-                            'italic',
-                            'blockQuote',
-                            'bulletedList',
-                            'numberedList',
-                            'insertTable',
-                            'outdent',
-                            'indent',
-                            'undo',
-                            'redo'
-                        ]
-                    }
-                })
-                    /*.then( editor => {
-                        const toolbarElement = editor.ui.view.toolbar.element;
-                            toolbarElement.style.display = 'none'
-                            editor.enableReadOnlyMode( 'feature-id' )
-                    } )*/
-                    .catch(error => {
-                        console.log(error);
+                // wajib angka
+                const numericInputs = document.querySelectorAll('.numeric-input');
+                numericInputs.forEach(function(input) {
+                    input.addEventListener('input', function(e) {
+                        e.target.value = e.target.value.replace(/[^0-9]/g, '');
                     });
+                });
+
+                // Mendapatkan data gambar lama
+                let preloaded = [
+                    @foreach($product -> productImages as $image)
+                        {id: {{ $image->id }}, src: '{{ asset("storage/product-image")."/".$image -> image_path }}'},
+                    @endforeach
+                ];
+
+                // define ImageUploader
+                $('.input-images-1').imageUploader({
+                    preloaded: preloaded,
+                    imagesInputName: 'files',
+                    preloadedInputName: 'old',
+                    maxSize: 2 * 1024 * 1024,
+                    maxFiles: 5,
+                    required: false,
+                    label: "Tarik & Letakkan disini atau klik untuk mencari gambar produk",
+                });
+
+                // define CKEDITOR
+                ClassicEditor
+                    .create(document.querySelector('#editor'), {
+                        toolbar: {
+                            items: [
+                                'heading',
+                                'bold',
+                                'italic',
+                                'bulletedList',
+                                'numberedList',
+                                'undo',
+                                'redo'
+                            ]
+                        }
+                    })
+                    .then(editor => {
+                        editor.model.document.on('change:data', () => {
+                            const editorData = editor.getData();
+                            $('#editor').val(editorData).trigger('input');
+                        });
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+
             });
         </script>
 

@@ -100,6 +100,7 @@
 @endsection
 
 @section('script')
+
     <script>
         /*##########################################################
                        *TAMBAH PRODUCT KE KERANJANG*

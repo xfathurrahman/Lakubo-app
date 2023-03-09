@@ -11,10 +11,11 @@
             imagesInputName: 'images',
             preloadedInputName: 'preloaded',
             label: 'Drag & Drop files here or click to browse',
-            extensions: ['.jpg', '.jpeg', '.png', '.gif', '.svg','.JPEG'],
+            extensions: ['.jpg', '.jpeg', '.png', '.gif', '.svg'],
             mimes: ['image/jpeg', 'image/png', 'image/gif', 'image/svg+xml'],
             maxSize: undefined,
             maxFiles: undefined,
+            required: false,
         };
 
         // Get instance
@@ -81,7 +82,16 @@
                 name: plugin.settings.imagesInputName + '[]',
                 accept: plugin.settings.extensions.join(','),
                 multiple: '',
-            }).appendTo($container);
+                required: '',
+                'data-parsley-required-message': 'Wajib mengunggah minimal 1 gambar produk.',
+                'data-parsley-errors-container': '#parsley_error_image'
+            });
+            // jika plugin.settings.required bernilai false, maka hapus attribute required
+            if (!plugin.settings.required) {
+                $input.removeAttr('required');
+            }
+            $container.append($input);
+
 
             // Create the uploaded images container and append it to the container
             let $uploadedContainer = $('<div>', {class: 'uploaded'}).appendTo($container),
@@ -92,12 +102,10 @@
                 }).appendTo($container),
 
                 // Create the icon and append it to the text container
-                /*$i = $('<i>', {class: 'iui-cloud-upload'}).appendTo($textContainer),*/
+                $i = $('<i>', {class: 'fa-solid fa-cloud-arrow-up w-4 h-4 text-gray-500'}).appendTo($textContainer),
 
                 // Create the text and append it to the text container
-                $span = $('<span class="text-center" data-lucide="home">' +
-                    '<span><i class="fa-regular fa-images mr-2"></i><b class="text-primary">Pilih gambar</b> atau tarik dan letakkan.</span>',
-                    {text: plugin.settings.label}).appendTo($textContainer);
+                $span = $('<span>', {text: plugin.settings.label}).appendTo($textContainer);
 
 
             // Listen to container click and trigger input file click
@@ -139,7 +147,7 @@
                 $button = $('<button>', {class: 'delete-image'}).appendTo($container),
 
                 // Create the delete icon
-                $i = $('<i>', {class: 'fa-solid fa-xmark w-2'}).appendTo($button);
+                $i = $('<i>', {class: 'fa-solid fa-xmark text-white w-4 h-4'}).appendTo($button);
 
 
             // If the image is preloaded
@@ -152,7 +160,7 @@
                 let $preloaded = $('<input>', {
                     type: 'hidden',
                     name: plugin.settings.preloadedInputName + '[]',
-                    value: id,
+                    value: id
                 }).appendTo($container)
 
             } else {
@@ -209,12 +217,10 @@
 
                 // If there is no more uploaded files
                 if (!$parent.children().length) {
-
                     // Remove the 'has-files' class
                     $parent.parent().removeClass('has-files');
-
+                    $("input[name='files[]']").attr("required", true);
                 }
-
             });
 
             return $container;
@@ -281,10 +287,23 @@
         };
 
         let validateExtension = function (file) {
-
             if (plugin.settings.extensions.indexOf(file.name.replace(new RegExp('^.*\\.'), '.')) < 0) {
-                alertify.alert(`Berkas "${file.name}" ini bukan format yang tepat. Yang diperbolehkan adalah : "${plugin.settings.extensions.join('", "')}"`).set({title:"Maaf..",transition:'flipy'}).set({labels:{ok:'Oke'}});
-
+                let errorTittle = `Format berkas tidak valid!`;
+                let errorMessage = `Berkas '<strong>${file.name}</strong>' bukan format yang tepat.<br>Yang diperbolehkan : ${plugin.settings.extensions.join(', ')}`;
+                Toastify({
+                    node: $("#error-format-notification").clone().removeClass("hidden")[0],
+                    duration: -1,
+                    newWindow: true,
+                    close: true,
+                    gravity: "top",
+                    position: "right",
+                    stopOnFocus: true,
+                    offset: {
+                        y: 80
+                    },
+                }).showToast();
+                $("#error-format-notification").find("#errTtl").html(errorTittle);
+                $("#error-format-notification").find("#errMsg").html(errorMessage);
                 return false;
             }
 
@@ -294,17 +313,46 @@
         let validateMIME = function (file) {
 
             if (plugin.settings.mimes.indexOf(file.type) < 0) {
-                alertify.alert(`Berkas "${file.name}" ini bukan tipe yang tepat. Yang diperbolehkan adalah : "${plugin.settings.mimes.join('", "')}"`).set({title:"Maaf..",transition:'flipy'}).set({labels:{ok:'Oke'}});
+                let errorTittle = `Tipe berkas tidak valid!`;
+                let errorMessage = `Berkas '<strong>${file.name}</strong>' bukan tipe yang tepat.<br>Yang diperbolehkan : ${plugin.settings.mimes.join(', ')}`;
+                Toastify({
+                    node: $("#error-format-notification").clone().removeClass("hidden")[0],
+                    duration: -1,
+                    newWindow: true,
+                    close: true,
+                    gravity: "top",
+                    position: "right",
+                    stopOnFocus: true,
+                    offset: {
+                        y: 80
+                    },
+                }).showToast();
+                $("#error-format-notification").find("#errTtl").html(errorTittle);
+                $("#error-format-notification").find("#errMsg").html(errorMessage);
                 return false;
             }
-
             return true;
         };
 
         let validateMaxSize = function (file) {
 
             if (file.size > plugin.settings.maxSize) {
-                alertify.alert(`Berkas "${file.name}" tidak boleh melebihi ukuran yang diperbolehkan, yaitu ${plugin.settings.maxSize / 1024 / 1024}Mb`).set({title:"Maaf..",transition:'flipy'}).set({labels:{ok:'Oke'}});
+                let errorTittle = `Maksimal ukuran berkas ${plugin.settings.maxSize / 1024 / 1024}Mb!`;
+                let errorMessage = `Berkas '<strong>${file.name}</strong>' melebihi ukuran yang di izinkan.`;
+                Toastify({
+                    node: $("#error-format-notification").clone().removeClass("hidden")[0],
+                    duration: -1,
+                    newWindow: true,
+                    close: true,
+                    gravity: "top",
+                    position: "right",
+                    stopOnFocus: true,
+                    offset: {
+                        y: 80
+                    },
+                }).showToast();
+                $("#error-format-notification").find("#errTtl").html(errorTittle);
+                $("#error-format-notification").find("#errMsg").html(errorMessage);
                 return false;
             }
 
@@ -315,7 +363,22 @@
         let validateMaxFiles = function (index, file) {
 
             if ((index + dataTransfer.items.length + plugin.settings.preloaded.length) >= plugin.settings.maxFiles) {
-                alertify.alert(`Berkas "${file.name}" tidak dapat ditambahkan ( maksimal ${plugin.settings.maxFiles} Gambar. )`).set({title:"Maaf :(",transition:'pulse'}).set({labels:{ok:'Oke'}});
+                let errorTittle = `Hanya dapat mengunggah maksimal ${plugin.settings.maxFiles}!`;
+                let errorMessage = `Berkas '<strong>${file.name}</strong>' <br>tidak dapat ditambahkan.`;
+                Toastify({
+                    node: $("#error-format-notification").clone().removeClass("hidden")[0],
+                    duration: -1,
+                    newWindow: true,
+                    close: true,
+                    gravity: "top",
+                    position: "right",
+                    stopOnFocus: true,
+                    offset: {
+                        y: 80
+                    },
+                }).showToast();
+                $("#error-format-notification").find("#errTtl").html(errorTittle);
+                $("#error-format-notification").find("#errMsg").html(errorMessage);
                 return false;
             }
 

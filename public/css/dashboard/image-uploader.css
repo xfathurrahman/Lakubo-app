@@ -28,7 +28,7 @@
 
 /* Icon Close */
 .iui-close:before {
-    content: "\f2ed";
+    content: "\e900";
 }
 
 /* Icon Cloud Upload */
@@ -36,10 +36,17 @@
     content: "\e901";
 }
 
-/* Base style */
+/*Default*/
+/*!* Base style *!
 .image-uploader {
     min-height: 10rem;
-    border: 2px dashed #429bff;
+    border: 1px solid #d9d9d9;
+    position: relative;
+}*/
+
+.image-uploader {
+    min-height: 10rem;
+    border: 2px dashed #b6d5ff;
     position: relative;
     border-radius: 9px;
 }
@@ -60,10 +67,12 @@
 
 /* Text container */
 .image-uploader .upload-text {
-    position: relative;
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
     display: flex;
-    padding-top: 40px;
-    padding-bottom: 10px;
     justify-content: center;
     align-items: center;
     flex-direction: column;
@@ -77,30 +86,38 @@
 
 .image-uploader .upload-text span {
     display: block;
+    color: #ff7e7e;
 }
 
 /* Hide the text if there is at least one uploaded image */
-/*.image-uploader.has-files .upload-text {
+.image-uploader.has-files .upload-text {
     display: none;
-}*/
+}
 
 /* Uploaded images container */
 .image-uploader .uploaded {
-    padding: .7rem;
+    padding: .5rem;
     line-height: 0;
-    text-align: center;
 }
 
 .image-uploader .uploaded .uploaded-image {
     display: inline-block;
-    width: calc(16.6666667% - 2rem);
-    padding-bottom: calc(16.6666667% - 2rem);
+    width: calc(16.6666667% - 1rem);
+    padding-bottom: calc(16.6666667% - 1rem);
     height: 0;
     position: relative;
+    margin: .5rem;
     background: #f3f3f3;
     cursor: default;
-    margin: .5rem .5rem -40px;
 }
+
+/*Default*/
+/*.image-uploader .uploaded .uploaded-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+}*/
 
 .image-uploader .uploaded .uploaded-image img {
     width: 100%;
@@ -117,11 +134,10 @@
     position: absolute;
     top: .2rem;
     right: .2rem;
-    width: 25px;
     border-radius: 50%;
     padding: .3rem;
     line-height: 1;
-    background-color: rgba(229, 229, 229, 0.5);
+    background-color: rgba(0, 0, 0, .5);
     -webkit-appearance: none;
     border: none;
 }
@@ -138,10 +154,6 @@
     font-size: 1.4rem;
     line-height: 1.4rem;
 }
-
-/******************************
-*          RESPONSIVE         *
-******************************/
 
 @media screen and (max-width: 1366px) {
     .image-uploader .uploaded .uploaded-image {
@@ -183,12 +195,5 @@
         width: calc(50% - .4rem);
         padding-bottom: calc(50% - .4rem);
         margin: .2rem;
-    }
-}
-
-@media (max-width: 575.98px) {
-    .add-product-btn {
-        left: auto;
-        right: 0;
     }
 }
