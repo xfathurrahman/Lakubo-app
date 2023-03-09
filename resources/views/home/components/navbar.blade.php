@@ -144,7 +144,7 @@
     </div>
 </div>
 
-@section('script')
+@section('script-navbar')
     <script>
         $(document).ready(function() {
             // saat tombol toggle-profile diklik

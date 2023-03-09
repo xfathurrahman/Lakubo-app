@@ -12,7 +12,7 @@
         </div>
     @endif
 
-    <div class="main-carousel-promo carousel mb-2">
+    {{--<div class="main-carousel-promo carousel mb-2">
         <div class="owl-carousel owl-theme owl-wrapper carousel-promo">
             <div class="carousel-promo-item">
                 <a href="#">
@@ -36,9 +36,9 @@
                 </a>
             </div>
         </div>
-    </div>
+    </div>--}}
 
-    <div class="carousel-category my-5 rounded-lg pb-3">
+    <div class="carousel-category mb-5 rounded-lg pb-3">
         <div class="p-4 text-center font-semibold border-b">
             <span id="arrowNav" class="flex justify-between">Kategori</span>
         </div>

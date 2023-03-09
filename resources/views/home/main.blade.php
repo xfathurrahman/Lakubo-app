@@ -37,9 +37,7 @@
             });
         </script>
 
-
         <script>
-
             @if(Auth::check())
             loadCart();
                 function loadCart(){
@@ -61,6 +59,7 @@
         </script>
 
         @yield('script')
+        @yield('script-navbar')
 
     </body>
 
