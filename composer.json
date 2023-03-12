@@ -5,7 +5,9 @@
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "require": {
+        
         "php": "^8.1",
+        "ext-gd": "*",
         "azishapidin/indoregion": "^3.0",
         "diglactic/laravel-breadcrumbs": "^8.0",
         "guzzlehttp/guzzle": "^7.5",
