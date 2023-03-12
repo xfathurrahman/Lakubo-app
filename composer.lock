@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1275330d1c282aa87c9ec51a983b5846",
+    "content-hash": "02f560625ca1b58c48c972aa820db96d",
     "packages": [
         {
             "name": "azishapidin/indoregion",
