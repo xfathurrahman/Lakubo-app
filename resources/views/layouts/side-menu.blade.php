@@ -4,12 +4,12 @@
     <nav class="side-nav">
 
         @if(Request::is('admin/*'))
-            <a href="http://127.0.0.1:8000/admin/dashboard" class="intro-x flex items-center pl-5 pt-4">
+            <a href="{{ route('admin.dashboard') }}" class="intro-x flex items-center pl-5 pt-4">
                 <img alt="Lakubo - Lapak UMKM Boyolali" class="w-6" src="{{ asset('assets/images/logo.svg') }}">
                 <span class="hidden xl:block text-white text-lg ml-3 capitalize"> Lakubo Admin </span>
             </a>
         @elseif(Request::is('seller/*'))
-            <a href="http://127.0.0.1:8000/seller/dashboard" class="intro-x flex items-center pl-5 pt-4">
+            <a href="{{ route('seller.dashboard') }}" class="intro-x flex items-center pl-5 pt-4">
                 <img alt="Lakubo - Lapak UMKM Boyolali" class="w-6" src="{{ asset('assets/images/logo.svg') }}">
                 @if(auth()->user()->stores)
                     <span class="hidden xl:block text-white text-lg ml-3 capitalize"> {{ auth()->user()->stores->name }} </span>
@@ -18,7 +18,7 @@
                 @endif
             </a>
         @else
-            <a href="http://127.0.0.1:8000/profile" class="intro-x flex items-center pl-5 pt-4">
+            <a href="{{ route('profile.edit') }}" class="intro-x flex items-center pl-5 pt-4">
                 <img alt="Lakubo - Lapak UMKM Boyolali" class="w-6" src="{{ asset('assets/images/logo.svg') }}">
                 <span class="hidden xl:block text-white text-lg ml-3 capitalize"> {{ Auth::user()->name }} </span>
             </a>
@@ -79,12 +79,12 @@
                             <div class="side-menu__title">Pelapak UMKM</div>
                         </a>
                     </li>
-                    <li>
+                    {{--<li>
                         <a href="{{ route('admin.carousels.index') }}" class="side-menu {{ Request::is('admin/carousels') ? 'side-menu--active' : '' }}">
                             <div class="side-menu__icon"> <i data-lucide="package"></i> </div>
                             <div class="side-menu__title">Carousel</div>
                         </a>
-                    </li>
+                    </li>--}}
                     <li>
                         <a href="#" class="side-menu {{ Request::is('admin/categories/*') ? 'side-menu--active' : '' }}">
                             <div class="side-menu__icon"> <i data-lucide="tag"></i> </div>

@@ -12,32 +12,6 @@
         </div>
     @endif
 
-    {{--<div class="main-carousel-promo carousel mb-2">
-        <div class="owl-carousel owl-theme owl-wrapper carousel-promo">
-            <div class="carousel-promo-item">
-                <a href="#">
-                    <img class="d-block ca-img h-full"
-                         src="{{ asset('assets/images/app/caro.jpg')}}"
-                         alt="Carousel">
-                </a>
-            </div>
-            <div class="carousel-promo-item">
-                <a href="#">
-                    <img class="d-block ca-img h-full"
-                         src="{{ asset('assets/images/app/caro.jpg')}}"
-                         alt="Carousel">
-                </a>
-            </div>
-            <div class="carousel-promo-item">
-                <a href="#">
-                    <img class="d-block ca-img h-full"
-                         src="{{ asset('assets/images/app/caro.jpg')}}"
-                         alt="Carousel">
-                </a>
-            </div>
-        </div>
-    </div>--}}
-
     <div class="carousel-category mb-5 rounded-lg pb-3">
         <div class="p-4 text-center font-semibold border-b">
             <span id="arrowNav" class="flex justify-between">Kategori</span>
@@ -70,6 +44,12 @@
         </div>
         <div class="owl-carousel sc-products-carousel owl-theme mb-8">
             @foreach($products as $product)
+                @php
+                    $isAuthenticated = auth()->check();
+                    $isSeller = $isAuthenticated && auth()->user()->hasRole('seller');
+                    $isProductStoreSameAsUserStore = $isSeller && $product->stores->id === auth()->user()->stores->id;
+                    $canEditProduct = $isProductStoreSameAsUserStore;
+                @endphp
                 <div class="item ml-2">
                     <div class="card shadow-xl bg-gray-200">
                         <div class="date-option bg-red-400 text-center">
@@ -77,12 +57,6 @@
                                 <p class="mb-5">{{ $product -> created_at -> diffForHumans() }}</p>
                             </span>
                         </div>
-                        @php
-                            $isAuthenticated = auth()->check();
-                            $isSeller = $isAuthenticated && auth()->user()->hasRole('seller');
-                            $isProductStoreSameAsUserStore = $isSeller && $product->stores->id === auth()->user()->stores->id;
-                            $canEditProduct = $isProductStoreSameAsUserStore;
-                        @endphp
                         @if ($product->quantity > 0)
                             @if ($canEditProduct)
                                 <a href="{{ route('seller.products.edit', $product->id) }}" class="add-to-cart product_data">

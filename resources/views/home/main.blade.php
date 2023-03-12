@@ -13,7 +13,7 @@
             @include('home.components.navbar')
         </nav>
 
-        <main class="container mx-auto xl:px-32 mt-20 flex-auto">
+        <main class="container mx-auto xl:px-32 mt-14 lg:mt-20 flex-auto">
             @yield('content')
         </main>
 

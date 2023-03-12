@@ -47,10 +47,6 @@ class ProductController extends Controller
         $data = $request->all();
         $request->validated();
 
-        // tambahkan log untuk memastikan data sudah tersedia
-        /*Log::info('Data from form:', $data);
-        Log::info('Request:', $request->all());*/
-
         $product = new Product;
         $product->name = $data['nama_produk'];
         $product->price = $data['harga'];

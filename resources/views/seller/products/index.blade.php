@@ -98,7 +98,7 @@
                         @else
                             <tr>
                                 <td colspan="6">
-                                    <img class="max-w-3xl max-h-52 mx-auto" src="{{ asset('assets/images/app/not-found-store.png') }}" alt="iklan kosong">
+                                    <img class="max-w-3xl max-h-52 mx-auto !shadow-none" src="{{ asset('assets/images/app/not-found-store.png') }}" alt="iklan kosong">
                                     <p class="text-center text-dark py-5">Anda belum mengunggah produk.</p>
                                 </td>
                             </tr>

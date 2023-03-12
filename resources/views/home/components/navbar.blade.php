@@ -93,7 +93,7 @@
                             </li>
                             @if(Auth::user()->hasRole('admin'))
                                 <li class="px-2 flex items-center">
-                                    <a href="{{ route('profile.edit') }}"
+                                    <a href="{{ route('admin.dashboard') }}"
                                        class="rounded-md px-2 py-1 w-full hover:bg-white hover:bg-opacity-20">
                                         <i class="fa-solid fa-key mr-2.5"></i>
                                         Admin Dashboard
