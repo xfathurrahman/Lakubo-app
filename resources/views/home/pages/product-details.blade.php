@@ -21,7 +21,7 @@
                     @php $first = true; @endphp
                     @foreach($images as $image)
                         <img class="slide rounded-2xl md:mt-0 h-full w-full {{ $first ? ' block' : ' hidden' }}"
-                             src="{{ asset('storage/product-image').'/'.$image->image_path }}" alt="product">
+                             src="{{ asset('storage/product-images').'/'.$image->image_path }}" alt="product">
                         @php $first = false; @endphp
                     @endforeach
                 </div>
@@ -29,10 +29,10 @@
                     @foreach($images as $image)
                         <div class="w-1/5 flex justify-center">
                             <button aria-label="product-thumbnail"
-                                    data-image-path="{{ asset('storage/product-image').'/'.$image->image_path }}"
+                                    data-image-path="{{ asset('storage/product-images').'/'.$image->image_path }}"
                                     class="thumbnail-button rounded-2xl{{ $loop->first ? ' ring-2 opacity-50' : '' }}">
                                 <img class="rounded-2xl hover:opacity-50 w-full h-14 sm:h-20"
-                                     src="{{ asset('storage/product-image').'/'.$image->image_path }}"
+                                     src="{{ asset('storage/product-images').'/'.$image->image_path }}"
                                      alt="image-product">
                             </button>
                         </div>

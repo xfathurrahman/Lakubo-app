@@ -61,7 +61,7 @@
                             </div>
                             <div class="col-span-12 sm:col-span-12">
                                 <label for="kategori_store" class="form-label">Gambar kategori</label>
-                                <img id="cate_store_preview_edit-{{ $store_cate->id }}" alt="category-store-img" src="{{ asset('storage/store-category').'/'.$store_cate->image_path }}" data-action="zoom" class="mb-3 w-full rounded-md w-20 h-20 border-2 border-blue-400 rounded-lg border-dotted decoration-dotted">
+                                <img id="cate_store_preview_edit-{{ $store_cate->id }}" alt="category-store-img" src="{{ asset('storage/storage-categories').'/'.$store_cate->image_path }}" data-action="zoom" class="mb-3 w-full rounded-md w-20 h-20 border-2 border-blue-400 rounded-lg border-dotted decoration-dotted">
                                 <div>
                                     <input type="file" name="image" id="cate_store_input_edit-{{ $store_cate->id }}" accept="image/*" onchange="readURLStoreEdit{{$store_cate->id}}(this)" hidden/>
                                     <label for="cate_store_input_edit-{{ $store_cate->id }}" class="actual-btn-label px-3">Pilih Foto</label>

@@ -93,10 +93,10 @@ class CategoryController extends Controller
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $name = time().'.'.$image->getClientOriginalExtension();
-            $path = public_path('storage/store-category/'.$name);
+            $path = public_path('storage/store-categories/'.$name);
             Image::make($image->getRealPath())->resize(350, 350)->save($path);
             if ($store_cate->image_path) {
-                Storage::delete('public/store-category/'.$store_cate->image_path);
+                Storage::delete('public/store-categories/'.$store_cate->image_path);
             }
             $store_cate->image_path = $name;
         }
@@ -110,7 +110,7 @@ class CategoryController extends Controller
         $prod_cate = ProductCategory::find($id);
         if ($prod_cate)
         {
-            $path = public_path('storage/product-category/'.$prod_cate->image_path);
+            $path = public_path('storage/product-categories/'.$prod_cate->image_path);
             if (file_exists($path)) {
                 unlink($path);
             }
@@ -125,7 +125,7 @@ class CategoryController extends Controller
         $store_cate = StoreCategory::find($id);
         if ($store_cate)
         {
-            $path = public_path('storage/store-category/'.$store_cate->image_path);
+            $path = public_path('storage/store-categories/'.$store_cate->image_path);
             if (file_exists($path)) {
                 unlink($path);
             }

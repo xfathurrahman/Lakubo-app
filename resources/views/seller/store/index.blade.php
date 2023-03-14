@@ -24,7 +24,7 @@
                     <div class="mt-6 lg:mt-0 flex-1 px-5 border-l border-r border-slate-200/60 dark:border-darkmode-400 border-t lg:border-t-0 pt-5 lg:pt-0">
                         <div class="font-medium lg:mt-3">Kontak Lapak
                             <span class="inline-flex float-right">
-                                <a href="http://127.0.0.1:8000/profile" class="inline-flex text-primary"><i data-lucide="edit-2" class="w-4 h-4 mr-1"></i>Edit</a>
+                                <a href="{{ route('profile.edit') }}" class="inline-flex text-primary"><i data-lucide="edit-2" class="w-4 h-4 mr-1"></i>Edit</a>
                             </span>
                         </div>
                         <div class="flex flex-col justify-center items-center lg:items-start mt-4">

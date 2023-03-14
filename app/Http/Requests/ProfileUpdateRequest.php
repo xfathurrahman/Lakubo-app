@@ -16,9 +16,9 @@ class ProfileUpdateRequest extends FormRequest
             'kecamatan'=> ['required'],
             'desa'=> ['required'],
             'detail_alamat'=> ['required'],
-            'nama_lengkap' => ['required','string', 'max:255'],
-            'username' => ['required','string', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
-            'nomor_handphone' => ['required','regex:/^([0-9\s\-\+\(\)]*)$/','min:11','max:13'],
+            'name' => ['required','string', 'max:50'],
+            'username' => ['required','string', 'max:20', Rule::unique(User::class)->ignore($this->user()->id)],
+            'phone' => ['required','regex:/^([0-9\s\-\+\(\)]*)$/','min:11','max:13'],
             'email' => ['required','email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
         ];
     }

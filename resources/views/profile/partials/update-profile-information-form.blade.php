@@ -14,7 +14,7 @@
                 }
             @endphp
             <div class="intro-y mt-0">
-                <form method="post" action="{{ route('profile.update') }}" class="space-y-3">
+                <form method="post" action="{{ route('profile.update') }}" data-parsley-validate class="space-y-3">
                     @csrf
                     @method('patch')
                         <div class="flex items-center p-2 border-b border-slate-200/60 dark:border-darkmode-400">
@@ -29,25 +29,57 @@
                                             <label for="username" class="flex justify-between form-label">Nama Pengguna
                                                 <span class="text-slate-500"><x-input-error :messages="$errors->get('username')"/></span>
                                             </label>
-                                            <input id="username" name="username" type="text" class="form-control" placeholder="Masukan Nama Pengguna" value="{{ $user->username }}" required="" data-parsley-error-message="Nama pengguna wajib di isi.">
+                                            <input id="username"
+                                                   name="username"
+                                                   type="text"
+                                                   class="form-control"
+                                                   placeholder="Masukan Nama Pengguna"
+                                                   value="{{ $user->username }}"
+                                                   required
+                                                   data-parsley-error-message="Nama pengguna wajib di isi."
+                                            >
                                         </div>
                                         <div class="mt-3">
-                                            <label for="fullname" class="flex justify-between form-label">Nama lengkap
-                                                <span class="text-slate-500"><x-input-error :messages="$errors->get('nama_lengkap')"/></span>
+                                            <label for="name" class="flex justify-between form-label">Nama lengkap
+                                                <span class="text-slate-500"><x-input-error :messages="$errors->get('name')"/></span>
                                             </label>
-                                            <input id="fullname" name="nama_lengkap" type="text" class="form-control" placeholder="Masukan Nama Lengkap" value="{{ $user->name }}" required>
+                                            <input id="name"
+                                                   name="name"
+                                                   type="text"
+                                                   class="form-control"
+                                                   placeholder="Masukan Nama Lengkap"
+                                                   value="{{ $user->name }}"
+                                                   required
+                                                   data-parsley-error-message="Nama lengkap wajib di isi."
+                                            >
                                         </div>
                                         <div class="mt-3">
                                             <label for="email" class="flex justify-between form-label">Email
                                                 <span class="text-slate-500"><x-input-error :messages="$errors->get('email')"/></span>
                                             </label>
-                                            <input id="email" name="email" type="email" class="form-control" placeholder="Masukan Email" value="{{ $user->email }}" required>
+                                            <input id="email"
+                                                   name="email"
+                                                   type="email"
+                                                   class="form-control"
+                                                   placeholder="Masukan Email"
+                                                   value="{{ $user->email }}"
+                                                   required
+                                                   data-parsley-error-message="Email wajib di isi."
+                                            >
                                         </div>
                                         <div class="mt-3">
                                             <label for="phone" class="flex justify-between form-label">Nomor Handphone
-                                                <span class="text-slate-500"><x-input-error :messages="$errors->get('nomor_handphone')"/></span>
+                                                <span class="text-slate-500"><x-input-error :messages="$errors->get('phone')"/></span>
                                             </label>
-                                            <input id="phone" type="number" name="nomor_handphone" class="form-control" placeholder="Masukan Nomor Handphone" value="{{ $user->phone }}" required>
+                                            <input id="phone"
+                                                   type="number"
+                                                   name="phone"
+                                                   class="form-control"
+                                                   placeholder="Masukan Nomor Handphone"
+                                                   value="{{ $user->phone }}"
+                                                   required
+                                                   data-parsley-error-message="Nomor Handphone wajib di isi."
+                                            >
                                         </div>
                                     </div>
                                     <div class="col-span-12 2xl:col-span-6">
@@ -55,7 +87,12 @@
                                             <label for="selectProvince" class="flex justify-between form-label">Provinsi
                                                 <span class="text-slate-500"><x-input-error :messages="$errors->get('provinsi')"/></span>
                                             </label>
-                                            <select id="selectProvince" name="provinsi" class="js-states form-control" required>
+                                            <select id="selectProvince"
+                                                    name="provinsi"
+                                                    class="js-states form-control"
+                                                    required
+                                                    data-parsley-error-message="Provinsi wajib di isi."
+                                            >
                                                 @foreach( $provinces as $provinsi )
                                                     @if($provinsi -> id === $userProvinceId)
                                                         <option selected value="{{ $provinsi-> id }}">{{ $provinsi->name }}</option>
@@ -69,7 +106,12 @@
                                             <label for="selectRegency" class="flex justify-between form-label">Kabupaten
                                                 <span class="text-slate-500"><x-input-error :messages="$errors->get('kabupaten')"/></span>
                                             </label>
-                                            <select id="selectRegency" name="kabupaten" class="w-full form-control" required>
+                                            <select id="selectRegency"
+                                                    name="kabupaten"
+                                                    class="w-full form-control"
+                                                    required
+                                                    data-parsley-error-message="Kabupaten wajib di isi."
+                                            >
                                                 @foreach( $regencies as $regency )
                                                     @if($regency -> id === $userRegencyId)
                                                         <option selected value="{{ $regency-> id }}">{{ $regency->name }}</option>
@@ -83,7 +125,12 @@
                                             <label for="selectDistrict" class="flex justify-between form-label">Kecamatan
                                                 <span class="text-slate-500"><x-input-error :messages="$errors->get('kecamatan')"/></span>
                                             </label>
-                                            <select name="kecamatan" id="selectDistrict" class="w-full form-control" required>
+                                            <select name="kecamatan"
+                                                    id="selectDistrict"
+                                                    class="w-full form-control"
+                                                    required
+                                                    data-parsley-error-message="Kecamatan wajib di isi."
+                                            >
                                                 @foreach( $districts as $district )
                                                     @if($district -> id === $userDistrictId)
                                                         <option selected value="{{ $district-> id }}">{{ $district->name }}</option>
@@ -97,7 +144,12 @@
                                             <label for="selectVillage" class="flex justify-between form-label">Desa
                                                 <span class="text-slate-500"><x-input-error :messages="$errors->get('desa')"/></span>
                                             </label>
-                                            <select name="desa" id="selectVillage" class="w-full form-control">
+                                            <select name="desa"
+                                                    id="selectVillage"
+                                                    class="w-full form-control"
+                                                    required
+                                                    data-parsley-error-message="Desa wajib di isi."
+                                            >
                                                 @foreach( $villages as $village )
                                                     @if($village -> id === $userVillageId)
                                                         <option selected value="{{ $village-> id }}">{{ $village->name }}</option>
@@ -113,7 +165,13 @@
                                             <label for="detail-address" class="flex justify-between form-label">Detail alamat
                                                 <span class="text-slate-500"><x-input-error :messages="$errors->get('detail_alamat')"/></span>
                                             </label>
-                                            <textarea id="detail-address" name="detail_alamat" class="form-control" placeholder="Masukan detail alamat kamu">{{ $userDetailAddress }}</textarea>
+                                            <textarea id="detail-address"
+                                                      name="detail_alamat"
+                                                      class="form-control"
+                                                      placeholder="Masukan detail alamat kamu"
+                                                      required
+                                                      data-parsley-error-message="Detail Alamat wajib di isi."
+                                            >{{ $userDetailAddress }}</textarea>
                                         </div>
                                     </div>
                                 </div>

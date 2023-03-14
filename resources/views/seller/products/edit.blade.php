@@ -296,7 +296,7 @@
                 // Mendapatkan data gambar lama
                 let preloaded = [
                     @foreach($product -> productImages as $image)
-                        {id: {{ $image->id }}, src: '{{ asset("storage/product-image")."/".$image -> image_path }}'},
+                        {id: {{ $image->id }}, src: '{{ asset("storage/product-images")."/".$image -> image_path }}'},
                     @endforeach
                 ];
 

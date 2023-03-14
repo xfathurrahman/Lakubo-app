@@ -21,7 +21,7 @@
                         <div class="w-24 h-24 lg:w-12 lg:h-12 image-fit lg:mr-1">
                             @if($store_cate->image_path)
                                 <img alt="Store-img" class="tooltip rounded-full"
-                                     src="{{ asset('storage/store-category').'/'.$store_cate->image_path }}"
+                                     src="{{ asset('storage/store-categories').'/'.$store_cate->image_path }}"
                                      title="Diunggah {{ Carbon\Carbon::parse($store_cate->created_at)->diffForHumans() }}">
                             @else
                                 <img alt="Product-img" class="tooltip rounded-full"

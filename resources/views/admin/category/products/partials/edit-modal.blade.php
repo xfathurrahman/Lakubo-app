@@ -18,7 +18,7 @@
                     </div>
                     <div class="col-span-12 sm:col-span-12">
                         <label for="kategori_produk" class="form-label">Gambar kategori</label>
-                        <img id="cate_prod_preview_edit-{{$category->id}}" alt="category-prod-img" src="{{ asset('storage/product-category').'/'. $category->image_path }}" data-action="zoom" class="mb-3 w-full rounded-md w-20 h-20 border-2 border-blue-400 rounded-lg border-dotted decoration-dotted">
+                        <img id="cate_prod_preview_edit-{{$category->id}}" alt="category-prod-img" src="{{ asset('storage/product-categories').'/'. $category->image_path }}" data-action="zoom" class="mb-3 w-full rounded-md w-20 h-20 border-2 border-blue-400 rounded-lg border-dotted decoration-dotted">
                         <div>
                             <input type="file" name="image" id="cate_prod_input_edit-{{$category->id}}" accept="image/*" onchange="readURLProductEdit{{$category->id}}(this)" hidden/>
                             <label for="cate_prod_input_edit-{{$category->id}}" class="actual-btn-label px-3">Pilih Foto</label>

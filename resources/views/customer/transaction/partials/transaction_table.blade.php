@@ -47,7 +47,7 @@
                                 <div class="bg-gray-200 p-2 rounded mt-2">
                                     <div class="whitespace-nowrap inline-flex items-center">
                                         <div class="w-10 h-10 image-fit zoom-in">
-                                            <img data-action="zoom" alt="Product-img" class="tooltip rounded-full" src="{{ asset("storage/product-image")."/".$item-> products -> productImage -> image_path }}" title="Uploaded {{ Carbon\Carbon::parse($item -> products -> created_at)->diffForHumans() }}">
+                                            <img data-action="zoom" alt="Product-img" class="tooltip rounded-full" src="{{ asset("storage/product-images")."/".$item-> products -> productImage -> image_path }}" title="Uploaded {{ Carbon\Carbon::parse($item -> products -> created_at)->diffForHumans() }}">
                                         </div>
                                         <div class="ml-2">
                                             {{ $item->products->name }} ({{ $item->quantity }} Item)
@@ -128,7 +128,7 @@
                                 <div class="bg-gray-200 p-2 rounded mt-3">
                                     <div class="whitespace-nowrap inline-flex items-center">
                                         <div class="w-10 h-10 image-fit zoom-in">
-                                            <img data-action="zoom" alt="Product-img" class="tooltip rounded-full" src="{{ asset("storage/product-image")."/".$item-> products -> productImage -> image_path }}" title="Uploaded {{ Carbon\Carbon::parse($item -> products -> created_at)->diffForHumans() }}">
+                                            <img data-action="zoom" alt="Product-img" class="tooltip rounded-full" src="{{ asset("storage/product-images")."/".$item-> products -> productImage -> image_path }}" title="Uploaded {{ Carbon\Carbon::parse($item -> products -> created_at)->diffForHumans() }}">
                                         </div>
                                         <div class="ml-2">
                                             {{ $item->products->name }} ({{ $item->quantity }} Item)

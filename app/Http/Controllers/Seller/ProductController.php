@@ -63,7 +63,7 @@ class ProductController extends Controller
                 $image = new ProductImage;
                 $image_name = preg_replace('~[\\\\/:*?"<>|& ]~', '', $file->getClientOriginalName());
                 $fileName = date('mYdhs') . '_' . $image_name;
-                $path = public_path('/storage/product-image');
+                $path = public_path('/storage/product-images');
                 $file->move($path, $fileName);
                 $image->product_id = $product->id;
                 $image->image_path = $fileName;
@@ -119,7 +119,7 @@ class ProductController extends Controller
                     $image = new ProductImage();
                     $image_name = preg_replace('~[\\\\/:*?"<>|& ]~', '', $file->getClientOriginalName());
                     $fileName = date('mYdhs').'_'.$image_name;
-                    $path = public_path('/storage/product-image');
+                    $path = public_path('/storage/product-images');
                     $file->move($path, $fileName);
                     $image->product_id = $product->id;
                     $image->image_path = $fileName;
@@ -147,7 +147,7 @@ class ProductController extends Controller
         {
             foreach ( $product->productImages as $image)
             {
-                $path = public_path('storage/product-image/'.$image->image_path);
+                $path = public_path('storage/product-images/'.$image->image_path);
                 if (file_exists($path)) {
                     unlink($path);
                 }

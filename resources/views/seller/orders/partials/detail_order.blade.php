@@ -204,7 +204,7 @@
                                         <div class="flex items-center">
                                             <div class="w-10 h-10 image-fit zoom-in">
                                                 <img alt="#"
-                                                     src="{{ asset("storage/product-image")."/".$item-> products -> productImage -> image_path }}"
+                                                     src="{{ asset("storage/product-images")."/".$item-> products -> productImage -> image_path }}"
                                                      title="Uploaded {{ Carbon\Carbon::parse($item -> products -> created_at)->diffForHumans() }}">
                                             </div>
                                             <a href=""

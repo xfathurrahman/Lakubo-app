@@ -71,7 +71,7 @@
                                         @endif--}}
                                         <div class="w-10 h-10 image-fit zoom-in" style="margin-left: -0.70rem">
                                             <img alt="Product-img" class="tooltip rounded-full"
-                                                 src="{{ asset("storage/product-image")."/".$image -> image_path }}"
+                                                 src="{{ asset("storage/product-images")."/".$image -> image_path }}"
                                                  title="Uploaded {{ Carbon\Carbon::parse($product->created_at)->diffForHumans() }}">
                                         </div>
                                     @endforeach

@@ -28,7 +28,7 @@
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-x-2 gap-y-4 md:gap-x-4 px-4 py-2">
             @foreach ($products as $product)
                 <div class="card-detail mb-2 lg:mb-0 overflow-hidden relative shadow-lg shadow-gray-200 rounded-lg transform hover:translate-y-1 hover:shadow-xl transition duration-300">
-                    <img class="h-40 w-full object-cover rounded-t-lg" src="{{ asset("storage/product-image")."/".$product -> productImage -> image_path }}" alt="{{ $product->name }}">
+                    <img class="h-40 w-full object-cover rounded-t-lg" src="{{ asset("storage/product-images")."/".$product -> productImage -> image_path }}" alt="{{ $product->name }}">
                     @php
                         $isAuthenticated = auth()->check();
                         $isSeller = $isAuthenticated && auth()->user()->hasRole('seller');

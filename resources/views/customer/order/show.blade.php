@@ -326,7 +326,7 @@
                                         {{ $item -> products -> productCategories -> name }}
                                     </span>
                                     <div class="p-2 w-2/12">
-                                        <img class="rounded-md mx-auto h-16 w-8 object-cover" src="{{ asset("storage/product-image")."/".$item -> products -> productImage -> image_path }}" alt="">
+                                        <img class="rounded-md mx-auto h-16 w-8 object-cover" src="{{ asset("storage/product-images")."/".$item -> products -> productImage -> image_path }}" alt="">
                                         <span class="flex justify-center font-medium text-xs truncate">{{ $item -> quantity }} Item</span>
                                     </div>
                                     <div class="p-2 border-l w-10/12">

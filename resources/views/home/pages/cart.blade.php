@@ -27,7 +27,7 @@
                             @php $totalProduct = 0 @endphp
                             @foreach($store->cartItems as $cart_item)
                                 <div class="flex items-center">
-                                    <img class="w-20 h-20 object-cover rounded mb-2 md:mb-0 md:mr-2" src="{{ asset("storage/product-image")."/".$cart_item -> products -> productImage -> image_path }}" alt="Gambar Produk">
+                                    <img class="w-20 h-20 object-cover rounded mb-2 md:mb-0 md:mr-2" src="{{ asset("storage/product-images")."/".$cart_item -> products -> productImage -> image_path }}" alt="Gambar Produk">
                                     <div class="ml-2 flex-grow">
                                         <a href="{{ route('product.detail', $cart_item->products->id) }}" class="font-medium text-sm lg:font-bold line-clamp-2 hover:text-red-400">{{ $cart_item -> products -> name }}</a>
                                         <p class="font-bold">@currency($cart_item->products->price)</p>
