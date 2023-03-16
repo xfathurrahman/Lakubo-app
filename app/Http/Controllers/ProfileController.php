@@ -90,7 +90,11 @@ class ProfileController extends Controller
         if ($request->hasFile('profile_photo')) {
             $image = $request->file('profile_photo');
             $name = time().'.'.$image->getClientOriginalExtension();
-            $path = public_path('/storage/profile-photos/'.$name);
+            $directory = public_path('/storage/profile-photos');
+                    if (!file_exists($directory)) {
+                        mkdir($directory, 0755, true);
+                    }
+            $path = $directory.'/'.$name;
             Image::make($image->getRealPath())->resize(350, 350)->save($path);
             if ($user->image_path) {
                 Storage::delete('public/storage/profile-photos/'.$user->profile_photo_path);

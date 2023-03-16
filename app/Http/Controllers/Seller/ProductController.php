@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Intervention\Image\Facades\Image;
 
 class ProductController extends Controller
 {
@@ -60,13 +61,18 @@ class ProductController extends Controller
         if ($request->hasfile('files')) {
             $files = $request->file('files');
             foreach ($files as $file) {
-                $image = new ProductImage;
-                $image_name = preg_replace('~[\\\\/:*?"<>|& ]~', '', $file->getClientOriginalName());
-                $fileName = date('mYdhs') . '_' . $image_name;
-                $path = public_path('/storage/product-images');
-                $file->move($path, $fileName);
+                $image = new ProductImage();
+                $image_name = time().'-'.preg_replace('~[\\\\/:*?"<>|& ]~', '', $file->getClientOriginalName());
+                $directory = public_path('/storage/product-images');
+                if (!file_exists($directory)) {
+                    mkdir($directory, 0755, true);
+                }
+                $path = $directory.'/'.$image_name;
+                $image_resize = Image::make($file->getRealPath());
+                $image_resize->resize(350, 350);
+                $image_resize->save($path);
                 $image->product_id = $product->id;
-                $image->image_path = $fileName;
+                $image->image_path = $image_name;
                 $image->save();
             }
         }
@@ -117,16 +123,20 @@ class ProductController extends Controller
                 $files = $request->file('files');
                 foreach ($files as $file) {
                     $image = new ProductImage();
-                    $image_name = preg_replace('~[\\\\/:*?"<>|& ]~', '', $file->getClientOriginalName());
-                    $fileName = date('mYdhs').'_'.$image_name;
-                    $path = public_path('/storage/product-images');
-                    $file->move($path, $fileName);
+                    $image_name = time().'-'.preg_replace('~[\\\\/:*?"<>|& ]~', '', $file->getClientOriginalName());
+                    $directory = public_path('/storage/product-images');
+                    if (!file_exists($directory)) {
+                        mkdir($directory, 0755, true);
+                    }
+                    $path = $directory.'/'.$image_name;
+                    $image_resize = Image::make($file->getRealPath());
+                    $image_resize->resize(350, 350);
+                    $image_resize->save($path);
                     $image->product_id = $product->id;
-                    $image->image_path = $fileName;
+                    $image->image_path = $image_name;
                     $image->save();
                 }
             }
-
             $product -> name = $data['nama_produk'];
             $product -> price = $data['harga'];
             $product -> category_id = $data['kategori'];
