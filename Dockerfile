@@ -1,4 +1,4 @@
-FROM php:8.1-fpm as php
+FROM php:8.2-fpm as phpfpm82
 
 ENV PHP_OPCACHE_ENABLE=1
 ENV PHP_OPCACHE_ENABLE_CLI=0
@@ -8,9 +8,9 @@ ENV PHP_OPCACHE_REVALIDATE_FREQ=1
 RUN usermod -u 1000 www-data
 
 RUN apt-get update -y
-RUN apt-get install -y unzip nginx libpq-dev libcurl4-gnutls-dev libfreetype6-dev libjpeg62-turbo-dev
+RUN apt-get install -y unzip nginx libpq-dev libcurl4-gnutls-dev libfreetype6-dev libjpeg62-turbo-dev default-mysql-client
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg
-RUN docker-php-ext-install pdo pdo_mysql bcmath curl opcache -j$(nproc) gd
+RUN docker-php-ext-install pdo pdo_mysql bcmath curl -j$(nproc) gd
 # RUN docker-php-ext-enable opcache
 
 ARG APP_NAME

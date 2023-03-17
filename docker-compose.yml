@@ -1,18 +1,29 @@
 version: "3.8"
 services:
     php:
-        container_name: lakubo-php-fpm
+        container_name: lakubo-php
         build:
             context: .
-            target: php
+            target: phpfpm82
             args:
                 - APP_NAME=${APP_NAME}
                 - APP_ENV=${APP_ENV}
         environment:
-            - APP_ENV=${APP_ENV}
-            - CONTAINER_ROLE=app
+            APP_NAME: ${APP_NAME}
+            APP_ENV: ${APP_ENV}
+            MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+            MYSQL_HOST: ${DB_HOST}
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_USER: ${DB_USERNAME}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
         working_dir: /var/www/${APP_NAME}
         volumes:
             - ./:/var/www/${APP_NAME}
         ports:
-            - 8000:8000
+            - "8000:8000"
+        networks:
+            - env-server
+networks:
+    env-server:
+        external: true
+        name: environment-server
