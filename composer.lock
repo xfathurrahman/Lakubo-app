@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "981ee11f556f5dc9da5feda47f17cf04",
+    "content-hash": "143dade63a621860c2ec36d7e6c61c2e",
     "packages": [
         {
             "name": "azishapidin/indoregion",
@@ -1261,16 +1261,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v10.3.3",
+            "version": "v10.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "90f24d9e2860ecf6b5492e966956270ceb98c03d"
+                "reference": "c3e679cc7d19527fda4210ef137075dafb106d0c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/90f24d9e2860ecf6b5492e966956270ceb98c03d",
-                "reference": "90f24d9e2860ecf6b5492e966956270ceb98c03d",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/c3e679cc7d19527fda4210ef137075dafb106d0c",
+                "reference": "c3e679cc7d19527fda4210ef137075dafb106d0c",
                 "shasum": ""
             },
             "require": {
@@ -1457,7 +1457,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2023-03-09T14:00:53+00:00"
+            "time": "2023-03-17T14:28:55+00:00"
         },
         {
             "name": "laravel/sanctum",
@@ -6611,16 +6611,16 @@
         },
         {
             "name": "laravel-lang/lang",
-            "version": "12.18.5",
+            "version": "12.18.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Laravel-Lang/lang.git",
-                "reference": "61d2bb94035c1ce13fb7e4a26549730dd466a1b0"
+                "reference": "4ac8e147c620c8ca721b24307ff8ba3637a6ebf6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Laravel-Lang/lang/zipball/61d2bb94035c1ce13fb7e4a26549730dd466a1b0",
-                "reference": "61d2bb94035c1ce13fb7e4a26549730dd466a1b0",
+                "url": "https://api.github.com/repos/Laravel-Lang/lang/zipball/4ac8e147c620c8ca721b24307ff8ba3637a6ebf6",
+                "reference": "4ac8e147c620c8ca721b24307ff8ba3637a6ebf6",
                 "shasum": ""
             },
             "require": {
@@ -6673,7 +6673,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2023-02-27T16:14:16+00:00"
+            "time": "2023-03-16T12:49:54+00:00"
         },
         {
             "name": "laravel-lang/publisher",
@@ -9142,8 +9142,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "^8.1",
-        "ext-gd": "*"
+        "php": "^8.2"
     },
     "platform-dev": [],
     "plugin-api-version": "2.3.0"
