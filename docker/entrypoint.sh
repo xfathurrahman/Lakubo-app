@@ -15,6 +15,8 @@ php artisan key:generate --ansi
 php artisan config:clear
 php artisan view:clear
 php artisan cache:clear
+php artisan optimize:clear
+npm run build
 
 if [ ! -d "public/storage" ]; then
     php artisan storage:link
