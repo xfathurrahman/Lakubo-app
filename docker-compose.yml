@@ -1,21 +1,21 @@
-version: "3.8"
+version: "3.9"
 services:
     php:
-        container_name: lakubo-php
+        container_name: lakubo-app
         build:
             context: .
             target: phpfpm82
             args:
-                - APP_NAME=${APP_NAME}
-                - APP_ENV=${APP_ENV}
+            - APP_NAME=${APP_NAME}
+            - APP_ENV=${APP_ENV}
         environment:
-            APP_NAME: ${APP_NAME}
-            APP_ENV: ${APP_ENV}
-            MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-            MYSQL_HOST: ${DB_HOST}
-            MYSQL_DATABASE: ${DB_DATABASE}
-            MYSQL_USER: ${DB_USERNAME}
-            MYSQL_PASSWORD: ${DB_PASSWORD}
+            - APP_NAME=${APP_NAME}
+            - APP_ENV=${APP_ENV}
+            - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+            - MYSQL_HOST=${DB_HOST}
+            - MYSQL_DATABASE=${DB_DATABASE}
+            - MYSQL_USER=${DB_USERNAME}
+            - MYSQL_PASSWORD=${DB_PASSWORD}
         working_dir: /var/www/${APP_NAME}
         volumes:
             - ./:/var/www/${APP_NAME}
@@ -25,5 +25,5 @@ services:
             - env-server
 networks:
     env-server:
-        external: true
-        name: environment-server
+        name: ${NETWORK_NAME}
+        driver: bridge

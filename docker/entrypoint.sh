@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 if [ ! -f "vendor/autoload.php" ]; then
     composer install --no-progress --no-interaction
 fi
@@ -11,39 +13,60 @@ else
     echo "env file exists."
 fi
 
+# composer commands
 php artisan key:generate --ansi
 php artisan config:clear
 php artisan view:clear
 php artisan cache:clear
 php artisan optimize:clear
-npm run build
 
+# check if node_modules exists
+if [ ! -d "node_modules" ]; then
+    npm update
+fi
+
+# check if public/build exists
+if [ ! -d "public/build" ]; then
+    npm run build
+fi
+
+# check if storage directory already linked
 if [ ! -d "public/storage" ]; then
     php artisan storage:link
-else
-    echo "Storage directory already linked"
 fi
 
-# Connect to MySQL server and create database
-if ! mysql -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD" -e "use $MYSQL_DATABASE"; then
-  echo "Creating new database $MYSQL_DATABASE..."
-  mysql -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD" -e "CREATE DATABASE $MYSQL_DATABASE;"
+# Test MySQL connection
+if mysqladmin ping -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD" --silent; then
+    # Create user and grant privileges on the newly created database if it doesn't exist
+    if ! mysql -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD" -e "SELECT User FROM mysql.user WHERE User='$MYSQL_USER'" | grep -q "$MYSQL_USER"; then
+        echo "Creating new user $MYSQL_USER..."
+        mysql -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD" -e "CREATE USER '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';"
+        mysql -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD" -e "GRANT ALL PRIVILEGES ON $MYSQL_DATABASE.* TO '$MYSQL_USER'@'%';"
+        mysql -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD" -e "FLUSH PRIVILEGES;"
+        mysql -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD" -e "SHOW GRANTS FOR '$MYSQL_USER'@'%';"
+    fi
+    # Connect to MySQL server and create database if it doesn't exist
+    if ! mysql -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD" -e "use $MYSQL_DATABASE" -s --silent; then
+        echo "Database not found"
+        echo "Creating new database $MYSQL_DATABASE..."
+        mysql -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD" -e "CREATE DATABASE $MYSQL_DATABASE;"
+        # Check if the database is empty and run migrations if it is
+        if ! mysql -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" -e "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = '$MYSQL_DATABASE'" | grep -q -v "^0$"; then
+            echo "Database exists and has data, skipping migrations..."
+        else
+            if ! mysql -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" -e "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = '$MYSQL_DATABASE'" | grep -q "^0$"; then
+                echo "Database exists and has data, skipping migrations..."
+            else
+                echo "Database ready but is empty, running migrations..."
+                php artisan migrate --seed
+            fi
+        fi
+    else
+        echo "Database found and ready to use ..."
+    fi
 else
-  # Check if the database is empty
-  if mysql -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" -e "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = '$MYSQL_DATABASE'" | grep -q -v "0"; then
-    echo "Database exists and has data, skipping migrations..."
-  else
-    echo "Database exists but is empty, running migrations..."
-    php artisan migrate --seed
-  fi
-fi
-# Create user and grant privileges on the newly created database
-if ! mysql -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD" -e "SELECT User FROM mysql.user WHERE User='$MYSQL_USER'" | grep -q "$MYSQL_USER"; then
-  echo "Creating new user $MYSQL_USER..."
-  mysql -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD" -e "CREATE USER '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';"
-  mysql -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD" -e "GRANT ALL PRIVILEGES ON $MYSQL_DATABASE.* TO '$MYSQL_USER'@'%';"
-  mysql -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD" -e "FLUSH PRIVILEGES;"
-  mysql -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD" -e "SHOW GRANTS FOR '$MYSQL_USER'@'%';"
+    echo "Could not connect to MySQL server"
+    exit  1
 fi
 
 php-fpm -D
