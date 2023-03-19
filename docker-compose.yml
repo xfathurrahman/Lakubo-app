@@ -20,10 +20,11 @@ services:
         volumes:
             - ./:/var/www/${APP_NAME}
         ports:
-            - "8000:8000"
+            - "83:80"
         networks:
             - env-server
 networks:
     env-server:
         name: ${NETWORK_NAME}
         driver: bridge
+        external: true
