@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 #check if vendor directory exists
 if [ ! -f "vendor/autoload.php" ]; then
     composer install --no-progress --no-interaction
@@ -57,7 +59,7 @@ echo ""
         echo ""
     else # grant privileges if user already exists
         grant_query="GRANT ALL PRIVILEGES ON $MYSQL_DATABASE.* TO '$MYSQL_USER'@'%'; FLUSH PRIVILEGES;"
-        mysql -h "$MYSQL_HOST" -u root -p"$MYSQL_R
+        mysql -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD" -e "$grant_query"
         printf '%-110s%s\n' "[MySQL]  |  User '$MYSQL_USER' found, granting privileges on database '$MYSQL_DATABASE'" "DONE"
         echo ""
     fi
