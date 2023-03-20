@@ -4,7 +4,7 @@ services:
         container_name: lakubo-app
         build:
             context: .
-            target: phpfpm82
+            target: php
             args:
             - APP_NAME=${APP_NAME}
             - APP_ENV=${APP_ENV}
@@ -20,11 +20,10 @@ services:
         volumes:
             - ./:/var/www/${APP_NAME}
         ports:
-            - "83:80"
+            - "8001:8000"
         networks:
             - env-server
 networks:
     env-server:
         name: ${NETWORK_NAME}
         driver: bridge
-        external: true

@@ -1,11 +1,11 @@
 #!/bin/bash
 
-set -e
-
+#check if vendor directory exists
 if [ ! -f "vendor/autoload.php" ]; then
     composer install --no-progress --no-interaction
 fi
 
+#check if .env file exists
 if [ ! -f ".env" ]; then
     echo "Creating env file for env $APP_ENV"
     cp .env.example .env
@@ -20,53 +20,60 @@ php artisan view:clear
 php artisan cache:clear
 php artisan optimize:clear
 
-# check if node_modules exists
+#check if node_modules exists
 if [ ! -d "node_modules" ]; then
     npm update
 fi
 
-# check if public/build exists
+#check if public/build exists
 if [ ! -d "public/build" ]; then
     npm run build
 fi
 
-# check if storage directory already linked
+#check if storage directory already linked
 if [ ! -d "public/storage" ]; then
-    php artisan storage:link
+    php artisan storage:link --ansi
 fi
 
 # Test MySQL connection
-if mysqladmin ping -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD" --silent; then
-    # Create user and grant privileges on the newly created database if it doesn't exist
-    if ! mysql -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD" -e "SELECT User FROM mysql.user WHERE User='$MYSQL_USER'" | grep -q "$MYSQL_USER"; then
-        echo "Creating new user $MYSQL_USER..."
-        mysql -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD" -e "CREATE USER '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';"
-        mysql -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD" -e "GRANT ALL PRIVILEGES ON $MYSQL_DATABASE.* TO '$MYSQL_USER'@'%';"
-        mysql -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD" -e "FLUSH PRIVILEGES;"
-        mysql -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD" -e "SHOW GRANTS FOR '$MYSQL_USER'@'%';"
-    fi
-    # Connect to MySQL server and create database if it doesn't exist
-    if ! mysql -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD" -e "use $MYSQL_DATABASE" -s --silent; then
-        echo "Database not found"
-        echo "Creating new database $MYSQL_DATABASE..."
+if mysqladmin ping -s -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD"; then
+echo ""
+    # Create database if it doesn't exist yet
+    if ! mysql -s -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD" -e "use $MYSQL_DATABASE"; then
         mysql -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD" -e "CREATE DATABASE $MYSQL_DATABASE;"
-        # Check if the database is empty and run migrations if it is
-        if ! mysql -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" -e "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = '$MYSQL_DATABASE'" | grep -q -v "^0$"; then
-            echo "Database exists and has data, skipping migrations..."
-        else
-            if ! mysql -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" -e "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = '$MYSQL_DATABASE'" | grep -q "^0$"; then
-                echo "Database exists and has data, skipping migrations..."
-            else
-                echo "Database ready but is empty, running migrations..."
-                php artisan migrate --seed
-            fi
-        fi
+        printf '%-110s%s\n' "[MySQL]  |  Creating new database '$MYSQL_DATABASE'..." "DONE"
+        echo ""
     else
-        echo "Database found and ready to use ..."
+        printf '%-110s%s\n' "[MySQL]  |  Database '$MYSQL_DATABASE' already exists, skipping creation..." "DONE"
+        echo ""
+    fi
+    # Create user and grant privileges on the newly created database if it doesn't exist yet
+    if ! mysql -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD" -e "SELECT User FROM mysql.user WHERE User='$MYSQL_USER'" | grep -q "$MYSQL_USER"; then
+        printf '%-110s%s\n' "[MySQL]  |  User '$MYSQL_USER' not found, Creating new user '$MYSQL_USER'..." "DONE"
+        echo ""
+        printf '%-110s%s\n' "[MySQL]  |  granting privileges on database '$MYSQL_DATABASE' to  User '$MYSQL_USER'..." "DONE"
+        create_user_query="CREATE USER '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD'; GRANT ALL PRIVILEGES ON $MYSQL_DATABASE.* TO '$MYSQL_USER'@'%'; FLUSH PRIVILEGES;"
+        mysql -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD" -e "$create_user_query"
+        echo ""
+    else # grant privileges if user already exists
+        grant_query="GRANT ALL PRIVILEGES ON $MYSQL_DATABASE.* TO '$MYSQL_USER'@'%'; FLUSH PRIVILEGES;"
+        mysql -h "$MYSQL_HOST" -u root -p"$MYSQL_R
+        printf '%-110s%s\n' "[MySQL]  |  User '$MYSQL_USER' found, granting privileges on database '$MYSQL_DATABASE'" "DONE"
+        echo ""
+    fi
+    # check if database is empty
+    table_count=$(mysql -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD" -e "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = '$MYSQL_DATABASE'" -s --silent)
+    if [ $table_count -eq 0 ]; then
+        printf '%-110s%s\n' "[MySQL]  |  Database '$MYSQL_DATABASE' is empty, running migrations..." "DONE"
+        echo ""
+        php artisan migrate --seed
+    else
+        printf '%-110s%s\n' "[MySQL]  |  Database '$MYSQL_DATABASE' is not empty, skipping migrations..." "DONE"
+        echo ""
     fi
 else
-    echo "Could not connect to MySQL server"
-    exit  1
+    echo "[MySQL]  |  MySQL is unavailable - sleeping"
+    echo ""
 fi
 
 php-fpm -D

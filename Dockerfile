@@ -1,9 +1,10 @@
-FROM php:8.2-fpm as phpfpm82
+FROM php:8.2-fpm as php
 
-ENV PHP_OPCACHE_ENABLE=1
+ARG APP_NAME
+ENV PHP_OPCACHE_ENABLE=0
 ENV PHP_OPCACHE_ENABLE_CLI=0
-ENV PHP_OPCACHE_VALIDATE_TIMESTAMPS=1
-ENV PHP_OPCACHE_REVALIDATE_FREQ=1
+ENV PHP_OPCACHE_VALIDATE_TIMESTAMPS=0
+ENV PHP_OPCACHE_REVALIDATE_FREQ=0
 
 RUN usermod -u 1000 www-data
 
@@ -15,9 +16,8 @@ RUN curl -fsSL https://deb.nodesource.com/setup_19.x | bash - && apt-get install
 RUN npm install -g npm@latest
 
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg
-RUN docker-php-ext-install pdo pdo_mysql bcmath curl -j$(nproc) gd
+RUN docker-php-ext-install pdo pdo_mysql bcmath curl -j$(nproc) gd opcache
 
-ARG APP_NAME
 WORKDIR /var/www/${APP_NAME}
 
 COPY --chown=www-data:www-data . .

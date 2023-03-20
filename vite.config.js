@@ -11,14 +11,6 @@ export default defineConfig({
             refresh: true,
         }),
     ],
-    server: {
-        port: 3000 // ubah port menjadi 3000 atau port yang diinginkan
-    },
-    /*resolve: {
-        alias: {
-            '@fortawesome/fontawesome-free/css/all.css': '@fortawesome/fontawesome-free/css/all.min.css'
-        }
-    },*/
     build: {
         chunkSizeWarningLimit: 100000000,
     },
