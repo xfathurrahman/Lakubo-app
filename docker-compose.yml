@@ -11,6 +11,7 @@ services:
         environment:
             - APP_NAME=${APP_NAME}
             - APP_ENV=${APP_ENV}
+            - APP_KEY=${APP_KEY}
             - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
             - MYSQL_HOST=${DB_HOST}
             - MYSQL_DATABASE=${DB_DATABASE}

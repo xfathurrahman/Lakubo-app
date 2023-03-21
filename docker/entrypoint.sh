@@ -7,6 +7,8 @@ if [ ! -f "vendor/autoload.php" ]; then
     composer install --no-progress --no-interaction
 fi
 
+echo ""
+
 #check if .env file exists
 if [ ! -f ".env" ]; then
     echo "Creating env file for env $APP_ENV"
@@ -15,8 +17,19 @@ else
     echo "env file exists."
 fi
 
-# composer commands
-php artisan key:generate --ansi
+echo ""
+
+# check if APP_KEY exists
+if [ -z "$APP_KEY" ]; then
+    echo "APP_KEY is not set, generating..."
+    php artisan key:generate --ansi
+else
+    echo "APP_KEY is set, skipping generation..."
+fi
+
+echo ""
+
+# clear cache
 php artisan config:clear
 php artisan view:clear
 php artisan cache:clear
