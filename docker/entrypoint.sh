@@ -51,10 +51,10 @@ if [ ! -d "public/storage" ]; then
 fi
 
 # Test MySQL connection
-if mysqladmin ping -s -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD"; then
+if mysqladmin ping -h "$MYSQL_HOST" -u root -p -s; then
 echo ""
     # Create database if it doesn't exist yet
-    if ! mysql -s -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD" -e "use $MYSQL_DATABASE"; then
+    if ! mysql -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD" -e "use $MYSQL_DATABASE" -s; then
         mysql -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD" -e "CREATE DATABASE $MYSQL_DATABASE;"
         printf '%-110s%s\n' "[MySQL]  |  Creating new database '$MYSQL_DATABASE'..." "DONE"
         echo ""
@@ -77,8 +77,8 @@ echo ""
         echo ""
     fi
     # check if database is empty
-    table_count=$(mysql -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD" -e "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = '$MYSQL_DATABASE'" -s --silent)
-    if [ $table_count -eq 0 ]; then
+    table_count=$(mysql -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD" -e "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = '$MYSQL_DATABASE'")
+    if [ -n "$table_count" ] && [ $table_count -eq 0 ]; then
         printf '%-110s%s\n' "[MySQL]  |  Database '$MYSQL_DATABASE' is empty, running migrations..." "DONE"
         echo ""
         php artisan migrate --seed

@@ -29,7 +29,8 @@ COPY ./docker/nginx/nginx.conf /etc/nginx/nginx.conf
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-RUN chmod -R 755 /var/www/${APP_NAME}/storage
-RUN chmod -R 755 /var/www/${APP_NAME}/bootstrap
+RUN chmod -R 775 /var/www/${APP_NAME}/storage
+RUN chmod -R 775 /var/www/${APP_NAME}/storage/logs/laravel.log
+RUN chmod -R 775 /var/www/${APP_NAME}/bootstrap
 
 ENTRYPOINT [ "docker/entrypoint.sh" ]
