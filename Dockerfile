@@ -1,6 +1,7 @@
 FROM php:8.2-fpm as php
 
 ARG APP_NAME
+
 ENV PHP_OPCACHE_ENABLE=0
 ENV PHP_OPCACHE_ENABLE_CLI=0
 ENV PHP_OPCACHE_VALIDATE_TIMESTAMPS=0
@@ -30,7 +31,8 @@ COPY ./docker/nginx/nginx.conf /etc/nginx/nginx.conf
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 RUN chmod -R 775 /var/www/${APP_NAME}/storage
-RUN chmod -R 775 /var/www/${APP_NAME}/storage/logs/laravel.log
+RUN touch /var/www/${APP_NAME}/storage/logs/laravel.log \
+    && chmod 775 /var/www/${APP_NAME}/storage/logs/laravel.log
 RUN chmod -R 775 /var/www/${APP_NAME}/bootstrap
 
 ENTRYPOINT [ "docker/entrypoint.sh" ]

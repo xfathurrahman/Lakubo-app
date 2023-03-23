@@ -19,12 +19,12 @@ fi
 
 echo ""
 
-# check if APP_KEY exists
+# check if APP_KEY is set
 if [ -z "$APP_KEY" ]; then
     echo "APP_KEY is not set, generating..."
     php artisan key:generate --ansi
 else
-    echo "APP_KEY is set, skipping generation..."
+    echo "APP_KEY is set", skipping generation...""
 fi
 
 echo ""
@@ -51,7 +51,7 @@ if [ ! -d "public/storage" ]; then
 fi
 
 # Test MySQL connection
-if mysqladmin ping -h "$MYSQL_HOST" -u root -p -s; then
+if mysqladmin ping -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD" -s; then
 echo ""
     # Create database if it doesn't exist yet
     if ! mysql -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD" -e "use $MYSQL_DATABASE" -s; then
@@ -77,14 +77,18 @@ echo ""
         echo ""
     fi
     # check if database is empty
-    table_count=$(mysql -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD" -e "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = '$MYSQL_DATABASE'")
-    if [ -n "$table_count" ] && [ $table_count -eq 0 ]; then
-        printf '%-110s%s\n' "[MySQL]  |  Database '$MYSQL_DATABASE' is empty, running migrations..." "DONE"
-        echo ""
-        php artisan migrate --seed
+    table_count=$(mysql -h "$MYSQL_HOST" -u root -p"$MYSQL_ROOT_PASSWORD" -se "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = '$MYSQL_DATABASE'")
+    if [ -n "$table_count" ] && echo "$table_count" | grep -qE '^[0-9]+$'; then
+        if [ "$table_count" -eq 0 ]; then
+            printf '%-110s%s\n' "[MySQL]  |  Database '$MYSQL_DATABASE' is empty, running migrations..." "DONE"
+            echo ""
+            php artisan migrate --seed
+        else
+            printf '%-110s%s\n' "[MySQL]  |  Database '$MYSQL_DATABASE' is not empty, skipping migrations..." "DONE"
+            echo ""
+        fi
     else
-        printf '%-110s%s\n' "[MySQL]  |  Database '$MYSQL_DATABASE' is not empty, skipping migrations..." "DONE"
-        echo ""
+        printf '%-110s%s\n' "[MySQL]  |  Failed to get table count from database '$MYSQL_DATABASE'." "FAILED"
     fi
 else
     echo "[MySQL]  |  MySQL is unavailable - sleeping"
