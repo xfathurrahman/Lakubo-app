@@ -82,7 +82,7 @@ echo ""
         if [ "$table_count" -eq 0 ]; then
             printf '%-110s%s\n' "[MySQL]  |  Database '$MYSQL_DATABASE' is empty, running migrations..." "DONE"
             echo ""
-            php artisan migrate --seed
+            php artisan migrate --seed --force
         else
             printf '%-110s%s\n' "[MySQL]  |  Database '$MYSQL_DATABASE' is not empty, skipping migrations..." "DONE"
             echo ""

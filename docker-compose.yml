@@ -2,6 +2,8 @@ version: "3.9"
 services:
     php:
         container_name: lakubo-app
+        env_file:
+            - .env
         build:
             context: .
             target: php
@@ -24,6 +26,12 @@ services:
             - "8001:80"
         networks:
             - env-server
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost:8001"]
+            interval: 30s
+            timeout: 10s
+            retries: 3
+        
 networks:
     env-server:
         name: ${NETWORK_NAME}
