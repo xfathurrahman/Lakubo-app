@@ -435,8 +435,8 @@
     @endif
 
     @section('script')
-        <script type="text/javascript" src="https://app.midtrans.com/snap/snap.js"
-                data-client-key="config('midtrans.client_key')"></script>
+
+        <script type="text/javascript" src="{{ env('MIDTRANS_IS_PRODUCTION') === 'true' ? 'https://app.midtrans.com/snap/snap.js' : 'https://app.sandbox.midtrans.com/snap/snap.js'}}" data-client-key="config('midtrans.client_key')"></script>
 
         <script type="text/javascript">
             $(document).ready(function () {

@@ -4,8 +4,8 @@
     <!-- END: Breadcrumb -->
 
     <!-- BEGIN: Account Menu -->
-    <div class="intro-x dropdown w-8 h-8">
-        <div class="dropdown-toggle w-8 h-8 rounded-full overflow-hidden shadow-lg image-fit zoom-in" role="button"
+    <div class="intro-x dropdown md:w-8 h-8">
+        <div class="dropdown-toggle w-8 h-8 rounded-full overflow-hidden shadow-lg image-fit zoom-in ml-auto" role="button"
              aria-expanded="false" data-tw-toggle="dropdown">
             @if(auth()->user()->profile_photo_path)
                 <img id="preview-photo-top-bar" alt="Profile-photo-preview" src="{{ asset('storage/profile-photos/'. auth()->user()->profile_photo_path) }}">
