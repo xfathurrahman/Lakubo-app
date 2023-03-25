@@ -73,7 +73,7 @@ echo ""
     else # grant privileges if user already exists
         grant_query="GRANT ALL PRIVILEGES ON $DB_DATABASE.* TO '$DB_USERNAME'@'%'; FLUSH PRIVILEGES;"
         $DB_CONNECTION -h "$DB_HOST" -u root -p"$DB_ROOT_PASSWORD" -e "$grant_query"
-        printf '%-110s%s\n' "[$DB_CONNECTION]  |  User '$DB_USERNAME' found, granting privileges on database '$DB_DATABASE'" "DONE"
+        printf '%-110s%s\n' "[$DB_CONNECTION]  |  User '$DB_USERNAME' found, granting privileges on database '$DB_DATABASE'..." "DONE"
         echo ""
     fi
     # check if database is empty

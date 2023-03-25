@@ -2,11 +2,10 @@
 
 @section('body')
     <body id="main-app" class="font-sans flex flex-col min-h-screen">
-        <div id="loading-page" class="flex items-center justify-center h-screen">
-            <div class="flex flex-col items-center">
-                <svg class="animate-spin h-12 w-12 text-indigo-600" viewBox="0 0 24 24"></svg>
-                <p class="text-gray-700 mt-2 font-semibold text-lg">Memuat...</p>
-            </div>
+
+        <div id="loading-page" class="fixed inset-0 flex items-center justify-center bg-white z-50">
+            <i class="fas fa-spinner fa-spin text-indigo-600 text-xl mr-3 mt-2"></i>
+            <p class="text-gray-600 font-sans mt-2 font-semibold text-lg">Memuat...</p>
         </div>
 
         <nav class="px-4 py-2 shadow bg-white fixed w-full z-20 top-0 left-0 border-b border-gray-200">
