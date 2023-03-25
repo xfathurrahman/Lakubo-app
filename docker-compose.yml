@@ -1,6 +1,6 @@
 version: "3.9"
 services:
-    php:
+    app:
         container_name: lakubo-app
         env_file:
             - .env
@@ -10,15 +10,6 @@ services:
             args:
             - APP_NAME=${APP_NAME}
             - APP_ENV=${APP_ENV}
-        environment:
-            - APP_NAME=${APP_NAME}
-            - APP_ENV=${APP_ENV}
-            - APP_KEY=${APP_KEY}
-            - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
-            - MYSQL_HOST=${DB_HOST}
-            - MYSQL_DATABASE=${DB_DATABASE}
-            - MYSQL_USER=${DB_USERNAME}
-            - MYSQL_PASSWORD=${DB_PASSWORD}
         working_dir: /var/www/${APP_NAME}
         volumes:
             - ./:/var/www/${APP_NAME}
@@ -31,7 +22,6 @@ services:
             interval: 30s
             timeout: 10s
             retries: 3
-        
 networks:
     env-server:
         name: ${NETWORK_NAME}

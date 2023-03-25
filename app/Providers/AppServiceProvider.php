@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\View\Composers\NavbarComposer;
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Schema;
@@ -12,39 +13,44 @@ use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     *
-     * @return void
-     */
-    public function register()
+    protected $request;
+
+    public function __construct()
     {
-        //
+        $this->request = app('request');
     }
 
-    /**
-     * Bootstrap any application services.
-     *
-     * @return void
-     */
-    public function boot()
+    public function boot(Request $request)
     {
+        $this->setHttps($request);
+        $this->setLocale();
+        $this->setDatabase();
         View::composer('home.components.navbar', NavbarComposer::class);
-        // Fix https
-        // if ((isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] === 'on' || $_SERVER['HTTPS'] === 1)) || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) &&  $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')) {
-        //     $this->app['request']->server->set('HTTPS', true);
-        // }
-        
-        if ($this->app->environment('production')) {
-            $this->app['request']->server->set('HTTPS','on');
-            URL::forceScheme('https');
-        }
 
-        config(['app.locale' => 'id']);
-        Carbon::setLocale('id');
-        Schema::defaultStringLength(191);
         Blade::directive('currency', function ($expression) {
             return "Rp. <?php echo number_format($expression, 0, ',', '.'); ?>";
         });
+    }
+
+    protected function setHttps(Request $request)
+    {
+        if (app()->environment('production')) {
+            URL::forceScheme('https');
+        } elseif (app()->environment('local')) {
+            if ((isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] === 'on' || $_SERVER['HTTPS'] === 1)) || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) &&  $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')) {
+                $request->server->set('HTTPS', true);
+            }
+        }
+    }
+
+    protected function setLocale()
+    {
+        config(['app.locale' => 'id']);
+        Carbon::setLocale('id');
+    }
+
+    protected function setDatabase()
+    {
+        Schema::defaultStringLength(191);
     }
 }
