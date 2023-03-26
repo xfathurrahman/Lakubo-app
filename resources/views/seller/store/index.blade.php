@@ -52,6 +52,10 @@
             </div>
             <!-- END: Profile Info -->
 
+            <div class="w-full pt-4 sm:rounded-lg">
+                @include('seller.store.partials.update-bank-information-form')
+            </div>
+
             <!-- BEGIN: Display Information -->
             <div class="intro-y mt-0 box">
                 <form method="post" action="{{ route('seller.store.update', auth()->user()->stores->id) }}" class="space-y-3">
@@ -156,7 +160,7 @@
                 </form>
             </div>
             <!-- END: Display Information -->
-        @include('.seller.store.partials.delete-store-modal')
+        {{-- @include('seller.store.partials.delete-store-modal') --}}
     @else
         <div class="intro-y col-span-11 alert alert-primary alert-dismissible show flex items-center mb-6" role="alert">
             <span>
@@ -196,8 +200,6 @@
                         }
                     }
                 });
-
-
                 $(document).ready(function () {
                     $("#editSelectDistrictStore").select2({
                         placeholder:'Pilih Kecamatan',

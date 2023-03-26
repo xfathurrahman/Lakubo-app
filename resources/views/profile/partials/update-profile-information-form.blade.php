@@ -1,5 +1,5 @@
 <section>
-    <div class="grid grid-cols-12 gap-2 sm:px-3 lg:px-5">
+    <div class="grid grid-cols-12 gap-2 mt-5">
         <div class="col-span-12 lg:col-span-12 2xl:col-span-12 box">
             <!-- BEGIN: Display Information -->
             @php

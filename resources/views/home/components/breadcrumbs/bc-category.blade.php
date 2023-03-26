@@ -7,7 +7,7 @@
             <span class="mx-2 h-auto text-gray-400 font-medium mb-1"> <i class="fa-solid fa-chevron-right text-xs mr-3"></i> </span>
         </li>
         <li class="inline-flex items-center">
-            <p class="text-xs md:text-sm font-medium text-gray-600 text-blue-500 line-clamp-2">
+            <p class="text-xs md:text-sm font-medium text-gray-600 line-clamp-2">
                 {{ $productsCategoryName }}
             </p>
         </li>

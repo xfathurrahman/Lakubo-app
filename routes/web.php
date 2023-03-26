@@ -22,6 +22,8 @@ use App\Http\Controllers\Seller\ProductController;
 use App\Http\Controllers\Seller\SellerDashboardController;
 use App\Http\Controllers\Seller\SellerOrderController;
 use App\Http\Controllers\Seller\StoreController;
+use App\Http\Controllers\Seller\StoreTransactionController;
+use App\Http\Controllers\Seller\StoreWithdrawalController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -106,6 +108,9 @@ Route::middleware(['auth', 'verified', 'role:seller'])->name('seller.')->prefix(
     Route::get('/store',[StoreController::class,'index'])->name('store.index');
     Route::put('/store/{store}/update',[StoreController::class,'update'])->name('store.update');
     Route::delete('/store',[StoreController::class,'destroy'])->name('store.destroy');
+    Route::post('/store/update-photo', [StoreController::class, 'updatePhoto'])->name('store.update.photo');
+    Route::post('/store/destroy-photo', [StoreController::class, 'destroyPhoto'])->name('store.destroy.photo');
+    Route::patch('/store/update-bank', [StoreController::class, 'updateBankAccount'])->name('store.update.bank');
     /*-----------------------------------------------PRODUCTS---------------------------------------------------------*/
     Route::get('/products', [ProductController::class,'index'])->name('products.index');
     Route::get('/products/create', [ProductController::class,'create'])->name('products.create');
@@ -120,6 +125,11 @@ Route::middleware(['auth', 'verified', 'role:seller'])->name('seller.')->prefix(
     Route::put('/orders/detail/confirm/{order_id}', [SellerOrderController::class,'confirmOrder'])->name('order.confirm');
     Route::put('/orders/detail/reject/{order_id}', [SellerOrderController::class,'rejectOrder'])->name('order.reject');
     Route::put('/orders/detail/resi/{order_id}', [SellerOrderController::class,'updateResi'])->name('order.update.resi');
+    /*-----------------------------------------------WITHDRAW---------------------------------------------------------*/
+    Route::get('/withdrawals', [StoreWithdrawalController::class, 'index'])->name('withdraw.index');
+    Route::post('/withdraw/store', [StoreWithdrawalController::class, 'store'])->name('withdraw.store');
+    /*-----------------------------------------------TRANSACTIONS-----------------------------------------------------*/
+    Route::get('/transaction', [StoreTransactionController::class, 'index'])->name('transaction.index');
 });
 
 Route::middleware(['auth', 'verified', 'role:customer'])->name('customer.')->prefix('customer')->group(function (){

@@ -24,6 +24,11 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('name');
             $table->longText('description');
+            $table->string('bank_name')->nullable();
+            $table->string('bank_account_name')->nullable();
+            $table->string('bank_account_number')->nullable();
+            $table->bigInteger('balance')->default(0);
+            $table->text('profile_photo_path')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

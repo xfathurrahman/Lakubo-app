@@ -1,11 +1,3 @@
-.carousel-product {
-    position: relative;
-    display: block;
-    box-shadow: rgba(49,53,59,0.12) 0 1px 6px 0;
-    margin-bottom: 24px;
-    background-color: white;
-}
-
 .carousel-product .card {
     display: block;
     border-radius: 9px;
@@ -33,9 +25,9 @@
 }
 
 .carousel-product .add-to-cart {
-    position: absolute; !important;
-    right: 0; !important;
-    top: 0; !important;
+    position: absolute;
+    right: 0;
+    top: 0;
 }
 
 .carousel-product .add-to-cart {

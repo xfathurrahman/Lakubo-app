@@ -57,12 +57,14 @@
         </div>
         @auth()
             <div class="flex items-center">
-                <a href="{{ route('customer.cart.index') }}" class="relative flex">
-                    <button class="p-2 mr-2 focus:outline-none bg-red-400 hover:bg-red-300 rounded-md">
-                        <i class="fa-solid fa-cart-shopping text-lg text-white"></i>
-                        <span class="absolute right-3 top-0 rounded-full bg-red-600 bg-opacity-50 w-4 h-4 p-0 m-0 text-white font-mono text-sm  leading-tight text-center cart-count">0</span>
-                    </button>
-                </a>
+                @can('show-cart')
+                    <a href="{{ route('customer.cart.index') }}" class="relative flex">
+                        <button class="p-2 mr-2 focus:outline-none bg-red-400 hover:bg-red-300 rounded-md">
+                            <i class="fa-solid fa-cart-shopping text-lg text-white"></i>
+                            <span class="absolute right-3 top-0 rounded-full bg-red-600 bg-opacity-50 w-4 h-4 p-0 m-0 text-white font-mono text-sm  leading-tight text-center cart-count">0</span>
+                        </button>
+                    </a>
+                @endcan
                 <div id="toggle-profile" class="relative w-10 md:w-48">
                     <button id="toggle-btn"
                             class="flex items-center focus:outline-none bg-red-400 hover:bg-red-300 rounded-md hover:rounded-md py-1 px-2 w-full"

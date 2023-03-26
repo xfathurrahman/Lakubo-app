@@ -104,6 +104,12 @@ Breadcrumbs::for('orders', function (BreadcrumbTrail $trail) {
     $trail->push('Pesanan', url('seller/orders'));
 });
 
+// Pesanan
+Breadcrumbs::for('store-withdrawals', function (BreadcrumbTrail $trail) {
+    $trail->parent('seller_dashboard');
+    $trail->push('Penarikan dana', url('seller/withdrawals'));
+});
+
 /*END: Seller Page*/
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -124,7 +130,7 @@ Breadcrumbs::for('my-order', function (BreadcrumbTrail $trail) {
 
 // Pesanan saya / detail
 Breadcrumbs::for('my-order-detail', function (BreadcrumbTrail $trail) {
-    $trail->parent('my-order');
+    $trail->parent('profile');
     $trail->push('Detail Pesanan ', url('#'));
 });
 

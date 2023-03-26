@@ -54,19 +54,6 @@
                                 <i class="fa-solid fa-store mr-2"></i>
                                 Lapak Saya </a>
                         @endif
-                    @elseif(auth()->user()->hasAnyRole('admin',))
-                        {{--jika admin punya Lapak--}}
-                        @if(auth()->user()->stores)
-                            <a  data-tw-toggle="modal" data-tw-target="#create-store-form"
-                                href="#" class="dropdown-item hover:bg-white/5">
-                                <i class="fa-solid fa-store mr-2"></i>
-                                Lapak Saya </a>
-                        @else
-                            <a  data-tw-toggle="modal" data-tw-target="#create-store-form"
-                                href="#" class="dropdown-item hover:bg-white/5">
-                                <i class="fa-solid fa-store mr-2"></i>
-                                Lapak Saya </a>
-                        @endif
                     @endif
                 </li>
                 <li>

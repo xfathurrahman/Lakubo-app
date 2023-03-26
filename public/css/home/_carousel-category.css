@@ -6,21 +6,11 @@
 .slick-wrapper .slick-dots li button:hover,
 .slick-wrapper .slick-dots li button:focus,
 .slick-wrapper .slick-dots li.slick-active button {outline: none; background-color: #434343; transition: all 300ms ease 0s; color: #919191;}
-
-
-.carousel-category {
-    position: relative;
-    display: block;
-    box-shadow: rgba(49,53,59,30%) 0 1px 6px 0;
-    background-color: rgb(255, 255, 255);
-}
-
 .slick-list {margin: 0 -5px;}
 .slick-slide>div {padding: 0 5px;}
 
 .carousel-category .card {
     display: block;
-    box-shadow: rgba(49,53,59,30%) 0 1px 6px 0;
     margin-bottom: 24px;
     border: none;
     border-radius: 9px;
@@ -37,7 +27,7 @@
 
 .carousel-category .card-body p {
     font-weight: 900;
-    min-font-size: 20px;
+    font-size: 20px;
     padding: 0;
     margin: 0;
     word-wrap: break-word;

@@ -51,7 +51,7 @@
     </style>
 
     @section('breadcrumbs')
-        {{ Breadcrumbs::render('my-order') }}
+        {{ Breadcrumbs::render('transaction') }}
     @endsection
 
     <!-- BEGIN: Reject Notification Content -->
@@ -67,43 +67,35 @@
     <!-- BEGIN: Content -->
     <div class="grid grid-cols-12 gap-6 mt-5">
         <div class="intro-y col-span-12 flex justify-between items-center mt-2">
-            <div class="flex w-full">
+            <div class="flex w-full sm:w-auto">
                 <div class="w-48 relative text-slate-500 mr-2">
                     <input type="text" class="input form-control rounded w-48 box pr-10" placeholder="Cari...">
                     <i class="w-4 h-4 absolute mt-2.5 mb-auto inset-y-0 mr-3 right-0" data-lucide="search"></i>
                 </div>
-                <select id="filterStatus">
+                <select id="filterStatus" class="form-select box ml-2">
                     <option value="">Semua</option>
-                    <option value="awaiting_payment">Menunggu Pembayaran</option>
-                    <option value="awaiting_confirm">Menunggu Konfirmasi</option>
-                    <option value="confirmed">Dikonfirmasi</option>
-                    <option value="packing">Dikemas</option>
-                    <option value="delivered">Dikirim</option>
-                    <option value="completed">Selesai</option>
-                    <option value="cancelled">Dibatalkan</option>
+                    <option value="purchase">Pembayaran</option>
+                    <option value="withdrawal">Penarikan</option>
+                    <option value="refund">Pengembalian</option>
                 </select>
             </div>
         </div>
 
-        @if(auth()->user()->orders) @endif
         <!-- BEGIN: Data List -->
         <div class="intro-y col-span-12 overflow-auto 2xl:overflow-visible">
             <table id="order-table" class="table table-report -mt-2">
                 <thead>
                 <tr>
-                    <th class="whitespace-nowrap">ID Pesanan</th>
-                    <th class="whitespace-nowrap">Pesanan</th>
-                    <th class="text-center whitespace-nowrap">Status</th>
-                    <th class="text-center whitespace-nowrap">
-                        <div class="pr-16">Tagihan</div>
-                    </th>
-                    <th class="text-center whitespace-nowrap">
-                        <div class="pr-4">Aksi</div>
-                    </th>
+                    <th class="whitespace-nowrap">ID Transaksi</th>
+                    <th class="whitespace-nowrap">Keterangan</th>
+                    <th class="whitespace-nowrap text-center">Metode Pembayaran</th>
+                    <th class="whitespace-nowrap text-center">Jenis Transaksi</th>
+                    <th class="whitespace-nowrap text-center">Status</th>
+                    <th class="whitespace-nowrap text-center">Jumlah</th>
                 </tr>
                 </thead>
                 <tbody>
-                @include('customer.order.partials.orders_table', ['orders' => $orders])
+                @include('customer.transaction.partials.transaction_table', ['transactions' => $transactions])
                 </tbody>
             </table>
         </div>
@@ -116,39 +108,40 @@
         <script>
             $(document).ready(function() {
 
-                @if(session('message'))
-                // Success notification
-                Toastify({
-                    node: $("#confirm-notification-content").clone().removeClass("hidden")[0],
-                    duration: 3000,
-                    newWindow: true,
-                    close: true,
-                    gravity: "top",
-                    position: "center",
-                    stopOnFocus: true,
-                }).showToast();
-                @endif
+                function copy(obj) {
+                  try {
+                    if (obj) selectContent(obj)
+                    document.execCommand('copy')
+                    // clears the current selection
+                    window.getSelection().removeAllRanges()
+                  } catch (err) {
+                    console.log(err)
+                  }
+                }
 
-                @foreach($orders as $order)
-                $("#copy-tracking-no-" + {{ $order->id }}).click(function() {
-                    var copyText = document.getElementById("tracking_no-{{ $order->id }}");
-                    copyText.setSelectionRange(0, 99999); // mengatur range seleksi dari karakter 0 hingga 99999
-                    var button = this; // simpan referensi ke tombol yang diklik
-                    navigator.clipboard.writeText(copyText.value).then(function() {
-                        var tooltip = document.createElement("div");
-                        tooltip.innerHTML = "Disalin!";
-                        tooltip.classList.add("tooltip-copy");
-                        $(button).closest('div').append(tooltip);// gunakan referensi tombol untuk menambahkan tooltip
-                        setTimeout(function() {
-                            $(tooltip).fadeOut("fast", function() {
-                                $(this).remove();
-                            });
-                        }, 1000);
-                    }, function() {
-                        console.error("Tidak dapat menyalin teks");
-                    });
+                function selectContent(obj) {
+                  if (window.getSelection && document.createRange) {
+                    let sel = window.getSelection()
+                    let range = document.createRange()
+                    range.selectNodeContents(obj)
+                    sel.removeAllRanges()
+                    sel.addRange(range)
+                  } else if (document.selection && document.body.createTextRange) {
+                    let textRange = document.body.createTextRange()
+                    textRange.moveToElementText(obj)
+                    textRange.select()
+                  }
+                }
+
+                $('#panel1').mouseover(function(){
+                 selectContent(this);
                 });
-                @endforeach
+
+            });
+        </script>
+
+        <script>
+            $(document).ready(function() {
 
                 $('#filterStatus').select2({
                     minimumResultsForSearch: Infinity,
@@ -157,7 +150,7 @@
                 $('#filterStatus').change(function() {
                     let selectedStatus = $(this).val();
                     $.ajax({
-                        url: '{{ route('customer.orders') }}',
+                        url: '{{ route('customer.transaction.index') }}',
                         data: {status: selectedStatus},
                         success: function(result) {
                             $('#order-table tbody').html(result);

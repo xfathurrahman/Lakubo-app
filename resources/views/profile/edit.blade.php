@@ -24,33 +24,43 @@
 
     <div class="py-2">
         @include('profile.partials.update-profile-information-form')
-        <div class="w-full pt-4 sm:rounded-lg sm:px-3 lg:px-5">
+        @can('update-bank-account')
+        <div class="w-full pt-4 sm:rounded-lg">
             @include('profile.partials.update-bank-information-form')
         </div>
-        <div class="w-full pt-4 sm:rounded-lg sm:px-3 lg:px-5">
+        @endcan
+        <div class="w-full pt-4 sm:rounded-lg">
             @include('profile.partials.update-password-form')
         </div>
-        <div class="w-full flex justify-end mt-3 sm:px-3 lg:px-5">
+        @can('delete-account')
+        <div class="w-full flex justify-end mt-3">
             @include('profile.partials.delete-user-form')
         </div>
+        @endcan
     </div>
 
         @section('script')
 
             <script>
                 $(document).ready(function (){
+
+                    const numericInputs = document.querySelectorAll('.numeric-input');
+                    numericInputs.forEach(function(input) {
+                        input.addEventListener('input', function(e) {
+                            e.target.value = e.target.value.replace(/[^0-9]/g, '');
+                        });
+                    });
+
                     // Set CSRF token untuk setiap request jQuery
                     $.ajaxSetup({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         }
                     });
-
                     // Ketika tombol "Ubah Foto" diklik, tampilkan jendela dialog untuk memilih file gambar
                     $("#change-photo").click(function() {
                         $("#profile-photo").click();
                     });
-
                     // Ketika file gambar dipilih, tampilkan gambar di preview
                     $("#profile-photo").change(function() {
                         var reader = new FileReader();

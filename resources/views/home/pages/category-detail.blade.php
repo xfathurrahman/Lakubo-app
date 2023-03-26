@@ -9,9 +9,13 @@
     @include('home.components.breadcrumbs.bc-category')
 
     <div class="carousel-detail-product relative block shadow-lg rounded-lg py-2.5 mb-6" style="box-shadow: rgba(49,53,59,0.12) 0 1px 6px 0;">
-        <div class="mb-2 text-left">
+        <div class="mb-2 flex justify-between border-b">
             <h4 class="mx-4 mb-3">Menampilkan produk berdasar Kategori "<b class="text-red-400">{{ $productsCategoryName }}</b>"</h4>
-            <hr>
+            <h4>
+            @can('edit-category')
+            <a href="{{ route('admin.categories.products') }}" class="mr-2 text-blue-400">Edit</a>
+            @endcan
+            </h4>
         </div>
         @if($products -> count() < 1)
             <div class="w-full h-96 flex flex-col justify-center items-center">

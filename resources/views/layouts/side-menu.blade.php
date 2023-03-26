@@ -30,13 +30,13 @@
                 @if(auth()->user()->hasRole('seller'))
                     <li>
                         <a href="{{ route('seller.dashboard') }}" class="side-menu {{ Request::is('seller/dashboard') ? 'side-menu--active' : '' }}">
-                            <div class="side-menu__icon"> <i data-lucide="home"></i> </div>
+                            <div class="side-menu__icon"> <i data-lucide="flame"></i> </div>
                             <div class="side-menu__title"> Dashboard </div>
                         </a>
                     </li>
                     <li>
                         <a href="{{ url('seller/store') }}" class="side-menu {{ Request::is('seller/store') ? 'side-menu--active' : '' }}">
-                            <div class="side-menu__icon"> <i class="fa-solid fa-store w-5 h-5"></i> </div>
+                            <div class="side-menu__icon"> <i data-lucide="home"></i> </div>
                             <div class="side-menu__title"> Lapak Saya</div>
                         </a>
                     </li>
@@ -52,12 +52,24 @@
                             <div class="side-menu__title"> Pesanan </div>
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ route('seller.transaction.index') }}" class="side-menu {{ Request::is('seller/transaction*') ? 'side-menu--active' : '' }}">
+                            <div class="side-menu__icon"> <i data-lucide="zap"></i> </div>
+                            <div class="side-menu__title"> Transaksi Lapak </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('seller.withdraw.index') }}" class="side-menu {{ Request::is('seller/withdraw*') ? 'side-menu--active' : '' }}">
+                            <div class="side-menu__icon"> <i data-lucide="wallet"></i> </div>
+                            <div class="side-menu__title"> Penarikan Dana </div>
+                        </a>
+                    </li>
                 @endif
             @elseif(Request::is('admin/*'))
                 @if(auth()->user()->hasRole('admin'))
                     <li>
                         <a href="{{ route('admin.dashboard') }}" class="side-menu {{ Request::is('admin/dashboard') ? 'side-menu--active' : '' }}">
-                            <div class="side-menu__icon"> <i data-lucide="home"></i> </div>
+                            <div class="side-menu__icon"> <i data-lucide="flame"></i> </div>
                             <div class="side-menu__title"> Dashboard </div>
                         </a>
                     </li>
@@ -75,7 +87,7 @@
                     </li>
                     <li>
                         <a href="{{ route('admin.stores') }}" class="side-menu {{ Request::is('admin/stores') ? 'side-menu--active' : '' }}">
-                            <div class="side-menu__icon"> <i data-lucide="package"></i> </div>
+                            <div class="side-menu__icon"> <i data-lucide="home"></i> </div>
                             <div class="side-menu__title">Pelapak UMKM</div>
                         </a>
                     </li>
@@ -139,30 +151,39 @@
                     </li>
                 @endif
             @else
-                <li>
-                    <a href="{{ route('customer.orders') }}" class="side-menu {{ Request::is('customer/order*') ? 'side-menu--active' : '' }}">
-                        <div class="side-menu__icon"> <i data-lucide="shopping-bag"></i> </div>
-                        <div class="side-menu__title"> Pesanan </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('customer.transaction.index') }}" class="side-menu {{ Request::is('customer/transaction*') ? 'side-menu--active' : '' }}">
-                        <div class="side-menu__icon"> <i data-lucide="zap"></i> </div>
-                        <div class="side-menu__title"> Transaksi </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('customer.withdraw.index') }}" class="side-menu {{ Request::is('customer/withdraw*') ? 'side-menu--active' : '' }}">
-                        <div class="side-menu__icon"> <i data-lucide="wallet"></i> </div>
-                        <div class="side-menu__title"> Penarikan Dana </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ url('profile') }}" class="side-menu {{ Request::is('profile') ? 'side-menu--active' : '' }}">
-                        <div class="side-menu__icon"> <i data-lucide="user"></i> </div>
-                        <div class="side-menu__title"> Akun </div>
-                    </a>
-                </li>
+                @if (auth()->user()->hasRole('admin'))
+                    <li>
+                        <a href="{{ url('profile') }}" class="side-menu {{ Request::is('profile') ? 'side-menu--active' : '' }}">
+                            <div class="side-menu__icon"> <i data-lucide="user"></i> </div>
+                            <div class="side-menu__title"> Akun Saya</div>
+                        </a>
+                    </li>
+                @else
+                    <li>
+                        <a href="{{ url('profile') }}" class="side-menu {{ Request::is('profile') ? 'side-menu--active' : '' }}">
+                            <div class="side-menu__icon"> <i data-lucide="user"></i> </div>
+                            <div class="side-menu__title"> Akun Saya</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('customer.orders') }}" class="side-menu {{ Request::is('customer/order*') ? 'side-menu--active' : '' }}">
+                            <div class="side-menu__icon"> <i data-lucide="shopping-bag"></i> </div>
+                            <div class="side-menu__title"> Pesanan saya </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('customer.transaction.index') }}" class="side-menu {{ Request::is('customer/transaction*') ? 'side-menu--active' : '' }}">
+                            <div class="side-menu__icon"> <i data-lucide="zap"></i> </div>
+                            <div class="side-menu__title"> Transaksi Saya</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('customer.withdraw.index') }}" class="side-menu {{ Request::is('customer/withdraw*') ? 'side-menu--active' : '' }}">
+                            <div class="side-menu__icon"> <i data-lucide="wallet"></i> </div>
+                            <div class="side-menu__title"> Penarikan Dana </div>
+                        </a>
+                    </li>
+                @endif
             @endif
         </ul>
 

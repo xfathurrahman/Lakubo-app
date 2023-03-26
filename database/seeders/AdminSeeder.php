@@ -21,7 +21,7 @@ class AdminSeeder extends Seeder
             'email_verified_at' => now(),
             'password' => bcrypt('12345678'),
             'remember_token' => Str::random(10),
-        ])->assignRole('customer','seller','admin');
+        ])->assignRole('admin');
 
         /*Store::create([
             'name' => 'Lakubo Official',

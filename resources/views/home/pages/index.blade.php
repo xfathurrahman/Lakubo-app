@@ -12,9 +12,15 @@
         </div>
     @endif
 
-    <div class="carousel-category mb-5 rounded-lg pb-3">
+    <div class="carousel-category rounded-lg pb-3 sm:border bg-gray-100">
         <div class="p-4 text-center font-semibold border-b">
-            <span id="arrowNav" class="flex justify-between">Kategori</span>
+            @if (auth()->check() && auth()->user()->hasRole('admin'))
+                <a href="{{ route('admin.categories.products') }}">
+                    <span id="arrowNav" class="flex justify-center items-center">Kategori <i class="fa-solid fa-square-pen text-xl mt-1 ml-2 text-red-400"></i> </span>
+                </a>
+            @else
+                <span id="arrowNav" class="flex justify-center items-center">Kategori</span>
+            @endif
         </div>
         <div class="slick-wrapper px-4">
             <div id="sc-category-carousel" class="overflow-hidden" style="max-height: 450px;" data-slick='{"lazyLoad": "ondemand"}'>
@@ -29,7 +35,7 @@
                             <img class="image-product max-w-full lazy" data-lazy="{{ asset("storage/product-categories")."/".$category -> image_path }}" alt="category-img">
                         </div>
                         <div class="p-1 md:p-3 h-6 md:h-10 flex items-center justify-center">
-                            <span class="text-2xs leading-2 md:text-xxs md:leading-3 lg:text-xs text-center text-white font-semibold capitalize md:uppercase line-clamp-2 text-gray-700">{{ $category -> name }}</span>
+                            <span class="text-2xs leading-2 md:text-xxs md:leading-3 lg:text-xs text-center font-semibold capitalize md:uppercase line-clamp-2 text-white">{{ $category -> name }}</span>
                         </div>
                     </a>
                 @endforeach
@@ -37,80 +43,82 @@
         </div>
     </div>
 
-    <div class="carousel-product py-4 rounded-lg">
-        <div class="mb-2 text-center">
-            <h4 class="mx-4 mb-4 font-semibold">Produk Terbaru</h4>
-            <hr>
-        </div>
-        <div class="owl-carousel sc-products-carousel owl-theme mb-8">
-            @foreach($products as $product)
-                @php
-                    $isAuthenticated = auth()->check();
-                    $isSeller = $isAuthenticated && auth()->user()->hasRole('seller');
-                    $isProductStoreSameAsUserStore = $isSeller && $product->stores->id === auth()->user()->stores->id;
-                    $canEditProduct = $isProductStoreSameAsUserStore;
-                @endphp
-                <div class="item ml-2">
-                    <div class="card shadow-xl bg-gray-200">
-                        <div class="date-option bg-red-400 text-center">
-                            <span class="date-post">
-                                <p class="mb-5">{{ $product -> created_at -> diffForHumans() }}</p>
-                            </span>
-                        </div>
-                        @if ($product->quantity > 0)
-                            @if ($canEditProduct)
-                                <a href="{{ route('seller.products.edit', $product->id) }}" class="add-to-cart product_data">
-                                    <i class="fa-solid fa-pencil text-white"></i>
-                                </a>
-                            @else
-                                <div class="add-to-cart product_data bg-red-400">
-                                    <button>
-                                        <input type="hidden" class="qty_input" name="product_qty" value="1">
-                                        <input type="hidden" class="prod_id" name="product_id" value="{{ $product->id }}">
-                                        <input type="hidden" class="store_id" name="store_id" value="{{ $product->stores->id }}">
-                                        <button type="button" class="btn addToCartBtn">
-                                            <i class="fa fa-cart-plus text-white" aria-hidden="true"></i>
+    @if (count($products) > 0)
+        <div class="carousel-product py-4">
+            <div class="mb-2 text-center">
+                <h4 class="mx-4 mb-4 font-semibold">Produk Terbaru</h4>
+                <hr>
+            </div>
+            <div class="owl-carousel sc-products-carousel owl-theme mb-8">
+                @foreach($products as $product)
+                    @php
+                        $isAuthenticated = auth()->check();
+                        $isSeller = $isAuthenticated && auth()->user()->hasRole('seller');
+                        $isProductStoreSameAsUserStore = $isSeller && $product->stores->id === auth()->user()->stores->id;
+                        $canEditProduct = $isProductStoreSameAsUserStore;
+                    @endphp
+                    <div class="item ml-2">
+                        <div class="card shadow-xl bg-gray-200">
+                            <div class="date-option bg-red-400 text-center">
+                                <span class="date-post">
+                                    <p class="mb-5">{{ $product -> created_at -> diffForHumans() }}</p>
+                                </span>
+                            </div>
+                            @if ($product->quantity > 0)
+                                @if ($canEditProduct)
+                                    <a href="{{ route('seller.products.edit', $product->id) }}" class="add-to-cart product_data">
+                                        <i class="fa-solid fa-pencil text-white"></i>
+                                    </a>
+                                @else
+                                    <div class="add-to-cart product_data bg-red-400">
+                                        <button>
+                                            <input type="hidden" class="qty_input" name="product_qty" value="1">
+                                            <input type="hidden" class="prod_id" name="product_id" value="{{ $product->id }}">
+                                            <input type="hidden" class="store_id" name="store_id" value="{{ $product->stores->id }}">
+                                            <button type="button" class="btn addToCartBtn">
+                                                <i class="fa fa-cart-plus text-white" aria-hidden="true"></i>
+                                            </button>
                                         </button>
-                                    </button>
-                                </div>
+                                    </div>
+                                @endif
                             @endif
-                        @endif
-                            <img class="image-product" src="{{ asset("storage/product-images")."/".$product -> productImage -> image_path }}" alt="Image from {{ $product->stores->name }}">
-                            <div class="card-body bg-red-100">
-                                <div class="relative overflow-hidden py-0.5 rounded-br-lg bg-red-400 shadow-lg">
-                                    <svg class="absolute bottom-0 left-0 mb-8" viewBox="0 0 375 283" fill="none" style="transform: scale(1.5); opacity: 0.1;">
-                                        <rect x="159.52" y="175" width="152" height="152" rx="8" transform="rotate(-45 159.52 175)" fill="white"/>
-                                        <rect y="107.48" width="152" height="152" rx="8" transform="rotate(-45 0 107.48)" fill="white"/>
-                                    </svg>
-                                    <div class="relative px-2 text-white">
-                                        <span class="block font-semibold text-xs overflow-ellipsis">@currency($product->price)</span>
+                                <img class="image-product" src="{{ asset("storage/product-images")."/".$product -> productImage -> image_path }}" alt="Image from {{ $product->stores->name }}">
+                                <div class="card-body bg-red-100">
+                                    <div class="relative overflow-hidden py-0.5 rounded-br-lg bg-red-400 shadow-lg">
+                                        <svg class="absolute bottom-0 left-0 mb-8" viewBox="0 0 375 283" fill="none" style="transform: scale(1.5); opacity: 0.1;">
+                                            <rect x="159.52" y="175" width="152" height="152" rx="8" transform="rotate(-45 159.52 175)" fill="white"/>
+                                            <rect y="107.48" width="152" height="152" rx="8" transform="rotate(-45 0 107.48)" fill="white"/>
+                                        </svg>
+                                        <div class="relative px-2 text-white">
+                                            <span class="block font-semibold text-xs overflow-ellipsis">@currency($product->price)</span>
+                                        </div>
+                                    </div>
+                                    <a class="hover:text-red-400" href="{{ route('product.detail', $product -> id) }}">
+                                        <div class="px-2 product-name text-left text-gray-700 hover:text-red-500">{{ $product -> name }}</div>
+                                    </a>
+                                    <div class="px-2 owner-info">
+                                        <a href="{{ route('store.details', $product->stores->id) }}">
+                                            <div class="owner-pp">
+                                                @isset($product->stores->users->profile_photo_path)
+                                                    <img class="rounded-full" src="{{ asset('storage/profile-photos/'. $product->stores->users->profile_photo_path) }}" alt="pp-owner"/>
+                                                @else
+                                                    <img class="rounded-full" src="https://ui-avatars.com/api/?name={{ $product -> stores -> name }}&amp;color=7F9CF5&amp;background=EBF4FF" alt="pp-owner"/>
+                                                @endisset
+                                            </div>
+                                            <div class="owner-name whitespace-nowrap font-bold"
+                                                data-hover-before="{{  $product -> stores -> name }}"
+                                                data-hover-after="{{  $product -> stores -> users -> name }}">
+                                            </div>
+                                        </a>
                                     </div>
                                 </div>
-                                <a class="hover:text-red-400" href="{{ route('product.detail', $product -> id) }}">
-                                    <div class="px-2 product-name text-left text-gray-700 hover:text-red-500">{{ $product -> name }}</div>
-                                </a>
-                                <div class="px-2 owner-info">
-                                    <a href="{{ route('store.details', $product->stores->id) }}">
-                                        <div class="owner-pp">
-                                            @isset($product->stores->users->profile_photo_path)
-                                                <img class="rounded-full" src="{{ asset('storage/profile-photos/'. $product->stores->users->profile_photo_path) }}" alt="pp-owner"/>
-                                            @else
-                                                <img class="rounded-full" src="https://ui-avatars.com/api/?name={{ $product -> stores -> name }}&amp;color=7F9CF5&amp;background=EBF4FF" alt="pp-owner"/>
-                                            @endisset
-                                        </div>
-                                        <div class="owner-name whitespace-nowrap font-bold"
-                                             data-hover-before="{{  $product -> stores -> name }}"
-                                             data-hover-after="{{  $product -> stores -> users -> name }}">
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
+                        </div>
                     </div>
-                </div>
-            @endforeach
+                @endforeach
+            </div>
+            <a href="{{ route('product.detail.new') }}" class="absolute bottom-0 right-0 h-8 bg-red-400 rounded-tl-lg rounded-br-lg flex items-center text-white text-sm px-2 text-decoration-none">Lihat Semua</a>
         </div>
-        <a href="{{ route('product.detail.new') }}" class="absolute bottom-0 right-0 h-8 bg-red-400 rounded-tl-lg rounded-br-lg flex items-center text-white text-sm px-2 text-decoration-none">Lihat Semua</a>
-    </div>
+    @endif
 
     @include('home.components.notifications.cart-notification')
 @endsection
