@@ -156,7 +156,6 @@ class CheckoutController extends Controller
             $order->user_id = Auth::id();
             $order->store_id = $cart->store_id;
             $order->snap_token = $snapToken;
-            $order->status = 'awaiting_payment';
             $order->customer_name = Auth::user()->name;
             $order->customer_phone = Auth::user()->phone;
             $order->customer_email = Auth::user()->email;
@@ -193,6 +192,8 @@ class CheckoutController extends Controller
             $order->orderAddress()->save($orderAddress);
             $order->orderShipping()->save($orderShipping);
             $order->orderItems()->saveMany($orderItems);
+
+            $cart->delete();
 
             return redirect()->route('customer.order.show', ['order_id' => $order->id])->with('success', 'Pesanan berhasil dibuat!');
 

@@ -3,45 +3,26 @@
     <div class="intro-y grid grid-cols-11 gap-4 mt-5">
         <div class="col-span-12 lg:col-span-4 2xl:col-span-3">
             <div class="box p-4 rounded-md text-xs sm:text-sm">
-                <div class="flex items-center tool border-b border-slate-200/60 dark:border-darkmode-400 pb-5 mb-5">
+                <div class="text-start border-b border-slate-200/60 dark:border-darkmode-400 pb-2 mb-2">
                     <div class="font-medium text-base truncate">Detail Pesanan</div>
+                    <div class="absolute top-2 right-2 bg-gray-200 px-1 mt-3 mr-2 rounded-sm text-gray-700">ID: {{ ($order->id) }}</div>
+                    <p class="text-xs -mt-1">{{ Carbon\Carbon::parse($order->transaction_time)->format('d F Y (H:i)') }}</p>
                 </div>
-                <div class="flex items-center mt-3">
-                    <div class="inline-flex mr-2">
-                        <div class="flex items-center justify-between">
-                            <span class="w-32 sm:w-40 inline-flex">
-                                <i class="fa-solid fa-passport mr-2 text-slate-500"></i>ID Pesanan
-                            </span>:
-                        </div>
-                    </div>
-                    {{ ($order->id) }}
-                </div>
-                <div class="flex items-center mt-2">
-                    <div class="inline-flex mr-2">
-                        <div class="flex items-center justify-between">
-                            <span class="w-32 sm:w-40 inline-flex">
-                                <i class="fa-regular fa-calendar mr-2 text-slate-500"></i>
-                                Pesanan Dibuat
-                            </span>:
-                        </div>
-                    </div>
-                    {{ Carbon\Carbon::parse($order->transaction_time)->format('d F Y (H:i)') }}
-                </div>
-                <div class="flex items-center mt-2">
+                <div class="flex items-center mt-4">
                     <div class="inline-flex mr-2">
                         @if($order -> transaction_status === 'awaiting_payment' || $order -> transaction_status === 'completed')
                             <div class="flex items-center justify-between">
                                 <span class="w-32 sm:w-40 inline-flex">
-                                    <i class="fa-solid fa-arrow-right-arrow-left mr-2 text-slate-500"></i>Status Transaksi
+                                <i class="fa-solid fa-money-bill-wheat mr-2 text-slate-500"></i>Status Pembayaran
                                 </span>:
                             </div>
                         @endif
                     </div>
-                    <div class="inline-flex">
+                    <div class="inline-flex w-full">
                         @if($order -> transaction_status === 'awaiting_payment')
-                            <span class="bg-yellow-400 text-white px-2 rounded-md">Menunggu Pembayaran</span>
+                            <span class="bg-yellow-400 w-full text-center text-white px-2 rounded-md">Menunggu</span>
                         @elseif($order -> transaction_status === 'completed')
-                            <span class="bg-green-500 text-white px-2 rounded-md">Pembayaran Berhasil</span>
+                            <span class="bg-green-500 text-white px-2 rounded-md">Berhasil</span>
                         @endif
                     </div>
                 </div>
@@ -62,7 +43,7 @@
                         <div class="flex items-center mt-2">
                             <div class="inline-flex mr-2">
                                 <div class="flex items-center justify-between">
-                                    <span class="w-32 sm:w-40 inline-flex"><i class="fa-solid fa-bolt-lightning mr-2 text-slate-500"></i>Status Pesanan</span>:
+                                    <span class="w-32 sm:w-40 inline-flex"><i class="fa-solid fa-box mt-0.5 mr-2 text-slate-500"></i>Status Pesanan</span>:
                                 </div>
                             </div>
                         </div>
@@ -77,7 +58,7 @@
                         <div class="flex items-center mt-2">
                             <div class="inline-flex mr-2">
                                 <div class="flex items-center justify-between">
-                                    <span class="w-32 sm:w-40 inline-flex"><i class="fa-solid fa-bolt-lightning mr-2 text-slate-500"></i>Status Pesanan</span>:
+                                    <span class="w-32 sm:w-40 inline-flex"><i class="fa-solid fa-box mt-0.5 mr-2 text-slate-500"></i>Status Pesanan</span>:
                                 </div>
                             </div>
                         </div>
@@ -91,7 +72,7 @@
                         <div class="flex items-center mt-2">
                             <div class="inline-flex mr-2">
                                 <div class="flex items-center justify-between">
-                                    <span class="w-32 sm:w-40 inline-flex"><i class="fa-solid fa-bolt-lightning mr-2 text-slate-500"></i>Status Pesanan</span>:
+                                    <span class="w-32 sm:w-40 inline-flex"><i class="fa-solid fa-box mt-0.5 mr-2 text-slate-500"></i>Status Pesanan</span>:
                                 </div>
                             </div>
                             <span class="bg-blue-500 text-white px-2 rounded-md">Dikirim.</span>
@@ -103,7 +84,7 @@
                     <div class="flex items-center mt-2">
                         <div class="inline-flex mr-2">
                             <div class="flex items-center justify-between">
-                                <span class="w-32 sm:w-40 inline-flex"><i class="fa-solid fa-bolt-lightning mr-2 text-slate-500"></i>Status Pesanan</span>:
+                                <span class="w-32 sm:w-40 inline-flex"><i class="fa-solid fa-box mt-0.5 mr-2 text-slate-500"></i>Status Pesanan</span>:
                             </div>
                         </div>
                         <span class="bg-red-500 text-white px-2 rounded-md">Dibatalkan.</span>
@@ -136,8 +117,8 @@
                     </div>
                     @if($order->payment_type === 'bank_transfer')
                         <div class="ml-2">Bank Transfer</div>
-                    @elseif($order->payment_type === 'cstore')
-                        <div class="ml-2">Indomaret</div>
+                    @elseif($order->payment_type === 'qris')
+                        <div class="ml-2">QRIS</div>
                     @endif
                 </div>
                 <div class="flex items-center mt-3">
@@ -166,16 +147,7 @@
                 </div>
                 @if($order->transaction_status !== 'completed')
                     <div class="mt-2 rounded-lg">
-                        <div class="flex items-center mt-2">
-                            <div class="inline-flex">
-                                <div class="flex items-center justify-between">
-                                <span class="w-32 sm:w-40 inline-flex">
-                                    <i class="fa-solid fa-stopwatch-20 w-4 h-4 text-slate-500 mr-1"></i>Waktu Pembayaran
-                                </span>:
-                                </div>
-                            </div>
-                        </div>
-                        <div class="rounded mt-1 border bg-yellow-50">
+                        <div class="rounded mt-4 border bg-yellow-50">
                             <div class="flex justify-between px-4 py-1 bg-yellow-200 border-b rounded-t items-center">
                                 <i data-lucide="alert-triangle" class="inline-flex w-3 h-3 text-red-500"></i>
                                 <div class="text-blue-500 text-center" id="countdown"><i class="fa-solid fa-spinner fa-spin"></i></div>

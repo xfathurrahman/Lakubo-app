@@ -53,9 +53,10 @@ class OrderController extends Controller
     public function show($order_id)
     {
         $order = Order::with('orderItems')->where('id', $order_id)->first();
-
+        $barcodeUrl = "https://api.midtrans.com/v2/qris/$order->transaction_id/qr-code";
         return view('customer.order.show',[
             'order' => $order,
+            'barcodeUrl' => $barcodeUrl
         ]);
     }
 
@@ -80,7 +81,13 @@ class OrderController extends Controller
             $transaction_time = $json->transaction_time ?? null;
             $order->transaction_time = $transaction_time;
             $expiry_time = new DateTime($transaction_time);
-            $expiry_time->add(new DateInterval('P1D'));
+            if ($json->payment_type === 'bank_transfer') {
+                // add 24 hours (1 day) if payment_type is bank_transfer
+                $expiry_time->add(new DateInterval('P1D'));
+            } else {
+                // add 15 minutes if payment_type is not bank_transfer
+                $expiry_time->add(new DateInterval('PT15M'));
+            }
             $order->transaction_expire = $expiry_time->format('Y-m-d H:i:s');
             $va_number = $json->va_numbers[0]->va_number ?? null;
             $order->va_number = $va_number;
@@ -88,7 +95,6 @@ class OrderController extends Controller
             $order->bank = $bank;
             $order->pdf_url = $json->pdf_url ?? null;
             $order->update();
-
             UserTransaction::create([
                 'user_id' => $order->user_id,
                 'order_id' => $order->id,
@@ -96,7 +102,6 @@ class OrderController extends Controller
                 'payment_method' => $json->payment_type ?? null,
                 'payment_type' => 'purchase',
             ]);
-
             return redirect()->back()->with('success', 'Pembayaran berhasil');
         } catch (Exception $e) {
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
@@ -108,6 +113,8 @@ class OrderController extends Controller
         $order = Order::find($order_id);
         $order -> status = 'completed';
         $order -> update();
+
+        $order->stores->balance += $order->grand_total;
 
         // Simpan data session pada controller
         session()->flash('message');

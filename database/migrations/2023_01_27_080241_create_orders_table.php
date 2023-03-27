@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->enum('transaction_status', ['unpaid','awaiting_payment','completed','cancel'])->default('unpaid');
+            $table->enum('transaction_status', ['choosing_payment','awaiting_payment','completed','cancel'])->default('choosing_payment');
             $table->unsignedBigInteger('store_id');
             $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade');
             $table->string('customer_name');
@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('customer_email');
             $table->integer('subtotal');
             $table->integer('grand_total');
-            $table->enum('status', ['awaiting_payment', 'awaiting_confirm', 'confirmed', 'packing', 'delivered', 'completed', 'cancelled'])->nullable();
+            $table->enum('status', ['choosing_payment','awaiting_payment', 'awaiting_confirm', 'confirmed', 'packing', 'delivered', 'completed', 'cancelled'])->default('choosing_payment')->nullable();
             $table->string('transaction_id')->nullable();
             $table->string('snap_token')->nullable();
             $table->string('payment_type')->nullable();

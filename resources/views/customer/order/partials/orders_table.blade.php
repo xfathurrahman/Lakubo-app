@@ -67,7 +67,11 @@
             </div>
         </td>
         <td class="text-center">
-            @if($order->status === 'awaiting_payment')
+            @if($order->status === 'choosing_payment')
+                <div class="flex items-center justify-center whitespace-nowrap text-red-400">
+                    <i class="fa-regular fa-hand-pointer mr-2"></i> Memilih Pembayaran
+                </div>
+            @elseif($order->status === 'awaiting_payment')
                 <div class="flex items-center justify-center whitespace-nowrap text-yellow-500">
                     <i class="fa-solid fa-money-bill-transfer mr-2"></i> Menunggu Pembayaran
                 </div>

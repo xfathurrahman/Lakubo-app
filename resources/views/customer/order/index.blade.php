@@ -74,6 +74,7 @@
                 </div>
                 <select id="filterStatus">
                     <option value="">Semua</option>
+                    <option value="choosing_payment">Memilih Pembayaran</option>
                     <option value="awaiting_payment">Menunggu Pembayaran</option>
                     <option value="awaiting_confirm">Menunggu Konfirmasi</option>
                     <option value="confirmed">Dikonfirmasi</option>
