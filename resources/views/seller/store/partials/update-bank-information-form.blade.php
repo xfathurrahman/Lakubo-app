@@ -3,7 +3,7 @@
         <div class="intro-y">
             <div class="flex items-center p-2 border-b border-slate-200/60 dark:border-darkmode-400">
                 <h2 class="font-medium text-base ml-3 mr-auto">
-                    Informasi Rekening
+                    Informasi Rekening Lapak
                 </h2>
             </div>
             <form method="post" action="{{ route('seller.store.update.bank') }}">

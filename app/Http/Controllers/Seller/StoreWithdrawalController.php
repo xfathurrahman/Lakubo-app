@@ -23,27 +23,27 @@ class StoreWithdrawalController extends Controller
     {
         $amount = $request->input('amount');
 
-        if ($amount <= Auth::user()->balance)
+        if ($amount <= Auth::user()->stores->balance)
         {
             if ($amount >= 10000)
             {
                 $storeWd = new StoreWithdrawal;
-                $storeWd->user_id = Auth::id();
+                $storeWd->store_id = Auth::user()->stores->id;
                 $storeWd->amount = $amount;
-                $storeWd->bank_name = Auth::user()->bank_name;
-                $storeWd->bank_account_name = Auth::user()->bank_account_name;
-                $storeWd->bank_account_number = Auth::user()->bank_account_number;
+                $storeWd->bank_name = Auth::user()->stores->bank_name;
+                $storeWd->bank_account_name = Auth::user()->stores->bank_account_name;
+                $storeWd->bank_account_number = Auth::user()->stores->bank_account_number;
                 $storeWd->save();
 
                 $storeTrans = new StoreTransaction;
-                $storeTrans -> user_id = Auth::id();
+                $storeTrans -> store_id = Auth::user()->stores->id;
                 $storeTrans -> withdrawal_id = $storeWd->id;
                 $storeTrans -> amount = $amount;
                 $storeTrans -> payment_method = 'Bank Transfer';
                 $storeTrans -> payment_type = 'withdrawal';
                 $storeTrans -> save();
 
-                $storeBalance = User::find(Auth::id());
+                $storeBalance = User::find(Auth::user()->stores->id);
                 $storeBalance -> balance -= $amount;
                 $storeBalance -> update();
 

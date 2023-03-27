@@ -4,7 +4,7 @@
     <!-- END: Breadcrumb -->
 
     <!-- BEGIN: Account Menu -->
-    <div class="intro-x dropdown md:w-8 h-8">
+    <div class="intro-x dropdown md:w-8 h-8 ml-auto">
         <div class="dropdown-toggle w-8 h-8 rounded-full overflow-hidden shadow-lg image-fit zoom-in ml-auto" role="button"
              aria-expanded="false" data-tw-toggle="dropdown">
             @if(auth()->user()->profile_photo_path)

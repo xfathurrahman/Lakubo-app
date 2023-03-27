@@ -20,7 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger('order_id')->nullable();
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
             $table->string('amount');
-            $table->enum('payment_type', ['purchase', 'withdrawal', 'refund']);
+            $table->enum('payment_type', ['selling', 'withdrawal']);
             $table->string('payment_method')->default('Pemindahan Dana');
             $table->timestamps();
         });

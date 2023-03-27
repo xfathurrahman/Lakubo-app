@@ -51,11 +51,6 @@
                 </div>
             </div>
             <!-- END: Profile Info -->
-
-            <div class="w-full pt-4 sm:rounded-lg">
-                @include('seller.store.partials.update-bank-information-form')
-            </div>
-
             <!-- BEGIN: Display Information -->
             <div class="intro-y mt-0 box">
                 <form method="post" action="{{ route('seller.store.update', auth()->user()->stores->id) }}" class="space-y-3">
@@ -160,6 +155,9 @@
                 </form>
             </div>
             <!-- END: Display Information -->
+            <div class="w-full pt-4 sm:rounded-lg">
+                @include('seller.store.partials.update-bank-information-form')
+            </div>
         {{-- @include('seller.store.partials.delete-store-modal') --}}
     @else
         <div class="intro-y col-span-11 alert alert-primary alert-dismissible show flex items-center mb-6" role="alert">
@@ -190,39 +188,34 @@
 
         @section('script')
             <script>
+                $(document).ready(function (){
 
-                $("#editSelectCateStore").select2({
-                    placeholder:'Pilih Kategori Lapak',
-                    searchInputPlaceholder: 'Cari kategori...',
-                    language: {
-                        noResults: function () {
-                            return "Tidak ditemukan.";
-                        }
-                    }
-                });
-                $(document).ready(function () {
-                    $("#editSelectDistrictStore").select2({
-                        placeholder:'Pilih Kecamatan',
-                        searchInputPlaceholder: 'Cari Kecamatan...',
+                    const numericInputs = document.querySelectorAll('.numeric-input');
+                    numericInputs.forEach(function(input) {
+                        input.addEventListener('input', function(e) {
+                            e.target.value = e.target.value.replace(/[^0-9]/g, '');
+                        });
+                    });
+
+                    $("#editSelectCateStore").select2({
+                        placeholder:'Pilih Kategori Lapak',
+                        searchInputPlaceholder: 'Cari kategori...',
                         language: {
                             noResults: function () {
                                 return "Tidak ditemukan.";
                             }
                         }
                     });
-                    $("#editSelectVillageStore").select2({
-                        placeholder:'Pilih Desa',
-                        searchInputPlaceholder: 'Cari Desa...',
-                        language: {
-                            noResults: function () {
-                                return "Tidak ditemukan.";
+                    $(document).ready(function () {
+                        $("#editSelectDistrictStore").select2({
+                            placeholder:'Pilih Kecamatan',
+                            searchInputPlaceholder: 'Cari Kecamatan...',
+                            language: {
+                                noResults: function () {
+                                    return "Tidak ditemukan.";
+                                }
                             }
-                        }
-                    });
-
-                    $("#editSelectDistrictStore").change(function(){
-                        $('#editSelectVillageStore').html('');
-                        let id = $('#editSelectDistrictStore').val();
+                        });
                         $("#editSelectVillageStore").select2({
                             placeholder:'Pilih Desa',
                             searchInputPlaceholder: 'Cari Desa...',
@@ -230,24 +223,37 @@
                                 noResults: function () {
                                     return "Tidak ditemukan.";
                                 }
-                            },
-                            ajax: {
-                                url: "{{ url('indoregion/village')}}/"+ id,
-                                processResults: function({data}){
-                                    return {
-                                        results: $.map(data, function(item){
-                                            return {
-                                                id: item.id,
-                                                text: item.name
-                                            }
-                                        })
+                            }
+                        });
+
+                        $("#editSelectDistrictStore").change(function(){
+                            $('#editSelectVillageStore').html('');
+                            let id = $('#editSelectDistrictStore').val();
+                            $("#editSelectVillageStore").select2({
+                                placeholder:'Pilih Desa',
+                                searchInputPlaceholder: 'Cari Desa...',
+                                language: {
+                                    noResults: function () {
+                                        return "Tidak ditemukan.";
+                                    }
+                                },
+                                ajax: {
+                                    url: "{{ url('indoregion/village')}}/"+ id,
+                                    processResults: function({data}){
+                                        return {
+                                            results: $.map(data, function(item){
+                                                return {
+                                                    id: item.id,
+                                                    text: item.name
+                                                }
+                                            })
+                                        }
                                     }
                                 }
-                            }
+                            });
                         });
                     });
                 });
-
             </script>
         @endsection
 

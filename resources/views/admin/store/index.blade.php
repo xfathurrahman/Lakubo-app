@@ -6,7 +6,7 @@
 
         <div class="grid grid-cols-12 gap-6 mt-5">
             <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
-                <div class="dropdown" data-tw-placement="bottom-start">
+                {{-- <div class="dropdown" data-tw-placement="bottom-start">
                     <button class="dropdown-toggle btn px-2 box" aria-expanded="false" data-tw-toggle="dropdown">Aksi &emsp;
                         <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="plus"></i></span>
                     </button>
@@ -26,8 +26,8 @@
                             </li>
                         </ul>
                     </div>
-                </div>
-                <div class="hidden md:block mx-auto text-slate-500">
+                </div> --}}
+                <div class="hidden md:block mr-auto text-slate-500">
                     <div class="float-left" style="vertical-align: center;">
                         Menampilkan
                         {{ $stores->firstItem() }}
@@ -51,7 +51,7 @@
                     <thead>
                     <tr>
                         <th class="whitespace-nowrap">
-                            <input class="form-check-input" type="checkbox">
+                            #ID
                         </th>
                         <th class="whitespace-nowrap">PELAPAK</th>
                         <th class="text-center whitespace-nowrap">NAMA LAPAK</th>
@@ -64,12 +64,12 @@
                     @foreach($stores as $store)
                     <tr class="intro-x">
                         <td class="w-10">
-                            <input class="form-check-input" type="checkbox">
+                            {{ $store -> id }}
                         </td>
                         <td class="!py-3.5">
                             <div class="flex items-center">
                                 <div class="w-9 h-9 image-fit zoom-in">
-                                    <img alt="Midone - HTML Admin Template" class="rounded-lg border-white shadow-md tooltip" src="{{ asset('assets/images/profile-7.jpg') }}" title="Uploaded at 29 May 2022">
+                                    <img alt="Midone - HTML Admin Template" class="rounded-lg border-white shadow-md tooltip" src="{{ asset('storage/profile-photos/'. $store->users->profile_photo_path) }}" title="Uploaded at 29 May 2022">
                                 </div>
                                 <div class="ml-4">
                                     <a href="" class="font-medium whitespace-nowrap">{{ $store -> users -> name }}</a>

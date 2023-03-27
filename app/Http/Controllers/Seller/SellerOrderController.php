@@ -13,13 +13,14 @@ class SellerOrderController extends Controller
 {
     public function index(Request $request)
     {
-        $seller_id = auth()->user()->id;
+        $seller_id = auth()->user()->stores->id;
 
         // Mengambil status yang dipilih dari request, atau defaultnya adalah null
         $status = $request->input('status', null);
 
         // Membuat query builder untuk model Order dengan filter status
-        $query = Order::where('store_id', $seller_id)
+        $query = Order::query()
+            ->where('store_id', $seller_id)
             ->whereNotNull('status')
             ->orderBy('created_at', 'asc');
 
@@ -44,16 +45,17 @@ class SellerOrderController extends Controller
     }
 
     public function show($order_id) {
-        $order = Order::where('id', $order_id)->first();
+        $order = new Order();
+        $order = $order->find($order_id);
         return view('seller.orders.show', [
            'order' => $order
         ]);
-
     }
 
     public function confirmOrder($order_id): string
     {
-        $order = Order::find($order_id);
+        $order = new Order();
+        $order = $order->find($order_id);
         $order->status = 'confirmed';
         $order->update();
 
@@ -65,12 +67,13 @@ class SellerOrderController extends Controller
     public function rejectOrder(Request $request, $order_id): string
     {
         $reject_msg = $request->input('rejectMsg');
-        $order = Order::find($order_id);
+        $order = new Order();
+        $order = $order->find($order_id);
         $order->status = 'cancelled';
         $order->reject_msg = $reject_msg;
         $order->update();
 
-        $user = User::where('id',$order->user_id)->first();
+        $user = User::user()->where('id',$order->user_id)->first();
         $user->balance += $order->grand_total;
         $user->update();
 
@@ -88,7 +91,8 @@ class SellerOrderController extends Controller
     {
         $selectedStatus = $request->input('selectedStatus');
 
-        $order = Order::find($order_id);
+        $order = new Order();
+        $order = $order->find($order_id);
         $order->status = $selectedStatus;
         $order->update();
 
@@ -99,7 +103,8 @@ class SellerOrderController extends Controller
 
     public function updateResi(Request $request, $order_id)
     {
-        $order = Order::find($order_id);
+        $order = new Order();
+        $order = $order->find($order_id);
         if ($order === null) {
             return response()->json(['error' => "Order not found."], 404);
         }

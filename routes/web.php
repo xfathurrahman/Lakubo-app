@@ -72,6 +72,8 @@ Route::middleware(['auth', 'verified', 'role:admin'])->name('admin.')->prefix('a
     Route::put('/carousels/update/{id}', [CarouselController::class,'update'])->name('carousels.update');
     Route::delete('/carousels/delete/{id}', [CarouselController::class,'destroy'])->name('carousels.destroy');
     /*-----------------------------------------------Transactions-------------------------------------------------------*/
+    Route::get('/transactions/stores', [AdminTransactionController::class,'storeTransactions'])->name('transaction.stores');
+    Route::get('/transactions/customers', [AdminTransactionController::class,'customerTransactions'])->name('transaction.customers');
     Route::get('/transactions', [AdminTransactionController::class,'index'])->name('transactions.index');
     Route::put('/transactions/update/{id}', [AdminTransactionController::class,'update'])->name('transactions.update');
     Route::delete('/transactions/delete/{id}', [AdminTransactionController::class,'delete'])->name('transactions.delete');

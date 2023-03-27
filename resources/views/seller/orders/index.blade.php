@@ -4,6 +4,56 @@
         {{ Breadcrumbs::render('orders') }}
     @endsection
 
+    <style>
+        .select2.select2-container {
+            width: 200px !important;
+        }
+
+        .select2.select2-container .select2-selection {
+            box-shadow: 0 3px 20px #0000000b;
+            position: relative;
+            border-radius: 0.375rem;
+            border-color: transparent;
+            --tw-bg-opacity: 1;
+            background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            height: 38px;
+            margin-bottom: 5px;
+            outline: none !important;
+            transition: all .15s ease-in-out;
+        }
+
+        .select2.select2-container .select2-selection .select2-selection__arrow {
+            background: #f8f8f8;
+            border-left: 1px solid #ccc;
+            -webkit-border-radius: 0 3px 3px 0;
+            -moz-border-radius: 0 3px 3px 0;
+            border-radius: 0 3px 3px 0;
+            height: 38px;
+            width: 33px;
+        }
+
+        .select2.select2-container .select2-selection .select2-selection__rendered {
+            color: #333;
+            line-height: 38px;
+            padding-right: 33px;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 26px;
+            position: absolute;
+            top: -1px;
+            right: -1px;
+            width: 20px;
+        }
+
+        .select2-container .select2-dropdown .select2-results ul {
+            background: #fff;
+            border: 1px solid #cecece;
+        }
+    </style>
+
     <!-- BEGIN: Reject Notification Content -->
     <div id="reject-notification-content" class="toastify-content hidden flex"> <i class="text-success" data-lucide="check-circle"></i>
         <div class="ml-4 mr-4">
@@ -18,10 +68,10 @@
         <div class="intro-y col-span-12 flex justify-between items-center mt-2">
             <div class="flex w-full sm:w-auto">
                 <div class="w-48 relative text-slate-500 mr-2">
-                    <input type="text" class="input form-control rounded w-48 box pr-10" placeholder="Cari...">
+                    <input type="text" class="input form-control rounded w-14 sm:w-48 box pr-10" placeholder="Cari...">
                     <i class="w-4 h-4 absolute mt-2.5 mb-auto inset-y-0 mr-3 right-0" data-lucide="search"></i>
                 </div>
-                <select id="filterStatus">
+                <select id="filterStatus" class="form-select box ml-2">
                     <option value="">Semua</option>
                     <option value="awaiting_payment">Menunggu Pembayaran</option>
                     <option value="awaiting_confirm">Menunggu Konfirmasi</option>
@@ -31,22 +81,6 @@
                     <option value="completed">Selesai</option>
                     <option value="cancelled">Dibatalkan</option>
                 </select>
-            </div>
-            <div class="dropdown ml-2 md:ml-auto">
-                <button class="dropdown-toggle btn px-2 box" aria-expanded="false" data-tw-toggle="dropdown">
-                      <span class="w-5 h-5 flex items-center justify-center">
-                        <i class="w-4 h-4" data-lucide="plus"></i>
-                      </span>
-                </button>
-                <div class="dropdown-menu w-40">
-                    <ul class="dropdown-content">
-                        <li>
-                            <a href="" class="dropdown-item">
-                                <i data-lucide="file-text" class="w-4 h-4 mr-2"></i> Export Excel
-                            </a>
-                        </li>
-                    </ul>
-                </div>
             </div>
         </div>
 

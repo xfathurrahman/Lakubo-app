@@ -55,7 +55,7 @@
     @endsection
 
     <!-- BEGIN: Reject Notification Content -->
-    <div id="confirm-notification-content" class="toastify-content hidden flex">
+    <div id="confirm-notification-content" class="toastify-content hidden">
         <i class="text-success" data-lucide="check-circle"></i>
         <div class="ml-4 mr-4">
             <div class="font-medium">Terimakasih Telah Berbelanja di Lakubo!</div>
@@ -69,7 +69,7 @@
         <div class="intro-y col-span-12 flex justify-between items-center mt-2">
             <div class="flex w-full">
                 <div class="w-48 relative text-slate-500 mr-2">
-                    <input type="text" class="input form-control rounded w-48 box pr-10" placeholder="Cari...">
+                    <input type="text" class="input form-control rounded w-14 sm:w-48 box pr-10" placeholder="Cari...">
                     <i class="w-4 h-4 absolute mt-2.5 mb-auto inset-y-0 mr-3 right-0" data-lucide="search"></i>
                 </div>
                 <select id="filterStatus">

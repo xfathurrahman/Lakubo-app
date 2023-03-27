@@ -13,19 +13,19 @@
             </div>
         @endif
 
-    <!-- BEGIN: Reject Notification Content -->
+    <!-- BEGIN: Succcess Notification Content -->
     <div id="confirm-notification-content" class="toastify-content hidden flex">
         <i class="text-success" data-lucide="check-circle"></i>
         <div class="ml-4 mr-4">
-            <div class="font-medium">Terimakasih Telah Berbelanja di Lakubo!</div>
+            <div class="font-medium">Terimakasih Telah Berlapak di Lakubo!</div>
             <div class="text-slate-500 mt-1">Tempatnya jual - beli UMKM boyolali.</div>
         </div>
     </div>
-    <!-- END: Reject Notification Content -->
+    <!-- END: Succcess Notification Content -->
 
         <!-- BEGIN: Display Information -->
         <div class="intro-y mt-0">
-            <form method="post" action="{{ route('customer.withdraw.store') }}" class="space-y-3">
+            <form method="post" action="{{ route('seller.withdraw.store') }}" class="space-y-3">
                 @csrf
                 @method('post')
                 <div class="flex items-center p-2 border-b border-slate-200/60 dark:border-darkmode-400">
@@ -106,5 +106,15 @@
             </form>
         </div>
         <!-- END: Display Information -->
+
+        @section('script')
+            <script>
+                $(document).ready(function () {
+                    $('.numeric-input').on('input', function (event) {
+                        this.value = this.value.replace(/[^0-9]/g, '');
+                    });
+                });
+            </script>
+        @endsection
 
 </x-app-layout>

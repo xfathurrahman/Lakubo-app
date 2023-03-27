@@ -27,7 +27,7 @@ class OrderController extends Controller
 
         // Membuat query builder untuk model Order dengan filter status
         $query = Order::with('orderItems')->where('user_id', Auth::id())
-            ->whereNotNull('status')
+            // ->whereNotNull('status')
             ->orderBy('created_at', 'desc');
 
         if ($status) {

@@ -1,9 +1,7 @@
 <x-app-layout>
-
     @section('breadcrumbs')
-        {{ Breadcrumbs::render('my-order-detail') }}
+        {{ Breadcrumbs::render('seller-order-detail') }}
     @endsection
-
         <!-- BEGIN: Reject Confirmation Modal -->
         <div id="reject-confirmation-modal" class="modal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">

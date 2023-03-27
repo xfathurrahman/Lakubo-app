@@ -6,7 +6,7 @@
 
         <div class="grid grid-cols-12 gap-6 mt-5">
             <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
-                <div class="dropdown" data-tw-placement="bottom-start">
+                {{-- <div class="dropdown" data-tw-placement="bottom-start">
                     <button class="dropdown-toggle btn px-2 box" aria-expanded="false" data-tw-toggle="dropdown">Aksi &emsp;
                         <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="plus"></i></span>
                     </button>
@@ -26,9 +26,9 @@
                             </li>
                         </ul>
                     </div>
-                </div>
-                <div class="hidden md:block mx-auto text-slate-500">
-                    <div class="float-left" style="vertical-align: center;">
+                </div> --}}
+                <div class="hidden md:block mr-auto text-slate-500">
+                    <div class="float-left">
                         Menampilkan
                         {{ $products->firstItem() }}
                         {{---
@@ -112,7 +112,7 @@
                     @else
                         <tr>
                             <td colspan="6">
-                                <img class="max-w-3xl max-h-52 mx-auto"
+                                <img class="max-w-3xl max-h-52 mx-auto !shadow-none"
                                      src="{{ asset('assets/images/app/not-found-store.png') }}" alt="iklan kosong">
                                 <p class="text-center text-dark py-5">Belum ada produk yang diunggah.</p>
                             </td>

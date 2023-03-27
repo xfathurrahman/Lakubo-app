@@ -12,66 +12,73 @@ Breadcrumbs::for('Homepage', function (BreadcrumbTrail $trail) {
     $trail->push('Beranda', route('home'));
 });
 
-/*BEGIN: Admin Page*/
+/*------------------------------------------------------------------------------*/
+/*-----------------------------BEGIN: Admin Page--------------------------------*/
+/*------------------------------------------------------------------------------*/
 
-// Dashboard
 Breadcrumbs::for('admin_dashboard', function (BreadcrumbTrail $trail) {
-    $trail->parent('Homepage');
-    $trail->push('Admin Dashboard', route('admin.dashboard'));
+    $trail->parent('Homepage'); // Beranda
+    $trail->push('Admin Dashboard', route('admin.dashboard')); // Admin Dashboard
 });
 
-// Pengguna
 Breadcrumbs::for('users', function (BreadcrumbTrail $trail) {
-    $trail->parent('admin_dashboard');
-    $trail->push('Daftar Pengguna', url('admin/users'));
+    $trail->parent('admin_dashboard'); // Admin Dashboard
+    $trail->push('Daftar Pengguna', url('admin/users')); // Daftar Pengguna
 });
 
-// Pengguna > Edit Pengguna
 Breadcrumbs::for('user-edit', function (BreadcrumbTrail $trail) {
-    $trail->parent('users');
-    $trail->push('Edit Pengguna', url('#'));
+    $trail->parent('users'); // Daftar Pengguna
+    $trail->push('Edit Pengguna', url('#')); // Pengguna > Edit Pengguna
 });
 
-// Products
 Breadcrumbs::for('admin_products', function (BreadcrumbTrail $trail) {
-    $trail->parent('admin_dashboard');
-    $trail->push('Daftar Produk', url('admin/products'));
+    $trail->parent('admin_dashboard'); // Admin Dashboard
+    $trail->push('Daftar Produk', url('admin/products')); // Daftar Produk
 });
 
-// Stores
 Breadcrumbs::for('admin_stores', function (BreadcrumbTrail $trail) {
-    $trail->parent('admin_dashboard');
-    $trail->push('Daftar Pelapak', url('admin/stores'));
+    $trail->parent('admin_dashboard'); // Admin Dashboard
+    $trail->push('Daftar Pelapak', url('admin/stores')); // Daftar Pelapak
 });
 
 // Categories
 Breadcrumbs::for('categories', function (BreadcrumbTrail $trail) {
-    $trail->parent('admin_dashboard');
-    $trail->push('Kelola Kategori', url('admin/categories'));
+    $trail->parent('admin_dashboard'); // Admin Dashboard
+    $trail->push('Kelola Kategori', url('admin/categories')); // Kelola Kategori
+});
+
+// Transaksi Pelanggan
+Breadcrumbs::for('customer-transactions', function (BreadcrumbTrail $trail) {
+    $trail->parent('admin_dashboard'); // Admin Dashboard
+    $trail->push('Transaksi Pelanggan', url('admin/transactions/customers')); // Transaksi Pelanggan
+});
+
+// Transaksi Lapak
+Breadcrumbs::for('store-transactions', function (BreadcrumbTrail $trail) {
+    $trail->parent('admin_dashboard'); // Admin Dashboard
+    $trail->push('Transaksi Lapak', url('admin/transactions/stores')); // Transaksi Lapak
 });
 
 // Kelola Peran
 Breadcrumbs::for('roles', function (BreadcrumbTrail $trail) {
-    $trail->parent('admin_dashboard');
-    $trail->push('Kelola Peran', url('admin/roles'));
+    $trail->parent('admin_dashboard'); // Admin Dashboard
+    $trail->push('Kelola Peran', url('admin/roles')); // Kelola Peran
 });
 
 // Kelola Hak Akses
 Breadcrumbs::for('permissions', function (BreadcrumbTrail $trail) {
-    $trail->parent('admin_dashboard');
-    $trail->push('Kelola Hak Akses', url('admin/permissions'));
+    $trail->parent('admin_dashboard'); // Admin Dashboard
+    $trail->push('Kelola Hak Akses', url('admin/permissions')); // Kelola Hak Akses
 });
 
-/*END: Admin Page*/
-
-/////////////////////////////////////////////////////////////////////////////////
-
-/*BEGIN: Seller Page*/
+/*------------------------------------------------------------------------------*/
+/*-----------------------------BEGIN: Seller Page--------------------------------*/
+/*------------------------------------------------------------------------------*/
 
 // Dashboard
 Breadcrumbs::for('seller_dashboard', function (BreadcrumbTrail $trail) {
-    $trail->parent('Homepage');
-    $trail->push('Seller Dashboard', route('seller.dashboard'));
+    $trail->parent('Homepage'); // Beranda
+    $trail->push('Dashboard Lapak', route('seller.dashboard')); // Dashboard Lapak
 });
 
 // Store
@@ -104,34 +111,34 @@ Breadcrumbs::for('orders', function (BreadcrumbTrail $trail) {
     $trail->push('Pesanan', url('seller/orders'));
 });
 
+Breadcrumbs::for('seller-order-detail', function (BreadcrumbTrail $trail) {
+    $trail->parent('orders');
+    $trail->push('Detail Pesanan ', url('#')); // Pesanan > detail
+});
+
 // Pesanan
 Breadcrumbs::for('store-withdrawals', function (BreadcrumbTrail $trail) {
     $trail->parent('seller_dashboard');
     $trail->push('Penarikan dana', url('seller/withdrawals'));
 });
 
-/*END: Seller Page*/
+/*-------------------------------------------------------------------------------*/
+/*-----------------------------BEGIN: Customer Page------------------------------*/
+/*-------------------------------------------------------------------------------*/
 
-/////////////////////////////////////////////////////////////////////////////////
-
-/*BEGIN: Customer Page*/
-
-// Profile edit
 Breadcrumbs::for('profile', function (BreadcrumbTrail $trail) {
     $trail->parent('Homepage');
-    $trail->push('Akun Saya', route('profile.edit'));
+    $trail->push('Akun Saya', route('profile.edit')); // Profile edit
 });
 
-// Pesanan saya
 Breadcrumbs::for('my-order', function (BreadcrumbTrail $trail) {
     $trail->parent('profile');
-    $trail->push('Pesanan Saya', route('customer.orders'));
+    $trail->push('Pesanan Saya', route('customer.orders')); // Pesanan saya
 });
 
-// Pesanan saya / detail
 Breadcrumbs::for('my-order-detail', function (BreadcrumbTrail $trail) {
-    $trail->parent('profile');
-    $trail->push('Detail Pesanan ', url('#'));
+    $trail->parent('my-order');
+    $trail->push('Detail Pesanan ', url('#')); // Pesanan saya > detail
 });
 
 // Transaksi saya

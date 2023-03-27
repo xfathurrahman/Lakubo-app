@@ -28,7 +28,6 @@ return new class extends Migration
             $table->string('bank_account_name')->nullable();
             $table->string('bank_account_number')->nullable();
             $table->bigInteger('balance')->default(0);
-            $table->text('profile_photo_path')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

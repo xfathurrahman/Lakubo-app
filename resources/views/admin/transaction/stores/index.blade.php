@@ -51,14 +51,14 @@
     </style>
 
     @section('breadcrumbs')
-        {{ Breadcrumbs::render('transaction') }}
+        {{ Breadcrumbs::render('store-transactions') }}
     @endsection
 
     <!-- BEGIN: Reject Notification Content -->
     <div id="confirm-notification-content" class="toastify-content hidden flex">
         <i class="text-success" data-lucide="check-circle"></i>
         <div class="ml-4 mr-4">
-            <div class="font-medium">Terimakasih Telah Berlapak di Lakubo!</div>
+            <div class="font-medium">Lakubo</div>
             <div class="text-slate-500 mt-1">Tempatnya jual - beli UMKM boyolali.</div>
         </div>
     </div>
@@ -74,6 +74,7 @@
                 </div>
                 <select id="filterStatus" class="form-select box ml-2">
                     <option value="">Semua</option>
+                    <option value="purchase">Pembelian</option>
                     <option value="selling">Penjualan</option>
                     <option value="withdrawal">Penarikan</option>
                 </select>
@@ -94,7 +95,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                @include('seller.transaction.partials.transaction_table', ['transactions' => $transactions])
+                @include('admin.transaction.partials.transaction_store_table', ['transactions' => $transactions])
                 </tbody>
             </table>
         </div>
