@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Customer\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -15,16 +16,14 @@ class OrderController extends Controller
 
         if ($hashed === $request->signature_key) {
             if ($request->transaction_status === 'capture' || $request->transaction_status === 'settlement'){
-                $order = Order::find($request->order_id);
-
+                $order = Order::query()->find($request->order_id);
                 // mengurangi stok produk terkait
                 foreach($order->orderItems as $order_item) {
-                    $product = Product::find($order_item->product_id);
-                    $product->stock -= $order_item->quantity;
+                    $product = Product::query()->find($order_item->product_id);
+                    $product->quantity -= $order_item->quantity;
                     $product->save();
                 }
-
-                // mengupdate status order
+                // update order
                 $order->update([
                     'transaction_status' => 'completed',
                     'status' => 'awaiting_confirm',
@@ -36,7 +35,7 @@ class OrderController extends Controller
                 ]);
             }
             if ($request->transaction_status === 'cancel' || $request->transaction_status === 'deny' || $request->transaction_status === 'expire'){
-                $order = Order::find($request->order_id);
+                $order = Order::query()->find($request->order_id);
                 $order->update([
                     'transaction_status' => 'cancel',
                     'status' => 'cancelled'

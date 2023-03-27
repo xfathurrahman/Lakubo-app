@@ -81,6 +81,10 @@
                                         </button>
                                     </div>
                                 @endif
+                            @else
+                                <div class="absolute inset-1/2 bg-red-400  w-full flex justify-center items-center">
+                                    <p>Habis</p>
+                                </div>
                             @endif
                                 <img class="image-product" src="{{ asset("storage/product-images")."/".$product -> productImage -> image_path }}" alt="Image from {{ $product->stores->name }}">
                                 <div class="card-body bg-red-100">

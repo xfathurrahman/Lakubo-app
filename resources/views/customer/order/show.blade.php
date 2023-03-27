@@ -66,7 +66,7 @@
                             @elseif($order -> transaction_status === 'choosing_payment')
                                 <span class="bg-red-400 text-white px-2 w-full text-center rounded-md">Memilih</span>
                             @elseif($order -> transaction_status === 'completed')
-                                <span class="bg-green-500 text-white px-2 rounded-md">Berhasil</span>
+                                <span class="bg-green-500 text-white w-full text-center px-2 rounded-md">Berhasil</span>
                             @endif
                         </div>
                     </div>
@@ -77,7 +77,7 @@
                                     <span class="w-32 sm:w-40 inline-flex"><i class="fa-solid fa-box mt-0.5 mr-2 text-slate-500"></i>Status Pesanan</span>:
                                 </div>
                             </div>
-                            <span class="bg-blue-500 text-white px-2 rounded-md">Menunggu Konfirmasi.</span>
+                            <span class="bg-blue-500 text-white w-full text-center px-2 rounded-md">Menunggu Konfirmasi</span>
                         </div>
                     @elseif($order->status === 'confirmed')
                         <div class="flex items-center mt-2">
@@ -236,7 +236,7 @@
                                     </div>
                                 </div>
                                 <div class="flex -mt-4 justify-center items-center">
-                                    <p class="font-medium"> Kode Pembayaran QRIS </p> 
+                                    <p class="font-medium"> Kode Pembayaran QRIS </p>
                                     <a href="{{ $barcodeUrl }}" download="qris.png" class="ml-2 inline-flex text-red-400 items-center underline">
                                         Unduh<i class="fa-solid fa-cloud-arrow-down ml-1"></i>
                                     </a>
