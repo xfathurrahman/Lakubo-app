@@ -64,7 +64,7 @@ class CheckoutController extends Controller
         $shipping_agent = $request->input('shipping_agent');
         $cart_id = $request->input('cart_id');
 
-        $cart = Cart::find($cart_id);
+        $cart = Cart::query()->find($cart_id);
         $totalWeight = 0;
         $subtotalWeight = 0;
         foreach ($cart->cartItems as $item) {
@@ -72,7 +72,7 @@ class CheckoutController extends Controller
         }
 
         $totalWeight += $subtotalWeight;
-        $userAddress  = UserAddress::find(Auth::id());
+        $userAddress  = UserAddress::query()->find(Auth::id());
         $userRegency  = str_replace(array('KABUPATEN ', 'KOTA '), '', $userAddress->regency->name);
         $searchQuery  = $userRegency;
         $city         = $this->searchCityByName($searchQuery);
@@ -147,6 +147,7 @@ class CheckoutController extends Controller
                 'phone' => Auth::user()->phone,
             ),
         );
+
         $snapToken = Snap::getSnapToken($params);
 
         // simpan data pesanan ke database

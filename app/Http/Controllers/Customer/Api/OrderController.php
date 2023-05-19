@@ -38,7 +38,8 @@ class OrderController extends Controller
                 $order = Order::query()->find($request->order_id);
                 $order->update([
                     'transaction_status' => 'cancel',
-                    'status' => 'cancelled'
+                    'status' => 'cancelled',
+                    'reject_msg' => 'Dibatalkan otomatis oleh sistem.'
                 ]);
             }
         }

@@ -32,22 +32,37 @@
                             <div class="truncate sm:whitespace-normal flex items-center mt-3"> <i data-lucide="instagram" class="w-4 h-4 mr-2"></i> {{ auth()->user()->phone }} </div>
                         </div>
                     </div>
-                    <div class="mt-6 lg:mt-0 flex-1 flex items-center justify-center px-5 border-t lg:border-0 border-slate-200/60 dark:border-darkmode-400 pt-5 lg:pt-0">
-                        <div class="text-center rounded-md w-20 py-3">
-                            <div class="font-medium text-primary text-xl">{{ count(auth()->user()->stores->products) }}</div>
-                            <div class="text-slate-500">Produk</div>
-                        </div>
-                        <div class="text-center rounded-md w-20 py-3">
-                            <div class="font-medium text-primary text-xl">{{ count(auth()->user()->stores->orders) }}</div>
-                            <div class="text-slate-500">Pesanan</div>
-                        </div>
-                        <div class="text-center rounded-md w-20 py-3">
-                            <div class="font-medium text-primary text-xl">
-                                {{ $countSuccessOrders }}
+
+                    <div class="p-3">
+                        <div class="report-box zoom-in h-full before:bg-primary/20">
+                            <div class="box p-3 h-full bg-primary">
+                                <div class="text-white text-opacity-70 dark:text-slate-300 flex items-center leading-3">
+                                    SALDO TERSEDIA
+                                    <i data-lucide="alert-circle" class="tooltip w-4 h-4 ml-1.5" title="Total dari seluruh penjualan: @currency($totalSales)"></i>
+                                </div>
+                                <div class="text-white mt-2 relative text-2xl font-medium leading-5">
+                                    @currency(auth()->user()->stores->balance)
+                                </div>
+                                <div class="mt-2 flex-1 flex items-center text-white justify-center px-2 border-t border-slate-200/60 dark:border-darkmode-400">
+                                    <div class="text-center rounded-md w-20 pt-0.5">
+                                        <div class="font-medium text-xl">{{ count(auth()->user()->stores->products) }}</div>
+                                        <div class="text-white">Produk</div>
+                                    </div>
+                                    <div class="text-center rounded-md w-20 pt-0.5">
+                                        <div class="font-medium text-xl">{{ count(auth()->user()->stores->orders) }}</div>
+                                        <div class="text-white">Pesanan</div>
+                                    </div>
+                                    <div class="text-center rounded-md w-20 pt-0.5">
+                                        <div class="font-medium text-xl">
+                                            {{ $countSuccessOrders }}
+                                        </div>
+                                        <div class="text-white">Penjualan</div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="text-slate-500">Penjualan</div>
                         </div>
                     </div>
+
                 </div>
             </div>
             <!-- END: Profile Info -->

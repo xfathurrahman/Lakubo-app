@@ -4,14 +4,18 @@
         {{ Breadcrumbs::render('users') }}
     @endsection
 
-    <div class="py-12 w-full">
-        <div class="mx-auto sm:px-3 lg:px-5">
-            <div class="grid grid-cols-12 gap-6 mt-10">
-                <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
+    <h2 class="intro-y text-lg font-medium mt-5">
+        Daftar Pengguna
+    </h2>
+
+    <div class="pb-10 w-full">
+        <div class="mx-auto">
+            <div class="my-5">
+                <div class="intro-y flex flex-wrap sm:flex-nowrap items-center mt-2">
 
                     <div class="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0">
                         <div class="w-full relative text-slate-500 border-2 rounded-lg">
-                            <input type="text" class="form-control w-56 box pr-10" placeholder="Cari pengguna...">
+                            <input type="text" id="searchInput" class="form-control w-56 box pr-10" placeholder="Cari pengguna...">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="search" class="lucide lucide-search w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0" data-lucide="search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                         </div>
                     </div>
@@ -41,42 +45,12 @@
                             </button>
                         </div>
                     @endif
-
                 </div>
 
-                <!-- BEGIN: Users Layout -->
-                @foreach ($users as $user)
-                    <div class="intro-y col-span-12 md:col-span-6">
-                        <div class="box">
-                            <div class="flex flex-col lg:flex-row items-center p-5">
-                                <div class="w-24 h-24 lg:w-12 lg:h-12 image-fit lg:mr-1">
-                                    <img alt="Midone - HTML Admin Template" class="rounded-full" src="http://rubick.left4code.com/dist/images/profile-8.jpg">
-                                </div>
-                                <div class="lg:ml-2 lg:mr-auto text-center lg:text-left mt-3 lg:mt-0">
-                                    <a href="" class="font-medium">{{ $user->name }}</a>
-                                    <div class="text-slate-500 text-xs mt-0.5">{{ $user->email }}</div>
-                                    @foreach ($user->roles as $user_role)
-                                        <span class="bg-green-400 text-xs px-1 rounded text-gray-50">{{$user_role->name}}</span>
-                                    @endforeach
-                                </div>
-                                <div class="flex mt-4 lg:mt-0">
-                                    <a href="{{ route('admin.users.show', $user->id) }}"
-                                       class="btn btn-outline-secondary mr-2">Edit</a>
-                                    <div class="text-center">
-                                        <a href="#"
-                                           data-tw-toggle="modal"
-                                           data-tw-target="#deleteUserModal-{{ $user->id }}"
-                                           class="btn btn-primary delete"
-                                           data-user_id="{{ $user->id }}"
-                                        >Hapus</a>
-                                    </div>
-                                    <!-- END: Modal Toggle -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-                <!-- BEGIN: Users Layout -->
+                <div id="userList" class="mt-5">
+                    @include('admin.users.partials.user_list')
+                </div>
+
             </div>
 
             @foreach($users as $user)
@@ -104,13 +78,34 @@
         </div>
     </div>
 
-        @section('script')
-            {{--<script>
-                $(document).on('click','.delete',function(){
-                    let id = $(this).data('user_id');
-                    $('#delete_user').attr('action', 'users/' + id);
+
+    @section('script')
+    <script>
+        $(document).ready(function() {
+            $('#searchInput').on('input', function() {
+                var searchQuery = $(this).val();
+
+                $.ajax({
+                    url: '{{ route('admin.users.search') }}',
+                    method: 'GET',
+                    data: { search: searchQuery },
+                    beforeSend: function() {
+                        // Tambahkan tindakan sebelum permintaan dikirim, seperti menampilkan ikon loading.
+                    },
+                    success: function(response) {
+                        // Tangani respons yang diterima dari server.
+                        $('#userList').html(response);
+                    },
+                    error: function(xhr, status, error) {
+                        // Tangani kesalahan jika permintaan gagal.
+                    }
                 });
-            </script>--}}
-        @endsection
+            });
+        });
+    </script>
+
+    @endsection
+
+
 
 </x-app-layout>

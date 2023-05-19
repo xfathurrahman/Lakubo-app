@@ -44,21 +44,25 @@
         <!-- END: Delete Confirmation Modal -->
 
         <!-- BEGIN: Notification Content -->
-        <div id="success-notification-content" class="toastify-content hidden flex">
-            <i class="text-success" data-lucide="check-circle"></i>
-            <div class="ml-4 mr-4">
-                <div class="font-medium">Status Disimpan!</div>
-                <div class="text-slate-500 mt-1">Status Pesanan berhasil di ubah.</div>
+        <div id="success-notification-content" class="toastify-content hidden">
+            <div class="flex">
+                <i class="text-success" data-lucide="check-circle"></i>
+                <div class="ml-4 mr-4">
+                    <div class="font-medium">Status Disimpan!</div>
+                    <div class="text-slate-500 mt-1">Status Pesanan berhasil di ubah.</div>
+                </div>
             </div>
         </div>
         <!-- END: Notification Content -->
 
         <!-- BEGIN: Notification Content -->
-        <div id="success-confirm-content" class="toastify-content hidden flex">
-            <i class="text-success" data-lucide="check-circle"></i>
-            <div class="ml-4 mr-4">
-                <div class="font-medium">Pesanan Dikonfirmasi!</div>
-                <div class="text-slate-500 mt-1">Segera siapkan produk untuk dikirim ke pelanggan.</div>
+        <div id="success-confirm-content" class="toastify-content hidden">
+            <div class="flex">
+                <i class="text-success" data-lucide="check-circle"></i>
+                <div class="ml-4 mr-4">
+                    <div class="font-medium">Pesanan Dikonfirmasi!</div>
+                    <div class="text-slate-500 mt-1">Segera siapkan produk untuk dikirim ke pelanggan.</div>
+                </div>
             </div>
         </div>
         <!-- END: Notification Content -->

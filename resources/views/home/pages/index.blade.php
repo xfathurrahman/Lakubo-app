@@ -45,8 +45,9 @@
 
     @if (count($products) > 0)
         <div class="carousel-product py-4">
-            <div class="mb-2 text-center">
+            <div class="mb-2 inline-flex">
                 <h4 class="mx-4 mb-4 font-semibold">Produk Terbaru</h4>
+                <a href="{{ route('product.detail.new') }}" class="h-6 flex items-center bg-red-400 rounded-lg text-white text-sm px-2 text-decoration-none">Lihat Semua</a>
                 <hr>
             </div>
             <div class="owl-carousel sc-products-carousel owl-theme mb-8">
@@ -54,38 +55,39 @@
                     @php
                         $isAuthenticated = auth()->check();
                         $isSeller = $isAuthenticated && auth()->user()->hasRole('seller');
+                        $isAdmin = $isAuthenticated && auth()->user()->hasRole('admin');
                         $isProductStoreSameAsUserStore = $isSeller && $product->stores->id === auth()->user()->stores->id;
-                        $canEditProduct = $isProductStoreSameAsUserStore;
+                        $canEditProduct = $isProductStoreSameAsUserStore && !$isAdmin;
                     @endphp
-                    <div class="item ml-2">
-                        <div class="card shadow-xl bg-gray-200">
-                            <div class="date-option bg-red-400 text-center">
-                                <span class="date-post">
-                                    <p class="mb-5">{{ $product -> created_at -> diffForHumans() }}</p>
-                                </span>
-                            </div>
-                            @if ($product->quantity > 0)
-                                @if ($canEditProduct)
-                                    <a href="{{ route('seller.products.edit', $product->id) }}" class="add-to-cart product_data">
-                                        <i class="fa-solid fa-pencil text-white"></i>
-                                    </a>
-                                @else
-                                    <div class="add-to-cart product_data bg-red-400">
-                                        <button>
-                                            <input type="hidden" class="qty_input" name="product_qty" value="1">
-                                            <input type="hidden" class="prod_id" name="product_id" value="{{ $product->id }}">
-                                            <input type="hidden" class="store_id" name="store_id" value="{{ $product->stores->id }}">
-                                            <button type="button" class="btn addToCartBtn">
-                                                <i class="fa fa-cart-plus text-white" aria-hidden="true"></i>
-                                            </button>
-                                        </button>
-                                    </div>
-                                @endif
-                            @else
-                                <div class="absolute inset-1/2 bg-red-400  w-full flex justify-center items-center">
-                                    <p>Habis</p>
+                        <div class="item ml-2">
+                            <div class="card shadow-xl bg-gray-200">
+                                <div class="date-option bg-red-400 text-center">
+                                    <span class="date-post">
+                                        <p class="mb-5">{{ $product->created_at->diffForHumans() }}</p>
+                                    </span>
                                 </div>
-                            @endif
+                                @unless ($isAdmin)
+                                    @if ($product->quantity <= 0)
+                                        <div class="absolute inset-y-1/4 inset-1 h-fit text-center bg-red-400 bg-opacity-50 w-full text-white rounded-sm">HABIS</div>
+                                    @else
+                                        @if ($canEditProduct)
+                                            <a href="{{ route('seller.products.edit', $product->id) }}" class="add-to-cart product_data">
+                                                <i class="fa-solid fa-pencil text-white"></i>
+                                            </a>
+                                        @else
+                                            <div class="add-to-cart product_data bg-red-400">
+                                                <button>
+                                                    <input type="hidden" class="qty_input" name="product_qty" value="1">
+                                                    <input type="hidden" class="prod_id" name="product_id" value="{{ $product->id }}">
+                                                    <input type="hidden" class="store_id" name="store_id" value="{{ $product->stores->id }}">
+                                                    <button type="button" class="btn addToCartBtn">
+                                                        <i class="fa fa-cart-plus text-white" aria-hidden="true"></i>
+                                                    </button>
+                                                </button>
+                                            </div>
+                                        @endif
+                                    @endif
+                                @endunless
                                 <img class="image-product" src="{{ asset("storage/product-images")."/".$product -> productImage -> image_path }}" alt="Image from {{ $product->stores->name }}">
                                 <div class="card-body bg-red-100">
                                     <div class="relative overflow-hidden py-0.5 rounded-br-lg bg-red-400 shadow-lg">
@@ -120,7 +122,6 @@
                     </div>
                 @endforeach
             </div>
-            <a href="{{ route('product.detail.new') }}" class="absolute bottom-0 right-0 h-8 bg-red-400 rounded-tl-lg rounded-br-lg flex items-center text-white text-sm px-2 text-decoration-none">Lihat Semua</a>
         </div>
     @endif
 

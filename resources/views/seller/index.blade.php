@@ -25,10 +25,10 @@
                                         <div class="box p-5 h-full bg-primary">
                                             <div class="text-white text-opacity-70 dark:text-slate-300 flex items-center leading-3 mt-6">
                                                 SALDO TERSEDIA
-                                                <i data-lucide="alert-circle" class="tooltip w-4 h-4 ml-1.5" title="Total nilai dari seluruh penjualan: @currency(1234567)"></i>
+                                                <i data-lucide="alert-circle" class="tooltip w-4 h-4 ml-1.5" title="Total dari seluruh penjualan: @currency($totalSales)"></i>
                                             </div>
                                             <div class="text-white mt-6 relative text-2xl font-medium leading-5">
-                                                @currency(1234567)
+                                                @currency(auth()->user()->stores->balance)
                                             </div>
                                         </div>
                                     </div>
@@ -40,7 +40,7 @@
                                                 <i data-lucide="shopping-cart" class="report-box__icon text-primary"></i>
                                                 <div class="ml-auto">
                                                     <a class="report-box__indicator bg-primary cursor-pointer"> Lihat Semua
-                                                        <i data-lucide="chevron-down" class="w-4 h-4 ml-0.5"></i>
+                                                        <i class="fa-solid fa-arrow-right ml-1"></i>
                                                     </a>
                                                 </div>
                                             </div>
@@ -56,7 +56,7 @@
                                                 <i data-lucide="credit-card" class="report-box__icon text-pending"></i>
                                                 <div class="ml-auto">
                                                     <a class="report-box__indicator bg-primary cursor-pointer"> Lihat Semua
-                                                        <i data-lucide="chevron-down" class="w-4 h-4 ml-0.5"></i>
+                                                        <i class="fa-solid fa-arrow-right ml-1"></i>
                                                     </a>
                                                 </div>
                                             </div>
@@ -72,7 +72,7 @@
                                                 <i data-lucide="monitor" class="report-box__icon text-warning"></i>
                                                 <div class="ml-auto">
                                                     <a class="report-box__indicator bg-primary cursor-pointer"> Lihat Semua
-                                                        <i data-lucide="chevron-down" class="w-4 h-4 ml-0.5"></i>
+                                                        <i class="fa-solid fa-arrow-right ml-1"></i>
                                                     </a>
                                                 </div>
                                             </div>
@@ -96,15 +96,24 @@
                                     </a>
                                 </div>
                             </div>
-                            <div class="intro-y box p-5 mt-12 sm:mt-5">
-                                <div class="capitalize_address lg:-mb-3 mt-1 lg:mt-0 bg-gray-200 rounded-md p-2 lg:bg-transparent lg:p-0">
+                            <div class="intro-y box p-3 mt-12 sm:mt-5">
+                                <div class="capitalize_address lg:-mb-3 mt-1 lg:mt-0 bg-gray-200 rounded-md px-2 pb-3 lg:bg-transparent lg:p-0">
                                     {{ Auth::user()->stores->storeAddresses->detail_address }},
                                     {{ Auth::user()->stores->storeAddresses->village->name }},
                                     {{ Auth::user()->stores->storeAddresses->district->name }},
                                     {{ Auth::user()->stores->storeAddresses->regency->name }},
                                     {{ Auth::user()->stores->storeAddresses->province->name }}.
                                 </div>
-                                <div class="mt-5 bg-slate-200 rounded-md"></div>
+                                @if(Auth::user()->stores->storeAddresses->embedded_map)
+                                    <div class="w-full h-60 overflow-hidden">{!! Auth::user()->stores->storeAddresses->embedded_map !!}</div>
+                                @else
+                                    <div class="w-full text-center flex justify-center items-center text-gray-400 mt-2 h-64 overflow-hidden bg-gray-100 rounded-sm">
+                                        <div class="sm:flex sm:items-center">
+                                            <i class="fa-solid fa-map-location-dot text-3xl mr-2"></i>
+                                            <p class="mt-1">Anda tidak menyematkan Lokasi UMKM, <a class="text-blue-500" href="{{ route('seller.store.index') }}">Klik disini</a> untuk menyematkan.</p>
+                                        </div>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                         <!-- END: Official Store -->
@@ -116,7 +125,7 @@
                                 </h2>
                             </div>
                             <div class="mt-5">
-                                @foreach($topProductSales as $item)
+                                @foreach($topProductSales->take(3) as $item)
                                     <div class="intro-y">
                                         <div class="box px-4 py-4 mb-3 flex items-center zoom-in">
                                             <div class="w-10 h-10 flex-none image-fit rounded-md overflow-hidden">
@@ -147,9 +156,9 @@
                                     </h2>
                                 </div>
                                 <div class="mt-5">
-                                    @foreach($transactionSuccess as $transaction)
+                                    @foreach($transactionSuccess->take(7) as $transaction)
                                         <div class="intro-x">
-                                            <div class="box px-5 py-3 mb-3 flex items-center zoom-in">
+                                            <div class="box px-5 py-3 mb-2.5 flex items-center zoom-in">
                                                 <div class="w-10 h-10 flex-none image-fit rounded-full overflow-hidden">
                                                     <img alt="user-profile" src="{{ asset('assets/images/preview-1.jpg') }}">
                                                 </div>
@@ -164,7 +173,7 @@
                                             </div>
                                         </div>
                                     @endforeach
-                                    <a href="" class="intro-x w-full block text-center rounded-md py-3 border border-dotted border-slate-400 dark:border-darkmode-300 text-slate-500">Lihat Semua</a>
+                                    <a href="{{ route('seller.transaction.index') }}" class="intro-x w-full block text-center rounded-md py-3 border border-dotted border-slate-400 dark:border-darkmode-300 text-slate-500">Lihat Semua</a>
                                 </div>
                             </div>
                             <!-- END: Transactions -->

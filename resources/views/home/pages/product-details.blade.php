@@ -23,6 +23,9 @@
                         <img class="slide rounded-2xl md:mt-0 h-full w-full {{ $first ? ' block' : ' hidden' }}"
                              src="{{ asset('storage/product-images').'/'.$image->image_path }}" alt="product">
                         @php $first = false; @endphp
+                        @if ($product->quantity === 0 || $product->quantity < 0)
+                            <div class="absolute inset-y-1/2 h-fit text-center bg-red-400 bg-opacity-20 w-full text-white rounded-sm">HABIS</div>
+                        @endif
                     @endforeach
                 </div>
                 <div class="flex justify-center mt-4">
@@ -41,8 +44,7 @@
             </div>
             <div class="w-full lg:w-3/5 p-4">
                 <div class="h-14 flex items-center">
-                    <span
-                        class="text-sm sm:text-lg lg:text-xl text-red-400 font-bold line-clamp-2 text-justify lg:text-left">{{ $product -> name }}</span>
+                    <span class="text-sm sm:text-lg lg:text-xl text-red-400 font-bold line-clamp-2 text-justify lg:text-left">{{ $product -> name }}</span>
                 </div>
                 <div class="h-10 flex items-center">
                     <div class="flex justify-between w-full items-center">
@@ -91,7 +93,7 @@
                                             </span>:
                                         </div>
                                     </div>
-                                    {{ $product -> quantity}}
+                                    {{ $product->quantity}}
                                 </div>
                                 <div class="flex items-center">
                                     <div class="inline-flex mr-2">
@@ -102,7 +104,7 @@
                                             </span>:
                                         </div>
                                     </div>
-                                    {{ $product -> weight}} Gram
+                                    {{ $product->weight}} Gram
                                 </div>
                             </div>
                             <div id="editor">{!! $product->description !!}</div>
@@ -113,8 +115,7 @@
                                 Kecamatan {{ $district }}, {{ $regency }}, {{ $province }}.
                             </div>
                             @if($product->stores->storeAddresses->embedded_map)
-                                <div
-                                    class="google-maps w-full">{!! $product->stores->storeAddresses->embedded_map !!}</div>
+                                <div class="google-maps w-full">{!! $product->stores->storeAddresses->embedded_map !!}</div>
                             @else
                                 <div class="w-full text-center text-gray-400 h-full pt-28 bg-gray-100">
                                     <i class="fa-solid fa-map-location-dot text-3xl"></i> <br>
@@ -127,42 +128,66 @@
                 @php
                     $isAuthenticated = auth()->check();
                     $isSeller = $isAuthenticated && auth()->user()->hasRole('seller');
+                    $isAdmin = $isAuthenticated && auth()->user()->hasRole('admin');
                     $isProductStoreSameAsUserStore = $isSeller && $product->stores->id === auth()->user()->stores->id;
-                    $canEditProduct = $isProductStoreSameAsUserStore;
+                    $canEditProduct = $isProductStoreSameAsUserStore && !$isAdmin;
                 @endphp
-                @if ($product->quantity > 0)
-                    @if ($canEditProduct)
-                        <a href="{{ route('seller.products.edit', $product -> id ) }}">
-                            <button
-                                class="w-full mt-8 py-3 bg-red-400 rounded text-white text-lg focus:outline-none hover:bg-red-500">
-                                <i class="fa-solid fa-pencil text-lg mr-2"></i>Edit Produk
-                            </button>
-                        </a>
-                    @else
+
+                @unless ($isAdmin)
+                    @if ($product->quantity <= 0)
                         <div class="mt-5 lg:grid lg:grid-cols-3 lg:justify-items-center lg:gap-5 lg:mt-8 lg:px-5">
                             <div class="mt-3 px-5 w-full lg:mt-0 lg:px-0">
                                 <div class="flex justify-between h-full items-center bg-gray-100 py-2 px-4 rounded-xl">
                                     <button class="w-6 h-6" id="minus-btn" aria-label="icon-minus">
                                         <i class="fa-solid fa-minus text-red-400 text-lg"></i>
                                     </button>
-                                    <p id="count">1</p>
+                                    <p id="count">0</p>
                                     <button class="w-6 h-6" id="plus-btn" aria-label="icon-plus">
                                         <i class="fa-solid fa-plus text-red-400 text-lg"></i>
                                     </button>
                                 </div>
                             </div>
-                            <input type="hidden" value="{{ $product->id }}" id="product_id">
-                            <input type="hidden" value="{{ $product->stores->id }}" id="store_id">
-                            <input type="hidden" value="1" id="qty">
                             <div class="w-full mt-3 px-5 md:col-span-2 lg:mt-0 lg:px-0">
-                                <button id="add-to-cart"
-                                        class="flex justify-center items-center w-full rounded-lg py-4 md:py-[14px] shadow-orange-200 shadow-2xl hover:bg-red-500 text-sm gap-3 font-semibold bg-red-400 text-white">
-                                    <i class="fa-solid fa-cart-plus text-xl"></i>Tambah ke Keranjang
+                                <button id="add-to-cart" disabled
+                                        class="flex justify-center items-center w-full rounded-lg py-4 md:py-[14px] shadow-gray-200 shadow-2xl text-sm gap-3 font-semibold bg-red-300 text-white">Habis
                                 </button>
                             </div>
-                            @endif
-                            @endif
                         </div>
+                    @else
+                        @if ($canEditProduct)
+                            <a href="{{ route('seller.products.edit', $product -> id ) }}">
+                                <button
+                                    class="w-full mt-8 py-3 bg-red-400 rounded text-white text-lg focus:outline-none hover:bg-red-500">
+                                    <i class="fa-solid fa-pencil text-lg mr-2"></i>Edit Produk
+                                </button>
+                            </a>
+                        @else
+                            <div class="mt-5 lg:grid lg:grid-cols-3 lg:justify-items-center lg:gap-5 lg:mt-8 lg:px-5">
+                                <div class="mt-3 px-5 w-full lg:mt-0 lg:px-0">
+                                    <div class="flex justify-between h-full items-center bg-gray-100 py-2 px-4 rounded-xl">
+                                        <button class="w-6 h-6" id="minus-btn" aria-label="icon-minus">
+                                            <i class="fa-solid fa-minus text-red-400 text-lg"></i>
+                                        </button>
+                                        <p id="count">1</p>
+                                        <button class="w-6 h-6" id="plus-btn" aria-label="icon-plus">
+                                            <i class="fa-solid fa-plus text-red-400 text-lg"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <input type="hidden" value="{{ $product->id }}" id="product_id">
+                                <input type="hidden" value="{{ $product->stores->id }}" id="store_id">
+                                <input type="hidden" value="1" id="qty">
+                                <div class="w-full mt-3 px-5 md:col-span-2 lg:mt-0 lg:px-0">
+                                    <button id="add-to-cart"
+                                            class="flex justify-center items-center w-full rounded-lg py-4 md:py-[14px] shadow-gray-400 shadow-2xl hover:bg-red-500 text-sm gap-3 font-semibold bg-red-400 text-white">
+                                        <i class="fa-solid fa-cart-plus text-xl"></i>Tambah ke Keranjang
+                                    </button>
+                                </div>
+                            </div>
+                        @endif
+                    @endif
+                @endunless
+                </div>
             </div>
         </div>
     </div>

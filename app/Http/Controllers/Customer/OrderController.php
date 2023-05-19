@@ -4,19 +4,15 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\StoreTransaction;
 use App\Models\UserTransaction;
-use Carbon\Carbon;
 use DateInterval;
 use DateTime;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use JsonException;
-use Midtrans\Config;
-use Midtrans\Snap;
-use Midtrans\Transaction;
 
 class OrderController extends Controller
 {
@@ -65,7 +61,7 @@ class OrderController extends Controller
      */
     public function update(Request $request, $order_id)
     {
-        $order = Order::find($order_id);
+        $order = Order::query()->find($order_id);
         $json = json_decode($request->get('json'), false, 512, JSON_THROW_ON_ERROR);
 
         try {
@@ -95,6 +91,7 @@ class OrderController extends Controller
             $order->bank = $bank;
             $order->pdf_url = $json->pdf_url ?? null;
             $order->update();
+
             UserTransaction::create([
                 'user_id' => $order->user_id,
                 'order_id' => $order->id,
@@ -102,6 +99,9 @@ class OrderController extends Controller
                 'payment_method' => $json->payment_type ?? null,
                 'payment_type' => 'purchase',
             ]);
+
+            $cart = session()->get('cart');
+
             return redirect()->back()->with('success', 'Pembayaran berhasil');
         } catch (Exception $e) {
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
@@ -110,11 +110,24 @@ class OrderController extends Controller
 
     public function confirmOrder($order_id): RedirectResponse
     {
-        $order = Order::find($order_id);
-        $order -> status = 'completed';
-        $order -> update();
+        // Ubah status order menjadi completed
+        $order = Order::query()->find($order_id);
+        $order->status = 'completed';
+        $order->update();
 
-        $order->stores->balance += $order->grand_total;
+        // Tambahkan grand total ke saldo toko
+        $store = $order->stores;
+        $store->balance += $order->grand_total;
+        $store->update();
+
+        // Tambahkan transaksi ke store transaction
+        StoreTransaction::create([
+            'store_id' => $order->stores->id,
+            'order_id' => $order->id,
+            'amount' => $order->grand_total,
+            'payment_method' => $order->payment_type ?? null,
+            'payment_type' => 'selling',
+        ]);
 
         // Simpan data session pada controller
         session()->flash('message');

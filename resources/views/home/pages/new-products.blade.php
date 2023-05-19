@@ -27,27 +27,32 @@
                         @php
                             $isAuthenticated = auth()->check();
                             $isSeller = $isAuthenticated && auth()->user()->hasRole('seller');
+                            $isAdmin = $isAuthenticated && auth()->user()->hasRole('admin');
                             $isProductStoreSameAsUserStore = $isSeller && $product->stores->id === auth()->user()->stores->id;
-                            $canEditProduct = $isProductStoreSameAsUserStore;
+                            $canEditProduct = $isProductStoreSameAsUserStore && !$isAdmin;
                         @endphp
-                        @if ($product->quantity > 0)
-                            @if ($canEditProduct)
-                                <a href="{{ route('seller.products.edit', $product->id) }}" class="absolute top-0 right-0 product_data bg-red-400 text-lg text-white px-1 rounded-tr-lg rounded-bl-lg">
-                                    <i class="fa-solid fa-pencil"></i>
-                                </a>
+                        @unless ($isAdmin)
+                            @if ($product->quantity <= 0)
+                                <div class="absolute inset-y-1/4 h-fit text-center bg-red-400 bg-opacity-50 w-full text-white rounded-sm">HABIS</div>
                             @else
-                                <div class="absolute top-0 right-0 product_data bg-red-400 text-lg text-white px-1 rounded-tr-lg rounded-bl-lg">
-                                    <button>
-                                        <input type="hidden" class="qty_input" name="product_qty" value="1">
-                                        <input type="hidden" class="prod_id" name="product_id" value="{{ $product->id }}">
-                                        <input type="hidden" class="store_id" name="store_id" value="{{ $product->stores->id }}">
-                                        <button type="button" class="btn addToCartBtn">
-                                            <i class="fa fa-cart-plus" aria-hidden="true"></i>
+                                @if ($canEditProduct)
+                                    <a href="{{ route('seller.products.edit', $product->id) }}" class="absolute top-0 right-0 product_data bg-red-400 text-lg text-white px-1 rounded-tr-lg rounded-bl-lg">
+                                        <i class="fa-solid fa-pencil"></i>
+                                    </a>
+                                @else
+                                    <div class="absolute top-0 right-0 product_data bg-red-400 text-lg text-white px-1 rounded-tr-lg rounded-bl-lg">
+                                        <button>
+                                            <input type="hidden" class="qty_input" name="product_qty" value="1">
+                                            <input type="hidden" class="prod_id" name="product_id" value="{{ $product->id }}">
+                                            <input type="hidden" class="store_id" name="store_id" value="{{ $product->stores->id }}">
+                                            <button type="button" class="btn addToCartBtn">
+                                                <i class="fa fa-cart-plus" aria-hidden="true"></i>
+                                            </button>
                                         </button>
-                                    </button>
-                                </div>
+                                    </div>
+                                @endif
                             @endif
-                        @endif
+                        @endunless
                         <div class="rounded-lg shadow-lg bg-red-100">
                             <div class="relative overflow-hidden py-0.5 rounded-br-lg bg-red-400 shadow-lg">
                                 <svg class="absolute bottom-0 left-0 mb-8" viewBox="0 0 375 283" fill="none" style="transform: scale(1.5); opacity: 0.1;">

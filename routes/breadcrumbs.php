@@ -50,7 +50,7 @@ Breadcrumbs::for('categories', function (BreadcrumbTrail $trail) {
 // Transaksi Pelanggan
 Breadcrumbs::for('customer-transactions', function (BreadcrumbTrail $trail) {
     $trail->parent('admin_dashboard'); // Admin Dashboard
-    $trail->push('Transaksi Pelanggan', url('admin/transactions/customers')); // Transaksi Pelanggan
+    $trail->push('Transaksi Pengguna', url('admin/transactions/customers')); // Transaksi Pelanggan
 });
 
 // Transaksi Lapak
@@ -58,6 +58,19 @@ Breadcrumbs::for('store-transactions', function (BreadcrumbTrail $trail) {
     $trail->parent('admin_dashboard'); // Admin Dashboard
     $trail->push('Transaksi Lapak', url('admin/transactions/stores')); // Transaksi Lapak
 });
+
+// penarikan lapak
+Breadcrumbs::for('store-withdrawal', function (BreadcrumbTrail $trail) {
+    $trail->parent('admin_dashboard'); // Admin Dashboard
+    $trail->push('Penarikan Dana Lapak', url('admin/withdrawal/store')); // Penarikan lapak
+});
+
+// penarikan pelaanggan
+Breadcrumbs::for('customer-withdrawal', function (BreadcrumbTrail $trail) {
+    $trail->parent('admin_dashboard'); // Admin Dashboard
+    $trail->push('Penarikan Dana Pengguna', url('admin/withdrawal/customer')); // Penarikan pelaanggan
+});
+
 
 // Kelola Peran
 Breadcrumbs::for('roles', function (BreadcrumbTrail $trail) {

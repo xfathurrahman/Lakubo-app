@@ -24,11 +24,17 @@ class StoreController extends Controller
         $districts = District::where('regency_id', $storeAddresses->regency_id)->get();
         $villages = Village::where('district_id', $storeAddresses->district_id)->get();
 
+        # count orders where status = completed
         $countSuccessOrders = auth()->user()->stores->with(['orders' => function ($query) {
             $query->where('status', 'completed');
         }])->get()->pluck('orders')->flatten()->count();
 
-        return view('seller.store.index', compact('storeCategories','districts','villages','storeAddresses','countSuccessOrders'));
+        # count grant_total from table orders where status = completed
+        $totalSales = auth()->user()->stores->with(['orders' => function ($query) {
+            $query->where('status', 'completed');
+        }])->get()->pluck('orders')->flatten()->sum('grand_total');
+
+        return view('seller.store.index', compact('storeCategories','districts','villages','storeAddresses','countSuccessOrders','totalSales'));
     }
 
     /**
@@ -52,7 +58,7 @@ class StoreController extends Controller
         $store -> description = $data['deskripsi_lapak'];
         $store->update();
 
-        $storeAddress = StoreAddress::find($store->id);
+        $storeAddress = StoreAddress::query()->find($store->id);
         $storeAddress -> district_id = $data['kecamatan'];
         $storeAddress -> village_id = $data['desa'];
         $storeAddress -> detail_address = $data['detail_alamat'];
@@ -68,7 +74,7 @@ class StoreController extends Controller
         $bank_acc_name = $request->input('bank_acc_name');
         $bank_acc_number = $request->input('bank_acc_number');
         $bank_name = $request->input('bank_name');
-        $bank_info = Store::where('id', Auth::user()->stores->id)->first();
+        $bank_info = Store::query()->where('id', Auth::user()->stores->id)->first();
         $bank_info -> bank_account_name = $bank_acc_name;
         $bank_info -> bank_account_number = $bank_acc_number;
         $bank_info -> bank_name = $bank_name;

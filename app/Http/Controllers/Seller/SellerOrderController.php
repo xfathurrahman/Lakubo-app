@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Seller;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\StoreTransaction;
 use App\Models\User;
 use App\Models\UserTransaction;
 use Illuminate\Http\Request;
@@ -21,7 +22,7 @@ class SellerOrderController extends Controller
         // Membuat query builder untuk model Order dengan filter status
         $query = Order::query()
             ->where('store_id', $seller_id)
-            ->whereNotNull('status')
+            ->whereNotIn('status', ['choosing_payment', 'awaiting_payment'])
             ->orderBy('created_at', 'asc');
 
         if ($status) {
@@ -67,13 +68,14 @@ class SellerOrderController extends Controller
     public function rejectOrder(Request $request, $order_id): string
     {
         $reject_msg = $request->input('rejectMsg');
+
         $order = new Order();
         $order = $order->find($order_id);
         $order->status = 'cancelled';
         $order->reject_msg = $reject_msg;
         $order->update();
 
-        $user = User::user()->where('id',$order->user_id)->first();
+        $user = User::query()->where('id',$order->user_id)->first();
         $user->balance += $order->grand_total;
         $user->update();
 

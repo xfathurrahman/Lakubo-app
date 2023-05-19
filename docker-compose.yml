@@ -1,25 +1,24 @@
 version: "3.9"
 services:
     app:
-        container_name: lakubo-app
+        container_name: lakubo
         env_file:
             - .env
         build:
             context: .
             target: php
             args:
-            - APP_NAME=${APP_NAME}
-            - APP_ENV=${APP_ENV}
+                - APP_NAME=${APP_NAME}
+                - APP_ENV=${APP_ENV}
         working_dir: /var/www/${APP_NAME}
         volumes:
             - ./:/var/www/${APP_NAME}
         ports:
-            - '8001:80'
-            - '5173:5173'
+            - '8009:80'
         networks:
             - env-server
         healthcheck:
-            test: ["CMD", "curl", "-f", "http://localhost:8001"]
+            test: [ "CMD", "curl", "-f", "http://localhost:8001" ]
             interval: 30s
             timeout: 10s
             retries: 3

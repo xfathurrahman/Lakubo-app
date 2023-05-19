@@ -1,5 +1,4 @@
 <x-app-layout>
-
     @section('breadcrumbs')
         {{ Breadcrumbs::render('orders') }}
     @endsection
@@ -8,7 +7,6 @@
         .select2.select2-container {
             width: 200px !important;
         }
-
         .select2.select2-container .select2-selection {
             box-shadow: 0 3px 20px #0000000b;
             position: relative;
@@ -23,7 +21,6 @@
             outline: none !important;
             transition: all .15s ease-in-out;
         }
-
         .select2.select2-container .select2-selection .select2-selection__arrow {
             background: #f8f8f8;
             border-left: 1px solid #ccc;
@@ -33,13 +30,11 @@
             height: 38px;
             width: 33px;
         }
-
         .select2.select2-container .select2-selection .select2-selection__rendered {
             color: #333;
             line-height: 38px;
             padding-right: 33px;
         }
-
         .select2-container--default .select2-selection--single .select2-selection__arrow {
             height: 26px;
             position: absolute;
@@ -47,18 +42,33 @@
             right: -1px;
             width: 20px;
         }
-
         .select2-container .select2-dropdown .select2-results ul {
             background: #fff;
             border: 1px solid #cecece;
         }
+        @media (min-width: 640px) {
+            #order-table thead {
+                display: table-header-group;
+            }
+
+            #order-table {
+                table-layout: auto;
+            }
+
+            #tr-content td {
+                display: table-cell;
+            }
+        }
     </style>
 
     <!-- BEGIN: Reject Notification Content -->
-    <div id="reject-notification-content" class="toastify-content hidden flex"> <i class="text-success" data-lucide="check-circle"></i>
-        <div class="ml-4 mr-4">
-            <div class="font-medium">Pesanan Berhasil Diperbarui.</div>
-            <div class="text-slate-500 mt-1">Pesanan dengan id #<b>{{ session('success') }}</b> Berhasil di tolak.</div>
+    <div id="reject-notification-content" class="toastify-content hidden">
+        <div class="flex">
+            <i class="text-success" data-lucide="check-circle"></i>
+            <div class="ml-4 mr-4">
+                <div class="font-medium">Pesanan Berhasil Diperbarui.</div>
+                <div class="text-slate-500 mt-1">Pesanan dengan id #<b>{{ session('success') }}</b> Berhasil di tolak.</div>
+            </div>
         </div>
     </div>
     <!-- END: Reject Notification Content -->
@@ -73,7 +83,6 @@
                 </div>
                 <select id="filterStatus" class="form-select box ml-2">
                     <option value="">Semua</option>
-                    <option value="awaiting_payment">Menunggu Pembayaran</option>
                     <option value="awaiting_confirm">Menunggu Konfirmasi</option>
                     <option value="confirmed">Dikonfirmasi</option>
                     <option value="packing">Dikemas</option>
@@ -84,18 +93,13 @@
             </div>
         </div>
 
-        <!-- BEGIN: Data List -->
-        <div class="intro-y col-span-12 overflow-auto 2xl:overflow-visible">
-            <table id="order-table" class="table table-report -mt-2">
-                <thead>
+        <div class="intro-y col-span-12 sm:overflow-auto 2xl:overflow-visible">
+            <table id="order-table" class="table table-report w-full table-fixed -mt-2">
+              <thead class="hidden">
                 <tr>
-                    {{--<th class="whitespace-nowrap">
-                        <input class="form-check-input" type="checkbox">
-                    </th>--}}
                     <th class="whitespace-nowrap">ID Pesanan</th>
-                    <th class="whitespace-nowrap">Pelanggan</th>
+                    <th class="whitespace-nowrap">Pesanan</th>
                     <th class="text-center whitespace-nowrap">Status</th>
-                    <th class="whitespace-nowrap">Pembayaran</th>
                     <th class="text-right whitespace-nowrap">
                         <div class="pr-16">Tagihan</div>
                     </th>
@@ -107,78 +111,77 @@
                 </tbody>
             </table>
         </div>
-        <!-- END: Data List -->
     </div>
-    <!-- END: Content -->
 
-        @section('script')
+    @section('script')
+        <script>
+            $(document).ready(function() {
 
-            <script>
-                $(document).ready(function() {
-
-                    @foreach($orders as $order)
-                        $("#copy-tracking-no-" + {{ $order->id }}).click(function() {
-                            var copyText = document.getElementById("tracking_no-{{ $order->id }}");
-                            copyText.setSelectionRange(0, 99999); // mengatur range seleksi dari karakter 0 hingga 99999
-                            var button = this; // simpan referensi ke tombol yang diklik
-                            navigator.clipboard.writeText(copyText.value).then(function() {
-                                var tooltip = document.createElement("div");
-                                tooltip.innerHTML = "Disalin!";
-                                tooltip.classList.add("tooltip-copy");
-                                $(button).closest('div').append(tooltip);// gunakan referensi tombol untuk menambahkan tooltip
-                                setTimeout(function() {
-                                    $(tooltip).fadeOut("fast", function() {
-                                        $(this).remove();
-                                    });
-                                }, 1000);
-                            }, function() {
-                                console.error("Tidak dapat menyalin teks");
-                            });
-                        });
-                    @endforeach
-
-                    @if(session('success'))
-                    // Success notification
-                    Toastify({
-                        node: $("#reject-notification-content").clone().removeClass("hidden")[0],
-                        duration: 4000,
-                        newWindow: true,
-                        close: true,
-                        gravity: "top",
-                        position: "center",
-                        stopOnFocus: true,
-                    }).showToast();
-                    @endif
-
-                    $('#filterStatus').select2({
-                        minimumResultsForSearch: Infinity,
-                    });
-
-                    $('#filterStatus').change(function() {
-                        let selectedStatus = $(this).val();
-                        $.ajax({
-                            url: '{{ route('seller.orders.index') }}',
-                            data: {status: selectedStatus},
-                            success: function(result) {
-                                $('#order-table tbody').html(result);
-                            },
+                @foreach($orders as $order)
+                    $("#copy-tracking-no-" + {{ $order->id }}).click(function() {
+                        var copyText = document.getElementById("tracking_no-{{ $order->id }}");
+                        copyText.setSelectionRange(0, 99999); // mengatur range seleksi dari karakter 0 hingga 99999
+                        var button = this; // simpan referensi ke tombol yang diklik
+                        navigator.clipboard.writeText(copyText.value).then(function() {
+                            var tooltip = document.createElement("div");
+                            tooltip.innerHTML = "Disalin!";
+                            tooltip.classList.add("tooltip-copy");
+                            $(button).closest('div').append(tooltip);// gunakan referensi tombol untuk menambahkan tooltip
+                            setTimeout(function() {
+                                $(tooltip).fadeOut("fast", function() {
+                                    $(this).remove();
+                                });
+                            }, 1000);
+                        }, function() {
+                            console.error("Tidak dapat menyalin teks");
                         });
                     });
-                    $('input[type="text"]').on('keyup', searchTable);
+                @endforeach
+
+                @if(session('success'))
+                // Success notification
+                Toastify({
+                    node: $("#reject-notification-content").clone().removeClass("hidden")[0],
+                    duration: 4000,
+                    newWindow: true,
+                    close: true,
+                    gravity: "top",
+                    position: "center",
+                    stopOnFocus: true,
+                }).showToast();
+                @endif
+
+                $('#filterStatus').select2({
+                    minimumResultsForSearch: Infinity,
                 });
 
-                function searchTable() {
-                    // Ambil nilai input pencarian
-                    var input = $(this).val().toLowerCase();
-                    // Iterasi setiap baris pada tbody tabel
-                    $('#order-table tr').filter(function () {
-                        // Jika nilai pencarian tidak ditemukan pada baris ini, sembunyikan baris ini
-                        $(this).toggle($(this).text().toLowerCase().indexOf(input) > -1);
+                $('#filterStatus').change(function() {
+                    let selectedStatus = $(this).val();
+                    $.ajax({
+                        url: '{{ route('seller.orders.index') }}',
+                        data: {status: selectedStatus},
+                        success: function(result) {
+                            $('#order-table tbody').html(result);
+                        },
                     });
+                });
+                $('input[type="text"]').on('keyup', searchTable);
+            });
+
+            function searchTable() {
+                var input = $(this).val().toLowerCase();
+                $('#order-table tbody tr').filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(input) > -1);
+                });
+
+                // Tampilkan kembali thead jika ada baris yang ditampilkan pada tbody
+                if ($('#order-table tbody tr:visible').length > 0) {
+                    $('#order-table thead').show();
+                } else {
+                    $('#order-table thead').hide();
                 }
-
-            </script>
-
-        @endsection
+            }
+        </script>
+    @endsection
 
 </x-app-layout>

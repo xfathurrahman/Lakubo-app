@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\WithdrawalController;
 use App\Http\Controllers\Customer\CartController;
 use App\Http\Controllers\Customer\CheckoutController;
 use App\Http\Controllers\Customer\CustomerController;
@@ -60,12 +61,10 @@ Route::middleware(['auth', 'verified', 'role:admin'])->name('admin.')->prefix('a
     Route::get('/dashboard',[AdminDashboardController::class,'index'])->name('dashboard');
     /*-----------------------------------------------Produk-------------------------------------------------------*/
     Route::get('/products',[AdminProductController::class,'index'])->name('products');
-    Route::put('/products/update/{id}',[AdminProductController::class,'update'])->name('products.update');
-    Route::delete('/products/delete/{id}',[AdminProductController::class,'destroy'])->name('products.delete');
+    Route::delete('/products/{product}/delete',[AdminProductController::class,'destroy'])->name('product.delete');
     /*-----------------------------------------------Lapak-------------------------------------------------------*/
     Route::get('/stores',[AdminStoreController::class,'index'])->name('stores');
-    Route::put('/stores/update/{id}',[AdminStoreController::class,'update'])->name('stores.update');
-    Route::delete('/stores/delete/{id}',[AdminStoreController::class,'delete'])->name('stores.delete');
+    Route::delete('/stores/{store}/delete',[AdminStoreController::class,'destroy'])->name('store.delete');
     /*-----------------------------------------------Carousels-------------------------------------------------------*/
     Route::get('/carousels', [CarouselController::class,'index'])->name('carousels.index');
     Route::post('/carousels/store', [CarouselController::class,'store'])->name('carousels.store');
@@ -74,10 +73,12 @@ Route::middleware(['auth', 'verified', 'role:admin'])->name('admin.')->prefix('a
     /*-----------------------------------------------Transactions-------------------------------------------------------*/
     Route::get('/transactions/stores', [AdminTransactionController::class,'storeTransactions'])->name('transaction.stores');
     Route::get('/transactions/customers', [AdminTransactionController::class,'customerTransactions'])->name('transaction.customers');
-    Route::get('/transactions', [AdminTransactionController::class,'index'])->name('transactions.index');
-    Route::put('/transactions/update/{id}', [AdminTransactionController::class,'update'])->name('transactions.update');
-    Route::delete('/transactions/delete/{id}', [AdminTransactionController::class,'delete'])->name('transactions.delete');
-    /*-----------------------------------------------Kategori-------------------------------------------------------*/
+    Route::post('/transactions/stores/update', [AdminTransactionController::class,'storeTransactionUpdate'])->name('store.transaction.update');
+    Route::post('/transactions/customers/update', [AdminTransactionController::class,'customerTransactionUpdate'])->name('customer.transaction.update');
+    /*-----------------------------------------------Withdrawals-------------------------------------------------------*/
+    Route::get('/withdrawal/customers', [WithdrawalController::class,'customerIndex'])->name('withdrawal.customer.index');
+    Route::get('/withdrawal/stores', [WithdrawalController::class,'storeIndex'])->name('withdrawal.store.index');
+    /*-------------------------------------------------Kategori-------------------------------------------------------*/
     Route::get('/categories/products',[CategoryController::class,'getProduct'])->name('categories.products');
     Route::get('/categories/stores',[CategoryController::class,'getStore'])->name('categories.stores');
     Route::post('/categories/products/create',[CategoryController::class,'storeCateProd'])->name('product.category.store');
@@ -102,6 +103,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->name('admin.')->prefix('a
     Route::put('/users/access/{user}', [UserController::class, 'updateAccess'])->name('users.access.update');
     Route::put('/users/password/{user}', [UserController::class, 'updatePassword'])->name('users.password.update');
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+    Route::get('/admin/users/search', [UserController::class, 'search'])->name('users.search');
 });
 
 Route::middleware(['auth', 'verified', 'role:seller'])->name('seller.')->prefix('seller')->group(function (){

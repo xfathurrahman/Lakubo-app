@@ -4,7 +4,6 @@
         .select2.select2-container {
             width: 200px !important;
         }
-
         .select2.select2-container .select2-selection {
             box-shadow: 0 3px 20px #0000000b;
             position: relative;
@@ -19,7 +18,6 @@
             outline: none !important;
             transition: all .15s ease-in-out;
         }
-
         .select2.select2-container .select2-selection .select2-selection__arrow {
             background: #f8f8f8;
             border-left: 1px solid #ccc;
@@ -29,13 +27,11 @@
             height: 38px;
             width: 33px;
         }
-
         .select2.select2-container .select2-selection .select2-selection__rendered {
             color: #333;
             line-height: 38px;
             padding-right: 33px;
         }
-
         .select2-container--default .select2-selection--single .select2-selection__arrow {
             height: 26px;
             position: absolute;
@@ -43,10 +39,20 @@
             right: -1px;
             width: 20px;
         }
-
         .select2-container .select2-dropdown .select2-results ul {
             background: #fff;
             border: 1px solid #cecece;
+        }
+        @media (min-width: 640px) {
+            #order-table thead {
+                display: table-header-group;
+            }
+            #order-table {
+                table-layout: auto;
+            }
+            #tr-content td {
+                display: table-cell;
+            }
         }
     </style>
 
@@ -74,7 +80,6 @@
                 </div>
                 <select id="filterStatus" class="form-select box ml-2">
                     <option value="">Semua</option>
-                    <option value="purchase">Pembelian</option>
                     <option value="selling">Penjualan</option>
                     <option value="withdrawal">Penarikan</option>
                 </select>
@@ -82,20 +87,19 @@
         </div>
 
         <!-- BEGIN: Data List -->
-        <div class="intro-y col-span-12 overflow-auto 2xl:overflow-visible">
-            <table id="order-table" class="table table-report -mt-2">
-                <thead>
+        <div class="intro-y col-span-12 sm:overflow-auto 2xl:overflow-visible">
+            <table id="order-table" class="table table-report w-full table-fixed -mt-2">
+                <thead class="hidden">
                 <tr>
                     <th class="whitespace-nowrap">ID Transaksi</th>
                     <th class="whitespace-nowrap">Keterangan</th>
                     <th class="whitespace-nowrap text-center">Metode Pembayaran</th>
-                    <th class="whitespace-nowrap text-center">Jenis Transaksi</th>
                     <th class="whitespace-nowrap text-center">Status</th>
                     <th class="whitespace-nowrap text-center">Jumlah</th>
                 </tr>
                 </thead>
                 <tbody>
-                @include('admin.transaction.partials.transaction_store_table', ['transactions' => $transactions])
+                    @include('admin.transaction.partials.transaction_store_table', ['transactions' => $transactions])
                 </tbody>
             </table>
         </div>
@@ -150,7 +154,7 @@
                 $('#filterStatus').change(function() {
                     let selectedStatus = $(this).val();
                     $.ajax({
-                        url: '{{ route('customer.transaction.index') }}',
+                        url: '{{ route('admin.transaction.stores') }}',
                         data: {status: selectedStatus},
                         success: function(result) {
                             $('#order-table tbody').html(result);
@@ -161,11 +165,8 @@
             });
 
             function searchTable() {
-                // Ambil nilai input pencarian
                 var input = $(this).val().toLowerCase();
-                // Iterasi setiap baris pada tbody tabel
-                $('#order-table tr').filter(function () {
-                    // Jika nilai pencarian tidak ditemukan pada baris ini, sembunyikan baris ini
+                $('#order-table tbody tr').filter(function () {
                     $(this).toggle($(this).text().toLowerCase().indexOf(input) > -1);
                 });
             }

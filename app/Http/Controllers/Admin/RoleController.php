@@ -16,7 +16,7 @@ class RoleController extends Controller
         $permissions = Permission::all();
         $role_permission = Role::with('permissions')->get();
 
-        return view('admin.roles.index', compact('roles','permissions','role_permission'));
+        return view('admin.development.roles.index', compact('roles','permissions','role_permission'));
     }
 
     public function create()
@@ -29,7 +29,7 @@ class RoleController extends Controller
         $validated = $request->validate(['name' => ['required', 'min:3']]);
         Role::create($validated);
 
-        return to_route('admin.roles.index')->with('message', 'Role Created successfully.');
+        return back()->with('message', 'Role Created successfully.');
     }
 
     public function edit(Role $role)

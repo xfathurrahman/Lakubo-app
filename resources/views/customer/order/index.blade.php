@@ -4,7 +4,6 @@
         .select2.select2-container {
             width: 200px !important;
         }
-
         .select2.select2-container .select2-selection {
             box-shadow: 0 3px 20px #0000000b;
             position: relative;
@@ -19,7 +18,6 @@
             outline: none !important;
             transition: all .15s ease-in-out;
         }
-
         .select2.select2-container .select2-selection .select2-selection__arrow {
             background: #f8f8f8;
             border-left: 1px solid #ccc;
@@ -29,13 +27,11 @@
             height: 38px;
             width: 33px;
         }
-
         .select2.select2-container .select2-selection .select2-selection__rendered {
             color: #333;
             line-height: 38px;
             padding-right: 33px;
         }
-
         .select2-container--default .select2-selection--single .select2-selection__arrow {
             height: 26px;
             position: absolute;
@@ -43,10 +39,20 @@
             right: -1px;
             width: 20px;
         }
-
         .select2-container .select2-dropdown .select2-results ul {
             background: #fff;
             border: 1px solid #cecece;
+        }
+        @media (min-width: 640px) {
+            #order-table thead {
+                display: table-header-group;
+            }
+            #order-table {
+                table-layout: auto;
+            }
+            #tr-content td {
+                display: table-cell;
+            }
         }
     </style>
 
@@ -56,10 +62,12 @@
 
     <!-- BEGIN: Reject Notification Content -->
     <div id="confirm-notification-content" class="toastify-content hidden">
-        <i class="text-success" data-lucide="check-circle"></i>
-        <div class="ml-4 mr-4">
-            <div class="font-medium">Terimakasih Telah Berbelanja di Lakubo!</div>
-            <div class="text-slate-500 mt-1">Tempatnya jual - beli UMKM boyolali.</div>
+        <div class="inline-flex">
+            <i class="text-success" data-lucide="check-circle"></i>
+            <div class="ml-4 mr-4">
+                <div class="font-medium">Terimakasih Telah Berbelanja di Lakubo!</div>
+                <div class="text-slate-500 mt-1">Tempatnya jual - beli UMKM boyolali.</div>
+            </div>
         </div>
     </div>
     <!-- END: Reject Notification Content -->
@@ -86,37 +94,34 @@
             </div>
         </div>
 
-        @if(auth()->user()->orders) @endif
         <!-- BEGIN: Data List -->
-        <div class="intro-y col-span-12 overflow-auto 2xl:overflow-visible">
-            <table id="order-table" class="table table-report -mt-2">
-                <thead>
+        <div class="intro-y col-span-12 sm:overflow-auto 2xl:overflow-visible">
+            <table id="order-table" class="table table-report w-full table-fixed -mt-2">
+              <thead class="hidden">
                 <tr>
-                    <th class="whitespace-nowrap">ID Pesanan</th>
-                    <th class="whitespace-nowrap">Pesanan</th>
-                    <th class="text-center whitespace-nowrap">Status</th>
-                    <th class="text-center whitespace-nowrap">
-                        <div class="pr-16">Tagihan</div>
-                    </th>
-                    <th class="text-center whitespace-nowrap">
-                        <div class="pr-4">Aksi</div>
-                    </th>
+                  <th class="whitespace-nowrap">ID Pesanan</th>
+                  <th class="whitespace-nowrap">Detail Pesanan</th>
+                  <th class="text-center whitespace-nowrap">Status</th>
+                  <th class="text-center whitespace-nowrap">
+                    <div class="pr-16">Tagihan</div>
+                  </th>
+                  <th class="text-center whitespace-nowrap">
+                    <div class="pr-4">Aksi</div>
+                  </th>
                 </tr>
-                </thead>
-                <tbody>
+              </thead>
+              <tbody>
                 @include('customer.order.partials.orders_table', ['orders' => $orders])
-                </tbody>
+              </tbody>
             </table>
-        </div>
+          </div>
         <!-- END: Data List -->
     </div>
     <!-- END: Content -->
 
     @section('script')
-
         <script>
             $(document).ready(function() {
-
                 @if(session('message'))
                 // Success notification
                 Toastify({
@@ -169,16 +174,20 @@
             });
 
             function searchTable() {
-                // Ambil nilai input pencarian
                 var input = $(this).val().toLowerCase();
-                // Iterasi setiap baris pada tbody tabel
-                $('#order-table tr').filter(function () {
-                    // Jika nilai pencarian tidak ditemukan pada baris ini, sembunyikan baris ini
+                $('#order-table tbody tr').filter(function () {
                     $(this).toggle($(this).text().toLowerCase().indexOf(input) > -1);
                 });
-            }
-        </script>
 
+                // Tampilkan kembali thead jika ada baris yang ditampilkan pada tbody
+                if ($('#order-table tbody tr:visible').length > 0) {
+                    $('#order-table thead').show();
+                } else {
+                    $('#order-table thead').hide();
+                }
+            }
+
+        </script>
     @endsection
 
 </x-app-layout>

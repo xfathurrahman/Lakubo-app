@@ -53,15 +53,15 @@
                                         <span class="w-20">Tujuan</span>
                                         <span class="ml-2">: {{ Auth::user()->bank_account_number }}</span>
                                     </div>
-                                    <a class="text-blue-400" href="{{ route('profile.edit') }}">Ubah</a>
                                 </div>
                                 <div class="inline-flex">
                                     <span class="w-20">Atas nama</span>
                                     <span class="ml-2">: {{ Auth::user()->bank_account_name }}</span>
                                 </div>
-                                <div class="inline-flex">
+                                <div class="inline-flex w-full">
                                     <span class="w-20">Nama Bank</span>
                                     <span class="ml-2">: {{ Auth::user()->bank_name }}</span>
+                                    <a class="ml-auto mr-0 text-blue-400" href="{{ route('profile.edit') }}">Ubah</a>
                                 </div>
                             </div>
                             <div class="mt-6">
@@ -106,5 +106,15 @@
             </form>
         </div>
         <!-- END: Display Information -->
+
+        @section('script')
+            <script>
+                $(document).ready(function () {
+                    $('.numeric-input').on('input', function (event) {
+                        this.value = this.value.replace(/[^0-9]/g, '');
+                    });
+                });
+            </script>
+        @endsection
 
 </x-app-layout>

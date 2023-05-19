@@ -4,6 +4,7 @@
         .select2.select2-container {
             width: 200px !important;
         }
+
         .select2.select2-container .select2-selection {
             box-shadow: 0 3px 20px #0000000b;
             position: relative;
@@ -18,6 +19,7 @@
             outline: none !important;
             transition: all .15s ease-in-out;
         }
+
         .select2.select2-container .select2-selection .select2-selection__arrow {
             background: #f8f8f8;
             border-left: 1px solid #ccc;
@@ -27,11 +29,13 @@
             height: 38px;
             width: 33px;
         }
+
         .select2.select2-container .select2-selection .select2-selection__rendered {
             color: #333;
             line-height: 38px;
             padding-right: 33px;
         }
+
         .select2-container--default .select2-selection--single .select2-selection__arrow {
             height: 26px;
             position: absolute;
@@ -39,6 +43,7 @@
             right: -1px;
             width: 20px;
         }
+
         .select2-container .select2-dropdown .select2-results ul {
             background: #fff;
             border: 1px solid #cecece;
@@ -57,7 +62,7 @@
     </style>
 
     @section('breadcrumbs')
-        {{ Breadcrumbs::render('customer-transactions') }}
+        {{ Breadcrumbs::render('customer-withdrawal') }}
     @endsection
 
     <!-- BEGIN: Reject Notification Content -->
@@ -70,8 +75,20 @@
     </div>
     <!-- END: Reject Notification Content -->
 
+    <!-- BEGIN: Notification Content -->
+    <div id="success-notification-content" class="toastify-content hidden">
+        <div class="flex">
+            <i class="text-success" data-lucide="check-circle"></i>
+            <div class="ml-4 mr-4">
+                <div class="font-medium">Berhasil diperbarui!</div>
+                <div class="text-slate-500 mt-1">Status penarikan dana berhasil diperbarui.</div>
+            </div>
+        </div>
+    </div>
+    <!-- END: Notification Content -->
+
     <!-- BEGIN: Content -->
-    <div class="grid grid-cols-12 gap-6 mt-5">
+    <div class="grid grid-cols-12 gap-2 mt-5">
         <div class="intro-y col-span-12 flex justify-between items-center mt-2">
             <div class="flex w-full sm:w-auto">
                 <div class="w-48 relative text-slate-500 mr-2">
@@ -80,26 +97,25 @@
                 </div>
                 <select id="filterStatus" class="form-select box ml-2">
                     <option value="">Semua</option>
-                    <option value="purchase">Pembelian</option>
-                    <option value="withdrawal">Penarikan</option>
+                    <option value="approved">Disetujui</option>
+                    <option value="rejected">Ditolak</option>
+                    <option value="processing">Tertunda</option>
                 </select>
             </div>
         </div>
-
         <!-- BEGIN: Data List -->
         <div class="intro-y col-span-12 sm:overflow-auto 2xl:overflow-visible">
             <table id="order-table" class="table table-report w-full table-fixed -mt-2">
                 <thead class="hidden">
                 <tr>
-                    <th class="whitespace-nowrap">ID Transaksi</th>
-                    <th class="whitespace-nowrap">Keterangan</th>
-                    <th class="whitespace-nowrap text-center">Metode Pembayaran</th>
-                    <th class="whitespace-nowrap text-center">Status</th>
-                    <th class="whitespace-nowrap text-center">Jumlah</th>
+                    <th class="whitespace-nowrap">ID Penarikan</th>
+                    <th class="whitespace-nowrap">Penarik Dana</th>
+                    <th class="whitespace-nowrap">Waktu</th>
+                    <th class="whitespace-nowrap text-center">Aksi</th>
                 </tr>
                 </thead>
                 <tbody>
-                @include('admin.transaction.partials.transaction_customer_table', ['transactions' => $transactions])
+                    @include('admin.withdrawal.partials.wd_customer_table', ['custWds' => $custWds])
                 </tbody>
             </table>
         </div>
@@ -137,8 +153,60 @@
                   }
                 }
 
-                $('#panel1').mouseover(function(){
-                 selectContent(this);
+                $('#panel').mouseover(function(){
+                    selectContent(this);
+                });
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
+                // Menggunakan event "change" pada elemen select dengan ID "changeStatus"
+                $(document).on('change', '#changeStatus', function() {
+                    var selectedStatus = $(this).val(); // Mendapatkan nilai yang dipilih dari select
+                    var transactionId = $(this).closest('tr').data('transaction-id'); // Mendapatkan ID transaksi dari elemen terdekat dengan class "order-row"
+
+                    // Mengirim data ke server menggunakan Ajax
+                    $.ajax({
+                    url: '{{ route('admin.customer.transaction.update') }}',
+                    type: 'POST',
+                    data: {
+                        status: selectedStatus,
+                        transactionId: transactionId
+                    },
+                    success: function(response) {
+
+                        // Memperbarui elemen terkait
+                        $('[data-transaction-id="' + transactionId + '"]').each(function() {
+                            var updatedElement = $(this).find('.status');
+
+                            // Hapus elemen select dan ganti dengan teks sesuai status
+                            if (selectedStatus === 'approved') {
+                                updatedElement.html('<p class="text-green-500">Disetujui</p>');
+                            } else if (selectedStatus === 'rejected') {
+                                updatedElement.html('<p class="text-red-500">Ditolak</p>');
+                            }
+                        });
+
+                        // Tindakan yang akan diambil setelah berhasil mengupdate status transaksi
+                        console.log('Status transaksi berhasil diperbarui');
+                        Toastify({
+                            node: $("#success-notification-content").clone().removeClass("hidden")[0],
+                            duration: 3000,
+                            newWindow: true,
+                            close: true,
+                            gravity: "top",
+                            position: "right",
+                            stopOnFocus: true,
+                        }).showToast();
+                    },
+                    error: function(xhr) {
+                        // Tindakan yang akan diambil jika terjadi kesalahan
+                        console.log('Terjadi kesalahan saat memperbarui status transaksi');
+                    }
+                    });
                 });
 
             });
@@ -154,7 +222,7 @@
                 $('#filterStatus').change(function() {
                     let selectedStatus = $(this).val();
                     $.ajax({
-                        url: '{{ route('admin.transaction.customers') }}',
+                        url: '{{ route('admin.withdrawal.customer.index') }}',
                         data: {status: selectedStatus},
                         success: function(result) {
                             $('#order-table tbody').html(result);

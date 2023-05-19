@@ -197,7 +197,7 @@
                                         @else
                                             <img id="preview-photo" class="rounded-md w-full max-h-full" alt="Profile-photo-preview" src="https://ui-avatars.com/api/?size=100&name={{ Auth::user()->name }}">
                                         @endisset
-                                        <div id="reset-photo" title="Remove this profile photo?" class="tooltip w-5 h-5 flex items-center justify-center absolute rounded-full text-white bg-danger right-0 top-0 -mr-2 -mt-2 hidden">
+                                        <div id="reset-photo" title="Hapus foto profil ini?" class="tooltip w-5 h-5 flex items-center justify-center absolute rounded-full text-white bg-danger right-0 top-0 -mr-2 -mt-2 hidden">
                                             <i data-lucide="x" class="w-4 h-4"></i>
                                         </div>
                                         <span id="loading-icon" class="hidden">

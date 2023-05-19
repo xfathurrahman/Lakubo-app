@@ -16,7 +16,7 @@ class PermissionController extends Controller
         $permissions = Permission::all();
         $role_permission = Permission::with('roles')->get();
 
-        return view('admin.permissions.index', compact('roles','permissions','role_permission'));
+        return view('admin.development.permissions.index', compact('roles','permissions','role_permission'));
     }
 
     public function create()
@@ -38,7 +38,7 @@ class PermissionController extends Controller
             'name' => $request->name,
         ]);
 
-        return to_route('admin.permissions.index')->with('success', 'Hak akses berhasil di buat.');
+        return back()->with('success', 'Hak akses berhasil di buat.');
     }
 
     public function edit(Permission $permission)

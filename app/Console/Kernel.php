@@ -16,6 +16,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+        // $schedule->command('orders:confirm')->daily();
+        $schedule->command('orders:confirm')->everyMinute();
     }
 
     /**
@@ -27,6 +29,11 @@ class Kernel extends ConsoleKernel
     {
         $this->load(__DIR__.'/Commands');
 
+        $this->commands([
+            \App\Console\Commands\ConfirmOrderCommand::class,
+        ]);
+
         require base_path('routes/console.php');
     }
+
 }

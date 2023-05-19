@@ -21,10 +21,13 @@ class HomeController extends Controller
 {
     public function index(): Factory|View|Application
     {
-        $products = Product::orderBy('created_at', 'DESC')->get();
-        $categories = ProductCategory::orderBy('id', 'asc')->get();
+        $products = Product::query()->orderBy('id', 'desc')->get();
+        $categories = ProductCategory::query()->orderBy('id', 'asc')->get();
 
-        return view('home.pages.index', compact('products','categories'));
+        return view('home.pages.index', [
+            'products' => $products,
+            'categories' => $categories,
+        ]);
     }
 
     public function termAndConditions(): View|\Illuminate\Foundation\Application|Factory|Application
@@ -39,8 +42,8 @@ class HomeController extends Controller
 
     public function getProduct($id): Factory|View|Application
     {
-        $product = Product::find($id);
-        $images = ProductImage::where('product_id',$id)->orderBy('id','asc')->get();
+        $product = Product::query()->find($id);
+        $images = ProductImage::query()->where('product_id',$id)->orderBy('id','asc')->get();
         $province = ucwords(strtolower(Province::find('33')->name));
         $regency = ucwords(strtolower(Regency::find('3309')->name));
         $district = ucwords(strtolower(District::where('regency_id', $product->stores->storeAddresses->regency_id )->first()->name));
@@ -60,8 +63,8 @@ class HomeController extends Controller
 
     public function getProductByCategory($id): Factory|View|Application
     {
-        $products = Product::where('category_id', $id)->orderBy('created_at', 'DESC')->paginate(16);
-        $productsCategory = ProductCategory::find($id)->name;
+        $products = Product::query()->where('category_id', $id)->orderBy('created_at', 'DESC')->paginate(16);
+        $productsCategory = ProductCategory::query()->find($id)->name;
 
         return view('home.pages.category-detail', [
             'products' => $products,
@@ -71,7 +74,7 @@ class HomeController extends Controller
 
     public function getNewProduct(): View|\Illuminate\Foundation\Application|Factory|Application
     {
-        $products = Product::orderBy('created_at', 'DESC')->paginate(16);
+        $products = Product::query()->orderBy('created_at', 'DESC')->paginate(16);
         return view('home.pages.new-products', [
             'products' => $products,
         ]);
@@ -83,9 +86,9 @@ class HomeController extends Controller
         $category = $request->query('category');
 
         if (empty($category) || $category === "undefined") {
-            $products = Product::where('name', 'LIKE', '%'.$query.'%')->get();
+            $products = Product::query()->where('name', 'LIKE', '%'.$query.'%')->get();
         } else {
-            $products = Product::where('category_id', $category)->where('name', 'LIKE', '%'.$query.'%')->get();
+            $products = Product::query()->where('category_id', $category)->where('name', 'LIKE', '%'.$query.'%')->get();
         }
 
         return response()->json($products);
@@ -98,21 +101,26 @@ class HomeController extends Controller
         $error = $request->input('error');
 
         if (empty($category) || $category === "undefined") {
-            $products = Product::where('name', 'LIKE', '%'.$query.'%')->get();
+            $products = Product::query()->where('name', 'LIKE', '%'.$query.'%')->get();
         } else {
-            $products = Product::where('category_id', $category)->where('name', 'LIKE', '%'.$query.'%')->get();
+            $products = Product::query()->where('category_id', $category)->where('name', 'LIKE', '%'.$query.'%')->get();
         }
 
         $searchTerm = $query;
-        $category = ProductCategory::find($category);
+        $category = ProductCategory::query()->find($category);
 
-        return view('home.pages.search-results', compact('products', 'searchTerm' , 'category', 'error'));
+        return view('home.pages.search-results', [
+            'products' => $products,
+            'searchTerm' => $searchTerm,
+            'category' => $category,
+            'error' => $error,
+        ]);
     }
 
     public function getStoreDetail($id): View|\Illuminate\Foundation\Application|Factory|Application
     {
-        $store = Store::find($id);
-        $storeProducts = Product::where('store_id', $id)->paginate(16);
+        $store = Store::query()->find($id);
+        $storeProducts = Product::query()->where('store_id', $id)->paginate(16);
 
         $countSuccessOrders = $store->with(['orders' => function ($query) {
             $query->where('status', 'completed');

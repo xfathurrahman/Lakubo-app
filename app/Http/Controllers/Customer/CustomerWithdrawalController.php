@@ -43,7 +43,7 @@ class CustomerWithdrawalController extends Controller
                 $userTrans -> payment_type = 'withdrawal';
                 $userTrans -> save();
 
-                $userBalance = User::find(Auth::id());
+                $userBalance = User::query()->find(Auth::id());
                 $userBalance -> balance -= $amount;
                 $userBalance -> update();
 

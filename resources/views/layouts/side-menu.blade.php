@@ -81,6 +81,18 @@
                         </a>
                     </li>
                     <li>
+                        <a href="{{ route('admin.stores') }}" class="side-menu {{ Request::is('admin/stores') ? 'side-menu--active' : '' }}">
+                            <div class="side-menu__icon"> <i data-lucide="home"></i> </div>
+                            <div class="side-menu__title">Pelapak UMKM</div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{url('admin/manage/users')}}" class="side-menu {{ Request::is('admin/manage/users') ? 'side-menu--active' : '' }}">
+                            <div class="side-menu__icon"> <i data-lucide="users"></i> </div>
+                            <div class="side-menu__title">Pengguna</div>
+                        </a>
+                    </li>
+                    <li>
                         <a href="#" class="side-menu {{ Request::is('admin/transactions/*') ? 'side-menu--active' : '' }}">
                             <div class="side-menu__icon"> <i data-lucide="slack"></i> </div>
                             <div class="side-menu__title">
@@ -92,22 +104,39 @@
                             <li>
                                 <a href="{{ route('admin.transaction.stores') }}" class="side-menu {{ Request::is('admin/transactions/stores') ? 'side-menu--active' : '' }}">
                                     <div class="side-menu__icon"> <i data-lucide="zap"></i> </div>
-                                    <div class="side-menu__title"> Transaksi Lapak </div>
+                                    <div class="side-menu__title"> Pelapak </div>
                                 </a>
                             </li>
                             <li>
                                 <a href="{{ route('admin.transaction.customers') }}" class="side-menu {{ Request::is('admin/transactions/customers') ? 'side-menu--active' : '' }}">
                                     <div class="side-menu__icon"> <i data-lucide="zap"></i> </div>
-                                    <div class="side-menu__title"> Transaksi Pelanggan </div>
+                                    <div class="side-menu__title"> Pengguna </div>
                                 </a>
                             </li>
                         </ul>
                     </li>
                     <li>
-                        <a href="{{ route('admin.stores') }}" class="side-menu {{ Request::is('admin/stores') ? 'side-menu--active' : '' }}">
-                            <div class="side-menu__icon"> <i data-lucide="home"></i> </div>
-                            <div class="side-menu__title">Pelapak UMKM</div>
+                        <a href="#" class="side-menu {{ Request::is('admin/withdrawal/*') ? 'side-menu--active' : '' }}">
+                            <div class="side-menu__icon"> <i data-lucide="wallet"></i> </div>
+                            <div class="side-menu__title">
+                                Penarikan Dana
+                                <div class="side-menu__sub-icon "> <i data-lucide="chevron-down"></i> </div>
+                            </div>
                         </a>
+                        <ul>
+                            <li>
+                                <a href="{{url('admin/withdrawal/customers')}}" class="side-menu {{ Request::is('admin/withdrawal/customers') ? 'side-menu--active' : '' }}">
+                                    <div class="side-menu__icon"> <i data-lucide="zap"></i> </div>
+                                    <div class="side-menu__title">Pengguna</div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{url('admin/withdrawal/stores')}}" class="side-menu {{ Request::is('admin/withdrawal/stores') ? 'side-menu--active' : '' }}">
+                                    <div class="side-menu__icon"> <i data-lucide="zap"></i> </div>
+                                    <div class="side-menu__title">Pelapak</div>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                     {{--<li>
                         <a href="{{ route('admin.carousels.index') }}" class="side-menu {{ Request::is('admin/carousels') ? 'side-menu--active' : '' }}">
@@ -139,24 +168,18 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="#" class="side-menu {{ Request::is('admin/manage/*') ? 'side-menu--active' : '' }}">
-                            <div class="side-menu__icon"> <i data-lucide="users"></i> </div>
+                        <a href="#" class="side-menu {{ Request::is('admin/manage/roles') || Request::is('admin/manage/permissions') ? 'side-menu--active' : '' }}">
+                            <div class="side-menu__icon"> <i data-lucide="cpu"></i> </div>
                             <div class="side-menu__title">
-                                Kelola Pengguna
+                                Pengembangan
                                 <div class="side-menu__sub-icon "> <i data-lucide="chevron-down"></i> </div>
                             </div>
                         </a>
                         <ul>
                             <li>
-                                <a href="{{url('admin/manage/users')}}" class="side-menu {{ Request::is('admin/manage/users') ? 'side-menu--active' : '' }}">
-                                    <div class="side-menu__icon"> <i data-lucide="zap"></i> </div>
-                                    <div class="side-menu__title">Daftar Pengguna</div>
-                                </a>
-                            </li>
-                            <li>
                                 <a href="{{url('admin/manage/roles')}}" class="side-menu {{ Request::is('admin/manage/roles') ? 'side-menu--active' : '' }}">
                                     <div class="side-menu__icon"> <i data-lucide="zap"></i> </div>
-                                    <div class="side-menu__title">Daftar Peran</div>
+                                    <div class="side-menu__title">Peran</div>
                                 </a>
                             </li>
                             <li>

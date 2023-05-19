@@ -4,6 +4,20 @@
         {{ Breadcrumbs::render('products') }}
     @endsection
 
+    <style>
+        @media (min-width: 640px) {
+            #order-table thead {
+                display: table-header-group;
+            }
+            #order-table {
+                table-layout: auto;
+            }
+            #tr-content td {
+                display: table-cell;
+            }
+        }
+    </style>
+
         <!-- BEGIN: Success Notification Content -->
         <div id="success-notification-content" class="toastify-content hidden flex"> <i class="fa-regular fa-circle-check text-success text-lg"></i>
             <div class="ml-4 mr-4 w-72">
@@ -15,13 +29,31 @@
         </div>
         <!-- END: Success Notification Content -->
 
+        <!-- BEGIN: error Notification Content -->
+        <div id="error-notification-content" class="toastify-content hidden flex"> <i class="fa-regular fa-circle-exclamation text-primary text-lg"></i>
+            <div class="ml-4 mr-4 w-72">
+                <div class="font-medium truncate">Tidak dapat dihapus.</div>
+                <div class="text-slate-500 mt-1 space-y">
+                    {{ Session::get('error') }}
+                </div>
+            </div>
+        </div>
+        <!-- END: error Notification Content -->
+
         @if(auth()->user()->stores)
             <div class="grid grid-cols-12 gap-6 mt-5">
                 <div class="intro-y col-span-12 flex flex-wrap sm:flex-nowrap items-center mt-2">
-                    <a class="btn btn-primary shadow-md mr-2" href="{{ route('seller.products.create') }}">
-                        Tambah Produk
+                    <div class="w-48 relative text-slate-500 mr-2">
+                        <input type="text" class="input form-control rounded w-14 sm:w-48 box pr-10" placeholder="Cari...">
+                        <i class="w-4 h-4 absolute mt-2.5 mb-auto inset-y-0 mr-3 right-0" data-lucide="search"></i>
+                    </div>
+                    <a class="btn btn-primary shadow-md mr-0 ml-auto" href="{{ route('seller.products.create') }}">
+                        <div class="flex items-center">
+                            <span class="text-sm hidden sm:block">Tambah Produk</span>
+                            <span class="fa fa-plus mx-2 my-0.5 sm:hidden"></span>
+                        </div>
                     </a>
-                    {{--<div class="dropdown">
+                    {{-- <div class="dropdown">
                         <button class="dropdown-toggle btn px-2 box" aria-expanded="false" data-tw-toggle="dropdown">
                             <span class="w-5 h-5 flex items-center justify-center"> <i class="w-4 h-4" data-lucide="plus"></i> </span>
                         </button>
@@ -38,18 +70,18 @@
                                 </li>
                             </ul>
                         </div>
-                    </div>--}}
-                    {{--<div class="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0">
+                    </div>
+                    <div class="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0">
                         <div class="w-56 relative text-slate-500">
                             <input type="text" class="form-control w-56 box pr-10" placeholder="Search...">
                             <i class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0" data-lucide="search"></i>
                         </div>
-                    </div>--}}
+                    </div> --}}
                 </div>
                 <!-- BEGIN: Data List -->
-                <div class="intro-y col-span-12 overflow-auto lg:overflow-visible">
-                    <table class="table table-report -mt-2">
-                        <thead>
+                <div class="intro-y col-span-12 sm:overflow-auto 2xl:overflow-visible">
+                    <table id="order-table" class="table table-report w-full table-fixed -mt-2">
+                      <thead class="hidden">
                         @if ($listProducts->count())
                             <tr>
                                 <th class="whitespace-nowrap">GAMBAR PRODUK</th>
@@ -61,7 +93,7 @@
                         </thead>
                         <tbody>
                         @foreach($listProducts as $product)
-                            <tr class="intro-x">
+                            <tr class="intro-x" id="tr-content">
                                 <td class="w-52">
                                     <div class="flex justify-center">
                                         @foreach($product->productImages as $image)
@@ -69,25 +101,44 @@
                                                 @break
                                             @endif--}}
                                             <div class="w-10 h-10 image-fit zoom-in" style="margin-left: -0.70rem">
-                                                <img data-action="zoom" alt="Product-img" class="rounded-full" src="{{ asset("storage/product-images")."/".$image -> image_path }}" title="Uploaded {{ Carbon\Carbon::parse($product->created_at)->diffForHumans() }}">
+                                                <img data-action="zoom" alt="Product-img" class="rounded-full" src="{{ asset("storage/product-images")."/".$image ->image_path }}" title="Uploaded {{ Carbon\Carbon::parse($product->created_at)->diffForHumans() }}">
                                             </div>
                                         @endforeach
                                     </div>
+                                    <div class="pt-2 sm:hidden">
+                                        <a href="" class="font-medium break-words text-center sm:text-left line-clamp-2">{{ $product->name }}</a>
+                                        @isset($product->productCategories)
+                                            <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5 flex justify-between px-2">
+                                                <span>{{ $product->productCategories->name }}</span>
+                                                <span class="inline-flex">
+                                                    <i class="fa-solid fa-boxes-stacked mr-1"></i> {{ $product->quantity }}
+                                                    <p class="mx-2">|</p>
+                                                    <i class="fa-solid fa-weight-scale mr-1"></i> {{ $product->weight }} Gram
+                                                </span>
+                                            </div>
+                                        @else
+                                            <div class="text-red-500 text-xs whitespace-nowrap mt-0.5">Belum dikategorikan</div>
+                                        @endif
+                                        <div class="flex flex-wrap justify-between px-2 pt-3">
+                                            <a class="flex items-center bg-gray-50 px-4 py-1 rounded text-blue-300" href="{{ route('seller.products.edit', $product->id) }}"> <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Edit </a>
+                                            <a class="flex items-center bg-gray-50 px-4 py-1 rounded text-danger" href="javascript:;" data-tw-toggle="modal" data-tw-target="#delete-confirmation-modal-{{$product->id}}"> <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Delete </a>
+                                        </div>
+                                    </div>
                                 </td>
-                                <td>
-                                    <a href="" class="font-medium whitespace-nowrap">{{ $product->name }}</a>
+                                <td class="line-clamp-2 hidden">
+                                    <a href="" class="font-medium break-words">{{ $product->name }}</a>
                                     @isset($product->productCategories)
                                         <div class="text-slate-500 text-xs whitespace-nowrap mt-0.5">{{ $product->productCategories->name }}</div>
                                     @else
                                         <div class="text-red-500 text-xs whitespace-nowrap mt-0.5">Belum dikategorikan</div>
                                     @endif
                                 </td>
-                                <td class="text-center">{{ $product-> quantity }}</td>
-                                <td class="text-center">{{ $product-> weight }} Gram</td>
+                                <td class="text-center whitespace-nowrap hidden">{{ $product->quantity }}</td>
+                                <td class="text-center whitespace-nowrap hidden">{{ $product->weight }} Gram</td>
                                 {{--<td class="w-40">
                                     <div class="flex items-center justify-center text-success"> <i data-lucide="check-square" class="w-4 h-4 mr-2"></i> Active </div>
                                 </td>--}}
-                                <td class="table-report__action w-56">
+                                <td class="table-report__action w-56 whitespace-nowrap hidden">
                                     <div class="flex justify-center items-center">
                                         <a class="flex items-center mr-3" href="{{ route('seller.products.edit', $product->id) }}"> <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Edit </a>
                                         <a class="flex items-center text-danger" href="javascript:;" data-tw-toggle="modal" data-tw-target="#delete-confirmation-modal-{{$product->id}}"> <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Delete </a>
@@ -107,35 +158,6 @@
                     </table>
                 </div>
                 <!-- END: Data List -->
-                <div class="flex justify-between mt-4">
-                    @if($listProducts->previousPageUrl())
-                        <a href="{{ $listProducts->previousPageUrl() }}"
-                           class="text-gray-500 hover:text-blue-600 px-4 py-2 rounded-full hover:bg-blue-100 transition-colors duration-200">
-                            Previous
-                        </a>
-                    @else
-                        <span class="text-gray-300 px-4 py-2 rounded-full">Previous</span>
-                    @endif
-
-                    @if($simplePagination)
-                        <span class="text-gray-500 px-4 py-2 rounded-full">
-                                {{ $listProducts->currentPage() }}
-                            </span>
-                    @else
-                        <div>
-                            {{ $listProducts->links('vendor.pagination.tailwind') }}
-                        </div>
-                    @endif
-
-                    @if($listProducts->nextPageUrl())
-                        <a href="{{ $listProducts->nextPageUrl() }}"
-                           class="text-gray-500 hover:text-blue-600 px-4 py-2 rounded-full hover:bg-blue-100 transition-colors duration-200">
-                            Next
-                        </a>
-                    @else
-                        <span class="text-gray-300 px-4 py-2 rounded-full">Next</span>
-                    @endif
-                </div>
             </div>
             @include('.seller.products.partials.delete-product-modal')
         @else
@@ -176,7 +198,44 @@
                     @endphp
                     @endif
                     <!-- END: Notification -->
+
+                    <!-- BEGIN: Notification Error-->
+                    @if(Session::has('error'))
+                    Toastify({
+                        node: $("#error-notification-content").clone().removeClass("hidden")[0],
+                        duration: 2000,
+                        newWindow: true,
+                        close: true,
+                        gravity: "top",
+                        position: "right",
+                        stopOnFocus: true,
+                        offset: {
+                            y: 80
+                        },
+                    }).showToast();
+                    @php
+                        Session::forget('error');
+                    @endphp
+                    @endif
+                    <!-- END: Notification -->
+
+                    $('input[type="text"]').on('keyup', searchTable);
+
                 })
+
+                function searchTable() {
+                    var input = $(this).val().toLowerCase();
+                    $('#order-table tbody tr').filter(function () {
+                        $(this).toggle($(this).text().toLowerCase().indexOf(input) > -1);
+                    });
+
+                    // Tampilkan kembali thead jika ada baris yang ditampilkan pada tbody
+                    if ($('#order-table tbody tr:visible').length > 0) {
+                        $('#order-table thead').show();
+                    } else {
+                        $('#order-table thead').hide();
+                    }
+                }
             </script>
 
         @endsection

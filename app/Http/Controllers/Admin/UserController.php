@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
+use App\Models\Store;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -73,7 +75,24 @@ class UserController extends Controller
         if ($user->hasRole('admin')) {
             return back()->with('error', 'anda adalah "admin".');
         }
+
+        $hasOrders = Order::query()->where('user_id', $user->id)->exists();
+        $hasStoreAndThatStoreHasOrder = Store::query()->where('user_id', $user->id)->whereHas('orders')->exists();
+
+        if ($hasOrders || $hasStoreAndThatStoreHasOrder) {
+            return back()->with('error', 'Pengguna sedang dalam transaksi.');
+        }
+
         $user->delete();
         return back()->with('success', "pengguna '$user->name' dihapus.");
     }
+
+    #function for search user
+    public function search(Request $request)
+    {
+        $search = $request->input('search');
+        $users = User::query()->where('name', 'like', '%'.$search.'%')->orWhere('email', 'like', '%'.$search.'%')->get();
+        return view('admin.users.partials.user_list', ['users' => $users]);
+    }
+
 }

@@ -4,7 +4,7 @@
         {{ Breadcrumbs::render('permissions') }}
     @endsection
 
-    <div class="overflow-x-auto relative sm:rounded-lg mx-auto sm:px-3 lg:px-5">
+    <div class="overflow-x-auto relative sm:rounded-lg mx-auto">
         <div class="flex justify-start py-8">
             <a href="#"
                data-tw-toggle="modal"

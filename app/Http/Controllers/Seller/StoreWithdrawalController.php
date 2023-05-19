@@ -43,9 +43,9 @@ class StoreWithdrawalController extends Controller
                 $storeTrans -> payment_type = 'withdrawal';
                 $storeTrans -> save();
 
-                $storeBalance = User::find(Auth::user()->stores->id);
-                $storeBalance -> balance -= $amount;
-                $storeBalance -> update();
+                $store = Auth::user()->stores;
+                $store->balance -= $amount;
+                $store->update();
 
                 return redirect()->route('seller.transaction.index');
             }

@@ -45,16 +45,16 @@
                                         <button class="del-cart-btn text-red-500 font-bold mr-5">
                                             <i class="fa-regular fa-trash-can text-xl"></i>
                                         </button>
-                                        <input type="hidden" value="{{ $cart_item -> products -> id }}" class="prod_id">
-                                        <input class="hidden max-qty inline-block p-0 m-0" id="max-qty" value="{{ $cart_item -> products -> quantity }}" name="max-qty">
+                                        <input type="hidden" class="prod_id" value="{{ $cart_item -> products -> id }}">
+                                        <input type="hidden" class="max-qty" value="{{ $cart_item -> products -> quantity }}">
                                         <div class="inline-flex h-10 rounded-lg bg-transparent">
                                             <button class="changeQuantity decrement_btn text-red-400 rounded-l cursor-pointer outline-none">
                                                 <i class="fa-solid fa-circle-minus text-lg"></i>
                                             </button>
                                             @if( $cart_item -> products -> quantity < $cart_item -> product_qty)
-                                                <input type="number" name="quantity" class="qty_input p-0 border-transparent outline-none focus:outline-none text-center w-14 font-semibold text-md focus:text-black flex items-center text-gray-700  outline-none" disabled value="0">
+                                                <input type="number" name="quantity" class="qty_input p-0 border-transparent outline-none focus:outline-none text-center w-14 font-semibold text-md focus:text-black flex items-center text-gray-700" disabled value="0">
                                             @else
-                                                <input type="number" name="quantity" class="qty_input p-0 border-transparent outline-none focus:outline-none text-center w-14 font-semibold text-md focus:text-black flex items-center text-gray-700  outline-none" disabled value="{{ $cart_item -> product_qty }}">
+                                                <input type="number" name="quantity" class="qty_input p-0 border-transparent outline-none focus:outline-none text-center w-14 font-semibold text-md focus:text-black flex items-center text-gray-700" disabled value="{{ $cart_item -> product_qty }}">
                                             @endif
                                             <button class="changeQuantity increment_btn text-red-400 rounded-r cursor-pointer">
                                                 <i class="fa-solid fa-circle-plus text-lg"></i>

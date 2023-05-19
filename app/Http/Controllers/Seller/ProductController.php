@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Seller;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Seller\StoreProductRequest;
 use App\Http\Requests\Seller\UpdateProductRequest;
+use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\ProductImage;
@@ -150,23 +151,30 @@ class ProductController extends Controller
         return back()->with('error','Wajib menggunggah minimal 1 gambar produk.');
     }
 
-    public function destroy($product)
-    {
-        $product = Product::find($product);
-        if ($product)
-        {
-            foreach ( $product->productImages as $image)
-            {
+    public function destroy($product) {
+        $product = Product::query()->find($product);
+
+        if ($product) {
+            // Memeriksa apakah ada order_item terkait dengan produk ini
+            $hasOrders = OrderItem::query()->where('product_id', $product->id)->exists();
+
+            if ($hasOrders) {
+                return redirect('seller/products')->with('error', 'Produk sedang dalam transaksi.');
+            }
+
+            foreach ($product->productImages as $image) {
                 $path = public_path('storage/product-images/'.$image->image_path);
                 if (file_exists($path)) {
                     unlink($path);
                 }
             }
+
             $product->productImages()->delete();
             $product->delete();
-            return redirect('seller/products')->with('success', 'Produk berhasil di hapus.');
+            return redirect('seller/products')->with('success', 'Produk berhasil dihapus.');
         }
-        $product->delete();
-        return redirect('seller/products')->with('success', 'Produk tidak memiliki gambar.');
+
+        return redirect('seller/products')->with('success', 'Produk tidak ditemukan.');
     }
+
 }
