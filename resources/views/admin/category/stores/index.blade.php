@@ -25,7 +25,7 @@
                                      title="Diunggah {{ Carbon\Carbon::parse($store_cate->created_at)->diffForHumans() }}">
                             @else
                                 <img alt="Product-img" class="tooltip rounded-full"
-                                     src="{{ asset("assets/images/umkm-boy.png") }}"
+                                     src="https://ui-avatars.com/api/?name={{ $store_cate->name }}&amp;color=7F9CF5&amp;background=EBF4FF"
                                      title="Diunggah {{ Carbon\Carbon::parse($store_cate->created_at)->diffForHumans() }}">
                             @endif
                         </div>

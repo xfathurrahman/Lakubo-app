@@ -50,7 +50,7 @@
                                     <div class="w-52 mx-auto xl:mr-0 xl:ml-6">
                                         <div class="border-2 border-dashed shadow-sm border-blue-500 border-opacity-20 dark:border-darkmode-400 rounded-md p-5">
                                             <div class="h-40 relative image-fit cursor-pointer zoom-in mx-auto">
-                                                <img class="rounded-md" alt="Midone - HTML Admin Template" src="http://rubick.left4code.com/dist/images/profile-15.jpg">
+                                                <img class="rounded-md" alt="Lakubo - Lapak UMKM Boyolali" src="http://rubick.left4code.com/dist/images/profile-15.jpg">
                                                 <div class="tooltip w-5 h-5 flex items-center justify-center absolute rounded-full text-white bg-danger right-0 top-0 -mr-2 -mt-2">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="x" data-lucide="x" class="lucide lucide-x w-4 h-4"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                                                 </div>

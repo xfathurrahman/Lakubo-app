@@ -443,26 +443,26 @@
 
         <script>
             function copyToClipboard(selector) {
-            var element = document.querySelector(selector);
-            if (!element) {
-                console.error("Error: Selector '" + selector + "' not found");
-                return;
-            }
-            var $temp = document.createElement("input");
-            document.body.appendChild($temp);
-            $temp.value = element.textContent;
-            $temp.select();
-            document.execCommand("copy");
-            document.body.removeChild($temp);
+                var element = document.querySelector(selector);
+                if (!element) {
+                    console.error("Error: Selector '" + selector + "' not found");
+                    return;
+                }
+                var $temp = document.createElement("input");
+                document.body.appendChild($temp);
+                $temp.value = element.textContent;
+                $temp.select();
+                document.execCommand("copy");
+                document.body.removeChild($temp);
 
-            var tooltip = document.createElement("div");
-            tooltip.classList.add("tooltip-copy");
-            tooltip.textContent = "Disalin!";
-            element.appendChild(tooltip);
+                var tooltip = document.createElement("div");
+                tooltip.classList.add("tooltip-copy");
+                tooltip.textContent = "Disalin!";
+                element.appendChild(tooltip);
 
-            setTimeout(function() {
-                element.removeChild(tooltip);
-            }, 1000);
+                setTimeout(function() {
+                    element.removeChild(tooltip);
+                }, 1000);
             }
         </script>
 

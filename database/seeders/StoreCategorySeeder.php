@@ -10,128 +10,103 @@ class StoreCategorySeeder extends Seeder
     public function run()
     {
         StoreCategory::create([
-            'name' => 'PERDAGANGAN, HOTEL dan RESTORAN',
-            'image_path' => 'umkm-boy.png'
+            'name' => 'PERDAGANGAN, HOTEL dan RESTORAN'
         ]);
 
         StoreCategory::create([
-            'name' => 'JASA SWASTA',
-            'image_path' => 'umkm-boy.png'
+            'name' => 'JASA SWASTA'
         ]);
 
         StoreCategory::create([
-            'name' => 'INDUSTRI PENGOLAHAN',
-            'image_path' => 'umkm-boy.png'
+            'name' => 'INDUSTRI PENGOLAHAN'
         ]);
 
         StoreCategory::create([
-            'name' => 'PERTANIAN, PETERNAKAN, KEHUTANAN dan PERIKANAN',
-            'image_path' => 'umkm-boy.png'
+            'name' => 'PERTANIAN, PETERNAKAN, KEHUTANAN dan PERIKANAN'
         ]);
 
         StoreCategory::create([
-            'name' => 'PEDAGANG ECERAN',
-            'image_path' => 'umkm-boy.png'
+            'name' => 'PEDAGANG ECERAN'
         ]);
 
         StoreCategory::create([
-            'name' => 'TOKO KELONTONG',
-            'image_path' => 'umkm-boy.png'
+            'name' => 'TOKO KELONTONG'
         ]);
 
         StoreCategory::create([
-            'name' => 'INDUSTRI PENGOLAHAN MAKANAN',
-            'image_path' => 'umkm-boy.png'
+            'name' => 'INDUSTRI PENGOLAHAN MAKANAN'
         ]);
 
         StoreCategory::create([
-            'name' => 'PERSEWAAN',
-            'image_path' => 'umkm-boy.png'
+            'name' => 'PERSEWAAN'
         ]);
 
         StoreCategory::create([
-            'name' => 'LISTRIK, GAS, dan AIR BERSIH',
-            'image_path' => 'umkm-boy.png'
+            'name' => 'LISTRIK, GAS, dan AIR BERSIH'
         ]);
 
         StoreCategory::create([
-            'name' => 'AKNGUKTAN dan KOMUNIKASI',
-            'image_path' => 'umkm-boy.png'
+            'name' => 'AKNGUKTAN dan KOMUNIKASI'
         ]);
 
         StoreCategory::create([
-            'name' => 'INDUSTRI PENGOLAHAN TEKSTIL/PAKAIAN JADI/KONVEKSI',
-            'image_path' => 'umkm-boy.png'
+            'name' => 'INDUSTRI PENGOLAHAN TEKSTIL/PAKAIAN JADI/KONVEKSI'
         ]);
 
         StoreCategory::create([
-            'name' => 'INDUSTRI PENGOLAHAN KERAJINAN KAYU DAN ANYAMAN',
-            'image_path' => 'umkm-boy.png'
+            'name' => 'INDUSTRI PENGOLAHAN KERAJINAN KAYU DAN ANYAMAN'
         ]);
 
         StoreCategory::create([
-            'name' => 'BANGUNAN',
-            'image_path' => 'umkm-boy.png'
+            'name' => 'BANGUNAN'
         ]);
 
         StoreCategory::create([
-            'name' => 'INDUSTRI PENGOLAHAN MINUMAN',
-            'image_path' => 'umkm-boy.png'
+            'name' => 'INDUSTRI PENGOLAHAN MINUMAN'
         ]);
 
         StoreCategory::create([
-            'name' => 'INDUSTRI PENGOLAHAN HANDYCRAFT',
-            'image_path' => 'umkm-boy.png'
+            'name' => 'INDUSTRI PENGOLAHAN HANDYCRAFT'
         ]);
 
         StoreCategory::create([
-            'name' => 'JASA BOGA (KATERING)',
-            'image_path' => 'umkm-boy.png'
+            'name' => 'JASA BOGA (KATERING)'
         ]);
 
         StoreCategory::create([
-            'name' => 'PERTAMBANGAN dan PENGGALIAN',
-            'image_path' => 'umkm-boy.png'
+            'name' => 'PERTAMBANGAN dan PENGGALIAN'
         ]);
 
         StoreCategory::create([
-            'name' => 'INDUSTRI PENGOLAHAN NON LOGAM',
-            'image_path' => 'umkm-boy.png'
+            'name' => 'INDUSTRI PENGOLAHAN NON LOGAM'
         ]);
 
         StoreCategory::create([
-            'name' => 'INDUSTRI PENGOLAHAN LOGAM',
-            'image_path' => 'umkm-boy.png'
+            'name' => 'INDUSTRI PENGOLAHAN LOGAM'
         ]);
 
         StoreCategory::create([
-            'name' => 'PERDAGANGAN BESAR',
-            'image_path' => 'umkm-boy.png'
+            'name' => 'PERDAGANGAN BESAR'
         ]);
 
         StoreCategory::create([
-            'name' => 'PERDAGANGAN BESAR',
-            'image_path' => 'umkm-boy.png'
+            'name' => 'PERDAGANGAN BESAR'
         ]);
 
         StoreCategory::create([
-            'name' => 'PUSAT PENJUALAN MAKANAN (FOOD COURT)',
-            'image_path' => 'umkm-boy.png'
+            'name' => 'PUSAT PENJUALAN MAKANAN (FOOD COURT)'
         ]);
 
         StoreCategory::create([
-            'name' => 'INDUSTRI PENGOLAHAN BATIK',
-            'image_path' => 'umkm-boy.png'
+            'name' => 'INDUSTRI PENGOLAHAN BATIK'
         ]);
 
         StoreCategory::create([
-            'name' => 'USAHA RESTORAN',
-            'image_path' => 'umkm-boy.png'
+            'name' => 'USAHA RESTORAN'
         ]);
 
         StoreCategory::create([
-            'name' => 'KAFE',
-            'image_path' => 'umkm-boy.png'
+            'name' => 'KAFE'
         ]);
 
     }

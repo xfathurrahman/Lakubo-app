@@ -47,6 +47,12 @@ Breadcrumbs::for('categories', function (BreadcrumbTrail $trail) {
     $trail->push('Kelola Kategori', url('admin/categories')); // Kelola Kategori
 });
 
+// Konfirmasi Orders
+Breadcrumbs::for('admin-confirmOrders', function (BreadcrumbTrail $trail) {
+    $trail->parent('admin_dashboard'); // Admin Dashboard
+    $trail->push('Konfirmasi Order', url('admin/confirm/orders')); // Konfirmasi Orders
+});
+
 // Transaksi Pelanggan
 Breadcrumbs::for('customer-transactions', function (BreadcrumbTrail $trail) {
     $trail->parent('admin_dashboard'); // Admin Dashboard

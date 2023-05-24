@@ -129,7 +129,7 @@
                                     <div class="intro-y">
                                         <div class="box px-4 py-4 mb-3 flex items-center zoom-in">
                                             <div class="w-10 h-10 flex-none image-fit rounded-md overflow-hidden">
-                                                <img alt="Midone - HTML Admin Template" src="{{ asset('storage/product-images/'.$item->productImage->image_path) }}">
+                                                <img alt="Lakubo - Lapak UMKM Boyolali" src="{{ asset('storage/product-images/'.$item->productImage->image_path) }}">
                                             </div>
                                             <div class="ml-4 w-9/12 overflow-hidden mr-4">
                                                 <div class="font-medium w-full truncate">{{ $item->name }}</div>

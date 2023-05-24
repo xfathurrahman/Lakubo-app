@@ -59,6 +59,7 @@ return new class extends Migration
             $table->string('service');
             $table->string('etd');
             $table->string('tracking_number')->nullable();
+            $table->date('shipping_at')->nullable();
             $table->timestamps();
         });
 

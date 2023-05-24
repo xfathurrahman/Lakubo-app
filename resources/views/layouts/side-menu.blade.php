@@ -93,6 +93,12 @@
                         </a>
                     </li>
                     <li>
+                        <a href="{{url('admin/confirm/orders')}}" class="side-menu {{ Request::is('admin/confirm/orders') ? 'side-menu--active' : '' }}">
+                            <div class="side-menu__icon"> <i data-lucide="truck"></i> </div>
+                            <div class="side-menu__title">Konfirmasi Pesanan</div>
+                        </a>
+                    </li>
+                    <li>
                         <a href="#" class="side-menu {{ Request::is('admin/transactions/*') ? 'side-menu--active' : '' }}">
                             <div class="side-menu__icon"> <i data-lucide="slack"></i> </div>
                             <div class="side-menu__title">

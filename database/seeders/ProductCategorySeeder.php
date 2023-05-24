@@ -10,8 +10,7 @@ class ProductCategorySeeder extends Seeder
     public function run()
     {
         ProductCategory::create([
-            'name' => 'VAS bunga',
-            'image_path' => 'gambar-1.jpg'
+            'name' => 'Kerajinan'
         ]);
     }
 }

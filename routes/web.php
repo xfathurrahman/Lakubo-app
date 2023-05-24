@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\ConfirmOrderController;
 use App\Http\Controllers\Admin\WithdrawalController;
 use App\Http\Controllers\Customer\CartController;
 use App\Http\Controllers\Customer\CheckoutController;
@@ -75,6 +76,9 @@ Route::middleware(['auth', 'verified', 'role:admin'])->name('admin.')->prefix('a
     Route::get('/transactions/customers', [AdminTransactionController::class,'customerTransactions'])->name('transaction.customers');
     Route::post('/transactions/stores/update', [AdminTransactionController::class,'storeTransactionUpdate'])->name('store.transaction.update');
     Route::post('/transactions/customers/update', [AdminTransactionController::class,'customerTransactionUpdate'])->name('customer.transaction.update');
+    /*-----------------------------------------------Confirm Order-------------------------------------------------------*/
+    Route::get('/confirm/orders', [ConfirmOrderController::class,'index'])->name('confirmOrders');
+    Route::post('/confirm/order/{order_id}', [ConfirmOrderController::class, 'confirmOrder'])->name('confirm.order');
     /*-----------------------------------------------Withdrawals-------------------------------------------------------*/
     Route::get('/withdrawal/customers', [WithdrawalController::class,'customerIndex'])->name('withdrawal.customer.index');
     Route::get('/withdrawal/stores', [WithdrawalController::class,'storeIndex'])->name('withdrawal.store.index');

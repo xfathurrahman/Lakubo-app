@@ -93,10 +93,13 @@ class SellerOrderController extends Controller
     {
         $selectedStatus = $request->input('selectedStatus');
 
-        $order = new Order();
-        $order = $order->find($order_id);
+        $order = Order::query()->find($order_id);
         $order->status = $selectedStatus;
         $order->update();
+
+        if ($selectedStatus == 'delivered') {
+            $order->orderShipping()->update(['shipping_at' => now()]);
+        }
 
         return view('seller.orders.partials.detail_order', [
             'order' => $order,

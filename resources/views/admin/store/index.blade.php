@@ -60,8 +60,11 @@
                         <td class="!py-3.5">
                             <div class="sm:hidden flex items-center">
                                 <div class="w-9 h-9 image-fit zoom-in sm:hidden">
-                                    <img alt="Midone - HTML Admin Template" class="rounded-lg border-white shadow-md" src="{{ asset('storage/profile-photos/'. $store->users->profile_photo_path) }}">
-                                </div>
+                                    @isset($store->users->profile_photo_path)
+                                        <img class="rounded-full" src="{{ asset('storage/profile-photos/'. $store->users->profile_photo_path) }}" alt="pp-owner"/>
+                                    @else
+                                        <img class="rounded-full" src="https://ui-avatars.com/api/?name={{ $store->name }}&amp;color=7F9CF5&amp;background=EBF4FF" alt="pp-owner"/>
+                                    @endisset                                </div>
                                 <a href="" class="flex flex-col ml-2 w-44">
                                     <span class="font-medium text-lg text-red-400 truncate">
                                         <i class="fa-solid fa-store text-sm mr-2"></i>{{ $store->name }}
@@ -73,7 +76,11 @@
                             </div>
                             <div class="flex items-center my-2 sm:my-0">
                                 <div class="w-9 h-9 image-fit zoom-in hidden sm:block">
-                                    <img alt="Midone - HTML Admin Template" class="rounded-lg border-white shadow-md" src="{{ asset('storage/profile-photos/'. $store->users->profile_photo_path) }}">
+                                    @isset($store->users->profile_photo_path)
+                                        <img class="rounded-full" src="{{ asset('storage/profile-photos/'. $store->users->profile_photo_path) }}" alt="pp-owner"/>
+                                    @else
+                                        <img class="rounded-full" src="https://ui-avatars.com/api/?name={{ $store->name }}&amp;color=7F9CF5&amp;background=EBF4FF" alt="pp-owner"/>
+                                    @endisset
                                 </div>
                                 <div class="sm:ml-4">
                                     <a href="" class="font-medium whitespace-nowrap">{{ $store->users->name }}</a>

@@ -5,14 +5,11 @@ namespace App\Http\Controllers\Seller;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Product;
-use App\Models\Store;
-use Illuminate\Http\Request;
 
 class SellerDashboardController extends Controller
 {
     public function index()
     {
-
         if (is_null(auth()->user()->stores)){
             return back()->with('error','Anda belum memiliki Lapak UMKM');
         }
@@ -40,35 +37,5 @@ class SellerDashboardController extends Controller
             'transactionSuccess' => $transactionSuccess,
             'totalSales' => $totalSales
         ]);
-    }
-
-    public function create()
-    {
-        //
-    }
-
-    public function store(Request $request)
-    {
-        //
-    }
-
-    public function show($id)
-    {
-        //
-    }
-
-    public function edit($id)
-    {
-        //
-    }
-
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    public function destroy($id)
-    {
-        //
     }
 }
