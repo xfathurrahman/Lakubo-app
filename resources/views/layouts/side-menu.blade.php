@@ -4,23 +4,23 @@
     <nav class="side-nav">
 
         @if(Request::is('admin/*'))
-            <a href="{{ route('admin.dashboard') }}" class="intro-x flex items-center pl-5 pt-4">
-                <img alt="Lakubo - Lapak UMKM Boyolali" class="w-6" src="{{ asset('assets/images/logo.svg') }}">
-                <span class="hidden xl:block text-white text-lg ml-3 capitalize"> Lakubo Admin </span>
+            <a href="{{ route('admin.dashboard') }}" class="intro-x flex items-center mb-10">
+                <img alt="Lakubo - Lapak UMKM Boyolali" class="w-40" src="{{ asset('assets/images/lakubo-logo copy.svg') }}">
+                <span class="hidden xl:block font-medium text-white text-lg absolute mt-24 ml-10 truncate capitalize w-40"> {{ auth()->user()->name }} </span>
             </a>
         @elseif(Request::is('seller/*'))
-            <a href="{{ route('seller.dashboard') }}" class="intro-x flex items-center pl-5 pt-4">
-                <img alt="Lakubo - Lapak UMKM Boyolali" class="w-6" src="{{ asset('assets/images/logo.svg') }}">
+            <a href="{{ route('seller.dashboard') }}" class="intro-x flex items-center mb-10">
+                <img alt="Lakubo - Lapak UMKM Boyolali" class="w-40" src="{{ asset('assets/images/lakubo-logo copy.svg') }}">
                 @if(auth()->user()->stores)
-                    <span class="hidden xl:block text-white text-lg ml-3 capitalize"> {{ auth()->user()->stores->name }} </span>
+                    <span class="hidden xl:block font-medium text-white text-lg absolute mt-24 ml-10 truncate capitalize w-40"> {{ auth()->user()->stores->name }} </span>
                 @else
                     <span class="hidden xl:block text-white text-lg ml-3 capitalize"> Belum buka lapak </span>
                 @endif
             </a>
         @else
-            <a href="{{ route('profile.edit') }}" class="intro-x flex items-center pl-5 pt-4">
-                <img alt="Lakubo - Lapak UMKM Boyolali" class="w-6" src="{{ asset('assets/images/logo.svg') }}">
-                <span class="hidden xl:block text-white text-lg ml-3 capitalize"> {{ Auth::user()->name }} </span>
+            <a href="{{ route('profile.edit') }}" class="intro-x flex items-center mb-10">
+                <img alt="Lakubo - Lapak UMKM Boyolali" class="w-40" src="{{ asset('assets/images/lakubo-logo copy.svg') }}">
+                <span class="hidden xl:block font-medium text-white text-lg absolute mt-24 ml-10 truncate capitalize w-40"> {{ auth()->user()->name }} </span>
             </a>
         @endif
 
@@ -34,6 +34,7 @@
                             <div class="side-menu__title"> Dashboard </div>
                         </a>
                     </li>
+                    <hr class="opacity-30 my-6 intro-x">
                     <li>
                         <a href="{{ url('seller/store') }}" class="side-menu {{ Request::is('seller/store') ? 'side-menu--active' : '' }}">
                             <div class="side-menu__icon"> <i data-lucide="home"></i> </div>
@@ -52,7 +53,7 @@
                             <div class="side-menu__title"> Pesanan </div>
                         </a>
                     </li>
-
+                    <hr class="opacity-30 my-6 intro-x">
                     <li>
                         <a href="{{ route('seller.withdraw.index') }}" class="side-menu {{ Request::is('seller/withdraw*') ? 'side-menu--active' : '' }}">
                             <div class="side-menu__icon"> <i data-lucide="wallet"></i> </div>
@@ -92,6 +93,7 @@
                             <div class="side-menu__title">Pengguna</div>
                         </a>
                     </li>
+                    <hr class="opacity-30 my-6 intro-x">
                     <li>
                         <a href="{{url('admin/confirm/orders')}}" class="side-menu {{ Request::is('admin/confirm/orders') ? 'side-menu--active' : '' }}">
                             <div class="side-menu__icon"> <i data-lucide="truck"></i> </div>
@@ -173,6 +175,7 @@
                             </li>
                         </ul>
                     </li>
+                    <hr class="opacity-30 my-6 intro-x">
                     <li>
                         <a href="#" class="side-menu {{ Request::is('admin/manage/roles') || Request::is('admin/manage/permissions') ? 'side-menu--active' : '' }}">
                             <div class="side-menu__icon"> <i data-lucide="cpu"></i> </div>
