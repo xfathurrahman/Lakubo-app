@@ -92,38 +92,11 @@
                 </select>
             </div>
             <div class="text-center sm:text-right w-full sm:w-auto">
-                <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#datepicker-modal-preview" class="btn btn-primary mt-2 sm:mt-0 w-full">
-                    <span class="hidden sm:block">Export</span>
-                    <span class="sm:hidden">Unduh Laporan .xlsx</span>
-                </a>
+                <button id="export-button" class="btn btn-primary mt-2 sm:mt-0 w-full">
+                    Unduh (.xlsx)
+                </button>
             </div>
         </div>
-
-        <!-- BEGIN: Modal Content -->
-        <div id="datepicker-modal-preview" class="modal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h2 class="font-medium text-base mr-auto">Unduh laporan pesanan lapak</h2>
-                    </div>
-                    <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
-                        <div class="col-span-12 sm:col-span-6">
-                            <div class="form-label">Dari</div>
-                            <input type="text" id="modal-datepicker-1" class="datepicker form-control" data-single-mode="true">
-                        </div>
-                        <div class="col-span-12 sm:col-span-6">
-                            <div class="form-label">Sampai</div>
-                            <input type="text" id="modal-datepicker-2" class="datepicker form-control" data-single-mode="true">
-                        </div>
-                    </div>
-                    <div class="modal-footer text-right">
-                        <button type="button" data-tw-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">Batal</button>
-                        <button class="btn btn-primary"> <i data-lucide="file" class="w-4 h-4 mr-2"></i> Unduh </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- END: Modal Content -->
 
         <div class="intro-y col-span-12 sm:overflow-auto 2xl:overflow-visible">
             <table id="order-table" class="table table-report w-full table-fixed -mt-2">
@@ -146,6 +119,29 @@
     </div>
 
     @section('script')
+
+        <script>
+            $(document).ready(function() {
+                $('#export-button').click(function() {
+                    $.ajax({
+                        url: '{{ route("seller.orders.export") }}',
+                        method: 'GET',
+                        xhrFields: {
+                            responseType: 'blob'
+                        },
+                        success: function(data) {
+                            var a = document.createElement('a');
+                            var url = window.URL.createObjectURL(data);
+                            a.href = url;
+                            a.download = 'orders.xlsx';
+                            a.click();
+                            window.URL.revokeObjectURL(url);
+                        }
+                    });
+                });
+            });
+        </script>
+
         <script>
             $(document).ready(function() {
 
@@ -213,7 +209,9 @@
                     $('#order-table thead').hide();
                 }
             }
+
         </script>
+
     @endsection
 
 </x-app-layout>

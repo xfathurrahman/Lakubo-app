@@ -66,5 +66,3 @@ class Regency extends Model
         return $this->hasMany(StoreAddress::class);
     }
 }
-    
-}

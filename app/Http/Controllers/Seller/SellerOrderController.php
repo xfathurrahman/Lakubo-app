@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Seller;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
-use App\Models\StoreTransaction;
 use App\Models\User;
 use App\Models\UserTransaction;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\OrdersExport;
+use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 
 class SellerOrderController extends Controller
 {
@@ -119,6 +121,12 @@ class SellerOrderController extends Controller
         $orderShipping->update();
 
         return response()->json(['success' => "Tersimpan."]);
+    }
+
+
+    public function exportOrders(Request $request)
+    {
+        return Excel::download(new OrdersExport, 'orders.xlsx');
     }
 
 

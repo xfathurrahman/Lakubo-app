@@ -13,6 +13,7 @@
         "laravel/framework": "^10.0",
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.8",
+        "maatwebsite/excel": "^3.1",
         "midtrans/midtrans-php": "^2.5",
         "milon/barcode": "^10.0",
         "nesbot/carbon": "^2.66",
