@@ -20,6 +20,8 @@
             @include('home.components.footer')
         </footer>
 
+        @include('layouts.bottom-nav')
+
         <script src="{{ asset('js/jquery-3.6.1.js') }}"></script>
         <script src="{{ asset('js/owl.carousel.js') }}"></script>
         <script src="{{ asset('js/slick.min.js') }}"></script>

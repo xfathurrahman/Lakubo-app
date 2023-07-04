@@ -38,7 +38,7 @@
     </div>
 </div>
 
-<div class="md:flex md:justify-between p-4 bg-white w-full">
+<div class="md:flex md:justify-between p-4 bg-white w-full mb-8 sm:mb-0">
     <a href="https://goo.gl/maps/f7nPofSVnBwH4TC28" class="mr-4 h-28 w-full lg:w-8/12 rounded-lg xl:w-9/12 overflow-hidden">
         <img class="object-cover transform hover:scale-150 cursor-zoom-in h-28 w-full" src="{{ asset('assets/images/maps.png') }}" alt="maps">
     </a>

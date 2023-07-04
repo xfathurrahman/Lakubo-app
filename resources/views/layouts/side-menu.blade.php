@@ -240,7 +240,7 @@
     </nav>
     <!-- END: Side Menu -->
     <!-- BEGIN: Content -->
-    <div class="content">
+    <div class="content mb-16 sm:mb-0">
         @include('components.top-bar')
         <!-- Page Content -->
         <main>

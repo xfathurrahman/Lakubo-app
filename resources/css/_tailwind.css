@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    .btm-nav {
+        @apply hover:text-red-500 active:-translate-y-1 transition
+    }
+}

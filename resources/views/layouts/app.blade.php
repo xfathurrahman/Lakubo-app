@@ -11,6 +11,7 @@
     <body class="py-5">
         @include('components.mobile-menu')
         @include('layouts.side-menu')
+        @include('layouts.bottom-nav')
         <script src="{{ asset('js/midone_app.js') }}"></script>
         <script src="{{ asset('js/jquery-3.6.1.js') }}"></script>
         <script src="{{ asset('js/toastify.js') }}"></script>
@@ -22,4 +23,5 @@
         @yield('script')
         @yield('script-navbar')
     </body>
+
 </html>

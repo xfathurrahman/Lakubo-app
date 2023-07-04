@@ -75,8 +75,8 @@
 
     <!-- BEGIN: Content -->
     <div class="grid grid-cols-12 gap-6 mt-5">
-        <div class="intro-y col-span-12 flex justify-between items-center mt-2">
-            <div class="flex w-full sm:w-auto">
+        <div class="intro-y col-span-12 flex flex-col sm:flex-row justify-between items-center mt-2">
+            <div class="flex w-full sm:w-auto mb-2 sm:mb-0">
                 <div class="w-48 relative text-slate-500 mr-2">
                     <input type="text" class="input form-control rounded w-14 sm:w-48 box pr-10" placeholder="Cari...">
                     <i class="w-4 h-4 absolute mt-2.5 mb-auto inset-y-0 mr-3 right-0" data-lucide="search"></i>
@@ -91,7 +91,39 @@
                     <option value="cancelled">Dibatalkan</option>
                 </select>
             </div>
+            <div class="text-center sm:text-right w-full sm:w-auto">
+                <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#datepicker-modal-preview" class="btn btn-primary mt-2 sm:mt-0 w-full">
+                    <span class="hidden sm:block">Export</span>
+                    <span class="sm:hidden">Unduh Laporan .xlsx</span>
+                </a>
+            </div>
         </div>
+
+        <!-- BEGIN: Modal Content -->
+        <div id="datepicker-modal-preview" class="modal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="font-medium text-base mr-auto">Unduh laporan pesanan lapak</h2>
+                    </div>
+                    <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
+                        <div class="col-span-12 sm:col-span-6">
+                            <div class="form-label">Dari</div>
+                            <input type="text" id="modal-datepicker-1" class="datepicker form-control" data-single-mode="true">
+                        </div>
+                        <div class="col-span-12 sm:col-span-6">
+                            <div class="form-label">Sampai</div>
+                            <input type="text" id="modal-datepicker-2" class="datepicker form-control" data-single-mode="true">
+                        </div>
+                    </div>
+                    <div class="modal-footer text-right">
+                        <button type="button" data-tw-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">Batal</button>
+                        <button class="btn btn-primary"> <i data-lucide="file" class="w-4 h-4 mr-2"></i> Unduh </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END: Modal Content -->
 
         <div class="intro-y col-span-12 sm:overflow-auto 2xl:overflow-visible">
             <table id="order-table" class="table table-report w-full table-fixed -mt-2">
