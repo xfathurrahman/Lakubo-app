@@ -12,6 +12,8 @@ namespace App\Models;
 use AzisHapidin\IndoRegion\Traits\VillageTrait;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\District;
+use App\Models\UserAddress;
+use App\Models\StoreAddress;
 
 /**
  * Village Model.
@@ -44,5 +46,13 @@ class Village extends Model
     public function district()
     {
         return $this->belongsTo(District::class);
+    }
+    public function userAddress()
+    {
+        return $this->hasMany(userAddress::class);
+    }
+    public function storeAddress()
+    {
+        return $this->hasMany(StoreAddress::class);
     }
 }

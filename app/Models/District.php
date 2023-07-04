@@ -13,6 +13,8 @@ use AzisHapidin\IndoRegion\Traits\DistrictTrait;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Regency;
 use App\Models\Village;
+use App\Models\UserAddress;
+use App\Models\StoreAddress;
 
 /**
  * District Model.
@@ -55,5 +57,14 @@ class District extends Model
     public function villages()
     {
         return $this->hasMany(Village::class);
+    }
+
+    public function userAddress()
+    {
+        return $this->hasMany(userAddress::class);
+    }
+    public function storeAddress()
+    {
+        return $this->hasMany(StoreAddress::class);
     }
 }

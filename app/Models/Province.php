@@ -11,6 +11,8 @@ namespace App\Models;
 
 use AzisHapidin\IndoRegion\Traits\ProvinceTrait;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\UserAddress;
+use App\Models\StoreAddress;
 
 /**
  * Province Model.
@@ -34,5 +36,15 @@ class Province extends Model
     {
         return $this->hasMany(Regency::class);
     }
+
+    public function userAddress()
+    {
+        return $this->hasMany(userAddress::class);
+    }
+    public function storeAddress()
+    {
+        return $this->hasMany(StoreAddress::class);
+    }
+}s
 
 }

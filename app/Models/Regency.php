@@ -11,6 +11,8 @@ namespace App\Models;
 
 use AzisHapidin\IndoRegion\Traits\RegencyTrait;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\UserAddress;
+use App\Models\StoreAddress;
 
 /**
  * Regency Model.
@@ -54,4 +56,15 @@ class Regency extends Model
     {
         return $this->hasMany(District::class);
     }
+
+    public function userAddress()
+    {
+        return $this->hasMany(userAddress::class);
+    }
+    public function storeAddress()
+    {
+        return $this->hasMany(StoreAddress::class);
+    }
+}
+    
 }
