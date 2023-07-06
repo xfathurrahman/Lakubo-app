@@ -123,20 +123,11 @@
         <script>
             $(document).ready(function() {
                 $('#export-button').click(function() {
-                    $.ajax({
-                        url: '{{ route("seller.orders.export") }}',
-                        method: 'GET',
-                        xhrFields: {
-                            responseType: 'blob'
-                        },
-                        success: function(data) {
-                            var a = document.createElement('a');
-                            var url = window.URL.createObjectURL(data);
-                            a.href = url;
-                            a.download = 'orders.xlsx';
-                            a.click();
-                            window.URL.revokeObjectURL(url);
-                        }
+                    var sellerId = {{ auth()->user()->stores->id }}
+                    var downloadUrl = '{{ route("seller.orders.export", ":sellerId") }}';
+                    downloadUrl = downloadUrl.replace(':sellerId', sellerId);
+                    $.get(downloadUrl, function(response) {
+                        window.location.href = response.download_url;
                     });
                 });
             });

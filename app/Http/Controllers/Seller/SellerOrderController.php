@@ -9,8 +9,9 @@ use App\Models\UserTransaction;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\OrdersExport;
-use Illuminate\Support\Facades\Validator;
+use App\Models\Store;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class SellerOrderController extends Controller
 {
@@ -123,11 +124,24 @@ class SellerOrderController extends Controller
         return response()->json(['success' => "Tersimpan."]);
     }
 
-
-    public function exportOrders(Request $request)
+    public function exportOrders($sellerId)
     {
-        return Excel::download(new OrdersExport, 'orders.xlsx');
-    }
-
+        $seller = Store::query()->find($sellerId);
+    
+        if (!$seller) {
+            return redirect()->back()->with('error', 'Lapak tidak ditemukan.');
+        }
+    
+        $filename = 'orders_' . $seller->name . '_' . Carbon::now()->format('d-m-Y_H:i:s') . '.xlsx';
+    
+        $path = storage_path('app/public/exports/' . $filename);
+    
+        Excel::store(new OrdersExport($seller), 'public/exports/' . $filename);
+    
+        $downloadUrl = asset('storage/exports/' . $filename);
+    
+        return response()->json(['download_url' => $downloadUrl]);
+    }     
+    
 
 }

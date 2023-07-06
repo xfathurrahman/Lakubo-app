@@ -5,14 +5,14 @@ ARG APP_NAME
 RUN usermod -u 1000 www-data
 
 RUN apt-get update -y
-RUN apt-get install -y unzip nginx libpq-dev libcurl4-gnutls-dev libfreetype6-dev libjpeg62-turbo-dev default-mysql-client
+RUN apt-get install -y unzip nginx libpq-dev libcurl4-gnutls-dev libfreetype6-dev libjpeg62-turbo-dev default-mysql-client libzip-dev
 
 RUN curl -fsSL https://deb.nodesource.com/setup_19.x | bash - && apt-get install -y nodejs
 
 RUN npm install -g npm@latest
 
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg
-RUN docker-php-ext-install pdo pdo_mysql bcmath curl -j$(nproc) gd opcache
+RUN docker-php-ext-install pdo pdo_mysql bcmath curl -j$(nproc) gd opcache zip
 
 WORKDIR /var/www/${APP_NAME}
 

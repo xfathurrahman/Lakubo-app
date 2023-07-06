@@ -133,7 +133,7 @@ Route::middleware(['auth', 'verified', 'role:seller'])->name('seller.')->prefix(
     Route::put('/orders/detail/confirm/{order_id}', [SellerOrderController::class,'confirmOrder'])->name('order.confirm');
     Route::put('/orders/detail/reject/{order_id}', [SellerOrderController::class,'rejectOrder'])->name('order.reject');
     Route::put('/orders/detail/resi/{order_id}', [SellerOrderController::class,'updateResi'])->name('order.update.resi');
-    Route::get('/orders/export', [SellerOrderController::class, 'exportOrders'])->name('orders.export');
+    Route::get('/orders/export/{sellerId}', [SellerOrderController::class, 'exportOrders'])->name('orders.export');
     /*-----------------------------------------------WITHDRAW---------------------------------------------------------*/
     Route::get('/withdrawals', [StoreWithdrawalController::class, 'index'])->name('withdraw.index');
     Route::post('/withdraw/store', [StoreWithdrawalController::class, 'store'])->name('withdraw.store');
