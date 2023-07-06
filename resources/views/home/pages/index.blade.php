@@ -75,7 +75,7 @@
                                                 <i class="fa-solid fa-pencil text-white"></i>
                                             </a>
                                         @else
-                                            <div class="add-to-cart product_data bg-red-400">
+                                            <div class="add-to-cart product_data" style="background: rgb(250, 112, 112)">
                                                 <button>
                                                     <input type="hidden" class="qty_input" name="product_qty" value="1">
                                                     <input type="hidden" class="prod_id" name="product_id" value="{{ $product->id }}">
