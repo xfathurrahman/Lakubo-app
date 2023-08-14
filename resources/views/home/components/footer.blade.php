@@ -40,7 +40,7 @@
 
 <div class="md:flex md:justify-between p-4 bg-white w-full mb-8 sm:mb-0">
     <a href="https://goo.gl/maps/f7nPofSVnBwH4TC28" class="mr-4 h-28 w-full lg:w-8/12 rounded-lg xl:w-9/12 overflow-hidden">
-        <img class="object-cover transform hover:scale-150 cursor-zoom-in h-28 w-full" src="{{ asset('assets/images/maps.png') }}" alt="maps">
+        <img class="object-cover transform hover:scale-150 cursor-zoom-in h-28 w-full" src="{{ asset('assets/images/maps.png') }}" alt="maps" width="100%" height="100%">
     </a>
     <div class="w-full flex lg:w-4/12 xl:w-3/12 justify-center items-center">
 
@@ -65,4 +65,7 @@
 
 <hr class="border-t-4 m-0 border-gray-200 sm:mx-auto">
 
-<div class="h-10 flex items-center justify-center">©2023<a href="#" class="mx-1 hover:underline">Lakubo™</a>All Rights Reserved.</div>
+<div class="h-10 flex items-center justify-center">©2023
+    <a href="#" class="mx-1 hover:underline">Lakubo™</a>All Rights Reserved. 
+    <a href="https://drive.google.com/file/d/1aWos1fcy19hWl8QdUbUe71D8dZClbEd1/view?usp=sharing" class="ml-2 text-blue-400">Unduh Aplikasi Android</a>
+</div>

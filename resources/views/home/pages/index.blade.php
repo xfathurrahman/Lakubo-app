@@ -32,7 +32,7 @@
                         </svg>
                         <div class="slider relative flex items-center justify-center">
                             {{--<div class="block absolute w-20 h-20 bottom-0 left-0 -mb-24 ml-3" style="background: radial-gradient(black, transparent 60%); transform: rotate3d(0, 0, 1, 20deg) scale3d(1, 0.6, 1); opacity: 0.2;"></div>--}}
-                            <img class="image-product max-w-full lazy" data-lazy="{{ asset("storage/product-categories")."/".$category -> image_path }}" alt="category-img">
+                            <img class="image-product max-w-full lazy" data-lazy="{{ asset("storage/product-categories")."/".$category->image_path }}" alt="category-img" width="200" height="150">
                         </div>
                         <div class="p-1 md:p-3 h-6 md:h-10 flex items-center justify-center">
                             <span class="text-2xs leading-2 md:text-xxs md:leading-3 lg:text-xs text-center font-semibold capitalize md:uppercase line-clamp-2 text-white">{{ $category -> name }}</span>
@@ -80,7 +80,7 @@
                                                     <input type="hidden" class="qty_input" name="product_qty" value="1">
                                                     <input type="hidden" class="prod_id" name="product_id" value="{{ $product->id }}">
                                                     <input type="hidden" class="store_id" name="store_id" value="{{ $product->stores->id }}">
-                                                    <button type="button" class="btn addToCartBtn">
+                                                    <button type="button" class="btn addToCartBtn" aria-label="addToCart">
                                                         <i class="fa fa-cart-plus text-white" aria-hidden="true"></i>
                                                     </button>
                                                 </button>
@@ -106,14 +106,14 @@
                                         <a href="{{ route('store.details', $product->stores->id) }}">
                                             <div class="owner-pp">
                                                 @isset($product->stores->users->profile_photo_path)
-                                                    <img class="rounded-full" src="{{ asset('storage/profile-photos/'. $product->stores->users->profile_photo_path) }}" alt="pp-owner"/>
+                                                    <img class="rounded-full" src="{{ asset('storage/profile-photos/'. $product->stores->users->profile_photo_path) }}" alt="pp-owner" width="100%" height="100%"/>
                                                 @else
-                                                    <img class="rounded-full" src="https://ui-avatars.com/api/?name={{ $product -> stores -> name }}&amp;color=7F9CF5&amp;background=EBF4FF" alt="pp-owner"/>
+                                                    <img class="rounded-full" src="https://ui-avatars.com/api/?name={{ $product -> stores -> name }}&amp;color=7F9CF5&amp;background=EBF4FF" alt="pp-owner" width="100%" height="100%"/>
                                                 @endisset
                                             </div>
                                             <div class="owner-name whitespace-nowrap font-bold"
-                                                data-hover-before="{{  $product -> stores -> name }}"
-                                                data-hover-after="{{  $product -> stores -> users -> name }}">
+                                                data-hover-before="{{  $product->stores->name }}"
+                                                data-hover-after="{{  $product->stores->users->name }}">
                                             </div>
                                         </a>
                                     </div>

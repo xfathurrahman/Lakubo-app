@@ -4,7 +4,13 @@
         <div class="box">
             <div class="flex flex-col lg:flex-row items-center p-5">
                 <div class="w-24 h-24 lg:w-12 lg:h-12 image-fit lg:mr-1">
-                    <img alt="Lakubo - Lapak UMKM Boyolali" class="rounded-full" src="http://rubick.left4code.com/dist/images/profile-8.jpg">
+                
+                @isset($user->profile_photo_path)
+                    <img alt="Lakubo - Lapak UMKM Boyolali" class="rounded-full" src="{{ asset('storage/profile-photos/'. $user->profile_photo_path) }}">
+                @else
+                    <img alt="Lakubo - Lapak UMKM Boyolali" class="rounded-full" src="https://ui-avatars.com/api/?size=100&name={{ $user->name }}">
+                @endisset
+
                 </div>
                 <div class="lg:ml-2 lg:mr-auto text-center lg:text-left mt-3 lg:mt-0">
                     <a href="" class="font-medium">{{ $user->name }}</a>

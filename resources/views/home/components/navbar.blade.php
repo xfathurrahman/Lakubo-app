@@ -13,7 +13,7 @@
     <div class="flex justify-between">
         <div class="flex items-center w-full">
             <a href="{{ route('home') }}" class="flex items-center xs:mx-3 w-24 lg:w-28 h-8">
-                <img src="{{ asset('assets/images/logo-app.svg') }}" alt="logo-app">
+                <img src="{{ asset('assets/images/logo-app.svg') }}" alt="logo-app" width="100%" height="100%">
             </a>
             <button data-search class="p-2 ml-4 sm:hidden focus:outline-none bg-red-400 hover:bg-red-300 rounded-md" type="button">
                 <i class="fa-solid fa-magnifying-glass text-lg text-white"></i>
@@ -48,7 +48,7 @@
                         @else
                             <input type="text" placeholder="Cari..." name="search" id="search" class="h-auto w-full my-1 mr-12 text-sm border-0 rounded-md focus:bg-white focus:ring-0">
                         @endif
-                        <button type="button" name="search-btn-main" id="search-btn" class="absolute inset-y-1 right-0 z-10 p-2 bg-white rounded-md hover:bg-gray-200 mr-2">
+                        <button type="button" name="search-btn-main" id="search-btn" class="absolute inset-y-1 right-0 z-10 p-2 bg-white rounded-md hover:bg-gray-200 mr-2" aria-label="Search">
                             <i class="fa-solid fa-magnifying-glass text-lg text-red-400"></i>
                         </button>
                     </div>

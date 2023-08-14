@@ -17,6 +17,7 @@
         "midtrans/midtrans-php": "^2.5",
         "milon/barcode": "^10.0",
         "nesbot/carbon": "^2.66",
+        "spatie/laravel-image-optimizer": "^1.7",
         "spatie/laravel-permission": "^5.7"
     },
     "require-dev": {
