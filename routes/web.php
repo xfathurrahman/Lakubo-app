@@ -108,6 +108,8 @@ Route::middleware(['auth', 'verified', 'role:admin'])->name('admin.')->prefix('a
     Route::put('/users/password/{user}', [UserController::class, 'updatePassword'])->name('users.password.update');
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
     Route::get('/admin/users/search', [UserController::class, 'search'])->name('users.search');
+    Route::post('/profile/update-photo/{user}', [UserController::class, 'updatePhoto'])->name('profile.update.photo');
+    Route::post('/profile/destroy-photo/{user}', [UserController::class, 'destroyPhoto'])->name('profile.destroy.photo');
 });
 
 Route::middleware(['auth', 'verified', 'role:seller'])->name('seller.')->prefix('seller')->group(function (){

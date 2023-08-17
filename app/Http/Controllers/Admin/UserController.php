@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -45,7 +47,7 @@ class UserController extends Controller
 
     public function updateUserAccount(Request $request, User $user)
     {
-        $updateUserAccount =  User::find($user->id);
+        $updateUserAccount =  User::query()->find($user->id);
         $updateUserAccount -> username = $request -> new_username;
         $updateUserAccount -> name = $request -> new_fullname;
         $updateUserAccount -> email = $request -> new_mail;
@@ -63,11 +65,49 @@ class UserController extends Controller
 
     public function updatePassword(Request $request, User $user)
     {
-        $updateUserPassword =  User::find($user->id);
-        $updateUserPassword -> password =  Hash::make($request->new_pass);
-        $updateUserPassword -> update();
+        $user -> password =  Hash::make($request->new_pass);
+        $user -> update();
 
         return back()->with('message', 'Kata sandi berhasil di ubah.');
+    }
+
+    public function updatePhoto(Request $request, User $user)
+    {
+        if (!$user) {
+            return redirect()->back()->with('error', 'User tidak ditemukan.');
+        }
+        if ($request->hasFile('profile_photo')) {
+            $image = $request->file('profile_photo');
+            $name = time().'.'.$image->getClientOriginalExtension();
+            $directory = public_path('/storage/profile-photos');
+                    if (!file_exists($directory)) {
+                        mkdir($directory, 0755, true);
+                    }
+            $path = $directory.'/'.$name;
+            Image::make($image->getRealPath())->resize(350, 350)->save($path);
+            if ($user->image_path) {
+                Storage::delete('public/storage/profile-photos/'.$user->profile_photo_path);
+            }
+            $user->profile_photo_path = $name;
+            $user->update();
+            return response()->json(['message' => 'Success to update profile photo']);
+        }
+        return response()->json(['message' => 'Failed to update profile photo']);
+    }
+
+    public function destroyPhoto(User $user)
+    {
+        if ($user->profile_photo_path)
+        {
+            $path = public_path('storage/profile-photos/'.$user->profile_photo_path);
+            if (file_exists($path)) {
+                unlink($path);
+            }
+            $user -> profile_photo_path = null;
+            $user -> save();
+            return response()->json(['message' => 'Success to delete profile photo']);
+        }
+        return response()->json(['message' => 'Photo already Empty']);
     }
 
     public function destroy(User $user)
