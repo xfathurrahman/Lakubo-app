@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Seller;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Product;
+use Illuminate\Support\Facades\DB;
 
 class SellerDashboardController extends Controller
 {
@@ -22,7 +23,20 @@ class SellerDashboardController extends Controller
             $query->where('status', 'awaiting_confirm');
         }])->get()->pluck('orders')->flatten()->count();
 
-        $topProductSales = Product::query()->where('store_id', auth()->user()->stores->id)->take(4)->get();
+        $topProductSales = Product::query()
+            ->withCount([
+                'orderItems as total_sold' => function ($query) {
+                    $query->select(DB::raw('coalesce(sum(quantity), 0)'));
+                }
+            ])
+            ->where('store_id', auth()->user()->stores->id)
+            ->whereHas('orderItems', function ($query) {
+                $query->where('quantity', '>', 0);
+            })
+            ->orderByDesc('total_sold')
+            ->take(3)
+            ->get();
+
         $transactionSuccess = Order::query()->where('store_id', auth()->user()->stores->id)->where('status', 'completed')->take(12)->get();
 
         # count grant_total from table orders where status = completed

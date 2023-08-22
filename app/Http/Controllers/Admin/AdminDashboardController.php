@@ -32,7 +32,7 @@ class AdminDashboardController extends Controller
         ->where('orders.status', 'completed')
         ->groupBy('products.id')
         ->orderByDesc('total_quantity')
-        ->take(10) // Ambil 10 produk terlaris
+        ->take(10)
         ->get();
 
         $topStores = Store::withCount(['orders' => function ($query) {

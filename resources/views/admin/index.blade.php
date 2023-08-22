@@ -10,76 +10,76 @@
                     <div class="grid grid-cols-12 gap-6">
                         <!-- BEGIN: General Report -->
                         <div class="col-span-12 lg:mt-8">
-                            <div class="intro-y flex items-center h-10">
-                                <h2 class="text-lg font-medium truncate mr-5">
+                            <div class="flex items-center h-10 intro-y">
+                                <h2 class="mr-5 text-lg font-medium truncate">
                                     Laporan Umum
                                 </h2>
-                                <a href="" class="ml-auto flex items-center text-primary">
+                                <a href="" class="flex items-center ml-auto text-primary">
                                     <i data-lucide="refresh-ccw" class="w-4 h-4 mr-3"></i> Reload Data
                                 </a>
                             </div>
                             <div class="grid grid-cols-12 gap-6 mt-5">
                                 <div class="col-span-12 sm:col-span-6 xl:col-span-3 intro-y">
                                     <div class="report-box zoom-in">
-                                        <div class="box p-5">
+                                        <div class="p-5 box">
                                             <div class="flex">
                                                 <i data-lucide="truck" class="report-box__icon text-success"></i>
                                                 <div class="ml-auto">
-                                                    <a href="{{ route('admin.confirmOrders') }}" class="report-box__indicator bg-primary cursor-pointer"> Lihat Semua
-                                                        <i class="fa-solid fa-arrow-right ml-1"></i>
+                                                    <a href="{{ route('admin.confirmOrders') }}" class="cursor-pointer report-box__indicator bg-primary"> Lihat Semua
+                                                        <i class="ml-1 fa-solid fa-arrow-right"></i>
                                                     </a>
                                                 </div>
                                             </div>
-                                            <div class="text-3xl font-medium leading-8 mt-6">{{ $totalWaitingConfirm }}</div>
-                                            <div class="text-base text-slate-500 mt-1">Menunggu konfirmasi</div>
+                                            <div class="mt-6 text-3xl font-medium leading-8">{{ $totalWaitingConfirm }}</div>
+                                            <div class="mt-1 text-base text-slate-500">Menunggu konfirmasi</div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-span-12 sm:col-span-6 xl:col-span-3 intro-y">
                                     <div class="report-box zoom-in">
-                                        <div class="box p-5">
+                                        <div class="p-5 box">
                                             <div class="flex">
                                                 <i data-lucide="home" class="report-box__icon text-primary"></i>
                                                 <div class="ml-auto">
-                                                    <a href="{{ route('admin.stores') }}" class="report-box__indicator bg-primary cursor-pointer"> Lihat Semua
-                                                        <i class="fa-solid fa-arrow-right ml-1"></i>
+                                                    <a href="{{ route('admin.stores') }}" class="cursor-pointer report-box__indicator bg-primary"> Lihat Semua
+                                                        <i class="ml-1 fa-solid fa-arrow-right"></i>
                                                     </a>
                                                 </div>
                                             </div>
-                                            <div class="text-3xl font-medium leading-8 mt-6">{{ $totalStores }}</div>
-                                            <div class="text-base text-slate-500 mt-1">Total Pelapak</div>
+                                            <div class="mt-6 text-3xl font-medium leading-8">{{ $totalStores }}</div>
+                                            <div class="mt-1 text-base text-slate-500">Total Pelapak</div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-span-12 sm:col-span-6 xl:col-span-3 intro-y">
                                     <div class="report-box zoom-in">
-                                        <div class="box p-5">
+                                        <div class="p-5 box">
                                             <div class="flex">
                                                 <i data-lucide="box" class="report-box__icon text-pending"></i>
                                                 <div class="ml-auto">
-                                                    <a href="{{ route('admin.products') }}" class="report-box__indicator bg-primary cursor-pointer"> Lihat Semua
-                                                        <i class="fa-solid fa-arrow-right ml-1"></i>
+                                                    <a href="{{ route('admin.products') }}" class="cursor-pointer report-box__indicator bg-primary"> Lihat Semua
+                                                        <i class="ml-1 fa-solid fa-arrow-right"></i>
                                                     </a>
                                                 </div>
                                             </div>
-                                            <div class="text-3xl font-medium leading-8 mt-6">{{ $totalProducts }}</div>
-                                            <div class="text-base text-slate-500 mt-1">Total produk</div>
+                                            <div class="mt-6 text-3xl font-medium leading-8">{{ $totalProducts }}</div>
+                                            <div class="mt-1 text-base text-slate-500">Total produk</div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-span-12 sm:col-span-6 xl:col-span-3 intro-y">
                                     <div class="report-box zoom-in">
-                                        <div class="box p-5">
+                                        <div class="p-5 box">
                                             <div class="flex">
                                                 <i data-lucide="users" class="report-box__icon text-warning"></i>
                                                 <div class="ml-auto">
-                                                    <a href="{{ route('admin.users.index') }}" class="report-box__indicator bg-primary cursor-pointer"> Lihat Semua
-                                                        <i class="fa-solid fa-arrow-right ml-1"></i>
+                                                    <a href="{{ route('admin.users.index') }}" class="cursor-pointer report-box__indicator bg-primary"> Lihat Semua
+                                                        <i class="ml-1 fa-solid fa-arrow-right"></i>
                                                     </a>
                                                 </div>
                                             </div>
-                                            <div class="text-3xl font-medium leading-8 mt-6">{{ $totalUser }}</div>
-                                            <div class="text-base text-slate-500 mt-1">Total pengguna</div>
+                                            <div class="mt-6 text-3xl font-medium leading-8">{{ $totalUser }}</div>
+                                            <div class="mt-1 text-base text-slate-500">Total pengguna</div>
                                         </div>
                                     </div>
                                 </div>
@@ -88,16 +88,16 @@
                         <!-- END: General Report -->
 
                         <!-- BEGIN: END: Top Seller Sales -->
-                        <div class="col-span-12 xl:col-span-8 mt-6">
-                            <div class="intro-y flex items-center h-10">
-                                <h2 class="text-lg font-medium truncate mr-5">
+                        <div class="col-span-12 mt-6 xl:col-span-8">
+                            <div class="flex items-center h-10 intro-y">
+                                <h2 class="mr-5 text-lg font-medium truncate">
                                     Produk Terlaris
                                 </h2>
                             </div>
                             <div class="mt-5">
                                 @foreach($bestSellingProducts as $product)
                                     <div class="intro-y">
-                                        <div class="box px-4 py-4 mb-3 flex items-center zoom-in">
+                                        <div class="flex items-center px-4 py-4 mb-3 box zoom-in">
                                             <div class="w-40">
                                                 <div class="flex">
                                                     @foreach ($product->productImages as $index => $image)
@@ -109,31 +109,31 @@
                                                     @endforeach
                                                 </div>
                                             </div>
-                                            <div class="ml-4 w-9/12 overflow-hidden mr-4">
-                                                <div class="font-medium w-full truncate">{{ $product->name }}</div>
+                                            <div class="w-9/12 ml-4 mr-4 overflow-hidden">
+                                                <div class="w-full font-medium truncate">{{ $product->name }}</div>
                                                 <div class="text-slate-500 text-xs mt-0.5">{{ $product->stores->name }}</div>
                                             </div>
-                                            <div class="py-1 px-2 rounded-full text-xs bg-success text-white cursor-pointer font-medium whitespace-nowrap">{{ $product->total_sold }} Terjual</div>
+                                            <div class="px-2 py-1 text-xs font-medium text-white rounded-full cursor-pointer bg-success whitespace-nowrap">{{ $product->total_sold }} Terjual</div>
                                         </div>
                                     </div>
                                 @endforeach
-                                <a href="{{ route('admin.products') }}" class="intro-y w-full block text-center rounded-md py-4 border border-dotted border-slate-400 dark:border-darkmode-300 text-slate-500">Lihat Semua</a>
+                                <a href="{{ route('admin.products') }}" class="block w-full py-4 text-center border border-dotted rounded-md intro-y border-slate-400 dark:border-darkmode-300 text-slate-500">Lihat Semua</a>
                             </div>
                         </div>
                         <!-- END: Top Seller Sales -->
 
                         <!-- BEGIN: END: Top Seller Sales -->
                         <div class="col-span-12 xl:col-span-4 sm:mt-6">
-                            <div class="intro-y flex items-center h-10">
-                                <h2 class="text-lg font-medium truncate mr-5">
+                            <div class="flex items-center h-10 intro-y">
+                                <h2 class="mr-5 text-lg font-medium truncate">
                                     Lapak Terlaris
                                 </h2>
                             </div>
                             <div class="mt-5">
                                 @foreach($topStores as $seller)
                                     <div class="intro-y">
-                                        <div class="box px-4 py-4 mb-3 flex items-center zoom-in">
-                                            <div class="w-10 h-10 flex-none image-fit rounded-md overflow-hidden">
+                                        <div class="flex items-center px-4 py-4 mb-3 box zoom-in">
+                                            <div class="flex-none w-10 h-10 overflow-hidden rounded-md image-fit">
                                                 <div class="owner-pp">
                                                     @isset($seller->users->profile_photo_path)
                                                         <img class="rounded-full" src="{{ asset('storage/profile-photos/'. $seller->users->profile_photo_path) }}" alt="pp-owner"/>
@@ -142,27 +142,27 @@
                                                     @endisset
                                                 </div>
                                             </div>
-                                            <div class="ml-4 w-9/12 overflow-hidden mr-4">
-                                                <div class="font-medium w-full truncate">{{ $seller->name }}</div>
+                                            <div class="w-9/12 ml-4 mr-4 overflow-hidden">
+                                                <div class="w-full font-medium truncate">{{ $seller->name }}</div>
                                                 <div class="text-slate-500 text-xs mt-0.5">{{ $seller->users->name }}</div>
                                             </div>
-                                            <div class="py-1 px-2 rounded-full text-xs bg-success text-white cursor-pointer font-medium whitespace-nowrap">{{ $seller->orders_count }} Penjualan</div>
+                                            <div class="px-2 py-1 text-xs font-medium text-white rounded-full cursor-pointer bg-success whitespace-nowrap">{{ $seller->orders_count }} Penjualan</div>
                                         </div>
                                     </div>
                                 @endforeach
-                                <a href="{{ route('admin.stores') }}" class="intro-y w-full block text-center rounded-md py-4 border border-dotted border-slate-400 dark:border-darkmode-300 text-slate-500">Lihat Semua</a>
+                                <a href="{{ route('admin.stores') }}" class="block w-full py-4 text-center border border-dotted rounded-md intro-y border-slate-400 dark:border-darkmode-300 text-slate-500">Lihat Semua</a>
                             </div>
                         </div>
                         <!-- END: Top Seller Sales -->
                     </div>
                 </div>
                 <div class="col-span-12 2xl:col-span-3">
-                    <div class="2xl:border-l sm:ml-6 -mb-10 pb-10">
-                        <div class="2xl:pl-6 grid grid-cols-12 gap-x-6 2xl:gap-x-0 gap-y-6">
+                    <div class="pb-10 -mb-10 2xl:border-l sm:ml-6">
+                        <div class="grid grid-cols-12 2xl:pl-6 gap-x-6 2xl:gap-x-0 gap-y-6">
                             <!-- BEGIN: Transactions -->
-                            <div class="col-span-12 md:col-span-6 xl:col-span-4 2xl:col-span-12 mt-3 2xl:mt-8">
-                                <div class="intro-x flex items-center h-10">
-                                    <h2 class="text-lg font-medium truncate mr-5">
+                            <div class="col-span-12 mt-3 md:col-span-6 xl:col-span-4 2xl:col-span-12 2xl:mt-8">
+                                <div class="flex items-center h-10 intro-x">
+                                    <h2 class="mr-5 text-lg font-medium truncate">
                                         Transaksi terbaru pengguna
                                     </h2>
                                 </div>
@@ -170,8 +170,12 @@
                                     @foreach($userTransactions->take(5) as $transaction)
                                         <div class="intro-x">
                                             <div class="box px-5 py-3 mb-2.5 flex items-center zoom-in">
-                                                <div class="w-10 h-10 flex-none image-fit rounded-full overflow-hidden">
-                                                    <img alt="user-profile" src="{{ asset('assets/images/preview-1.jpg') }}">
+                                                <div class="flex-none w-10 h-10 overflow-hidden rounded-full image-fit">
+                                                    @isset($transaction->user->profile_photo_path)
+                                                        <img alt="Lakubo - Lapak UMKM Boyolali" class="rounded-full" src="{{ asset('storage/profile-photos/'. $transaction->user->profile_photo_path) }}">
+                                                    @else
+                                                        <img alt="Lakubo - Lapak UMKM Boyolali" class="rounded-full" src="https://ui-avatars.com/api/?size=100&name={{ $transaction->user->name }}">
+                                                    @endisset
                                                 </div>
                                                 <div class="ml-4 mr-auto">
                                                     <div class="font-medium">{{ $transaction->user->name }}</div>
@@ -188,18 +192,18 @@
                                             </div>
                                         </div>
                                     @endforeach
-                                    <a href="{{ route('admin.transaction.customers') }}" class="intro-x w-full block text-center rounded-md py-3 border border-dotted border-slate-400 dark:border-darkmode-300 text-slate-500">Lihat Semua</a>
+                                    <a href="{{ route('admin.transaction.customers') }}" class="block w-full py-3 text-center border border-dotted rounded-md intro-x border-slate-400 dark:border-darkmode-300 text-slate-500">Lihat Semua</a>
                                 </div>
                             </div>
                             <!-- END: Transactions -->
                         </div>
                     </div>
-                    <div class="2xl:border-l sm:ml-6 -mb-10 pb-10">
-                        <div class="2xl:pl-6 grid grid-cols-12 gap-x-6 2xl:gap-x-0 gap-y-6">
+                    <div class="pb-10 -mb-10 2xl:border-l sm:ml-6">
+                        <div class="grid grid-cols-12 2xl:pl-6 gap-x-6 2xl:gap-x-0 gap-y-6">
                             <!-- BEGIN: Transactions -->
-                            <div class="col-span-12 md:col-span-6 xl:col-span-4 2xl:col-span-12 mt-3 2xl:mt-8">
-                                <div class="intro-x flex items-center h-10">
-                                    <h2 class="text-lg font-medium truncate mr-5">
+                            <div class="col-span-12 mt-3 md:col-span-6 xl:col-span-4 2xl:col-span-12 2xl:mt-8">
+                                <div class="flex items-center h-10 intro-x">
+                                    <h2 class="mr-5 text-lg font-medium truncate">
                                         Transaksi terbaru pelapak
                                     </h2>
                                 </div>
@@ -207,8 +211,12 @@
                                     @foreach($storeTransactions->take(5) as $transaction)
                                         <div class="intro-x">
                                             <div class="box px-5 py-3 mb-2.5 flex items-center zoom-in">
-                                                <div class="w-10 h-10 flex-none image-fit rounded-full overflow-hidden">
-                                                    <img alt="user-profile" src="{{ asset('assets/images/preview-1.jpg') }}">
+                                                <div class="flex-none w-10 h-10 overflow-hidden rounded-full image-fit">
+                                                    @isset($transaction->store->users->profile_photo_path)
+                                                        <img alt="Lakubo - Lapak UMKM Boyolali" class="rounded-full" src="{{ asset('storage/profile-photos/'. $transaction->store->users->profile_photo_path) }}">
+                                                    @else
+                                                        <img alt="Lakubo - Lapak UMKM Boyolali" class="rounded-full" src="https://ui-avatars.com/api/?size=100&name={{ $transaction->store->name }}">
+                                                    @endisset
                                                 </div>
                                                 <div class="ml-4 mr-auto">
                                                     <div class="font-medium">{{ $transaction->store->name }}</div>
@@ -225,7 +233,7 @@
                                             </div>
                                         </div>
                                     @endforeach
-                                    <a href="{{ route('admin.transaction.stores') }}" class="intro-x w-full block text-center rounded-md py-3 border border-dotted border-slate-400 dark:border-darkmode-300 text-slate-500">Lihat Semua</a>
+                                    <a href="{{ route('admin.transaction.stores') }}" class="block w-full py-3 text-center border border-dotted rounded-md intro-x border-slate-400 dark:border-darkmode-300 text-slate-500">Lihat Semua</a>
                                 </div>
                             </div>
                             <!-- END: Transactions -->
