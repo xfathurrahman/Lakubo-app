@@ -26,13 +26,13 @@ class AdminDashboardController extends Controller
         $userTransactions = UserTransaction::all();
         $storeTransactions = StoreTransaction::all();
 
-        $bestSellingProducts = Product::select('products.*', DB::raw('SUM(order_items.quantity) as total_quantity'), DB::raw('SUM(order_items.quantity) as total_sold'))
+        $bestSellingProducts = Product::select('products.*', DB::raw('SUM(order_items.quantity) as total_sold'))
         ->join('order_items', 'products.id', '=', 'order_items.product_id')
         ->join('orders', 'order_items.order_id', '=', 'orders.id')
         ->where('orders.status', 'completed')
         ->groupBy('products.id')
-        ->orderByDesc('total_quantity')
-        ->take(10)
+        ->orderByDesc('total_sold')
+        ->take(5)
         ->get();
 
         $topStores = Store::withCount(['orders' => function ($query) {

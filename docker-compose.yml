@@ -1,7 +1,7 @@
 version: "3.9"
 services:
     app:
-        container_name: lakubo-demo
+        container_name: lakubo
         env_file:
             - .env
         restart: always
@@ -15,11 +15,11 @@ services:
         volumes:
             - ./:/var/www/${APP_NAME}
         ports:
-            - '8001:80'
+            - '8002:80'
         networks:
             - env-server
         healthcheck:
-            test: [ "CMD", "curl", "-f", "http://localhost:8001" ]
+            test: [ "CMD", "curl", "-f", "http://localhost:8002" ]
             interval: 30s
             timeout: 10s
             retries: 3

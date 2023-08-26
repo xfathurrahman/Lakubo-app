@@ -130,7 +130,8 @@
                                 </h2>
                             </div>
                             <div class="mt-5">
-                                @foreach($topStores as $seller)
+                                @foreach($topStores->sortByDesc('orders_count')->take(5) as $seller)
+                                    @if ($seller->orders_count > 0)
                                     <div class="intro-y">
                                         <div class="flex items-center px-4 py-4 mb-3 box zoom-in">
                                             <div class="flex-none w-10 h-10 overflow-hidden rounded-md image-fit">
@@ -149,6 +150,7 @@
                                             <div class="px-2 py-1 text-xs font-medium text-white rounded-full cursor-pointer bg-success whitespace-nowrap">{{ $seller->orders_count }} Penjualan</div>
                                         </div>
                                     </div>
+                                    @endif
                                 @endforeach
                                 <a href="{{ route('admin.stores') }}" class="block w-full py-4 text-center border border-dotted rounded-md intro-y border-slate-400 dark:border-darkmode-300 text-slate-500">Lihat Semua</a>
                             </div>
