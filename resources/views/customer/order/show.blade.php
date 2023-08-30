@@ -28,6 +28,18 @@
             </div>
         </div>
         <!-- END: Delete Confirmation Modal -->
+
+        @if($order->transaction_status === 'choosing_payment' || $order->transaction_status === 'awaiting_payment')
+            <div class="alert alert-primary show mb-2" role="alert">
+                <div class="flex items-center">
+                    <div class="font-medium text-lg">APLIKASI INI MENGGUNAKAN SIMULASI PEMBAYARAN!</div>
+                    <div class="text-xs bg-white px-1 rounded-md text-slate-700 ml-auto">Info</div>
+                </div>
+                <div class="mt-3">Silahkan pilih pembayaran lalu anda bisa klik <a href="https://simulator.sandbox.midtrans.com/bca/va/index" target="_blank"><b class="underline">disini</b></a>, untuk melakukan simulasi pembayaran pada aplikasi Lakubo sesuai dengan metode pembayaran yang anda pilih.</div>
+            </div>
+        @endif
+    
+
     @if(isset($order))
         <!-- BEGIN: Transaction Details -->
         <div class="intro-y grid grid-cols-11 gap-5 mt-5">
