@@ -19,7 +19,7 @@ services:
         networks:
             - env-server
         healthcheck:
-            test: ["CMD-SHELL", "curl -f http://lakubo.shop || exit 1"]
+            test: ["CMD-SHELL", "curl -f https://lakubo.shop || exit 1"]
             interval: 30s
             timeout: 10s
             retries: 3
