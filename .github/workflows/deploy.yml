@@ -1,0 +1,16 @@
+name: Deploy
+on:
+  push:
+    branches:
+      - 'master'
+      - 'ops/deploy'
+env:
+  FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+jobs:
+  Deploy:
+    name: Deploy to fly.io
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: flyctl deploy
