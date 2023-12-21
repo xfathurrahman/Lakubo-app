@@ -1,7 +1,7 @@
 @extends('home.main')
 
 @section('head')
-    <title>Lakubo - Lapak UMKM Boyolali</title>
+    <title>Lakubo - Lapak UMKM Boyolali (Test)</title>
 @endsection
 
 @section('content')
