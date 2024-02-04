@@ -8,6 +8,7 @@ services:
         build:
             context: .
             target: php
+            dockerfile: Dockerfile.dev
             args:
                 - APP_NAME=${APP_NAME}
                 - APP_ENV=${APP_ENV}
@@ -19,7 +20,7 @@ services:
         networks:
             - env-server
         healthcheck:
-            test: ["CMD-SHELL", "curl -f https://lakubo.shop || exit 1"]
+            test: ["CMD-SHELL", "curl -f http://localhost:8002 || exit 1"]
             interval: 30s
             timeout: 10s
             retries: 3

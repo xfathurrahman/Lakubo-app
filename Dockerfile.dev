@@ -7,7 +7,7 @@ RUN usermod -u 1000 www-data
 RUN apt-get update -y
 RUN apt-get install -y unzip nginx libpq-dev libcurl4-gnutls-dev libfreetype6-dev libjpeg62-turbo-dev default-mysql-client libzip-dev
 
-RUN curl -fsSL https://deb.nodesource.com/setup_19.x | bash - && apt-get install -y nodejs
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && apt-get install -y nodejs
 
 RUN npm install -g npm@latest
 
