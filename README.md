@@ -5,53 +5,48 @@ Mayoritas pelaku Usaha Mikro Kecil dan Menengah (UMKM) di Kabupaten Boyolali men
 ## Diagram Konteks
 Diagram konteks pada Sistem Informasi E-Marketplace UMKM Boyolali ini menggambarkan aliran data untuk admin, penjual, dan pelanggan. 
 
-![Picture2](https://github.com/FathCodes/Lakubo/assets/50898302/5d92de56-68cd-41f8-bafa-af65df91e0d3)
+![konteks.jpg](public%2Fscreenshots%2Fkonteks.jpg)
 
 ## Diagram jenjang
 
 Diagram jenjang pada Sistem Informasi E-Marketplace UMKM Boyolali ini menggambarkan struktur dari sistem yang menggambarkan semua proses yang ada di sistem.
 
-![Picture3](https://github.com/FathCodes/Lakubo/assets/50898302/58f8cb4b-bed8-48a7-b860-493d4ea61aa6)
+![jenjang.jpg](public%2Fscreenshots%2Fjenjang.jpg)
 
 ## Data Flow Diagram (DFD)
 ### DFD Level 1
 DFD level 1 disini menggambarkan alur proses 1,2,3,4 dan 5 pada diagram jenjang yaitu proses Register, Login, Master Data, Transaksi, dan Laporan.
 
-![dfd1](https://github.com/FathCodes/Lakubo/assets/50898302/dfd72211-d8fa-4459-8fee-297aa2e791dc)
+![dfd1.jpg](public%2Fscreenshots%2Fdfd1.jpg)
 
 ### DFD Level 2 Proses 3
 DFD level 2 proses 3 disini menjabarkan alur proses level 2 proses 3 pada diagram jenjang yaitu proses master data.
 
-![dfd2p1](https://github.com/FathCodes/Lakubo/assets/50898302/739c14c5-3e10-479d-b20e-3704b94dd75f)
+![dfd2p1.jpg](public%2Fscreenshots%2Fdfd2p1.jpg)
 
 ### DFD Level 2 Proses 4
 DFD level 2 proses 4 disini menjabarkan alur proses level 2 proses 4 pada diagram jenjang yaitu proses Transaksi. 
 
-![dfd2p4](https://github.com/FathCodes/Lakubo/assets/50898302/7aba381a-00a4-43e6-a624-d7cb47329e6a)
+![dfd2p4.jpg](public%2Fscreenshots%2Fdfd2p4.jpg)
 
 ## ERD 
 Entity Relationship Diagram (ERD) pada Sistem Informasi E-Marketplace UMKM Boyolali ini menjelaskan tentang semua hubungan antar entitas yang digunakan pada project ini.
 
 ### ERD untuk Peran dan Hak Akses
 
-![erd1](https://github.com/FathCodes/Lakubo/assets/50898302/6ffaa3bb-8d2a-4807-bb74-53742d47375d)
-
+![erd1.jpg](public%2Fscreenshots%2Ferd1.jpg)
 
 ### ERD untuk data wilayah seluruh indonesia
 
-![erdwill](https://github.com/FathCodes/Lakubo/assets/50898302/677492a9-2fed-4d3d-bd49-e91959444d50)
-
+![erd2.jpg](public%2Fscreenshots%2Ferd2.jpg)
 
 ### ERD sistem utama
-![Picture1](https://github.com/FathCodes/Lakubo/assets/50898302/ee6f4bb4-bd3b-49eb-9464-5b5ea7e0d2b2)
 
+![erdutama.jpg](public%2Fscreenshots%2Ferdutama.jpg)
 
 ## Relasi Tabel
 Desain relasi tabel pada Sistem Informasi E-Marketplace UMKM Boyolali ini menampilkan relasi antar tabel yang digunakan dalam project ini.
 
-![relasi3](https://github.com/FathCodes/Lakubo/assets/50898302/71e2bd57-7c76-4ad9-911d-38cb121f17d8)
-
-![relasi2](https://github.com/FathCodes/Lakubo/assets/50898302/c952186b-acf1-4ea8-819f-d4704c8cfeae)
-
-![relasi1](https://github.com/FathCodes/Lakubo/assets/50898302/06fa5077-00ae-4524-86d5-4611772d1402)
-
+![relasi1.jpg](public%2Fscreenshots%2Frelasi1.jpg)
+![relasi2.jpeg](public%2Fscreenshots%2Frelasi2.jpeg)
+![relasi3.png](public%2Fscreenshots%2Frelasi3.png)
