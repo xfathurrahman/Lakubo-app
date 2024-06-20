@@ -18,3 +18,5 @@ do
     chmod -R 775 "$FOLDER"
     chown -R www-data:www-data "$FOLDER"
 done
+
+
