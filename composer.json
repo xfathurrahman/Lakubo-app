@@ -22,6 +22,7 @@
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
+        "fly-apps/dockerfile-laravel": "^1.0",
         "laravel-lang/attributes": "^2.0",
         "laravel-lang/lang": "^12.8",
         "laravel-lang/publisher": "^14.4",
