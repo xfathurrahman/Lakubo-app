@@ -1,9 +1,9 @@
-# fly.toml app configuration file generated for lakubo on 2024-06-19T21:41:15+07:00
+# fly.toml app configuration file generated for lakubo-app on 2024-06-27T06:09:21+07:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'lakubo'
+app = 'lakubo-app'
 primary_region = 'sin'
 console_command = 'php /var/www/html/artisan tinker'
 
@@ -13,26 +13,28 @@ console_command = 'php /var/www/html/artisan tinker'
     PHP_VERSION = '8.3'
 
 [env]
-APP_NAME = "Lakubo"
-APP_ENV = "production"
-APP_DEBUG = "false"
-DB_CONNECTION = "mysql"
-RAJAONGKIR_API_URL = "https://api.rajaongkir.com/starter"
-LOG_CHANNEL = "stderr"
-LOG_LEVEL = "info"
-LOG_STDERR_FORMATTER = "Monolog\\Formatter\\JsonFormatter"
-BROADCAST_DRIVER = "log"
-CACHE_DRIVER = "file"
-FILESYSTEM_DISK = "local"
-QUEUE_CONNECTION = "sync"
-SESSION_DRIVER = "cookie"
-SESSION_SECURE_COOKIE = "true"
-OPCACHE_ENABLE = "1"
-OPCACHE_ENABLE_CLI = "1"
-OPCACHE_VALIDATE_TIMESTAMPS = "1"
-OPCACHE_REVALIDATE_FREQ = "30"
-MIDTRANS_IS_PRODUCTION = "false"
+  APP_DEBUG = 'false'
+  APP_ENV = 'production'
+  APP_NAME = 'Lakubo'
+  BROADCAST_DRIVER = 'log'
+  CACHE_DRIVER = 'file'
+  DB_CONNECTION = 'mysql'
+  FILESYSTEM_DISK = 'local'
+  LOG_CHANNEL = 'stderr'
+  LOG_LEVEL = 'info'
+  LOG_STDERR_FORMATTER = 'Monolog\Formatter\JsonFormatter'
+  OPCACHE_ENABLE = '1'
+  OPCACHE_ENABLE_CLI = '0'
+  OPCACHE_REVALIDATE_FREQ = '30'
+  OPCACHE_VALIDATE_TIMESTAMPS = '1'
+  QUEUE_CONNECTION = 'sync'
+  RAJAONGKIR_API_URL = 'https://api.rajaongkir.com/starter'
+  SESSION_DRIVER = 'cookie'
+  SESSION_SECURE_COOKIE = 'true'
 
+[[mounts]]
+  source = 'lakubo_storage'
+  destination = '/var/www/html/storage'
 
 [http_service]
   internal_port = 8080
@@ -42,6 +44,7 @@ MIDTRANS_IS_PRODUCTION = "false"
   min_machines_running = 1
   processes = ['app']
 
-[[mounts]]
-source = 'lakubo_storage'
-destination = '/var/www/html/storage'
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1
