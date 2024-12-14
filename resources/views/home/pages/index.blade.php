@@ -22,6 +22,7 @@
                 <span id="arrowNav" class="flex items-center justify-center">Kategori</span>
             @endif
         </div>
+        
         <div class="px-4 slick-wrapper">
             <div id="sc-category-carousel" class="overflow-hidden" style="max-height: 450px;" data-slick='{"lazyLoad": "ondemand"}'>
                 @foreach($categories as $category)
